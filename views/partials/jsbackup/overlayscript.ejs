@@ -1,0 +1,535 @@
+<script>
+    var isPlaying = false;
+
+    var timerduration = 2000;
+    var finishedPlaying = true;
+
+    startTimer("firingTimer", timerduration);
+
+    function startTimer(message, timerduration) {
+        // var timer = duration,
+        //   minutes, seconds;
+
+        setInterval(function() {
+
+            if (finishedPlaying) {
+                console.log('callForNextAlert');
+
+                //calls method in overlayio which gets the last item in queue i.e. FIFO
+                callForNextAlert();
+            }
+
+
+            //take this line out
+            // playAlert("Schuster");
+            //bc.emit("timer", message);
+            // console.log("timer triggered");
+            //display.textContent = minutes + ":" + seconds;
+            //--timer; // put boolean value for minus values.
+
+        }, timerduration);
+
+    };
+
+    //this is a test function to play the alert
+    runOverlay = function(Username) {
+
+        console.log('run overlay function');
+
+        playAlert(Username);
+
+    }
+
+    /*    function runCommandAudioVideoImage(data) {
+
+           if (isPlaying == false) {
+               playCommandAV(data);
+           }
+
+       } */
+
+
+    // need to tidy this function up 
+    function playAlert(alertMsg) {
+
+        if (isPlaying == false) {
+            console.log('run add logo');
+            /*var src = "https://media.giphy.com/media/MlX8bnGj2HS7e/giphy.gif";*/
+            var src = alertMsg.image;
+            var videosrc = alertMsg.video;
+
+            //if there is no image get video
+            if (src == "") {
+                src = videosrc;
+            }
+
+            var audiosrc = alertMsg.sound;
+            playAlertAV(src, audiosrc, 350, 264, "Alert", alertMsg.userName, alertMsg.dateid, alertMsg.type, alertMsg.play, alertMsg.text);
+        } else {
+            //add to queue
+        }
+
+    }
+
+
+    // this deals with queueing for alerts so that they play one by one
+    function removeImageAndGetNextAlertInQueue(dateid, type) {
+
+        $(".OverlayImage").empty();
+        $(".OverlayWrap").empty();
+        // $("#alertText").empty();
+
+        $("#alertText").empty();
+        $("#alertText").removeClass();
+
+        finishedPlaying = true;
+        finishedWork(dateid, type);
+    }
+
+    function playCommandAlert(alertMsg) {
+
+        // only run if there isn't an alert already playing
+        if (isPlaying == false) {
+            console.log('run add logo');
+            /*var src = "https://media.giphy.com/media/MlX8bnGj2HS7e/giphy.gif";*/
+            /*             var src = "../media/graphics/alert.gif";
+                        var audiosrc = "../media/sounds/sound1.mp3"; */
+
+            // just set audio and image as vars for now but .....
+            //.....tidy this up by just passing alertMsg (TODO) so that all manipulation is done within playCommandAV
+            var src = alertMsg.image;
+            var videosrc = alertMsg.video;
+
+            //if there is no image get video
+            if (src == "") {
+                src = videosrc;
+            }
+
+
+            var audiosrc = alertMsg.sound;
+            playCommandAV(src, audiosrc, 350, 264, "Alert", alertMsg.userName, alertMsg.dateid, alertMsg.type, alertMsg.play);
+        } else {
+            //add to queue
+        }
+
+    }
+
+    function playAlertAV(src, audiosrc, width, height, alt, userName, dateid, type, play, followText) {
+        console.log('Alert Type: ' + type);
+        /*     var alertMsg = {
+                date: new Date().toString() + Math.floor((Math.random() * 100) + 1).toString(),
+                command_name: commandInDB.id,
+                user_id: "",
+                userName: UserName,
+                image: "alert3.gif",
+                sound: "firehorn.mp3",
+                video: "firehorn.mov",
+                following: "",
+                type: "commandAlert"
+
+            }; */
+        if (userName != "") {
+
+            //work with the followTetx
+            var followTextSplit = followText.split(' ')
+
+            var elementVar = 0;
+            var userIsAt = 0;
+            var userVarExists = false;
+            followTextSplit.forEach(element => {
+
+                if (element == "$user") {
+                    element = userName;
+                    userIsAt = elementVar;
+                    userVarExists = true;;
+                }
+
+                elementVar = elementVar + 1
+
+            });
+
+            if (userVarExists) {
+                followTextSplit[userIsAt] = userName;
+            }
+
+            followText = followTextSplit.join(' ');
+
+            var divFol = document.getElementById('alertText');
+
+            // divFol.className += 'text animated bounceInLeft';
+
+            $(".OverlayImage").empty();
+            $(".OverlayWrap").empty();
+            $("#alertText").empty();
+
+            $('#alertText').addClass("text animated lightSpeedIn").one('animationend webkitAnimationEnd oAnimationEnd', function() {
+                //  $("#alertText").empty();
+                //  $('#alertText').removeClass();
+            });
+
+
+            var div = document.getElementById('Oimage');
+            var div2 = document.getElementById('Owrap');
+
+            var img = new Image();
+            img.src = src;
+            img.height = height;
+            img.width = width;
+
+            //sound
+            var sound = new Audio();
+            sound.id = "sound1";
+            sound.src = audiosrc; //"../sounds/sound1.mp3";
+            sound.preload = "none"; //"auto";
+            var duration = sound.duration;
+
+            if (isNaN(duration)) {
+
+                duration = 10000;
+                console.log('no alert duration setting default: ' + duration);
+            } else {
+
+                duration = duration * 3000;
+                console.log('alert sound duration: ' + duration);
+            }
+
+
+            if (div2 != null) {
+                div2.appendChild(sound);
+
+                var isPlaying = sound.currentTime > 0 && !sound.paused && !sound.ended &&
+                    sound.readyState > 2;
+
+                if (!isPlaying) {
+
+
+                    switch (play) {
+                        case 1:
+                            playSoundsAndImagesText(sound, div, img, dateid, type, duration, divFol, followText);
+                            break;
+                        case 2:
+                            playSoundsAndTextOnly(sound, dateid, type, duration, divFol, followText);
+                            break;
+                        case 3:
+                            playVideoAndTextOnly(div, img, dateid, type, duration, divFol, followText)
+                            break;
+                        case 4:
+                            playImageAndTextOnly(div, img, dateid, type, duration, divFol, followText);
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+            }
+
+
+
+        }
+
+    };
+
+
+    // similar to alerts but these might need queueing differently if at all
+    function playCommandAV(src, audiosrc, width, height, alt, userName, dateid, type, play) {
+
+        console.log('Alert Type: ' + type);
+
+        var divFol = document.getElementById('alertText');
+
+        // divFol.className += 'text animated bounceInLeft';
+
+        $(".OverlayImage").empty();
+        $(".OverlayWrap").empty();
+        $("#alertText").empty();
+
+
+        /*         
+
+                $('#alertText').addClass("text animated lightSpeedIn").one('animationend webkitAnimationEnd oAnimationEnd', function() {
+                    $("#alertText").empty();
+                    $('#alertText').removeClass();
+                }); */
+
+
+        var div = document.getElementById('Oimage');
+        var div2 = document.getElementById('Owrap');
+
+        var img = new Image();
+        img.src = src;
+        img.height = height;
+        img.width = width;
+
+        //sound
+        var sound = new Audio();
+        sound.id = "sound1";
+        sound.src = audiosrc; //"../sounds/sound1.mp3";
+        sound.preload = "none"; //"auto";
+        var duration = sound.duration;
+
+        if (isNaN(duration)) {
+
+            duration = 5000; // 3 second duration
+            console.log('no alert duration setting default: ' + duration);
+        } else {
+
+            duration = duration + 500;
+            console.log('alert sound duration: ' + duration);
+        }
+
+
+        if (div2 != null) {
+            div2.appendChild(sound);
+            //userName = Username;
+
+            var isPlaying = sound.currentTime > 0 && !sound.paused && !sound.ended &&
+                sound.readyState > 2;
+
+            if (!isPlaying) {
+
+                switch (play) {
+                    case 1:
+                        playSoundsAndImages(sound, div, img, dateid, type, duration);
+                        break;
+                    case 2:
+                        playSoundsOnly(sound, dateid, type, duration);
+                        break;
+                    case 3:
+                        playVideoOnly(div, img, dateid, type, duration)
+                        break;
+                    case 4:
+                        playImageOnly(div, img, dateid, type, duration);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+        }
+    };
+
+    /////// FOLLOW / HOST ALERT FUNCTION requires text on image/video 
+    function playSoundsAndImagesText(sound, div, img, dateid, type, duration, divFol, followText) {
+        var playPromise = sound.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                    finishedPlaying = false;
+                    if (div != null) {
+
+                        var para = document.createElement("P"); // Create a <p> node
+                        var t = document.createTextNode(followText); // Create a text node
+                        para.appendChild(t);
+
+                        div.appendChild(img);
+                        divFol.appendChild(para);
+
+                    }
+
+                    //get dateid and type from alert
+                    setTimeout(function() {
+                        removeImageAndGetNextAlertInQueue(dateid, type);
+                    }, duration);
+                    // Automatic playback started!
+                    // Show playing UI.
+                })
+                .catch(error => {
+                    // Auto-play was prevented
+                    // Show paused UI.
+                    finishedPlaying = true;
+                    console.log('error playing alert');
+
+                });
+        }
+    }
+
+    function playSoundsAndImages(sound, div, img, dateid, type, duration) {
+        var playPromise = sound.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                    finishedPlaying = false;
+                    if (div != null) {
+
+                        div.appendChild(img);
+
+                    }
+
+                    //get dateid and type from alert
+                    setTimeout(function() {
+                        removeImageAndGetNextCommandInQueue(dateid, type);
+                    }, duration);
+                    // Automatic playback started!
+                    // Show playing UI.
+                })
+                .catch(error => {
+                    // Auto-play was prevented
+                    // Show paused UI.
+                    finishedPlaying = true;
+                    console.log('error playing alert');
+
+                });
+        }
+    }
+
+
+    function playSoundsOnly(sound, dateid, type, duration) {
+        var playPromise = sound.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                    finishedPlaying = false;
+
+                    //get dateid and type from alert
+                    setTimeout(function() {
+                        removeImageAndGetNextCommandInQueue(dateid, type);
+                    }, duration);
+                    // Automatic playback started!
+                    // Show playing UI.
+                })
+                .catch(error => {
+                    // Auto-play was prevented
+                    // Show paused UI.
+                    finishedPlaying = true;
+                    console.log('error playing alert');
+
+                });
+        }
+    }
+
+    /////// FOLLOW / HOST ALERT FUNCTION requires text on image/video 
+    function playSoundsAndTextOnly(sound, dateid, type, duration, divFol, followText) {
+        var playPromise = sound.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                    finishedPlaying = false;
+                    //get dateid and type from alert
+                    if (div != null) {
+
+                        var para = document.createElement("P"); // Create a <p> node
+                        var t = document.createTextNode(followText); // Create a text node
+                        para.appendChild(t);
+                        divFol.appendChild(para);
+                    }
+                    setTimeout(function() {
+                        removeImageAndGetNextAlertInQueue(dateid, type);
+                    }, duration);
+                    // Automatic playback started!
+                    // Show playing UI.
+                })
+                .catch(error => {
+                    // Auto-play was prevented
+                    // Show paused UI.
+                    finishedPlaying = true;
+                    console.log('error playing alert');
+
+                });
+        }
+    }
+
+    function playImageOnly(div, img, dateid, type, duration) {
+
+        finishedPlaying = false;
+        if (div != null) {
+
+            /*  var followText = 'Thank You for the follow,' + Username;
+                var para = document.createElement("P"); // Create a <p> node
+                var t = document.createTextNode(followText); // Create a text node
+                para.appendChild(t); 
+                */
+
+            div.appendChild(img);
+            //divFol.appendChild(para);
+        }
+
+        //get dateid and type from alert
+        setTimeout(function() {
+            removeImageAndGetNextAlertInQueue(dateid, type);
+        }, duration);
+        // Automatic playback started!
+        // Show playing UI.
+
+    }
+
+    function playImageAndTextOnly(div, img, dateid, type, duration, divFol, followText) {
+
+        finishedPlaying = false;
+        if (div != null) {
+
+            var para = document.createElement("P"); // Create a <p> node
+            var t = document.createTextNode(followText); // Create a text node
+            para.appendChild(t);
+
+            div.appendChild(img);
+            divFol.appendChild(para);
+        }
+
+        //get dateid and type from alert
+        setTimeout(function() {
+            removeImageAndGetNextAlertInQueue(dateid, type);
+        }, duration);
+        // Automatic playback started!
+        // Show playing UI.
+
+    }
+
+    function playVideoOnly(div, img, dateid, type, duration) {
+
+        finishedPlaying = false;
+        if (div != null) {
+
+            /*  var followText = 'Thank You for the follow,' + Username;
+                var para = document.createElement("P"); // Create a <p> node
+                var t = document.createTextNode(followText); // Create a text node
+                para.appendChild(t); 
+                */
+
+            div.appendChild(img);
+            //divFol.appendChild(para);
+        }
+
+        //get dateid and type from alert
+        setTimeout(function() {
+            removeImageAndGetNextCommandInQueue(dateid, type);
+        }, duration);
+        // Automatic playback started!
+        // Show playing UI.
+
+    }
+
+    function playVideoAndTextOnly(div, img, dateid, type, duration, divFol, followText) {
+
+        finishedPlaying = false;
+        if (div != null) {
+
+            var para = document.createElement("P"); // Create a <p> node
+            var t = document.createTextNode(followText); // Create a text node
+            para.appendChild(t);
+
+
+            div.appendChild(img);
+            divFol.appendChild(para);
+        }
+
+        //get dateid and type from alert
+        setTimeout(function() {
+            removeImageAndGetNextAlertInQueue(dateid, type);
+        }, duration);
+        // Automatic playback started!
+        // Show playing UI.
+
+    }
+
+
+    // this deals with queueing for command so that they play one by one
+    function removeImageAndGetNextCommandInQueue(dateid, type) {
+
+        $(".OverlayImage").empty();
+        $(".OverlayWrap").empty();
+
+
+        finishedPlaying = true;
+        finishedCommandWork(dateid, type);
+    }
+</script>

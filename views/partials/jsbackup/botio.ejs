@@ -1,0 +1,2618 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    //these are the users in chat
+    var chatUsrs = [];
+
+    //these are people that follow you
+    var followerUsrs = [];
+    var followerUsrsData = [];
+
+    //these are people you follow
+    var followingUsrsData = [];
+    var selectedFollower = '';
+
+    //move this argument value to config
+    const iosocket = io.connect('http://localhost:8081', {
+        'reconnection': true,
+        'reconnectionDelay': 1000,
+        'reconnectionDelayMax': 5000,
+        'reconnectionAttempts': 5
+    });
+
+    if (window.performance) {
+        // console.info("window.performance works fine on this browser");
+    }
+
+    if (performance.navigation.type == 1) {
+        console.info("Page Reloaded");
+        pingBeam();
+    } else {
+
+    }
+
+    $(function() {
+
+        ////validating duration input
+        document.getElementById("medAudOtherValue").onkeypress = function(e) {
+            var chr = String.fromCharCode(e.which);
+            if ("1234567890".indexOf(chr) < 0)
+                return false;
+        };
+        document.getElementById("medImgOtherValue").onkeypress = function(e) {
+            var chr = String.fromCharCode(e.which);
+            if ("1234567890".indexOf(chr) < 0)
+                return false;
+        };
+        document.getElementById("medVidOtherValue").onkeypress = function(e) {
+            var chr = String.fromCharCode(e.which);
+            if ("1234567890".indexOf(chr) < 0)
+                return false;
+        };
+
+        ////////////////// TABLE ONCLICK LISTENERS 
+        $("#tableF tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+            var name = $(this).attr('id');
+
+            $("#flActionBtn").html(name);
+
+        });
+
+        $("#tableF tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
+                var name = $(this).children('td').eq(1).text();
+
+                var result = isFollowingMyFollower(id);
+
+                $("#flActionBtn").html(name + " - " + result);
+            }
+
+
+        });
+
+        $("#tableCF tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+            var name = $(this).attr('id');
+
+            $("#flngActionBtn").html(name);
+
+        });
+
+        $("#tableCF tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
+                var name = $(this).children('td').eq(1).text();
+
+                var result = checkIfFollowing(id);
+
+                $("#flngActionBtn").html(name + " - " + result);
+            }
+
+        });
+
+
+        $("#tableChatUsers tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+        });
+
+        $("#tableChatUsers tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
+        $("#tableRecentFollowers tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+        });
+
+        $("#tableRecentFollowers tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
+        $("#tableFAL tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+        });
+
+        $("#tableFAL tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+
+                var Enabled = $(this).children('td').eq(0).text();
+                var Name = $(this).children('td').eq(1).text();
+
+                var Audio = $(this).children('td').eq(2).text();
+                var Video = $(this).children('td').eq(3).text();
+                var Image = $(this).children('td').eq(4).text();
+                var text = $(this).children('td').eq(5).text();
+
+                Audio = setFileDefaults(Audio);
+                Video = setFileDefaults(Video);
+                Image = setFileDefaults(Image);
+
+                var followAlertRowJson = {
+                    cid: Name,
+                    caudio: Audio,
+                    cvideo: Video,
+                    cimage: Image,
+                    ctext: text,
+                    cenabled: Enabled
+                };
+
+                SetCheckboxElement("altEnabled", followAlertRowJson.cenabled);
+                SetSelectElement("alertName", followAlertRowJson.cid);
+                SetSelectElement("selAlertTypeAltVars", "altAlertFollow");
+                SetSelectElement("audioAltSelect", followAlertRowJson.caudio);
+                SetSelectElement("videoAltSelect", followAlertRowJson.cvideo);
+                SetSelectElement("imageAltSelect", followAlertRowJson.cimage);
+                SetSelectElement("altText", followAlertRowJson.ctext);
+
+            }
+
+        });
+
+        $("#tableHAL tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+            //alert(value);
+        });
+
+        $("#tableHAL tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+
+                var Enabled = $(this).children('td').eq(0).text();
+                var Name = $(this).children('td').eq(1).text();
+
+                var Audio = $(this).children('td').eq(2).text();
+                var Video = $(this).children('td').eq(3).text();
+                var Image = $(this).children('td').eq(4).text();
+                var text = $(this).children('td').eq(5).text();
+
+                Audio = setFileDefaults(Audio);
+                Video = setFileDefaults(Video);
+                Image = setFileDefaults(Image);
+
+                var hostAlertRowJson = {
+                    cid: Name,
+                    caudio: Audio,
+                    cvideo: Video,
+                    cimage: Image,
+                    ctext: text,
+                    cenabled: Enabled
+                };
+
+                SetCheckboxElement("altEnabled", hostAlertRowJson.cenabled);
+                SetSelectElement("alertName", hostAlertRowJson.cid);
+                SetSelectElement("selAlertTypeAltVars", "altAlertHost");
+                SetSelectElement("audioAltSelect", hostAlertRowJson.caudio);
+                SetSelectElement("videoAltSelect", hostAlertRowJson.cvideo);
+                SetSelectElement("imageAltSelect", hostAlertRowJson.cimage);
+                SetSelectElement("altText", hostAlertRowJson.ctext);
+
+            }
+
+        });
+
+        $("#tableTIM tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+            //alert(value);
+        });
+
+        $("#tableTIM tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length);
+
+                var Enabled = $(this).children('td').eq(1).text();
+
+                var TimerText = $(this).children('td').eq(2).text();
+                var Interval = $(this).children('td').eq(3).text();
+
+
+
+                var timerRowJson = {
+                    cid: id,
+                    ctext: TimerText,
+                    cenabled: Enabled,
+                    cinterval: Interval
+                };
+
+
+                SetCheckboxElement("chkTPBoxInputEnabled", timerRowJson.cenabled);
+                SetSelectElement("TPtimerID", timerRowJson.cid);
+                SetSelectElement("tpText", timerRowJson.ctext);
+                SetSelectElement("tpInterval", timerRowJson.cinterval);
+
+
+            }
+
+        });
+
+
+        $("#tableKW tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+            //alert(value);
+        });
+
+
+        $("#tableKW tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(2, $this.closest('tr').attr('id').length);
+
+                var Enabled = $(this).children('td').eq(2).text();
+
+                var output = $(this).children('td').eq(1).text();
+
+
+                var commandRowJson = {
+                    cid: id,
+                    coutput: output,
+                    cenabled: Enabled
+                };
+
+
+                SetCheckboxElement("chkKWBoxInputEnabled", commandRowJson.cenabled);
+                SetSelectElement("triggerName", commandRowJson.cid);
+                SetSelectElement("kwTrigText", commandRowJson.coutput);
+
+
+            }
+
+        });
+
+
+        $("#tableCO tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+        });
+
+        $("#tableCO tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
+
+                var getPerms = getPermFromCommand($(this).children('td').eq(3).text());
+
+                var Enabled = $(this).children('td').eq(0).text();
+                var Name = $(this).children('td').eq(1).text();
+                var text = $(this).children('td').eq(2).text();
+                var Perms = getPerms;
+                var User = $(this).children('td').eq(4).text();
+                var Audio = $(this).children('td').eq(5).text();
+                var Video = $(this).children('td').eq(6).text();
+                var Image = $(this).children('td').eq(7).text();
+
+
+                Audio = setFileDefaults(Audio);
+                Video = setFileDefaults(Video);
+                Image = setFileDefaults(Image);
+
+                var commandRowJson = {
+                    cid: Name,
+                    cpermission: Perms,
+                    cuser: User,
+                    caudio: Audio,
+                    cvideo: Video,
+                    cimage: Image,
+                    ctext: text,
+                    ccooldown: "",
+                    cenabled: Enabled
+                };
+
+
+                SetCheckboxElement("chkBoxInputEnabled", commandRowJson.cenabled);
+                SetSelectElement("commandName", commandRowJson.cid);
+                SetSelectElement("selOptPermission", commandRowJson.cpermission);
+                SetSelectElement("audioSelect", commandRowJson.caudio);
+                SetSelectElement("videoSelect", commandRowJson.cvideo);
+                SetSelectElement("imageSelect", commandRowJson.cimage);
+                SetSelectElement("commandText", commandRowJson.ctext);
+
+            }
+
+
+        });
+
+
+        //////////////// THEME COLOUR PICKER LISTENERS
+
+        OutsideColorPicker.addEventListener("change", changeOutsideBox, false);
+        InsideColorPicker.addEventListener("change", changeInsideBox, false);
+        TogglesColorPicker.addEventListener("change", changeToggleButtons, false);
+        TogglesTextColorPicker.addEventListener("change", changeToggleButtonsText, false);
+        SearchColorPicker.addEventListener("change", changeSearchBoxes, false);
+        DropdownTextColorPicker.addEventListener("change", changeDropdowns, false);
+        DropdownBackgroundColorPicker.addEventListener("change", changeDropdownsBackground, false);
+        ModuleTextColorPicker.addEventListener("change", changeTextOnModules, false);
+
+        //////// IOSOCKET CONFIGURATION
+        iosocket.on('connect', function() {
+
+            console.log('socket connected');
+            connectedToSocket();
+
+        });
+
+        iosocket.on('connect_timeout', (timeout) => {
+
+            console.log('web socket connect timeout' + JSON.stringify(timeout));
+        });
+
+        iosocket.on("seq-num", (msg) => console.info(msg));
+
+        iosocket.on('connect_error', (error) => {
+            disconnectedToSocket();
+            console.log('web socket connect error' + JSON.stringify(error));
+
+        });
+
+
+
+        iosocket.on('error', (error) => {
+            console.log('bot web socket client error: ' + error.message);
+
+        });
+
+
+        iosocket.on('authenticated', function(message) {
+            console.log('client recieved authenticated message');
+            connectedToBeam();
+
+        });
+
+        iosocket.on('unauthenticated', function() {
+            disconnectedToBeam();
+            alert("Please Reauth your bot");
+
+        });
+
+        iosocket.on('loginaccounts', function(streamer, bot) {
+
+            setAccountsOnUi(streamer, bot);
+            console.log('client recieved unauthenticated message');
+        });
+
+        iosocket.on('followed', function(message) {
+
+            console.log(JSON.stringify(message));
+            $('#incomingChatMessages').append($('<li></li>').text(JSON.stringify(message, null, 2)));
+
+            addSingleFollowerToList(message);
+
+        });
+
+        iosocket.on('UserJoined', function(message) {
+
+            addSingleChatUserToList(message);
+
+        });
+
+
+        iosocket.on('MixerPurgeOrTimeoutMessage', function(message) {
+
+            addModeratorsActionToModMonitorList(message, 'PurgeOrTimeout');
+            //test
+        });
+
+        iosocket.on('MixerDeleteMessage', function(message) {
+
+            addModeratorsActionToModMonitorList(message, 'delete');
+
+        });
+
+        iosocket.on('MixerPurgeMessageBan', function(message) {
+
+            addModeratorsActionToModMonitorList(message, 'ban');
+
+        });
+
+
+        iosocket.on('UserPart', function(message) {
+
+            removeSingleChatUserFromList(message);
+
+        });
+
+        iosocket.on('update', function(message) {
+
+            //this is a constellation update
+            console.log('update in chat io');
+            console.log('update is: ' + console.log(JSON.stringify(message)));
+
+        });
+
+        iosocket.on('unfollowed', function(message) {
+
+
+            //this works but uncommented for now
+            /*             console.log('User Unfollowed');
+                        console.log(JSON.stringify(message));
+                        $('#incomingChatMessages').append($('<li></li>').text(JSON.stringify(message, null, 2)));
+                        removeSingleFollowerFromList(message); */
+
+        });
+
+        iosocket.on('message', function(message) {
+
+            $('#incomingChatMessages').append($('<li></li>').text(message));
+            /*            var objDiv = document.getElementById("chatbox");
+                       objDiv.scrollTop = objDiv.scrollHeight; */
+            scrollToEnd("chatbox");
+
+        });
+
+
+
+
+        iosocket.on('timer', function(message) {
+
+            $('#incomingChatMessages').append($('<li></li>').text("timer msg" + message));
+            var objDiv = document.getElementById("chatbox");
+            objDiv.scrollTop = objDiv.scrollHeight;
+
+        });
+
+        //server disconnected
+        iosocket.on('disconnect', function(reason) {
+
+            if (reason === 'io server disconnect') {
+                console.log('socket disconnected, reconnecting');
+                disconnectedToSocket();
+                // the disconnection was initiated by the server, you need to reconnect manually
+                iosocket.connect();
+            }
+
+        });
+
+        iosocket.on('followerCount', function(data) {
+
+            addFollowersToList(data);
+
+            for (var i = 0; i < data.length; i++) {
+                var obj = data[i];
+                followerUsrs.push(obj.id);
+            }
+
+
+            followerUsrsData = data;
+
+            var followCountStr = data.length.toString();
+
+            $("#followCountUsrs").empty();
+            $('#followCountUsrs').append($('<p></p>').text(followCountStr));
+
+        });
+
+        iosocket.on('followingCount', function(data) {
+
+            addFollowingToList(data);
+
+            $("#followingCountUsrs").empty();
+            $('#followingCountUsrs').append($('<p></p>').text(data.length.toString()));
+
+        });
+
+        iosocket.on('chatusercount', function(data) {
+
+            //add all users to JSON first
+            data.forEach(function(element) {
+
+                chatUsrs.push(element);
+            }, this);
+
+            //add users to table
+            addChatUsersToList(data);
+
+            //log temporarily to see whats in there
+            console.log('Chat Usrs array ' + JSON.stringify(chatUsrs));
+
+            //manage counter
+            var chatCountStr = chatUsrs.length.toString();
+            //$('#followCountUsrs').remove($('<p></p>'));
+            $("#chatCountUsrs").empty();
+            $('#chatCountUsrs').append($('<p></p>').text(chatCountStr));
+
+        });
+
+        iosocket.on('hostalertlist', function(data) {
+
+            addHostAlertsToTable(data);
+
+        });
+
+        iosocket.on('followalertlist', function(data) {
+
+            addFollowAlertsToTable(data);
+
+        });
+
+        iosocket.on('keywordlist', function(data) {
+
+            addKeywordsToTable(data);
+
+        });
+
+        iosocket.on('timerlist', function(data) {
+
+            addTimersToTable(data);
+
+        });
+
+        iosocket.on('addSaveSingleTimer', function(data) {
+
+            addorAmendTimerToTable(data);
+
+        });
+
+        iosocket.on('addSaveSingleTrigger', function(data) {
+
+            addorAmendTriggerToTable(data);
+
+        });
+
+
+        iosocket.on('sendSoundFilesToDropDown', function(data) {
+
+            addSoundMediaItems(data);
+
+        });
+
+        iosocket.on('sendVideoFilesToDropDown', function(data) {
+
+
+            addVideoMediaItems(data);
+
+
+        });
+
+        iosocket.on('sendImageFilesToDropDown', function(data) {
+
+            addImageMediaItems(data);
+
+        });
+
+        //processes command result
+        iosocket.on('addSaveCommandResult', function(data) {
+
+            var doSomethingWithResult = data;
+
+        });
+
+        iosocket.on('loadCommandsToList', function(data) {
+
+            addCommandsToListModule(data);
+
+        });
+
+
+        iosocket.on('loadMediaToList', function(audioMedia, imageMedia, videoMedia) {
+
+            addAllMediaToAlertAndCommandModules(audioMedia, imageMedia, videoMedia);
+
+        });
+
+        ////// SENDS MESSAGE TO MIXER VIA NODE JS SERVER
+        $('#outgoingChatMessage').keypress(function(event) {
+            if (event.which == 13) {
+                event.preventDefault();
+
+                if ($('#outgoingChatMessage').val().length > 0) {
+                    if ($('#outgoingChatMessage').val().length < 360) {
+                        iosocket.send($('#outgoingChatMessage').val());
+                        $('#outgoingChatMessage').val('');
+                    } else {
+                        alert('You cannot send a message longer than 360 characters');
+                    }
+
+                } else {
+                    console.log('Message Length is 0: ');
+                }
+
+            }
+        });
+
+
+        /////// 
+        minimisePartyUsersBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+        minimiseFollowersBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+        minimiseFollowingBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+        minimiseChatBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+        minimiseChatUsersBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+
+
+
+        minimiseTimerBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+
+        minimiseModMonBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+        minimiseKeywordsBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+        minimiseNotesBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+        minimiseCommandListBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+        minimiseRecentFollowersBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+
+        minimiseCommandBoxFunction = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
+
+
+        /*            function changeThemeTextItemChange(value, index, array) {
+                document.getElementById(value).style.color = this;
+
+                var el = document.getElementById(value);
+                el.style.color = this;
+
+
+            } */
+
+
+
+
+
+        minimiseBoxFunction = function(dataElement, parentElement) {
+
+            $('#' + dataElement).slideToggle();
+
+            if (document.getElementById(parentElement).style.height == "80px") {
+                document.getElementById(parentElement).style.height = "380px";
+                document.getElementById(parentElement).style.zIndex = pushAllToBackReturnIntIn(9);
+            } else {
+                document.getElementById(parentElement).style.height = "80px";
+                document.getElementById(parentElement).style.zIndex = pushAllToBackReturnIntIn(0);
+            }
+
+        }
+
+
+
+
+
+        function pushAllToBackReturnIntIn(number) {
+
+
+            var bringToBack = [];
+            bringToBack.push("divWrapperChat");
+            bringToBack.push("divWrapperCommands");
+            bringToBack.push("divWrapperAlerts");
+            bringToBack.push("divWrapperTriggerList");
+            bringToBack.push("divWrapperMedia");
+            bringToBack.push("divWrapperCommandsList");
+            bringToBack.push("divWrapperFollowers");
+            bringToBack.push("divWrapperFollowing");
+            bringToBack.push("divWrapperHostAlertsList");
+            bringToBack.push("divWrapperTimersList");
+            bringToBack.push("divWrapperModMonitor");
+            bringToBack.push("divWrapperTimerPanel");
+            bringToBack.push("divWrapperFollowAlertsList");
+            bringToBack.push("divWrapperNarrowChatUsers");
+            bringToBack.push("divWrapperNarrowRecentFollowers");
+            bringToBack.push("divWrapperNarrowKeywords");
+            bringToBack.forEach(pushDivToBack, event.target.value);
+
+            return number;
+        }
+
+
+
+
+
+        toggleSwitchModules = function(parentElement) {
+
+            var x = document.getElementById(parentElement);
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+
+        }
+
+
+        addModeratorsActionToModMonitorList = function(data, type) {
+
+
+            /*       <
+                  th > ID < /th> <
+                      th > Moderator < /th> <
+                      th > Action < /th> <
+                      th > Username < /th> <
+                      th > Date < /th> */
+
+
+            /*                                  "id": "3f9f2580-dfb1-11e8-b318-cd5dc9b6c820",
+                       "date": "2018-11-03T21:41:49.855Z",
+                       "moderatorid": 52684962,
+                       "moderatorname": "HersheyBot",
+                       "rolewho": "Mod",
+                       "action": "delete",
+                       "user": "" */
+
+
+            switch (type) {
+
+                case "delete":
+                    var tr;
+                    tr = $('<tr id="MMO' + data.id + '" class /> ');
+                    tr.append("<td>" + data.date + "</td>");
+                    tr.append("<td>" + data.rolewho + "</td>");
+                    tr.append("<td>" + data.moderatorname + "</td>");
+                    tr.append("<td>" + 'Deleted Message' + "</td>");
+                    tr.append("<td>" + data.user + "</td>");
+                    tr.append("<td>" + data.id + "</td>");
+                    $('#tableMMO').append(tr);
+
+                    break;
+                case "ban":
+                    tr = $('<tr id="MMO' + data.id + '" class /> ');
+                    tr.append("<td>" + data.date + "</td>");
+                    tr.append("<td>" + data.rolewho + "</td>");
+                    tr.append("<td>" + data.moderatorname + "</td>");
+                    tr.append("<td>" + 'Banned' + "</td>");
+                    tr.append("<td>" + data.user + "</td>");
+                    tr.append("<td>" + data.id + "</td>");
+                    $('#tableMMO').append(tr);
+
+                    break;
+                case "PurgeOrTimeout":
+                    tr = $('<tr id="MMO' + data.id + '" class /> ');
+                    tr.append("<td>" + data.date + "</td>");
+                    tr.append("<td>" + data.rolewho + "</td>");
+                    tr.append("<td>" + data.moderatorname + "</td>");
+                    tr.append("<td>" + 'Purged/Timed Out' + "</td>");
+                    tr.append("<td>" + data.user + "</td>");
+                    tr.append("<td>" + data.id + "</td>");
+                    $('#tableMMO').append(tr);
+
+                    break;
+                default:
+                    break;
+            }
+            //scroll table to end
+            scrollToEnd('modmonListbox');
+
+
+        }
+
+        //adds list of followers to list
+        addFollowersToList = function(data) {
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+
+
+                //these are your followers (people that you follow)
+                tr = $('<tr id="YFL' + data[i].id + '" class /> ');
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].username + "</td>");
+                tr.append("<td>" + data[i].followedDtFriendly + "</td>");
+                $('#tableF').append(tr);
+
+                //updates chat user if exists
+                amendChatUserRowToFollower(data[i].id);
+            }
+
+
+
+        }
+
+        addFollowingToList = function(data) {
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+
+                //these are people you follow
+                tr = $('<tr id="FLW' + data[i].userId + '" class /> ');
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].token + "</td>");
+                tr.append("<td>" + data[i].userId + "</td>");
+                tr.append("<td>" + data[i].userId + "</td>");
+                $('#tableCF').append(tr);
+            }
+
+            followingUsrsData = data;
+
+        }
+
+
+        //adds list of chat users to list
+        addChatUsersToList = function(data) {
+
+
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+
+                var res = data[i].split(" - ", 3);
+                var hidden = "display:none;";
+                var isChatUrsFollowing = checkIfFollowing(res[2]);
+                var ChatUrsFollowerResult = checkIfFollower(res[2]);
+
+                //checks if user is already in chat table
+                var addToTable = isInChat(res[2]);
+
+                if (!addToTable) {
+                    tr = $('<tr id="CU' + res[2] + '" class /> ');
+                    // tr = $('<tr class /> ');
+                    tr.append("<td>" + data[i] + "</td>");
+                    tr.append("<td>" + ChatUrsFollowerResult + "</td>");
+                    tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
+                    $('#tableChatUsers').append(tr);
+                }
+            }
+        }
+
+
+        addHostAlertsToTable = function(data) {
+
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+
+                var hidden = "display:none;";
+
+
+                tr = $('<tr id="HAL' + data[i].id + '" class /> ');
+                // tr = $('<tr class /> ');
+                tr.append("<td>" + data[i].enabled + "</td>");
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].audio + "</td>");
+                tr.append("<td>" + data[i].video + "</td>");
+                tr.append("<td>" + data[i].image + "</td>");
+                tr.append("<td>" + data[i].text + "</td>");
+                $('#tableHAL').append(tr);
+
+            }
+        }
+
+
+        addFollowAlertsToTable = function(data) {
+
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+
+                var hidden = "display:none;";
+
+
+                tr = $('<tr id="FAL' + data[i].id + '" class /> ');
+                // tr = $('<tr class /> ');
+                tr.append("<td>" + data[i].enabled + "</td>");
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].audio + "</td>");
+                tr.append("<td>" + data[i].video + "</td>");
+                tr.append("<td>" + data[i].image + "</td>");
+                tr.append("<td>" + data[i].text + "</td>");
+                $('#tableFAL').append(tr);
+
+            }
+        }
+
+
+
+        addKeywordsToTable = function(data) {
+
+            var tr;
+            for (var i = 0; i < data.length; i++) {
+
+                console.log('Keywords data for table is:' + data[i])
+
+                var hidden = "display:none;";
+
+                tr = $('<tr id="KW' + data[i].id + '" class /> ');
+                // tr = $('<tr class /> ');
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].text + "</td>");
+                tr.append("<td>" + data[i].enabled + "</td>");
+                $('#tableKW').append(tr);
+
+            }
+        }
+
+
+
+        //this is when its a new table
+        addorAmendTimerToTable = function(data) {
+
+            var tr;
+
+            var timerRow = document.getElementById("tableTIM").rows.namedItem("TIM" + data.id);
+
+            if (timerRow != null) {
+
+                var timerRowIndex = timerRow.rowIndex;
+
+                var x = document.getElementById("tableTIM").rows[timerRowIndex].cells;
+                x[1].innerHTML = data.enabled;
+                x[2].innerHTML = data.text;
+                x[3].innerHTML = data.interval;
+                x[4].innerHTML = data.option1;
+                x[5].innerHTML = data.option2;
+
+
+            } else {
+                console.log('Timers data for table is:' + data.id)
+
+                tr = $('<tr id="TIM' + data.id + '" class /> ');
+                // tr = $('<tr class /> ');
+                tr.append("<td>" + data.id + "</td>");
+                tr.append("<td>" + data.enabled + "</td>");
+                tr.append("<td>" + data.text + "</td>");
+                tr.append("<td>" + data.interval + "</td>");
+                tr.append("<td>" + data.option1 + "</td>");
+                tr.append("<td>" + data.option2 + "</td>");
+
+                $('#tableTIM').append(tr);
+            }
+
+
+
+
+
+
+        }
+
+
+        addorAmendTriggerToTable = function(data) {
+
+            var tr;
+
+            var triggerRow = document.getElementById("tableKW").rows.namedItem("KW" + data.id);
+
+            if (triggerRow != null) {
+
+                var triggerRowIndex = triggerRow.rowIndex;
+
+                var x = document.getElementById("tableKW").rows[triggerRowIndex].cells;
+
+                x[1].innerHTML = data.text;
+                x[2].innerHTML = data.enabled;
+
+
+
+            } else {
+                console.log('Timers data for table is:' + data.id)
+
+                tr = $('<tr id="KW' + data.id + '" class /> ');
+                // tr = $('<tr class /> ');
+                tr.append("<td>" + data.id + "</td>");
+                tr.append("<td>" + data.text + "</td>");
+                tr.append("<td>" + data.enabled + "</td>");
+
+
+                $('#tableKW').append(tr);
+            }
+
+
+
+
+
+
+        }
+
+
+
+        addTimersToTable = function(data) {
+
+            var tr;
+
+            for (var i = 0; i < data.length; i++) {
+                var rowID = data[i].id.replace("!", "x");
+                //var result = isFollowing(id);
+                console.log('timers data for table is:' + data[i])
+
+                var hidden = "display:none;";
+
+                tr = $('<tr id="TIM' + rowID + '" class /> ');
+                // tr = $('<tr class /> ');
+                tr.append("<td>" + data[i].id + "</td>");
+                tr.append("<td>" + data[i].enabled + "</td>");
+                tr.append("<td>" + data[i].text + "</td>");
+                tr.append("<td>" + data[i].interval + "</td>");
+                tr.append("<td>" + "N/A" + "</td>");
+                tr.append("<td>" + "N/A" + "</td>");
+                $('#tableTIM').append(tr);
+
+            }
+        }
+
+        removeSingleFollowerFromList = function(data) {
+
+            console.log("chat io - removeSingleFollowerFromList() " + data);
+
+            $("#YFL" + data.info.user.id.toString()).remove();
+
+            var rowCount = document.getElementById('tableF').rows.length - 1;
+
+            // amends if still in chat and updates to not following
+            amendChatUserRowToNonFollower(data.info.user.id);
+
+            //var followCountStr = followerUsrs.length.toString();
+            $("#followCountUsrs").empty();
+            $('#followCountUsrs').append($('<p></p>').text(rowCount));
+        }
+
+        addSingleFollowerToList = function(data) {
+
+            console.log("chat io - addSingleFollowerToList() " + data);
+
+            followerUsrs.push(data.info.user.id);
+
+            var tr;
+
+            var d = new Date();
+
+            tr = $('<tr id="YFL' + data.info.user.id + '" class /> ');
+            tr.append("<td>" + data.info.user.id + "</td>");
+            tr.append("<td>" + data.info.user.username + "</td>");
+            tr.append("<td>" + d.toDateString() + "</td>");
+            $('#tableF').append(tr);
+
+
+            var rowCount = document.getElementById('tableF').rows.length - 1;
+
+            //var followCountStr = followerUsrs.length.toString();
+            $("#followCountUsrs").empty();
+            $('#followCountUsrs').append($('<p></p>').text(rowCount));
+
+            //updates chat user list if exists
+            amendChatUserRowToFollower(data.info.user.id);
+        }
+
+
+        addSingleChatUserToList = function(data) {
+
+            //console.log("chat io - addSingleChatUserToList() " + data);
+            var newUser = [];
+            var res = data.split(" - ", 3);
+
+            console.log('User Array is' + JSON.stringify(data));
+
+            //check these and whats in them
+            newUser.push(res);
+            chatUsrs.push(newUser);
+
+            console.log('New Chat Usrs array is now ' + JSON.stringify(chatUsrs));
+
+            // am I following chat user ?
+            var ChatUsrFollowing = checkIfFollowing(res[2]);
+            // is chat user following me ?
+            var ChatUsrFollowerResult = checkIfFollower(res[2]);
+
+            //delete any entries of that user
+            isInChatDelete(res[2]);
+
+            var hidden = "display:none;";
+            var tr;
+            tr = $('<tr id="CU' + res[2] + '" class /> ');
+            tr.append("<td>" + data + "</td>");
+            tr.append("<td>" + ChatUsrFollowerResult + "</td>");
+            // tr.append("<td>" + ChatUsrFollowerResult + "</td>");
+            tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
+            $('#tableChatUsers').append(tr);
+
+            var chatCountStrNew = chatUsrs.length.toString();
+            $("#chatCountUsrs").empty();
+            $('#chatCountUsrs').append($('<p></p>').text(chatCountStrNew));
+        }
+
+
+        amendChatUserRowToFollower = function(id) {
+
+            var elid = "CU" + id;
+            var el = document.getElementById(elid);
+
+            if (el !== null) {
+
+                var chatUserdata = document.getElementById(elid).cells[0].innerHTML.toString();
+
+
+                if (document.getElementById(elid).firstChild == '[object HTMLTableCellElement]') {
+
+                    //Get contents off "cell clicked
+                    var content = "Follower";
+                    //amend chat user to follower
+                    var hidden = "display:none;";
+
+                    var row = '<tr id="' + elid + '" class /> ' + "<td>" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
+                    document.getElementById(elid).innerHTML = row;
+                }
+            }
+
+
+        }
+
+        amendChatUserRowToNonFollower = function(id) {
+
+            var elid = "CU" + id;
+            var el = document.getElementById(elid);
+            console.log("Chat User Row data Element is: " + document.getElementById(elid).cells[0].innerHTML.toString())
+
+
+            if (el !== null) {
+
+                console.log(" unfollowed event entire element html is: " + document.getElementById(elid).innerHTML.toString());
+
+
+                var chatUserdata = document.getElementById(elid).cells[0].innerHTML.toString();
+
+                if (document.getElementById(elid).firstChild == '[object Text]') {
+
+                    //Get contents off "cell clicked
+                    var content = "Not a Follower";
+                    //amend chat user to follower
+                    var hidden = "display:none;";
+
+                    var row = '<tr id="' + elid + '" class /> ' + "<td>" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
+                    document.getElementById(elid).innerHTML = row;
+                }
+            }
+
+
+        }
+
+        removeSingleChatUserFromList = function(data) {
+
+            console.log("User Left Channel");
+            console.log(JSON.stringify(data));
+
+            var res = data.split(" - ", 3);
+            console.log(res);
+            //check these and whats in them
+
+            chatUsrs.shift(res);
+
+            $("#CU" + res[2]).remove();
+
+            var chatCountStrNew = chatUsrs.length.toString();
+            $("#chatCountUsrs").empty();
+            $('#chatCountUsrs').append($('<p></p>').text(chatCountStrNew));
+
+
+        }
+
+
+        commandsPanelSelectPerms = function(data) {
+            if (data === "User") {
+
+                document.getElementById("commandUser").readOnly = false;
+
+
+            } else {
+                document.getElementById("commandUser").readOnly = true;
+            }
+        }
+
+        mediaTypeSelected = function(data) {
+            data = document.getElementById(data).selectedOptions[0].innerText;
+
+            switch (data) {
+                case "Audio":
+                    document.getElementById("audioMedSelect").disabled = false;
+                    document.getElementById("selAudioDurationMedVars").disabled = false;
+
+                    document.getElementById("imageMedSelect").disabled = true;
+                    document.getElementById("selImageDurationMedVars").disabled = true;
+                    document.getElementById("videoMedSelect").disabled = true;
+                    document.getElementById("selVideoDurationMedVars").disabled = true;
+
+                    document.getElementById("imageMedSelect").value = "default";
+                    document.getElementById("selImageDurationMedVars").value = "default";
+                    document.getElementById("videoMedSelect").value = "default";
+                    document.getElementById("selVideoDurationMedVars").value = "default";
+
+                    document.getElementById("medAudOtherValue").readOnly = true;
+                    document.getElementById("medAudOtherValue").value = "";
+                    document.getElementById("medImgOtherValue").readOnly = true;
+                    document.getElementById("medImgOtherValue").value = "";
+                    document.getElementById("medVidOtherValue").readOnly = true;
+                    document.getElementById("medVidOtherValue").value = "";
+                    break;
+
+                case "Image":
+                    document.getElementById("imageMedSelect").disabled = false;
+                    document.getElementById("selImageDurationMedVars").disabled = false;
+
+                    document.getElementById("audioMedSelect").disabled = true;
+                    document.getElementById("selAudioDurationMedVars").disabled = true;
+                    document.getElementById("videoMedSelect").disabled = true;
+                    document.getElementById("selVideoDurationMedVars").disabled = true;
+
+
+                    document.getElementById("audioMedSelect").value = "default";
+                    document.getElementById("selAudioDurationMedVars").value = "default";
+                    document.getElementById("videoMedSelect").value = "default";
+                    document.getElementById("selVideoDurationMedVars").value = "default";
+
+                    document.getElementById("medAudOtherValue").readOnly = true;
+                    document.getElementById("medAudOtherValue").value = "";
+                    document.getElementById("medImgOtherValue").readOnly = true;
+                    document.getElementById("medImgOtherValue").value = "";
+                    document.getElementById("medVidOtherValue").readOnly = true;
+                    document.getElementById("medVidOtherValue").value = "";
+
+                    break;
+
+                case "Video":
+                    document.getElementById("videoMedSelect").disabled = false;
+                    document.getElementById("selVideoDurationMedVars").disabled = false;
+
+                    document.getElementById("imageMedSelect").disabled = true;
+                    document.getElementById("selImageDurationMedVars").disabled = true;
+                    document.getElementById("audioMedSelect").disabled = true;
+                    document.getElementById("selAudioDurationMedVars").disabled = true;
+
+
+                    document.getElementById("audioMedSelect").value = "default";
+                    document.getElementById("selAudioDurationMedVars").value = "default";
+                    document.getElementById("imageMedSelect").value = "default";
+                    document.getElementById("selImageDurationMedVars").value = "default";
+
+                    document.getElementById("medAudOtherValue").readOnly = true;
+                    document.getElementById("medAudOtherValue").value = "";
+                    document.getElementById("medImgOtherValue").readOnly = true;
+                    document.getElementById("medImgOtherValue").value = "";
+                    document.getElementById("medVidOtherValue").readOnly = true;
+                    document.getElementById("medVidOtherValue").value = "";
+
+                    break;
+
+                default:
+                    document.getElementById("audioMedSelect").value = "default";
+                    document.getElementById("selAudioDurationMedVars").value = "default";
+                    document.getElementById("imageMedSelect").value = "default";
+                    document.getElementById("selImageDurationMedVars").value = "default";
+                    document.getElementById("videoMedSelect").value = "default";
+                    document.getElementById("selVideoDurationMedVars").value = "default";
+
+                    document.getElementById("medAudOtherValue").readOnly = true;
+                    document.getElementById("medAudOtherValue").value = "";
+                    document.getElementById("medImgOtherValue").readOnly = true;
+                    document.getElementById("medImgOtherValue").value = "";
+                    document.getElementById("medVidOtherValue").readOnly = true;
+                    document.getElementById("medVidOtherValue").value = "";
+                    break;
+            }
+
+
+        }
+
+        audioDurOtherSelected = function(data) {
+            data = document.getElementById(data).selectedOptions[0].innerText;
+
+            if (data === "Other") {
+
+                document.getElementById("medAudOtherValue").readOnly = false;
+
+            } else {
+                document.getElementById("medAudOtherValue").readOnly = true;
+                document.getElementById("medAudOtherValue").value = "";
+            }
+        }
+
+        imageDurOtherSelected = function(data) {
+            data = document.getElementById(data).selectedOptions[0].innerText;
+            if (data === "Other") {
+
+                document.getElementById("medImgOtherValue").readOnly = false;
+
+
+            } else {
+                document.getElementById("medImgOtherValue").readOnly = true;
+                document.getElementById("medImgOtherValue").value = "";
+            }
+        }
+
+
+        videoDurOtherSelected = function(data) {
+            data = document.getElementById(data).selectedOptions[0].innerText;
+            if (data === "Other") {
+
+                document.getElementById("medVidOtherValue").readOnly = false;
+
+
+            } else {
+                document.getElementById("medVidOtherValue").readOnly = true;
+                document.getElementById("medVidOtherValue").value = "";
+            }
+        }
+
+        //check the following to see if I am following my follower
+        function checkIfFollowing(data) {
+
+            var found = isFollowing(data);
+
+            if (found)
+                return "Unfollow";
+            else
+                return "Follow"
+
+        };
+
+
+
+        isFollowing = function(userID) {
+            //check if chat user is following
+            var FollowingRow = $("#FLW" + userID);
+
+            if (FollowingRow !== null) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+
+
+
+
+        isMyFollowingAFollower = function(userID) {
+            //is the person I am following a follower i.e are they in my followers list?
+            var FollowingRow = $("#YFL" + userID);
+
+            if (FollowingRow !== null) {
+
+                //I am following
+                return "Follows Me";
+            } else {
+                //I am not following
+                return "Does Follow Me";
+            }
+
+        }
+
+
+        //
+        isFollowingMyFollower = function(userID) {
+            //check if I am following my follower
+            var FollowingRow = $("#FLW" + userID);
+
+            if (FollowingRow !== null) {
+
+                //I am following
+                return "Following";
+            } else {
+                //I am not following
+                return "Not Following";
+            }
+
+        }
+
+
+
+
+        //check if user is follower
+        function checkIfFollower(data) {
+
+            var found = isFollower(data);
+
+            if (found)
+                return "Follower";
+            else
+                return "Not a Follower"
+
+        };
+
+        isFollower = function(userID) {
+            //check if chat user is following
+
+            var FollowerRow = document.getElementById("tableF").rows.namedItem("YFL" + userID);
+
+            if (FollowerRow !== null) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+        isInChatDelete = function(userID) {
+            //check if chat user is following
+            console.log('user to delete is: ' + userID);
+
+            var FollowerRow = document.getElementById("tableChatUsers").rows.namedItem("CU" + userID);
+            console.log('user to delete is: ' + userID);
+
+            if (FollowerRow !== null) {
+                $("#CU" + FollowerRow[2]).remove();
+            } else {
+
+            }
+
+        }
+
+        isInChat = function(userID) {
+
+            var FollowerRow = document.getElementById("tableChatUsers").rows.namedItem("CU" + userID);
+
+
+            if (FollowerRow !== null) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+
+
+        //this deals with themodules switches
+        chkBoxToglModuleVisible = function(div) {
+
+
+            var x = document.getElementById(div);
+
+
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+
+
+
+        }
+
+
+        // var switch1var = document.getElementById('switch1').checked;
+
+        //#region 
+        $("#chtUsrChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperNarrowChatUsers');
+        });
+
+        $("#recentFollowersChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperNarrowRecentFollowers');
+        });
+
+        $("#chtBoxChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperChat');
+        });
+
+        $("#followersChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperFollowers');
+        });
+
+        $("#followingChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperFollowing');
+        });
+
+        $("#partyQChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperNarrowPartyUsers');
+        });
+
+        $("#commandsChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperCommands');
+        });
+
+        $("#mediafilesChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperMedia');
+        });
+
+        $("#alertfilesChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperAlerts');
+        });
+
+        $("#hostalertsChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperHostAlertsList');
+        });
+
+        $("#followalertsChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperFollowAlertsList');
+        });
+
+        //LIST MODULES
+        $("#commandsListChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperCommandsList');
+        });
+
+        $("#keywordsListChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperNarrowKeywords');
+        });
+
+        $("#keywordsListChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperTriggerList');
+        });
+
+        $("#timerListChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperTimersList');
+        });
+
+        $("#modMonChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperModMonitor');
+        });
+
+        $("#managerTimersChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperTimerPanel');
+        });
+
+        $("#switch1").change(function() {
+
+            if (document.getElementById('switch1').checked) {
+
+                alert('checked');
+                $('.switch1').css({
+                    "background-color": "green"
+                });
+
+
+                iosocket.emit('startTimers', null);
+
+            } else {
+                // alert('unchecked');
+                $('.switch1').css({
+                    "background-color": "gray"
+                });
+
+                iosocket.emit('stopTimers', null);
+            }
+
+        });
+
+
+        // this plays a sound on the page for use with commands and possiblity quotes timers etc..
+        playCommandSound = function(file) {
+            /*     var snd = new Audio("../sounds/sound1.mp3"); // buffers automatically when created
+                snd.play(); 
+                file
+                */
+            // var src = "../sounds/sound1.mp3";
+            var src = "../sounds/" + file;
+            var c = document.createElement('audio');
+            c.src = src;
+
+            c.play();
+        }
+
+        addSaveCommand = function() {
+
+            var cmdObject = getCommandVariablesFromUI();
+
+            if (cmdObject != undefined) {
+                iosocket.emit('addSaveCommand', cmdObject);
+            }
+
+
+        }
+
+
+        deleteCommand = function() {
+
+            var cmdObject = getCommandVariablesFromUI();
+
+            if (cmdObject != undefined) {
+                iosocket.emit('deleteCommand', cmdObject);
+            }
+
+        }
+
+        addSaveTimer = function() {
+            var timObject = getTimerVariablesFromUI();
+
+            if (timObject != undefined) {
+                iosocket.emit('addSaveTimer', timObject);
+            }
+        }
+
+        addSaveTrigger = function() {
+            var triObject = getTriggerVariablesFromUI();
+
+            if (triObject != undefined) {
+                iosocket.emit('addSaveTrigger', triObject);
+            }
+        }
+
+        deleteTrigger = function() {
+            var triObject = getTriggerVariablesFromUI();
+
+            if (triObject != undefined) {
+                iosocket.emit('deleteTrigger', triObject);
+            }
+        }
+
+        deleteTimer = function() {
+            var timObject = getTimerVariablesFromUI();
+
+            if (timObject != undefined) {
+                iosocket.emit('deleteTimer', timObject);
+            }
+        }
+
+
+        //need to work on this
+        addEditAlert = function() {
+
+            var cmdObject = getAlertVariablesFromUI();
+
+
+            iosocket.emit('addEditAlert', cmdObject);
+
+
+        }
+
+
+        deleteAlert = function() {
+
+            var cmdObject = getAlertVariablesFromUI();
+
+            if (cmdObject != undefined) {
+                iosocket.emit('deleteAlert', cmdObject);
+            }
+
+
+        }
+
+        addSaveMedia = function() {
+
+            var mediaObject = getMediaVariablesFromUI();
+
+            if (mediaObject != undefined) {
+                iosocket.emit('addSaveMedia', mediaObject);
+            }
+
+        }
+
+
+
+
+
+        function getTimerVariablesFromUI() {
+
+            var timerEnabled = document.getElementById('chkTPBoxInputEnabled').checked;
+            var timerName = document.getElementById('TPtimerID').value;
+            var timerText = document.getElementById('tpText').value;
+            var timerInterval = document.getElementById('tpInterval').value;
+
+            if (timerName == "" || timerInterval == "") {
+
+                if (timerName == "") {
+                    alert("Please Select a Timer ID");
+                    return;
+                } else {
+                    alert("Please Select an Interval");
+                    return;
+                }
+
+            }
+
+            var timerObject = new Object();
+
+            //creates the command object
+            timerObject["enabled"] = convertEnabledBoolToYORN(timerEnabled);
+            timerObject["id"] = timerName;
+            timerObject["text"] = timerText;
+            timerObject["interval"] = parseInt(timerInterval);
+            timerObject["option1"] = "";
+            timerObject["option2"] = "";
+
+
+            return timerObject;
+
+        }
+
+
+
+
+        function getTriggerVariablesFromUI() {
+
+
+            var triggerEnabled = document.getElementById('chkKWBoxInputEnabled').checked;
+            var triggerName = document.getElementById('triggerName').value;
+            var triggerText = document.getElementById('kwTrigText').value;
+
+
+            var triggerObject = new Object();
+
+
+            //creates the command object
+            triggerObject["enabled"] = convertEnabledBoolToYORN(triggerEnabled);
+            triggerObject["id"] = triggerName;
+            triggerObject["text"] = triggerText;
+            triggerObject["option1"] = "";
+            triggerObject["option2"] = "";
+
+
+            return triggerObject;
+
+        }
+
+
+        function getCommandVariablesFromUI() {
+
+            var commandEnabled = document.getElementById('chkBoxInputEnabled').checked;
+            var commandName = document.getElementById('commandName').value;
+            var commandPermission = document.getElementById('selOptPermission').value;
+            var commandUserSpecific = document.getElementById('commandUser').value;
+            var commandAudioFile = document.getElementById('audioSelect').value;
+            var commandVideoFile = document.getElementById('videoSelect').value;
+            var commandImageFile = document.getElementById('imageSelect').value;
+            var commandText = document.getElementById('commandText').value;
+
+            var commandObject = new Object();
+
+            if (commandAudioFile.startsWith("Select") && commandVideoFile.startsWith("Select") && commandImageFile.startsWith("Select") && commandText == "") {
+                alert("You must select at least one of the four command types");
+                return;
+            } else {
+
+                //defaults need to be cleared / set to nothing
+                commandAudioFile = clearFileDefaults(commandAudioFile);
+                commandVideoFile = clearFileDefaults(commandVideoFile);
+                commandImageFile = clearFileDefaults(commandImageFile);
+
+                //creates the command object
+                commandObject["enabled"] = convertEnabledBoolToYORN(commandEnabled);
+                commandObject["id"] = commandName;
+                commandObject["permission"] = commandPermission;
+                commandObject["user"] = commandUserSpecific;
+                commandObject["audio"] = commandAudioFile;
+                commandObject["video"] = commandVideoFile;
+                commandObject["image"] = commandImageFile;
+                commandObject["text"] = commandText;
+
+            }
+
+
+            return commandObject;
+
+        }
+
+
+        function clearFileDefaults(value) {
+            if (value.startsWith("default")) {
+                return "";
+            } else {
+                return value;
+            }
+        }
+
+        function setFileDefaults(value) {
+            if (value == "") {
+                return "default";
+            } else {
+                return value;
+            }
+        }
+
+
+        //need to work on this
+        function getAlertVariablesFromUI() {
+
+            var alertEnabled = document.getElementById('chkaltBoxInputEnabled').checked;
+            var alertName = document.getElementById('alertName').value;
+            var commandAudioFile = document.getElementById('audioAltSelect').value;
+            var commandVideoFile = document.getElementById('videoAltSelect').value;
+            var commandImageFile = document.getElementById('imageAltSelect').value;
+            var commandText = document.getElementById('altText').value;
+            var commandAlertType = document.getElementById('selAlertTypeAltVars').value;
+
+            if (alertName == "" | commandAlertType == "") {
+                alert("Please Fill In the Alert Name and Type");
+                return;
+            }
+
+            //clears defaults
+            commandAudioFile = clearFileDefaults(commandAudioFile);
+            commandVideoFile = clearFileDefaults(commandVideoFile);
+            commandImageFile = clearFileDefaults(commandImageFile);
+
+            if (commandAudioFile == "" && commandVideoFile == "" && commandImageFile == "" && commandText == "") {
+                alert("Please Fill in Audio , Image , Video or Text");
+                return;
+            }
+
+
+
+            var commandObject = new Object();
+            commandObject["enabled"] = convertEnabledBoolToYORN(alertEnabled);
+            commandObject["id"] = alertName;
+            commandObject["audio"] = commandAudioFile;
+            commandObject["video"] = commandVideoFile;
+            commandObject["image"] = commandImageFile;
+            commandObject["text"] = commandText;
+            commandObject["type"] = commandAlertType;
+
+            return commandObject;
+
+        }
+
+
+        function getMediaVariablesFromUI() {
+
+            var mediaEnabled = document.getElementById('chkmedBoxInputEnabled').checked;
+            var mediaName = document.getElementById('mediaName').value;
+
+            var mediaType = document.getElementById('selMediaTypeMedVars').selectedOptions[0].innerText;
+            var mediaAudioFile = document.getElementById('audioMedSelect').selectedOptions[0].innerText;
+            var mediaAudioDur = document.getElementById('selAudioDurationMedVars').selectedOptions[0].innerText;
+            var mediaAudioOtherVal = document.getElementById('medAudOtherValue').value;
+
+            var mediaVideoFile = document.getElementById('videoMedSelect').selectedOptions[0].innerText;
+            var mediaVideoDur = document.getElementById('selVideoDurationMedVars').selectedOptions[0].innerText;
+            var mediaVideoOtherVal = document.getElementById('medVidOtherValue').value;
+
+            var mediaImageFile = document.getElementById('imageMedSelect').selectedOptions[0].innerText;
+            var mediaImageDur = document.getElementById('selImageDurationMedVars').selectedOptions[0].innerText;
+            var mediaImageOtherVal = document.getElementById('medImgOtherValue').value;
+
+            //TODO get value from durations and convert to milliseconds
+
+            if (mediaType.startsWith("Select") | mediaName == "") {
+                alert("Please select a Media Type and Media Name");
+                return;
+            } else {
+
+                var mediaObject = new Object();
+                if (mediaType == "Audio") {
+
+                    if (mediaAudioFile.startsWith("Select") | mediaAudioDur.startsWith("Select")) {
+                        alert("Please select an audio file and audio duration");
+                        return;
+                    } else {
+
+                        if (mediaAudioOtherVal.length > 0) {
+
+                            mediaAudioDur = setMediaDurationFromUI(mediaAudioOtherVal, mediaAudioDur);
+
+                        } else {
+                            mediaAudioDur = convertUIDurationToMilliseconds(mediaAudioDur)
+                        }
+
+                        if (mediaAudioDur != "") {
+                            mediaObject["enabled"] = convertEnabledBoolToYORN(mediaEnabled);
+                            mediaObject["id"] = mediaName;
+                            mediaObject["type"] = mediaType;
+                            mediaObject["audio"] = mediaAudioFile;
+                            mediaObject["audiodur"] = mediaAudioDur;
+                            mediaObject["video"] = "";
+                            mediaObject["videodur"] = "";
+                            mediaObject["image"] = "";
+                            mediaObject["imagedur"] = "";
+
+                        }
+
+                    }
+
+                }
+
+                if (mediaType == "Image") {
+
+                    if (mediaImageFile.startsWith("Select") | mediaImageDur.startsWith("select")) {
+                        alert("Please select an Image file and image duration");
+                        return;
+                    } else {
+
+                        if (mediaImageOtherVal.length > 0) {
+
+                            mediaImageDur = setMediaDurationFromUI(mediaImageOtherVal, mediaImageDur);
+                        } else {
+                            mediaImageDur = convertUIDurationToMilliseconds(mediaImageDur);
+                        }
+
+                        mediaObject["enabled"] = convertEnabledBoolToYORN(mediaEnabled);
+                        mediaObject["id"] = mediaName;
+                        mediaObject["type"] = mediaType;
+                        mediaObject["audio"] = "";
+                        mediaObject["audiodur"] = "";
+                        mediaObject["video"] = "";
+                        mediaObject["videodur"] = "";
+                        mediaObject["image"] = mediaImageFile;
+                        mediaObject["imagedur"] = mediaImageDur;
+                    }
+                }
+
+                if (mediaType == "Video") {
+
+                    if (mediaVideoFile.startsWith("Select") | mediaVideoDur.startsWith("Select")) {
+                        alert("Please select a video file and video duration");
+                        return;
+                    } else {
+
+                        if (mediaVideoOtherVal.length > 0) {
+
+                            mediaVideoDur = setMediaDurationFromUI(mediaVideoOtherVal, mediaVideoDur);
+
+                        } else {
+                            mediaVideoDur = convertUIDurationToMilliseconds(mediaVideoDur)
+                        }
+
+                        mediaObject["enabled"] = convertEnabledBoolToYORN(mediaEnabled);
+                        mediaObject["id"] = mediaName;
+                        mediaObject["type"] = mediaType;
+                        mediaObject["audio"] = "";
+                        mediaObject["audiodur"] = "";
+                        mediaObject["video"] = mediaVideoFile;
+                        mediaObject["videodur"] = mediaVideoDur;
+                        mediaObject["image"] = "";
+                        mediaObject["imagedur"] = "";
+                    }
+                }
+
+                return mediaObject;
+
+            }
+
+
+        }
+
+        setDefaultTheme();
+
+    });
+
+    function convertEnabledBoolToYORN(value) {
+        if (value == true) {
+            return "Y";
+        } else {
+            return "N";
+        }
+    }
+
+    function setMediaDurationFromUI(OtherVal, durValue) {
+
+        if (OtherVal.startsWith("0")) {
+            durValue = OtherVal.substring(1) * 1000;
+        } else {
+            durValue = parseInt(OtherVal) * 1000;
+        }
+        return durValue;
+    }
+
+
+
+    function convertUIDurationToMilliseconds(durationIn) {
+
+        switch (durationIn) {
+
+            case "":
+                return "";
+            case "5 Seconds":
+                return 5000;
+            case "10 Seconds":
+                return 10000;
+            case "15 Seconds":
+                return 15000;
+            case "30 Seconds":
+                return 30000;
+            case "60 Seconds":
+                return 60000;
+            case "Other":
+                return "Other";
+            default:
+                return "";
+        }
+
+    }
+
+    function getPermFromCommand(commandPermissions) {
+
+        switch (commandPermissions) {
+            case "+m":
+                return "Mod";
+            case "+v":
+                return "Viewer";
+            case "+o":
+                return "Owner";
+            case "+f":
+                return "Follower";
+            case "+s":
+                return "Subscriber";
+            case "+u":
+                return "User";
+            default:
+                return "Viewer";
+        }
+
+    }
+
+    function pushDivToBack(value, index, array) {
+
+        var x = document.getElementById(value);
+        x.style.zIndex = 0;
+
+    }
+
+    function setDefaultTheme() {
+
+
+        var picker = document.getElementById('OutsideColorPicker');
+        picker.setAttribute('value', '#000080');
+        picker.dispatchEvent(new Event('change'));
+
+        picker = document.getElementById('InsideColorPicker');
+        //picker.value = "#0000a0";
+        picker.setAttribute('value', '#0000a0');
+        picker.dispatchEvent(new Event('change'));
+
+        picker = document.getElementById('TogglesColorPicker');
+        //picker.value = "#0000a0";
+        picker.setAttribute('value', '#808080');
+        picker.dispatchEvent(new Event('change'));
+
+        picker = document.getElementById('TogglesTextColorPicker');
+        // picker.value = "#400040";
+        picker.setAttribute('value', '#400040');
+        picker.dispatchEvent(new Event('change'));
+
+        picker = document.getElementById('SearchColorPicker');
+        //picker.value = "#c0c0c0";
+        picker.setAttribute('value', '#c0c0c0');
+        picker.dispatchEvent(new Event('change'));
+
+        picker = document.getElementById('DropdownBackgroundColorPicker');
+        // picker.value = "#808080";
+        picker.setAttribute('value', '#808080');
+        picker.dispatchEvent(new Event('change'));
+
+
+        picker = document.getElementById('DropdownTextColorPicker');
+        // picker.value = "#808080";
+        picker.setAttribute('value', '#400040');
+        picker.dispatchEvent(new Event('change'));
+
+        picker = document.getElementById('ModuleTextColorPicker');
+        //picker.value = "#ff8040";
+        picker.setAttribute('value', '#ff8040');
+        picker.dispatchEvent(new Event('change'));
+
+
+    }
+
+    function changeTextOnModules(event) {
+
+        var themeElementsText = [];
+        themeElementsText.push("sendMessageTxtBox");
+        themeElementsText.push("followCountUsrs");
+        themeElementsText.push("followingCountUsrs");
+        themeElementsText.push("recentFollowersCount");
+        themeElementsText.push("commandPanelHeaderText");
+        themeElementsText.push("commandsListHeaderText");
+        themeElementsText.push("triggerPanelHeaderText");
+        themeElementsText.push("timerpanelPanelHeaderText");
+        themeElementsText.push("mediaPanelHeaderText");
+        themeElementsText.push("alertsPanelHeaderText");
+        themeElementsText.push("chatwindowText");
+        themeElementsText.push("menutexthostalerts");
+        themeElementsText.push("menutextfollowalerts");
+        themeElementsText.push("menutextkeywords");
+        themeElementsText.push("menutexttimerlist");
+        themeElementsText.push("menutextmodmonitor");
+        themeElementsText.push("menutextrecentfollowers");
+        themeElementsText.forEach(changeThemeTextItemChange, event.target.value);
+
+
+
+
+        //change div text colour by class name 
+        var themeElementsInsideModuleTextFormatting = [];
+        themeElementsInsideModuleTextFormatting.push("medSpansCombo");
+        themeElementsInsideModuleTextFormatting.push("medSpans");
+        themeElementsInsideModuleTextFormatting.push("altSpansCombo");
+        themeElementsInsideModuleTextFormatting.push("altSpans");
+        themeElementsInsideModuleTextFormatting.push("triSpans");
+        themeElementsInsideModuleTextFormatting.push("triSpansMedium");
+        themeElementsInsideModuleTextFormatting.push("triSpansFirst");
+        themeElementsInsideModuleTextFormatting.push("triSpansCombo");
+        themeElementsInsideModuleTextFormatting.push("cmdSpansCombo");
+        themeElementsInsideModuleTextFormatting.push("cmdSpans");
+        themeElementsInsideModuleTextFormatting.push("mediaPanelSmalllbl");
+        themeElementsInsideModuleTextFormatting.push("modulemenubartext");
+        themeElementsInsideModuleTextFormatting.forEach(changeDivTextItemChange, event.target.value);
+
+    }
+
+    function changeOutsideBox(event) {
+
+        var themeElementsMain = [];
+        themeElementsMain.push("divWrapperFollowers");
+        themeElementsMain.push("divWrapperFollowing");
+        themeElementsMain.push("divWrapperNarrowChatUsers");
+        themeElementsMain.push("divWrapperNarrowRecentFollowers");
+        themeElementsMain.push("divWrapperChat");
+        themeElementsMain.push("divWrapperCommands");
+        themeElementsMain.push("divWrapperCommandsList");
+        themeElementsMain.push("divWrapperMedia");
+        themeElementsMain.push("divWrapperAlerts");
+        themeElementsMain.push("divWrapperTriggerList");
+        themeElementsMain.push("divWrapperModMonitor");
+        themeElementsMain.push("divWrapperTimerPanel");
+        themeElementsMain.push("divWrapperTimersList");
+        themeElementsMain.push("divWrapperFollowAlertsList");
+        themeElementsMain.push("divWrapperNarrowKeywords");
+        themeElementsMain.push("divWrapperHostAlertsList");
+
+        themeElementsMain.forEach(changeOutsideBoxItemChange, event.target.value);
+
+        /*            document.querySelectorAll("p").forEach(function(p) {
+                       p.style.color = event.target.value;
+                   }); */
+    }
+
+    function changeInsideBox(event) {
+
+        var insideBoxElements = [];
+        insideBoxElements.push("chatbox");
+        insideBoxElements.push("followerbox");
+        insideBoxElements.push("followingbox");
+        insideBoxElements.push("narrowbox");
+        insideBoxElements.push("recentFollowersbox");
+        insideBoxElements.push("timerpanelbox");
+        insideBoxElements.push("triggerlistbox");
+        insideBoxElements.push("timersListbox");
+
+        insideBoxElements.forEach(changeInsideBoxItemChange, event.target.value);
+
+        var insideBoxCommandsElements = [];
+        insideBoxCommandsElements.push("commandsbox");
+        insideBoxCommandsElements.push("alertsbox");
+        insideBoxCommandsElements.push("mediabox");
+        insideBoxCommandsElements.push("commandsListbox");
+        insideBoxCommandsElements.push("keywordsbox");
+        insideBoxCommandsElements.push("modmonListbox");
+        insideBoxCommandsElements.push("hostAlertsListbox");
+        insideBoxCommandsElements.push("followAlertsListbox");
+
+        insideBoxCommandsElements.forEach(changeInsideBoxItemChange, event.target.value);
+
+    }
+
+    function changeToggleButtons(event) {
+
+        var toggleButtonElements = [];
+        toggleButtonElements.push("cbBtn");
+        toggleButtonElements.push("flActionBtn");
+        toggleButtonElements.push("RecentFollowersActionBtn");
+        toggleButtonElements.push("flBtn");
+        toggleButtonElements.push("flingBtn");
+        toggleButtonElements.push("chtUsersBtn");
+        toggleButtonElements.push("recentFollowersBtn");
+        toggleButtonElements.push("flngActionBtn");
+        toggleButtonElements.push("ChatActionBtn");
+        toggleButtonElements.push("flBtnWide");
+        toggleButtonElements.push("flBtnWideAlerts");
+        toggleButtonElements.push("flBtnWideTimers");
+
+
+
+
+        toggleButtonElements.push("flBtnWideTriggerManager");
+        toggleButtonElements.push("submitTPButton");
+        toggleButtonElements.push("submitKWButton");
+
+        toggleButtonElements.push("flBtnWideMedia");
+        toggleButtonElements.push("commandListBtn");
+        toggleButtonElements.push("submitCommandButton");
+        toggleButtonElements.push("deleteCommandButton");
+        toggleButtonElements.push("addVar");
+
+        toggleButtonElements.push("chatUsrBan");
+        toggleButtonElements.push("chatUsrTimeout5m");
+
+        toggleButtonElements.push("KeywordsToggleBtn");
+        toggleButtonElements.push("hostAlertsListBtn");
+        toggleButtonElements.push("followAlertsListBtn");
+        toggleButtonElements.push("timersListBtn");
+        toggleButtonElements.push("modmonListBtn");
+
+        toggleButtonElements.push("flBtnWideTriggerManager");
+        toggleButtonElements.push("flBtnWideTimers");
+        toggleButtonElements.push("KeywordsActionBtn");
+        toggleButtonElements.push("submitKWButton");
+
+
+
+
+
+        toggleButtonElements.push("deleteAlertButton");
+        toggleButtonElements.push("submitAlertButton");
+
+        toggleButtonElements.push("deleteMediaButton");
+        toggleButtonElements.push("submitMediaButton");
+
+        toggleButtonElements.forEach(changeToggleButtonsItemChange, event.target.value);
+
+    }
+
+    function changeToggleButtonsText(event) {
+
+        var toggleButtonElements = [];
+        toggleButtonElements.push("cbBtn");
+        toggleButtonElements.push("flActionBtn");
+        toggleButtonElements.push("RecentFollowersActionBtn");
+        toggleButtonElements.push("flBtn");
+        toggleButtonElements.push("flingBtn");
+        toggleButtonElements.push("chtUsersBtn");
+        toggleButtonElements.push("recentFollowersBtn");
+        toggleButtonElements.push("flngActionBtn");
+        toggleButtonElements.push("ChatActionBtn");
+        toggleButtonElements.push("flBtnWide");
+        toggleButtonElements.push("flBtnWideAlerts");
+        toggleButtonElements.push("flBtnWideMedia");
+        toggleButtonElements.push("commandListBtn");
+
+        toggleButtonElements.push("submitCommandButton");
+        toggleButtonElements.push("deleteCommandButton");
+        toggleButtonElements.push("addVar");
+
+
+
+        toggleButtonElements.push("chatUsrBan");
+        toggleButtonElements.push("chatUsrTimeout5m");
+        toggleButtonElements.push("modmonListBtn");
+        toggleButtonElements.push("timersListBtn");
+
+        toggleButtonElements.push("hostAlertsListBtn");
+        toggleButtonElements.push("followAlertsListBtn");
+        toggleButtonElements.push("KeywordsToggleBtn");
+
+
+        toggleButtonElements.push("flBtnWideTriggerManager");
+        toggleButtonElements.push("flBtnWideTimers");
+        toggleButtonElements.push("KeywordsActionBtn");
+        toggleButtonElements.push("submitKWButton");
+
+
+
+        toggleButtonElements.forEach(changeToggleButtonsTextItemChange, event.target.value);
+
+    }
+
+    function changeSearchBoxes(event) {
+
+
+
+        var moduleSearchBoxElements = [];
+        moduleSearchBoxElements.push("myInputF");
+        moduleSearchBoxElements.push("myInputFl");
+        moduleSearchBoxElements.push("myInputCO");
+
+
+        moduleSearchBoxElements.forEach(changeSearchBoxItemChange, event.target.value);
+
+    }
+
+    function changeDropdowns(event) {
+
+
+        //commands dropdowns
+        var moduleDropdownElements = [];
+        moduleDropdownElements.push("selOptPermission");
+        moduleDropdownElements.push("audioSelect");
+        moduleDropdownElements.push("videoSelect");
+        moduleDropdownElements.push("imageSelect");
+
+
+        //alert dropdowns
+        moduleDropdownElements.push("selAlertTypeAltVars");
+        moduleDropdownElements.push("audioAltSelect");
+        moduleDropdownElements.push("imageAltSelect");
+        moduleDropdownElements.push("videoAltSelect");
+
+        //media dropdowns
+        moduleDropdownElements.push("selMediaTypeMedVars");
+        moduleDropdownElements.push("audioMedSelect");
+        moduleDropdownElements.push("selAudioDurationMedVars");
+        moduleDropdownElements.push("imageMedSelect");
+        moduleDropdownElements.push("selImageDurationMedVars");
+        moduleDropdownElements.push("videoMedSelect");
+        moduleDropdownElements.push("selVideoDurationMedVars");
+
+
+        moduleDropdownElements.forEach(changeDropdownsTextItemChange, event.target.value);
+        ///
+
+    }
+
+    function changeDropdownsBackground(event) {
+
+
+        //commands dropdowns
+        var moduleDropdownElements = [];
+        moduleDropdownElements.push("selOptPermission");
+        moduleDropdownElements.push("audioSelect");
+        moduleDropdownElements.push("videoSelect");
+        moduleDropdownElements.push("imageSelect");
+
+
+        //alert dropdowns
+        moduleDropdownElements.push("selAlertTypeAltVars");
+        moduleDropdownElements.push("audioAltSelect");
+        moduleDropdownElements.push("imageAltSelect");
+        moduleDropdownElements.push("videoAltSelect");
+
+        //media dropdowns
+        moduleDropdownElements.push("selMediaTypeMedVars");
+        moduleDropdownElements.push("audioMedSelect");
+        moduleDropdownElements.push("selAudioDurationMedVars");
+        moduleDropdownElements.push("imageMedSelect");
+        moduleDropdownElements.push("selImageDurationMedVars");
+        moduleDropdownElements.push("videoMedSelect");
+        moduleDropdownElements.push("selVideoDurationMedVars");
+
+
+        moduleDropdownElements.forEach(changeDropdownsBackgroundItemChange, event.target.value);
+        ///
+
+    }
+
+    function changeThemeTextItemChange(value, index, array) {
+        document.getElementById(value).style.color = this;
+
+        var el = document.getElementById(value);
+        el.style.color = this;
+
+
+    }
+
+    function changeThemeTextItemChangeFormatting(value, index, array) {
+        var el = document.getElementById(value);
+
+        el.style.color = this;
+        el.style.fontWeight = "bold";
+        /*         el.style.float = "left";
+                el.style.paddingLeft = "40%"; */
+
+    }
+
+    function changeOutsideBoxItemChange(value, index, array) {
+        document.getElementById(value).style.background = this;
+    }
+
+    function changeInsideBoxItemChange(value, index, array) {
+        document.getElementById(value).style.background = this;
+    }
+
+    function changeToggleButtonsItemChange(value, index, array) {
+        var el = document.getElementById(value);
+        var elTextValue = document.getElementById('TogglesTextColorPicker').value;
+        el.style.background = this;
+        el.style.color = elTextValue;
+    }
+
+    function changeToggleButtonsTextItemChange(value, index, array) {
+        var el = document.getElementById(value);
+        var elBackgroundValue = document.getElementById('TogglesColorPicker').value;
+        el.style.background = elBackgroundValue;
+        el.style.color = this;
+    }
+
+    function changeSearchBoxItemChange(value, index, array) {
+        document.getElementById(value).style.background = this;
+    }
+
+    function changeDropdownsTextItemChange(value, index, array) {
+
+        var el = document.getElementById(value);
+        el.style.color = this;
+        el.style.backgroundImage = "url('../css/comboboxarrow.png')";
+    }
+
+    function changeDropdownsBackgroundItemChange(value, index, array) {
+        var el = document.getElementById(value);
+        el.style.backgroundColor = this;
+    }
+
+    function changeDivTextItemChange(value, index, array) {
+        /*    var cols = document.getElementsByClassName(value);
+           for (i = 0; i < cols.length; i++) {
+               cols[i].style.backgroundColor = this;
+           } */
+        var colour = this;
+        var inner = document.querySelectorAll("div." + value);
+
+        inner.forEach(function(item) {
+            item.style.color = colour;
+        });
+    }
+
+    function TimeOutMixerUser() {
+
+        var userToTimeout = document.getElementById('ChatActionBtn');
+
+        if (userToTimeout != "-") {
+            var timeout = confirm('Are you sure you wnat to timeout ' + userToTimeout.innerText);
+            if (timeout) {
+                alert('Timeout Submitted');
+                iosocket.emit('TimeoutMixerUser5Mins', userToTimeout.innerText);
+
+            } else {
+                alert('Timeout Cancelled');
+            }
+        }
+    }
+
+    function emptyTables() {
+
+        removeData();
+
+    }
+
+    function removeData() {
+        $("#tableChatUsers").find("tr:not(:first)").remove();
+        $("#tableF").find("tr:not(:first)").remove();
+        $("#tableCF").find("tr:not(:first)").remove();
+    }
+
+
+
+    function setUIToRefreshingData() {
+        refreshingMixerData();
+        //set UI to Refresh in progress here
+    }
+
+    function refreshingMixerData() {
+        //todo add connection icon
+        document.getElementById("beamConnection").innerHTML = '';
+        document.getElementById("beamConnection").innerHTML += "Mixer: Refreshing Data...";
+    }
+
+    function pingBeam() {
+
+        emptyTables();
+        setUIToRefreshingData();
+
+    }
+
+    function addCommandsToListModule(data) {
+
+        console.log('add commands to UI: ' + JSON.stringify(data));
+        data.data.commands.forEach(function(element) {
+
+            addSingleCommandToCommandListModule(element);
+
+        }, this);
+    }
+
+    function addSingleCommandToCommandListModule(data) {
+
+        /*                  <th>Enabled</th>
+                                    <th>Command Name</th>
+                                    <th>Text</th>
+                                    <th>Perms</th>
+                                    <th>User</th>
+                                    <th>Audio</th>
+                                    <th>Video</th>
+                                    <th>Image</th> 
+                                    
+                                        "id": "!test",
+            "permission": "SPECIFIC",
+            "user": "Schuster",
+            "audio": "sound1.mp3",
+            "video": "",
+            "image": "alert2.gif",
+            "text": "$user has been streaming for $uptime",
+            "cooldown": "5M",
+            "enabled": "Y"
+                                    
+                                    */
+
+
+
+        var commandEnabled = data.enabled;
+        var commandName = data.id;
+        var commantText = data.text;
+        var commandPerms = data.permission;
+        var commandUser = data.user;
+        var commandAudio = data.audio;
+        var commandVideo = data.video;
+        var commandImage = data.image;
+
+
+        var hidden = "display:none;";
+        var tr;
+        tr = $('<tr id="CO' + commandName + '" class /> ');
+        tr.append("<td>" + commandEnabled + "</td>");
+        tr.append("<td>" + commandName + "</td>");
+        tr.append("<td>" + commantText + "</td>");
+        tr.append("<td>" + commandPerms + "</td>");
+        tr.append("<td>" + commandUser + "</td>");
+        tr.append("<td>" + commandAudio + "</td>");
+        tr.append("<td>" + commandVideo + "</td>");
+        tr.append("<td>" + commandImage + "</td>");
+        //hidden sample
+        //tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
+        //add row to command list
+        $('#tableCO').append(tr);
+
+        /* //adjust command list count
+                var chatCountStrNew = chatUsrs.length.toString();
+                $("#tableCL").empty();
+                $('#tableCL').append($('<p></p>').text(chatCountStrNew)); */
+    }
+
+    function SetSelectElement(id, valueToSelect) {
+        var element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
+
+    function SetCheckboxElement(id, valueToSelect) {
+        var element = document.getElementById(id);
+        element.checked = valueToSelect;
+    }
+
+
+    function scrollToEnd(elementName) {
+        var objDiv = document.getElementById(elementName);
+        objDiv.scrollTop = objDiv.scrollHeight;
+    }
+</script>

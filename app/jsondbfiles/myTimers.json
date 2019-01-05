@@ -1,0 +1,20 @@
+{
+    "timers": [
+        {
+            "enabled": "Y",
+            "id": "!rules",
+            "text": "No Age in Chatioj",
+            "interval": 50000,
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!rules2",
+            "text": "No Age in Chatioj",
+            "interval": 50006,
+            "option1": "",
+            "option2": ""
+        }
+    ]
+}

@@ -1,0 +1,67 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    $(function() {
+
+        // var socket = io.connect('http://localhost:8001');
+        var iosocket = io.connect('http://localhost:8081');
+        iosocket.on('connect', function() {
+
+
+            //     connectedToSocket();
+
+            /*  $('#incomingChatMessages').append($('<li>Connected</li>')); */
+
+            /*  $('#incomingChatMessages').append($('<li>Connected</li>')); */
+            iosocket.on('message', function(message) {
+
+                //   $('#incomingChatMessages').append($('<li></li>').text(JSON.stringify(message, null, 2)));
+                // runOverlay();
+
+                //https://media.giphy.com/media/9TCH4keE6l9vy/giphy.mp4
+
+
+            });
+
+            /* iosocket.on('followalert', function(alertMsg) {
+
+
+                 runOverlay(alertMsg.userName);
+
+             }); */
+
+            // this gets called every x seconds
+            iosocket.on('playAlert', function(userName) {
+
+
+                playAlert(userName);
+
+            });
+
+            iosocket.on('playCommand', function(userName) {
+
+
+                playCommandAlert(userName);
+
+            });
+
+
+
+        });
+
+        finishedWork = function(Username) {
+            iosocket.emit('alertFinished', Username);
+        }
+
+        finishedCommandWork = function(dateid, type) {
+            iosocket.emit('alertCommandFinished', dateid, type);
+        }
+
+        callForNextAlert = function() {
+            iosocket.emit('getNextAlertInList', null);
+        }
+
+
+    });
+</script>

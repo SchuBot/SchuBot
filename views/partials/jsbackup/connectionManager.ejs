@@ -1,0 +1,31 @@
+<script>
+    connectedToSocket = function() {
+        document.getElementById("welcome").innerHTML = '';
+        document.getElementById("welcome").innerHTML += "Socket: Connected";
+    }
+
+    disconnectedToSocket = function() {
+        document.getElementById("welcome").innerHTML = '';
+        document.getElementById("welcome").innerHTML += "Socket: Disconnected";
+    }
+
+    connectedToBeam = function() {
+        //todo add connection icon
+        document.getElementById("beamConnection").innerHTML = '';
+        document.getElementById("beamConnection").innerHTML += "Mixer: Connected";
+    }
+
+
+
+    disconnectedToBeam = function() {
+        //todo add connection icon
+        document.getElementById("beamConnection").innerHTML = '';
+        document.getElementById("beamConnection").innerHTML += "Mixer: Not Authenticated";
+    }
+
+
+    setAccountsOnUi = function(streamer, bot) {
+        document.getElementById("casterAccount").innerHTML += streamer;
+        document.getElementById("botAccount").innerHTML += bot;
+    }
+</script>

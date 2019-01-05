@@ -1,0 +1,1262 @@
+.specialButton {
+    text-align: center;
+    float: right;
+}
+
+.button23 {
+    color: white;
+    display: block;
+    margin: 30px;
+    padding: 7px 35px;
+    font: 300 150% langdon;
+    background: transparent;
+    border: 3px solid black;
+    cursor: pointer;
+}
+
+#medVidOtherValue {
+    margin-bottom: 6px;
+}
+
+
+/* https://codepen.io/ericrasch/pen/zjDBx */
+
+
+/* -------------------- Source: http://danielneumann.com/blog/how-to-style-dropdown-with-css-only/ */
+
+
+/* -------------------- Source: http://stackoverflow.com/a/5809186 */
+
+#selOptPermission,
+#audioSelect,
+#audioAltSelect,
+#audioMedSelect,
+#videoSelect,
+#videoAltSelect,
+#videoMedSelect,
+#imageSelect,
+#imageAltSelect,
+#imageMedSelect,
+#selAudioDurationMedVars,
+#selVideoDurationMedVars,
+#selImageDurationMedVars,
+#selOptVars,
+#selAlertTypeAltVars,
+#selMediaTypeMedVars {
+    -webkit-appearance: button;
+    -webkit-padding-end: 20px;
+    -webkit-padding-start: 2px;
+    -webkit-user-select: none;
+    background-position: 97% center;
+    background-repeat: no-repeat;
+    font-size: inherit;
+    margin: 10px;
+    overflow: hidden;
+    padding: 5px 10px;
+    text-overflow: ellipsis;
+    /* -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #AAA;
+    white-space: nowrap;
+    width: 180px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: rgb(0, 0, 0);
+    background-image: url('/css/comboboxarrow.png'), -webkit-linear-gradient( #616161, #616161 40%, #616161);
+    background-color: #616161; */
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    padding-left: 15px;
+}
+
+option {
+    font-weight: bold;
+}
+
+select.dropdownTheme {
+    font-weight: bold;
+}
+
+
+/* comobox commands */
+
+
+/* this makes images opaque */
+
+img.transparent {
+    opacity: 0.15;
+}
+
+
+/* this makes images normal on hover */
+
+
+/* 
+img.transparent:hover {
+    opacity: 1;
+}
+ */
+
+body {
+    font: 12px arial;
+    color: #222;
+    text-align: center;
+    /*background-color: black;
+     padding: 35px; */
+}
+
+p,
+span {
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    font: 12px arial;
+    text-indent: 14px;
+}
+
+#chkBoxList {
+    width: 170px;
+    padding: 1em;
+    float: left;
+    /*margin-left: 1220px;*/
+    margin-top: 20px;
+    text-align: left;
+    overflow-y: auto;
+    height: 1000px;
+}
+
+.noteSpecial {
+    width: 50%;
+    float: left;
+}
+
+
+/* Modules Theme */
+
+.switchModuleText {
+    font-weight: bold;
+    font-size: 12pt;
+    padding-right: 5px;
+}
+
+.switchModuleText2 {
+    clear: left;
+    font-weight: bold;
+    font-size: 10pt;
+    padding-right: 5px;
+}
+
+
+/* Global Theme for all Text */
+
+.moduleText {
+    /*color: rgb(0, 0, 0);*/
+    color: orange;
+    font-weight: bold;
+}
+
+.moduleTextBlack {
+    /*color: rgb(0, 0, 0);*/
+    color: black;
+    font-weight: bold;
+}
+
+.moduleTextWhite {
+    /*color: rgb(0, 0, 0);*/
+    color: white;
+    font-weight: bold;
+}
+
+input#commandUser,
+input#commandName,
+textarea#commandText,
+textarea#ntNoteText,
+textarea#kwTrigText,
+input#mediaName,
+input#medAudOtherValue,
+input#medImgOtherValue,
+input#medVidOtherValue {
+    color: black;
+}
+
+
+/* this does the switches on the right that controls the visibilitity of the modules */
+
+.moduleToggleSwitches {
+    color: rgb(0, 0, 0);
+    background: rgb(114, 113, 113);
+}
+
+
+/* This does the toggle buttons in module */
+
+.toggleButton {
+    /* background: rgb(133, 131, 131);*/
+    background: #616161;
+    /*color: rgb(0, 0, 0);*/
+    color: orange;
+    /* These below  aren't theme related */
+    border-radius: 3em;
+    font-weight: bold;
+}
+
+.toggleAlertButtonSave {
+    width: 72px;
+    height: 30px;
+    /* background: rgb(133, 131, 131);*/
+    background: #616161;
+    /*color: rgb(0, 0, 0);*/
+    color: orange;
+    /* These below  aren't theme related */
+    border-radius: 3em;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.toggleAlertButtonDelete {
+    /* background: rgb(133, 131, 131);*/
+    width: 72px;
+    height: 30px;
+    background: #616161;
+    /*color: rgb(0, 0, 0);*/
+    color: orange;
+    /* These below  aren't theme related */
+    border-radius: 3em;
+    font-weight: bold;
+}
+
+.toggleButtonSave {
+    width: 72px;
+    height: 30px;
+    /* background: rgb(133, 131, 131);*/
+    background: #616161;
+    /*color: rgb(0, 0, 0);*/
+    color: orange;
+    /* These below  aren't theme related */
+    border-radius: 3em;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.toggleButtonDelete {
+    /* background: rgb(133, 131, 131);*/
+    width: 72px;
+    height: 30px;
+    background: #616161;
+    /*color: rgb(0, 0, 0);*/
+    color: orange;
+    /* These below  aren't theme related */
+    border-radius: 3em;
+    font-weight: bold;
+}
+
+
+/* this does the search boxes */
+
+.moduleSearchBox {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    background: rgb(148, 146, 146);
+}
+
+
+/* This colours the inside box */
+
+.insideBoxCommands,
+.insideBoxAlerts,
+.insideBoxMedia {
+    /* background: rgb(133, 131, 131); */
+    background: rgb(25, 25, 77);
+    /* color: rgb(0, 0, 0); */
+    color: orange;
+    /* These below  aren't theme related */
+}
+
+.insideBox {
+    /*  background: rgb(133, 131, 131); */
+    background: rgb(25, 25, 77);
+    /* color: rgb(0, 0, 0); */
+    color: orange;
+    /* These below  aren't theme related */
+    font-weight: bold;
+    width: 100%;
+}
+
+
+/* this does the dropdowns */
+
+.dropdownTheme {
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #AAA;
+    white-space: nowrap;
+    width: 180px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: orange;
+    background-image: url('../css/comboboxarrow.png'), -webkit-linear-gradient( #616161, #616161 40%, #616161);
+    background-color: #616161;
+}
+
+.square-button {
+    /* background: rgb(133, 131, 131); */
+    background: #616161;
+    color: orange;
+}
+
+.outsideBoxText {
+    color: orange;
+}
+
+
+/* This is the LIGHT theme */
+
+
+/* 
+#divWrapperFollowers.moduleThemeLight,
+#divWrapperFollowing.moduleThemeLight,
+#divWrapperNarrowChatUsers.moduleThemeLight,
+#divWrapperNarrowRecentFollowers.moduleThemeLight,
+#divWrapperKeywordsList.moduleThemeLight,
+#divWrapperChat.moduleThemeLight,
+#divWrapperCommands.moduleThemeLight,
+#divWrapperAlerts.moduleThemeLight,
+#divWrapperMedia.moduleThemeLight,
+#divWrapperCommandsList.moduleThemeLight {
+    background: rgb(81, 92, 250);
+}
+
+.toggleButtonLight {
+    background: rgb(81, 168, 250);
+    color: rgb(0, 0, 0);
+    border-radius: 3em;
+    font-weight: bold;
+}
+
+.moduleSearchBoxLight {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    background: rgb(81, 168, 250);
+}
+
+.insideBoxLight {
+    background: rgb(81, 168, 250);
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.insideBoxCommandsLight {
+    background: rgb(81, 168, 250);
+    color: rgb(0, 0, 0);
+}
+
+.dropdownThemeLight {
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #AAA;
+    white-space: nowrap;
+    width: 180px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: rgb(0, 0, 0);
+    background-image: url('/css/comboboxarrow.png'), -webkit-linear-gradient( rgb(134, 183, 255), rgb(81, 168, 250) 40%, rgb(81, 168, 250));
+    background-color: rgb(81, 168, 250);
+} */
+
+
+/* This is the blue theme
+
+#divWrapperFollowers.moduleThemeBlue,
+#divWrapperFollowing.moduleThemeBlue,
+#divWrapperNarrowChatUsers.moduleThemeBlue,
+#divWrapperNarrowRecentFollowers.moduleThemeBlue,
+#divWrapperKeywordsList.moduleThemeBlue,
+#divWrapperChat.moduleThemeBlue,
+#divWrapperCommands.moduleThemeBlue,
+#divWrapperAlerts.moduleThemeBlue,
+#divWrapperMedia.moduleThemeBlue,
+#divWrapperCommandsList.moduleThemeBlue {
+    background: #8691fc;
+}
+
+.toggleButtonBlue {
+    background: #8691fc;
+    color: rgb(0, 0, 0);
+    border-radius: 3em;
+    font-weight: bold;
+}
+
+.moduleSearchBoxBlue {
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+    background: #8691fc;
+}
+
+.insideBoxBlue {
+    background: #9293e6;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.insideBoxCommandsBlue {
+    background: #9293e6;
+    color: rgb(0, 0, 0);
+}
+
+.dropdownThemeBlue {
+    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #AAA;
+    white-space: nowrap;
+    width: 180px;
+    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    color: rgb(0, 0, 0);
+    background-image: url('/css/comboboxarrow.png'), -webkit-linear-gradient(#8691fc, #8691fc 40%, #8691fc);
+    background-color: #8691fc;
+} 
+
+
+/* End of Modules Theme */
+
+.mediaPanelSmalllbl {
+    width: 99%;
+    height: 20px;
+    margin-bottom: 2px;
+    padding-top: 9px;
+    margin-top: 1px;
+    padding-left: 9px;
+    margin-left: 1px;
+}
+
+.cmdSpansCombo,
+.altSpansCombo,
+.medSpansCombo {
+    font-weight: bold;
+    font-size: 10pt;
+    width: 120px;
+    float: left;
+    padding-top: 15px;
+    padding-left: 10px;
+}
+
+.cmdSpans,
+.altSpans,
+.medSpans,
+.triSpans,
+.timSpans,
+.notSpans {
+    font-weight: bold;
+    font-size: 10pt;
+    width: 130px;
+    float: left;
+    padding-top: 3px;
+    padding-left: 10px;
+}
+
+.triSpansFirst,
+.timSpansFirst,
+.notSpansFirst {
+    font-weight: bold;
+    font-size: 10pt;
+    /*width: 130px; */
+    float: left;
+    padding-top: 7px;
+    padding-left: 23px;
+}
+
+.triSpansMedium,
+.timSpansMedium,
+.notSpansMedium {
+    font-weight: bold;
+    font-size: 10pt;
+    width: 100%;
+    float: left;
+    padding-top: 3px;
+    padding-left: 10px;
+}
+
+.timSpansInterval {
+    font-weight: bold;
+    font-size: 10pt;
+    float: left;
+    padding-top: 3px;
+}
+
+input#commandName,
+input#commandUser,
+input#mediaName,
+input#alertName,
+input#triggerName {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    width: 220px;
+    height: 30px;
+    font-size: 12pt;
+}
+
+input#noteName {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    width: 150px;
+    height: 30px;
+    font-size: 12pt;
+}
+
+input#medAudOtherValue,
+input#medImgOtherValue,
+input#medVidOtherValue {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    width: 150px;
+    height: 30px;
+    font-size: 12pt;
+}
+
+textarea#commandText {
+    font-size: 14pt;
+    padding-left: 5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+textarea#ntNoteText,
+textarea#kwTrigText {
+    font-size: 14pt;
+    padding-left: 5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+button#submitCommandButton,
+button#deleteCommandButton {
+    margin-top: 0px;
+    margin-bottom: 2px;
+    height: 24px;
+    width: 80px;
+    padding-top: 0px;
+    padding-left: 0px;
+    margin-right: 15px;
+}
+
+button.square-button {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+button.square-buttonGroupVertical {
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#wrapper,
+#wrapperChat,
+#loginform {
+    /*  margin:0 auto;
+    padding-bottom:25px;
+    background:#EBF4FB;
+    width:395px;
+    border:1px solid #ACD8F0; */
+    margin: 0 auto;
+    padding-bottom: 0px;
+    /*background: rgb(251, 235, 235); */
+    width: 398px;
+    height: 298px;
+    border: 0px solid #ACD8F0;
+}
+
+#wrapperCommands,
+#wrapperAlerts,
+#wrapperMedia {
+    /*  margin:0 auto;
+    padding-bottom:25px;
+    background:#EBF4FB;
+    width:395px;
+    border:1px solid #ACD8F0;
+    margin: 0 auto; c */
+    padding-bottom: 0px;
+    width: 790px;
+    height: 300px;
+    border: 0px solid #ACD8F0;
+    float: left;
+}
+
+#chkBoxInputEnabled,
+#chkaltBoxInputEnabled,
+#chkmedBoxInputEnabled {
+    height: 20px;
+    width: 20px;
+    margin-top: 0px;
+}
+
+#partySizeInput {
+    margin-top: 5px;
+}
+
+#wrapperFollowers,
+#wrapperFollowing,
+#wrapperHostAlertsList,
+#wrapperFollowAlertsList,
+#wrapperChatUsers,
+#wrapperTriggerPanel,
+#wrapperNoteList,
+#wrapperTimerPanel,
+#wrapperRecentFollowers,
+#wrapperKeywords,
+#wrapperNote,
+#wrapperCommandsList {
+    /*  margin:0 auto;
+    padding-bottom:25px;
+    background:#EBF4FB;
+    width:395px;
+    border:1px solid #ACD8F0; */
+    margin: 0 auto;
+    padding-bottom: 0px;
+    /*background: #EBF4FB;*/
+    border: 0px solid #ACD8F0;
+    float: left;
+    width: 100%;
+}
+
+#wrapperTriggerPanel,
+#wrapperNote,
+#wrapperTimerPanel {
+    border: 1px solid #ACD8F0;
+    background: rgb(0, 0, 160);
+}
+
+#lblkwTrigText,
+#lblTimText,
+#lblntNoteText {
+    float: left;
+    margin-left: 20px;
+}
+
+#submitKWButton {
+    float: left;
+    margin-left: 40%;
+}
+
+#chatbox,
+#followerbox,
+#followingbox,
+#commandsListbox,
+#hostAlertsListbox,
+#followAlertsListbox,
+#modmonListbox,
+#timersListbox {
+    text-align: left;
+    margin-top: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 6px;
+    /* padding:10px; */
+    height: 200px;
+    width: 395px;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+}
+
+
+/* #followerOptions {
+    padding-top: 5px;
+    padding-bottom: 5px;
+} */
+
+div#menutextleftCL {
+    float: left;
+    padding-left: 5px;
+}
+
+div#menutextleft2 {
+    float: left;
+    padding-left: 5px;
+}
+
+.menutext {
+    float: left;
+    padding-left: 40%;
+    color: orange;
+}
+
+.modulemenubartext {
+    color: orange;
+    font-size: 14pt;
+    text-align: left;
+    padding: 2px;
+}
+
+div.menutextright,
+#flBtn.menutextright {
+    float: right;
+    padding-right: 5px;
+}
+
+#commandsbox,
+#alertsbox {
+    text-align: left;
+    margin-top: 0px;
+    margin-left: 4px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    /* padding:10px; */
+    width: 790px;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+}
+
+#mediabox {
+    text-align: left;
+    margin-top: 0px;
+    margin-left: 4px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    /* padding:10px; */
+    width: 780px;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+}
+
+#narrowbox,
+#recentFollowersbox,
+#keywordsbox,
+#notesbox {
+    text-align: left;
+    margin-top: 0px;
+    margin-left: 2px;
+    margin-right: 0px;
+    margin-bottom: 5px;
+    /* padding:10px; */
+    height: 255px;
+    width: 195px;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+}
+
+#partySizeInput {
+    width: 50%;
+}
+
+#usermsg {
+    width: 380px;
+    border: 1px solid #ACD8F0;
+}
+
+#submit {
+    width: 60px;
+}
+
+#commandSubmit,
+#alertSubmit {
+    float: right;
+}
+
+.error {
+    color: #ff0000;
+}
+
+#menu {
+    padding: 12.5px 25px 12.5px 25px;
+}
+
+#title {
+    font-size: 10pt;
+}
+
+
+/* 
+#flBtn,
+#flingBtn,
+#commandListBtn,
+#chtUsersBtn {
+
+    margin-top: 4px;
+    margin-right: 4px;
+    float: right;
+} */
+
+#commandListBtn {
+    float: right;
+}
+
+#cbBtn {
+    /*    margin-top: 4%;
+    margin-left: 50%;
+    margin-bottom: 2px;
+    */
+    float: right;
+    margin-top: 2px;
+    margin-right: 4px;
+}
+
+#recentFollowerBtn {
+    margin-top: 4px;
+    margin-right: 4px;
+}
+
+#flBtnWide,
+#flBtnWideAlerts,
+#flBtnWideTimers,
+#flBtnWideTriggerManager,
+#flBtnWideNoteManager,
+#flBtnWideMedia {
+    margin-top: 0px;
+    float: right;
+    margin-top: -22px;
+    /*height: 40px;*/
+}
+
+
+/* this does the buttons with text underneath */
+
+.square-button {
+    width: 40px;
+    height: 40px;
+    margin-left: 100px;
+    margin-top: -13px;
+    position: absolute;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+.btn-group-vertical-right {
+    position: relative;
+    vertical-align: middle;
+    float: right;
+    margin-top: 4px;
+}
+
+.btn-group-vertical-rightsecond {
+    position: relative;
+    vertical-align: middle;
+    float: right;
+    margin-top: 12px;
+}
+
+.btn-group-vertical-rightcommandslist {
+    position: relative;
+    vertical-align: middle;
+    float: right;
+    margin-top: -18px;
+}
+
+.square-buttonGroupVertical {
+    width: 40px;
+    height: 40px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#menubarnarrowcommandslist {
+    text-align: left;
+    padding-left: 2px;
+}
+
+#movMediaPanel,
+#movAlertsPanel,
+#movCommandsPanel,
+#movTriggerPanel,
+#movNotePanel,
+#movTimerPanel {
+    margin-top: -18px;
+    margin-bottom: 5px;
+}
+
+#movChatBoxModule {
+    margin-top: 4px;
+    margin-bottom: 5px;
+}
+
+#movCommandsListModule {
+    margin-top: 4px;
+    float: right;
+    margin-right: 6px;
+}
+
+#movRecentFollowersModule,
+#movKeywordsModule,
+#movTimersModule,
+#movModMonitorModule,
+#movFollowingModule,
+#movFollowersModule,
+#movNotesListModule {
+    margin-top: -8px;
+    margin-bottom: 5px;
+    margin-right: 6px;
+}
+
+#KeywordsToggleBtn,
+#NotesToggleBtn {
+    margin-top: -8px;
+}
+
+#movChatUsersModule {
+    margin-top: -8px;
+    margin-bottom: 5px;
+}
+
+#movHostAlertsListModule,
+#movFollowAlertsListModule {
+    margin-right: 6px;
+}
+
+#movChatUsersModule {
+    margin-right: 6px;
+}
+
+.square-buttonGroupVertical {
+    background: #616161;
+    color: orange;
+}
+
+.small-img {
+    max-width: 35px;
+    max-height: 35px;
+    /* background-image: url(~/img/moveicon.png); */
+    margin-left: -4px;
+}
+
+.button-text {
+    position: absolute;
+    bottom: 2%;
+    width: 100%;
+    left: 0%;
+    font-weight: bold;
+}
+
+
+/* this does the buttons with text underneath */
+
+div.menutext {
+    float: left;
+    padding-left: 40%;
+}
+
+#menutext {
+    float: left;
+    padding-left: 40%;
+}
+
+#menutext2 {
+    float: left;
+    padding-left: 40%;
+}
+
+#timersListBtn {
+    margin-top: 2px;
+}
+
+
+/* #menutextkeywords {
+    float: left;
+    padding-left: 60px;
+    margin-bottom: 5px;
+} */
+
+
+/* #menutextfollowalerts,
+#menutexthostalerts {
+    float: left;
+    padding-left: 40%;
+} */
+
+.welcome {
+    float: left;
+}
+
+.logout {
+    float: right;
+}
+
+.msgln {
+    margin: 0 0 2px 0;
+}
+
+#beamChat {
+    position: absolute;
+    background-color: #ff0000;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+}
+
+#elem {
+    position: absolute;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    overflow: auto;
+    margin: 0 auto;
+}
+
+#divWrapper,
+#divWrapperChat,
+#divWrapperCommands,
+#divWrapperAlerts,
+#divWrapperTriggerPanel,
+#divWrapperNote,
+#divWrapperMedia {
+    position: absolute;
+    /*background-color: green; */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    overflow: auto;
+    margin: 0 auto;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    background: #EBF4FB;
+}
+
+#divWrapperCommandsList,
+#divWrapperFollowers,
+#divWrapperFollowing,
+#divWrapperHostAlertsList,
+#divWrapperTimersList,
+#divWrapperModMonitor,
+#divWrapperTimerPanel,
+#divWrapperFollowAlertsList,
+#divWrapperNarrowChatUsers,
+#divWrapperNarrowRecentFollowers,
+#divWrapperKeywordsList,
+#divWrapperNotesList,
+#divWrapperNarrowPartyUsers {
+    position: absolute;
+    /*background-color: green; */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    overflow: auto;
+    margin: 0, 0, 0, 0;
+    border-radius: 5px;
+    border: 1px solid #000000;
+    background: #EBF4FB;
+}
+
+#sendChat {
+    position: absolute;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+    overflow: auto;
+    margin: 0 auto;
+}
+
+
+/*#chatbox {
+    text-align:left;
+    margin:0 auto;
+    margin-bottom:25px;
+    padding:10px;
+    background:#fff;
+    height:270px;
+    width:430px;
+    border:1px solid #ACD8F0;
+    overflow:auto; }
+*/
+
+
+/* #menubarnarrow {
+    padding-top: 5px;
+    height: 25px;
+} */
+
+
+/* #hostAlertsListmenubarnarrow,
+#followAlertsListmenubarnarrow {
+    padding-top: 5px;
+    height: 25px;
+} */
+
+#commandsmenubarnarrow,
+#alertsmenubarnarrow,
+
+/*#triggerlistmenubarnarrow, */
+
+#mediamenubarnarrow {
+    height: 70px;
+}
+
+#container {
+    position: absolute;
+    /* background-color: black; */
+    border: 1px solid #000000;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    background-color: #507cd8;
+}
+
+.footer p {
+    line-height: 60px;
+    color: white;
+}
+
+.footer a {
+    color: #efb22e;
+    text-decoration: none;
+}
+
+tbody td {
+    border: 1px #DDD solid;
+    padding: 5px;
+    cursor: pointer;
+}
+
+tbody tr.selected {
+    background-color: brown !important;
+    color: #FFF !important;
+}
+
+input#myInput {
+    background-image: url('/css/searchicon.png');
+    /* Add a search icon to input */
+    background-position: 1px 1px;
+    /* Position the search icon */
+    background-repeat: no-repeat;
+    /* Do not repeat the icon image */
+    width: 100%;
+    /* Full-width */
+    font-size: 14px;
+    /* Increase font-size */
+    padding: 4px 6px 4px 10px;
+    /* Add some padding */
+    border: 1px solid #ddd;
+    /* Add a grey border */
+    margin-top: 4px;
+    /* Add some space below the input */
+}
+
+input#myInputTIM {
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+#tableF,
+#tableCL,
+#tableCF,
+#tableTIM,
+#tableHAL,
+#tableFAL,
+#tableChatUsers,
+#tablePartyUsers,
+#tableRecentFollowers,
+#tableKW,
+#tableNotes {
+    border-collapse: collapse;
+    /* Collapse borders */
+    width: 100%;
+    /* Full-width */
+    border: 1px solid #ddd;
+    /* Add a grey border */
+    font-size: 12px;
+    /* Increase font-size */
+}
+
+#tableF th,
+#tableCF th,
+#tableKW th,
+#tableNotes th,
+#tableChatUsers th,
+#tableRecentFollowers th,
+#tablePartyUsers th,
+#tableCL th,
+#tableTIM th,
+#tableHAL th,
+#tableFAL th,
+#tableTIM td,
+#tableHAL td,
+#tableFAL td,
+#tableF td,
+#tableCF td,
+#tableKW td,
+#tableNotes td,
+#tableChatUsers td,
+#tablePartyUsers td,
+#tableCL td,
+#tableRecentFollowers td {
+    text-align: left;
+    /* Left-align text */
+    padding: 4px;
+    /* Add padding */
+}
+
+#tableF tr,
+#tableCL tr,
+#tableCF tr,
+#tableKW tr,
+#tableNotes tr,
+#tableTIM tr,
+#tableHAL tr,
+#tableFAL tr,
+#tableChatUsers tr,
+#tablePartyUsers tr,
+#tableRecentFollowers tr {
+    /* Add a bottom border to all table rows */
+    border-bottom: 1px solid #ddd;
+}
+
+#tableF tr.header,
+#tableCF tr.header,
+#tableKW tr.header,
+#tableNotes tr.header,
+#tableCL tr.header,
+#tablePartyUsers tr.header,
+#tableChatUsers tr.header,
+#tableRecentFollowers tr.header,
+#tableF tr:hover,
+#tableCF tr:hover,
+#tableKW tr:hover,
+#tableNotes tr:hover,
+#tableCL tr:hover,
+#tableTIM tr:hover,
+#tableHAL tr:hover,
+#tableFAL tr:hover,
+#tablePartyUsers tr:hover,
+#tableRecentFollowers tr:hover,
+#tableChatUsers tr:hover {
+    /* Add a grey background color to the table header and on hover */
+    background-color: #f1f1f1;
+}
+
+div.followerbox {
+    margin-top: 5px;
+}
+
+#commandPanelHeaderText,
+#alertsPanelHeaderText,
+#mediaPanelHeaderText,
+#alertListHeaderText,
+#triggerPanelHeaderText,
+#notePanelHeaderText,
+#timerpanelPanelHeaderText,
+#commandsListHeaderText,
+#chatwindowText {
+    font-size: 14pt;
+}

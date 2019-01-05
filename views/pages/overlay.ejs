@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>iBot - Dashboard</title>
+    <link href="/css/bootstrap.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <link href="/css/overlay.css" rel="stylesheet" type="text/css">
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+
+            <h1 id="h1"></h1>
+            <h2 id="h2"></h2>
+
+
+            <div id="container" style="width:1000px;height:800px;top:60px;left:220px; opacity:50;">
+
+                <div id="divWrapper" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:300px; left: 100px; top: 100px;">
+                    <div id="wrapper">
+                        <div id="Oimage" class="OverlayImage"></div>
+                        <div id="Owrap" class="OverlayWrap"></div>
+                        <div id="alertText"></div>
+                        <!-- class="text animated bounceInLeft" -->
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <% include ../partials/js/overlayio %>
+        <% include ../partials/js/overlayscript %>
+
+</body>
+
+
+
+</html>

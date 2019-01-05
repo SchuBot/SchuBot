@@ -1,0 +1,577 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <title>iBot - Streaming Solution</title>
+    <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
+
+    <!--Custom Fonts 
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli" rel="stylesheet">
+
+     Plugin CSS
+    <link rel="stylesheet" href="/vendors/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/vendors/simple-line-icons/css/simple-line-icons.css">
+
+     Theme CSS 
+    <link href="/css/login.css" rel="stylesheet">
+-->
+
+
+
+
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="well">Bot Login</h1>
+        <div class="col-lg-12 well">
+            <!--             <div class="row">
+                <div class="col-sm-6 form-group">
+                    <label>User Name</label>
+                    <input type="text" placeholder="username.." class="form-control">
+                </div>
+                <div class="col-sm-6 form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="password.." class="form-control">
+                </div>
+            </div> -->
+            <!--             <div class="row">
+                <div class="col-sm-12 text-center">
+
+                    <button type="button" class="btn btn-block btn-info">Login</button> 
+                    <a href="/login" class="btn btn-block btn-info"><span class="fa fa-beam"></span> Login</a>
+                </div>
+            </div> -->
+            <!--             <div class="or-text">
+                <div class="or-text-row">
+                    <div class="or-text-line">
+                        <button type="button" class="btn btn-default btn-circle" disabled="disabled">or</button>
+                    </div>
+                </div>
+            </div> -->
+            <div class="row">
+                <!--                 <div class="col-sm-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary">
+                <i class="fa fa-facebook"></i>Sign in with Facebook
+              </button>
+                    </div>
+                </div> -->
+                <!--                 <div class="col-sm-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-danger">
+                <i class="fa fa-google-plus"></i>Sign in with GooglePlus
+              </button>
+                    </div>
+                </div> -->
+                <!--                 <div class="col-sm-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info">
+                <i class="fa fa-linkedin"></i>Sign in with Linkedin
+              </button>
+                    </div>
+                </div> -->
+                <div class="col-sm-4">
+                    <div class="btn-group">
+                        <!-- /auth/beam "../botlogin.html" -->
+                        <button id="BotLogin" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Bot Sign in with Mixer</button>
+                        <button id="StreamerLogin" class="btn btn-block btn-info"><span class="fa fa-beam"></span>home</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Insert this line above script imports  -->
+    <script type="text/javascript">
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+    <!-- normal script imports etc  -->
+
+    <!-- Insert this line after script imports -->
+    <script type="text/javascript">
+        if (window.module) module = window.module;
+    </script>
+    <script type="text/javascript">
+        // include the ipc module to communicate with main process. 
+        const ipcRenderer = require('electron').ipcRenderer;
+
+        //const {session} = require('electron').remote;
+
+
+        const {
+            remote
+        } = require('electron');
+        const {
+            BrowserWindow
+        } = remote;
+
+
+
+        const btnclick = document.getElementById('BotLogin');
+        btnclick.addEventListener('click', function() {
+
+
+            //  ipcRenderer.send('open-login-window', 'an-argument');
+
+
+            // based on:
+            // http://iamemmanouil.com/blog/electron-oauth-with-github/
+            // https://github.com/ekonstantinidis/gitify
+
+            // this version uses https rather than superagent
+
+
+
+
+
+            // // Your GitHub Applications Credentials
+            // var options = {
+            //     client_id: '5ca546b27d464fc8e8fc8ac42e38380c5917710bbdf9545d',
+            //     client_secret: 'your_client_secret',
+            //     response_type: "token",
+            //     redirectUrl: "http://localhost:8081/auth/mixer2",
+            //     accessTokenPath: "https://mixer.com/api/v1/oauth/token",
+            //     scopes: ["user:details:self interactive:robot:self chat:connect chat:chat chat:whisper chat:bypass_links chat:bypass_slowchat chat:bypass_catbot chat:bypass_filter chat:clear_messages chat:giveaway_start chat:poll_start chat:remove_message chat:timeout chat:view_deleted chat:purge channel:details:self channel:update:self channel:clip:create:self"] // Scopes limit access for OAuth tokens.
+            // };
+
+            // // Build the OAuth consent page URL
+            // var authWindow = new electron.remote.BrowserWindow({
+            //     width: 800,
+            //     height: 600,
+            //     show: false,
+            //     sandbox: true
+            // });
+            // var githubUrl = 'https://mixer.com/oauth/authorize?';
+            // var authUrl = githubUrl + 'client_id=' + options.client_id + '&scope=' + options.scopes + '&response_type=' + options.response_type + '&redirect_uri=' + options.redirectUrl;
+            // authWindow.loadURL(authUrl);
+            // authWindow.show();
+
+
+            // //
+            // // var authWindow = new BrowserWindow({
+            // //     width: 800, 
+            // //     height: 600, 
+            // //     show: false, 
+            // //     'node-integration': false,
+            // //     'web-security': false
+            // // });
+            // // This is just an example url - follow the guide for whatever service you are using
+            // // var authUrl = 'https://SOMEAPI.com/authorize?{client_secret}....'
+
+            // // authWindow.loadURL(authUrl);
+            // // authWindow.show();
+            // // 'will-navigate' is an event emitted when the window.location changes
+            // // newUrl should contain the tokens you need
+            // authWindow.webContents.on('will-navigate', function(event, newUrl) {
+            //     console.log(newUrl);
+            //     // More complex code to handle tokens goes here
+            // });
+
+            // authWindow.webContents.on('did-get-redirect-request', function(event, oldUrl, newUrl) {
+            //     console.log("redirect");
+            // });
+
+            // authWindow.on('closed', function() {
+            //     authWindow = null;
+            // });
+
+            // authWindow.webContents.on('did-get-response-details', function(event, oldUrl, newUrl) {
+            //     console.log("redirect");
+            // });
+
+
+
+
+            // let type = "streamer";
+
+            // let tokenData = null;
+
+            // let streamerScopes = "user:details:self interactive:robot:self chat:connect chat:chat chat:whisper chat:bypass_links chat:bypass_slowchat chat:bypass_catbot chat:bypass_filter chat:clear_messages chat:giveaway_start chat:poll_start chat:remove_message chat:timeout chat:view_deleted chat:purge channel:details:self channel:update:self channel:clip:create:self";
+
+
+            // let info = {
+            //     key: '5ca546b27d464fc8e8fc8ac42e38380c5917710bbdf9545d',
+            //     scope: streamerScopes,
+            //     baseSite: "",
+            //     authorizePath: "https://mixer.com/oauth/authorize",
+            //     accessTokenPath: "https://mixer.com/api/v1/oauth/token",
+            //     redirectUrl: "http://localhost:8081/auth/mixer2",
+            //     code: "token"
+
+
+            // };
+
+            // let loginwindow = new BrowserWindow({
+            //     alwaysOnTop: true,
+            //     autoHideMenuBar: true,
+            //     webPreferences: {
+            //         nodeIntegration: false
+            //     }
+            // });
+
+
+
+            // // let loginwindow = new remote.BrowserWindow({
+            // //     parent: remote.getCurrentWindow(),
+            // //     modal: true
+            // // })
+
+            // let loginwindow = new BrowserWindow({
+            //     alwaysOnTop: true,
+            //     autoHideMenuBar: true,
+            //     webPreferences: {
+            //         nodeIntegration: false
+            //     }
+
+            // })
+
+            // var theUrl = 'file://' + __dirname + '/streamerlogin.html'
+            // console.log('url', theUrl);
+
+            // loginwindow.loadURL(theUrl);
+
+            /*  const ses = session.fromPartition(type);
+             ses.clearStorageData(); */
+
+            //   let auth = data => { 
+            //                      loginAuth.oauth2(info, loginwindow).then(token => {
+            //                          return token
+            //                      }).catch(err => {
+            //                              return err
+            //                          }
+            //                      } 
+
+
+
+
+
+
+        });
+
+
+        // this is the streamer login
+        const btnclickStreamer = document.getElementById('StreamerLogin');
+        btnclickStreamer.addEventListener('click', function() {
+
+            ipcRenderer.send('mixer-login', 'streamer');
+
+        });
+
+        const btnclickBot = document.getElementById('BotLogin');
+        btnclickBot.addEventListener('click', function() {
+
+            ipcRenderer.send('mixer-login', 'bot');
+
+        });
+
+
+
+
+        // } else {
+        //     authWindow.loadURL(authUrl);
+        //     authWindow.show();
+        // }
+
+
+
+
+        // // authWindow.webContents.session.clearStorageData();
+
+        // authWindow.webContents.on('will-redirect', function(event, newUrl, isInPlace, isMainFrame, frameProcessId, frameRoutingId) {
+
+        //     console.log('test');
+
+        // });
+
+
+
+
+        // authWindow.webContents.on('new-window', function(event, newUrl) {
+        //     console.log(url);
+        // })
+
+
+        // authWindow.webContents.on('will-navigate', function(event, newUrl) {
+        //     var raw_code = /code=([^&]*)/.exec(newUrl) || null,
+        //         code = (raw_code && raw_code.length > 1) ? raw_code[1] : null,
+        //         error = /\?error=(.+)$/.exec(newUrl);
+
+        //     if (code || error) {
+        //         // Close the browser if code found or error
+        //         authWindow.close();
+        //     }
+
+        //     // If there is a code in the callback, proceed to get token from mixer
+        //     if (code) {
+        //         console.log("code recieved: " + code);
+
+        //         var postData = querystring.stringify({
+        //             "grant_type": options.grant_type,
+        //             "redirect_uri": options.redirectUri,
+        //             "client_id": options.client_id,
+        //             "code": code
+        //         });
+
+        //         var post = {
+        //             host: "mixer.com",
+        //             path: "/api/v1/oauth/token",
+        //             method: "POST",
+        //             headers: {
+        //                 'Content-Type': 'application/x-www-form-urlencoded',
+        //                 'Content-Length': postData.length,
+        //                 "Accept": "application/json"
+        //             }
+        //         };
+
+        //         var req = https.request(post, function(response) {
+        //             var result = '';
+        //             response.on('data', function(data) {
+        //                 result = result + data;
+        //             });
+        //             response.on('end', function() {
+        //                 var json = JSON.parse(result.toString());
+        //                 console.log("access token recieved: " + json.access_token);
+
+
+
+
+        //                 userInfo("streamer", json.access_token, json.refresh_token, null, authDB)
+
+        //                 //  mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
+
+
+
+        //                 if (response && response.ok) {
+        //                     // Success - Received Token.
+        //                     // Store it in localStorage maybe?
+        //                     console.log(response.body.access_token);
+        //                 }
+        //             });
+        //             response.on('error', function(err) {
+        //                 console.log("MIXER OAUTH REQUEST ERROR: " + err.message);
+        //             });
+        //         });
+
+        //         req.write(postData);
+        //         req.end();
+        //     } else if (error) {
+        //         alert("Oops! Something went wrong and we couldn't log you in using Github. Please try again.");
+        //     }
+        // });
+
+
+        // authWindow.webContents.on('did-get-redirect-request', function(event, oldUrl, newUrl) {
+        //     var raw_code = /code=([^&]*)/.exec(newUrl) || null,
+        //         code = (raw_code && raw_code.length > 1) ? raw_code[1] : null,
+        //         error = /\?error=(.+)$/.exec(newUrl);
+
+        //     if (code || error) {
+        //         // Close the browser if code found or error
+        //         authWindow.close();
+        //     }
+
+        //     // If there is a code in the callback, proceed to get token from mixer
+        //     if (code) {
+        //         console.log("code recieved: " + code);
+
+        //         var postData = querystring.stringify({
+        //             "grant_type": options.grant_type,
+        //             "redirect_uri": options.redirectUri,
+        //             "client_id": options.client_id,
+        //             "code": code
+        //         });
+
+        //         var post = {
+        //             host: "mixer.com",
+        //             path: "/api/v1/oauth/token",
+        //             method: "POST",
+        //             headers: {
+        //                 'Content-Type': 'application/x-www-form-urlencoded',
+        //                 'Content-Length': postData.length,
+        //                 "Accept": "application/json"
+        //             }
+        //         };
+
+        //         var req = https.request(post, function(response) {
+        //             var result = '';
+        //             response.on('data', function(data) {
+        //                 result = result + data;
+        //             });
+        //             response.on('end', function() {
+        //                 var json = JSON.parse(result.toString());
+        //                 console.log("access token recieved: " + json.access_token);
+
+
+
+
+        //                 userInfo("streamer", json.access_token, json.refresh_token, null, authDB)
+
+        //                 mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
+
+
+
+        //                 if (response && response.ok) {
+        //                     // Success - Received Token.
+        //                     // Store it in localStorage maybe?
+        //                     console.log(response.body.access_token);
+        //                 }
+        //             });
+        //             response.on('error', function(err) {
+        //                 console.log("MIXER OAUTH REQUEST ERROR: " + err.message);
+        //             });
+        //         });
+
+        //         req.write(postData);
+        //         req.end();
+        //     } else if (error) {
+        //         alert("Oops! Something went wrong and we couldn't log you in using Github. Please try again.");
+        //     }
+        // });
+
+        // // Reset the authWindow on close
+        // authWindow.on('close', function() {
+        //     authWindow = null;
+        // }, false);
+
+
+
+        /* const {
+                OAuth2Provider
+            } = require("electron-oauth-helper")
+
+            const window = new BrowserWindow({
+                width: 600,
+                height: 800,
+                webPreferences: {
+                    sandbox: true
+                },
+            })
+
+
+
+            let streamerScopes = "user:details:self interactive:robot:self chat:connect chat:chat chat:whisper chat:bypass_links chat:bypass_slowchat chat:bypass_catbot chat:bypass_filter chat:clear_messages chat:giveaway_start chat:poll_start chat:remove_message chat:timeout chat:view_deleted chat:purge channel:details:self channel:update:self channel:clip:create:self";
+
+
+
+            const config = {
+                client_id: "5ca546b27d464fc8e8fc8ac42e38380c5917710bbdf9545d",
+                redirect_uri: "http://localhost:8081/auth/mixer2",
+                authorize_url: "https://mixer.com/oauth/authorize",
+                access_token_url: "https://mixer.com/api/v1/oauth/token",
+                response_type: "code",
+                scope: streamerScopes,
+            }
+
+
+            const provider = new OAuth2Provider(config)
+                // Your can use custom parameter.
+                // const provider = new OAuth2Provider(config)
+                //   .withCustomAuthorizationRequestParameter({})
+                //   .withCustomAccessTokenRequestParameter({})
+            provider.perform(window)
+                .then(resp => {
+                    console.log(resp)
+                })
+                .catch(error => console.error(error))
+ */
+
+
+
+        /* Not In USE */
+        // function login() {
+        //     const {
+        //         OAuth2Provider
+        //     } = require("electron-oauth-helper")
+
+        //     const window = new BrowserWindow({
+        //         parent: mainWindow,
+        //         modal: true,
+        //         width: 600,
+        //         height: 800,
+        //         webPreferences: {
+        //             sandbox: true
+        //         },
+        //     })
+
+        //     let streamerScopes = "user:details:self interactive:robot:self chat:connect chat:chat chat:whisper chat:bypass_links chat:bypass_slowchat chat:bypass_catbot chat:bypass_filter chat:clear_messages chat:giveaway_start chat:poll_start chat:remove_message chat:timeout chat:view_deleted chat:purge channel:details:self channel:update:self channel:clip:create:self";
+
+
+
+        //     const config = {
+        //         client_id: "5ca546b27d464fc8e8fc8ac42e38380c5917710bbdf9545d",
+        //         redirect_uri: "http://localhost:8081/auth/mixer2",
+        //         authorize_url: "https://mixer.com/oauth/authorize",
+        //         access_token_url: "https://mixer.com/api/v1/oauth/token",
+        //         response_type: "code",
+        //         scope: streamerScopes,
+        //     }
+
+
+        //     const provider = new OAuth2Provider(config)
+        //         // Your can use custom parameter.
+        //         // const provider = new OAuth2Provider(config)
+        //         //   .withCustomAuthorizationRequestParameter({})
+        //         //   .withCustomAccessTokenRequestParameter({})
+        //     provider.perform(window)
+        //         .then(resp => {
+        //             console.log(resp)
+        //         })
+        //         .catch(error => console.error(error))
+
+        //     /*             let info = {
+        //                     key: '5ca546b27d464fc8e8fc8ac42e38380c5917710bbdf9545d',
+        //                     scope: streamerScopes,
+        //                     baseSite: "",
+        //                     authorizePath: "https://mixer.com/oauth/authorize",
+        //                     accessTokenPath: "https://mixer.com/api/v1/oauth/token",
+        //                     redirectUrl: "http://localhost:8081/auth/mixer2",
+        //                     code: "token"
+
+
+        //                 };
+
+        //                 let loginwindow = new BrowserWindow({
+        //                     alwaysOnTop: true,
+        //                     autoHideMenuBar: true,
+        //                     webPreferences: {
+        //                         nodeIntegration: false
+        //                     }
+        //                 });
+
+
+        //                 loginAuth.oauth2(info, loginwindow).then(token => {
+        //                     console.log(token);
+        //                 }).catch(err => {
+        //                     console.log("error");
+        //                 }); */
+
+
+
+        // }
+
+
+
+
+
+        /*         var homeButton = document.getElementById("home");
+                const remote = require('electron').remote; // the remote module
+                homeButton.onclick = function() {
+                    var mainWindow = remote.getCurrentWindow(); // remote module
+
+                    mainWindow.loadURL('file://' + __dirname + '/index.html'); // load new page
+                } */
+    </script>
+
+
+</body>
+
+
+
+</html>

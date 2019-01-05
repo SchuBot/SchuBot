@@ -1,0 +1,21 @@
+{
+    "sounds": [{
+            "id": "!image1",
+            "image": "alert.gif",
+            "imagedur": "5000",
+            "enabled": "Y"
+        },
+        {
+            "id": "!image2",
+            "image": "alert2.gif",
+            "imagedur": "5000",
+            "enabled": "Y"
+        },
+        {
+            "id": "!image3",
+            "image": "alert2.gif",
+            "imagedur": "5000",
+            "enabled": "Y"
+        }
+    ]
+}

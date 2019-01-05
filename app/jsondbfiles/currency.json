@@ -1,0 +1,51 @@
+{
+    "currency": [{
+            "id": "1",
+            "enabled": "Y",
+            "currencyname": "Points",
+            "commandname": "!Points",
+            "info": "ranks based on hours or points",
+            "info2": "missing some other currency functions on other bots",
+            "ranksbasedon": "points",
+            "onlinepayintervalminutes": 1,
+            "offlinepayintervalminutes": 1,
+            "activeuserbonuspoints": 2,
+            "viewerpointsbonus": 1,
+            "regularbonuspoints": 1,
+            "moderatorbonuspoints": 3,
+            "subscriberbonuspoints": 4,
+            "onfollowbonuspoints": 5,
+            "onsubscribebonuspoints": 6,
+            "donationbonuspoints": 7,
+            "multiplybydonationamount": "N",
+            "ranks": [
+                { "name": "Test Rank", "requirement": 50 },
+                { "name": "Test Rank 2", "requirement": 100 }
+            ]
+        },
+        {
+            "id": "2",
+            "enabled": "N",
+            "currencyname": "Points",
+            "commandname": "!Points2",
+            "info": "ranks based on hours or points",
+            "ranksbasedon": "points",
+            "onlinepayintervalminutes": 1,
+            "offlinepayintervalminutes": 5,
+            "activeuserbonuspoints": 2,
+            "viewerpointsbonus": 5,
+            "regularbonuspoints": 1,
+            "moderatorbonuspoints": 3,
+            "subscriberbonuspoints": 4,
+            "onfollowbonuspoints": 5,
+            "onsubscribebonuspoints": 6,
+            "donationbonuspoints": 7,
+            "multiplybydonationamount": "N",
+            "ranks": [
+                { "name": "Test2 Rank", "requirement": 50 },
+                { "name": "Test2 Rank 2", "requirement": 100 }
+            ]
+        }
+
+    ]
+}

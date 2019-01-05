@@ -1,0 +1,21 @@
+{
+    "sounds": [{
+            "id": "!video1",
+            "video": "alert.gif",
+            "videodur": "5000",
+            "enabled": "Y"
+        },
+        {
+            "id": "!video2",
+            "video": "alert2.gif",
+            "videodur": "5000",
+            "enabled": "Y"
+        },
+        {
+            "id": "!video3",
+            "video": "alert2.gif",
+            "videodur": "5000",
+            "enabled": "Y"
+        }
+    ]
+}
