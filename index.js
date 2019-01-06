@@ -19,6 +19,67 @@ const { ipcMain } = electron;
 const { remote } = electron;
 
 
+const { autoUpdater } = require('electron-updater');
+const log = require('electron-log');
+// configure logging
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('App starting...');
+
+
+// Handle Squirrel events for windows machines
+if (process.platform === 'win32') {
+    let cp;
+    let updateDotExe;
+    let target;
+    let child;
+    switch (process.argv[1]) {
+        case '--squirrel-updated':
+            // cleanup from last instance
+
+            // use case-fallthrough to do normal installation
+            break;
+        case '--squirrel-install': //eslint-disable-line no-fallthrough
+            // Optional - do things such as:
+            // - Install desktop and start menu shortcuts
+            // - Add your .exe to the PATH
+            // - Write to the registry for things like file associations and explorer context menus
+
+            // Install shortcuts
+            cp = require('child_process');
+            updateDotExe = path.resolve(path.dirname(process.execPath), '..', 'update.exe');
+            target = path.basename(process.execPath);
+            child = cp.spawn(updateDotExe, ["--createShortcut", target], { detached: true });
+            child.on('close', app.quit);
+            return;
+
+        case '--squirrel-uninstall':
+            {
+                // Undo anything you did in the --squirrel-install and --squirrel-updated handlers
+
+                //attempt to delete the user-settings folder
+                /*         let rimraf = require('rimraf');
+                        rimraf.sync(dataAccess.getPathInUserData("/user-settings")); */
+
+                // Remove shortcuts
+                cp = require('child_process');
+                updateDotExe = path.resolve(path.dirname(process.execPath), '..', 'update.exe');
+                target = path.basename(process.execPath);
+                child = cp.spawn(updateDotExe, ["--removeShortcut", target], { detached: true });
+                child.on('close', app.quit);
+                return true;
+            }
+        case '--squirrel-obsolete':
+            // This is called on the outgoing version of your app before
+            // we update to the new version - it's the opposite of
+            // --squirrel-updated
+            app.quit();
+            return;
+    }
+}
+
+
+
 var Tray = require('electron').Tray; // jshint ignore:line
 var Menu = require('electron').Menu; // jshint ignore:line
 var fs = require('fs');
@@ -60,6 +121,40 @@ let mainWindow;
 
 let loginWindow;
 let authWindow;
+
+
+// Run Updater
+ipcMain.on('autoUpdate', () => {
+    autoUpdater.checkForUpdates();
+
+    autoUpdater.on('checking-for-update', () => {
+        //   sendStatusToWindow('Checking for update...');
+    });
+    autoUpdater.on('update-available', info => {
+        // sendStatusToWindow('Update available.');
+    });
+    autoUpdater.on('update-not-available', info => {
+        //  sendStatusToWindow('Update not available.');
+    });
+    autoUpdater.on('error', err => {
+        //  sendStatusToWindow(`Error in auto-updater: ${err.toString()}`);
+    });
+    autoUpdater.on('download-progress', progressObj => {
+        //  sendStatusToWindow(
+        `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred} + '/' + ${progressObj.total} + )`
+        //  );
+    });
+    autoUpdater.on('update-downloaded', info => {
+        sendStatusToWindow('Update downloaded; will install now');
+    });
+
+    autoUpdater.on('update-downloaded', info => {
+        // Wait 5 seconds, then quit and install
+        // In your application, you don't need to wait 500 ms.
+        // You could call autoUpdater.quitAndInstall(); immediately
+        autoUpdater.quitAndInstall();
+    });
+});
 
 
 ipcMain.on('loadbot', (event, arg) => {
