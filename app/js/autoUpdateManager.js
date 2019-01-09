@@ -16,11 +16,12 @@ ipcMain.on('autoUpdate', () => {
     });
     autoUpdater.on('download-progress', progressObj => {
         //  sendStatusToWindow(
-        `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred} + '/' + ${progressObj.total} + )`
+        // `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred} + '/' + ${progressObj.total} + )`
         //  );
     });
     autoUpdater.on('update-downloaded', info => {
-        sendStatusToWindow('Update downloaded; will install now');
+
+        //sendStatusToWindow('Update downloaded; will install now');
     });
 
     autoUpdater.on('update-downloaded', info => {

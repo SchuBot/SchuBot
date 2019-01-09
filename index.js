@@ -20,6 +20,7 @@ const { remote } = electron;
 
 
 const { autoUpdater } = require('electron-updater');
+const GhReleases = require('electron-gh-releases');
 const log = require('electron-log');
 // configure logging
 autoUpdater.logger = log;
@@ -123,37 +124,60 @@ let loginWindow;
 let authWindow;
 
 
+
+
 // Run Updater
 ipcMain.on('autoUpdate', () => {
-    autoUpdater.checkForUpdates();
 
-    autoUpdater.on('checking-for-update', () => {
-        //   sendStatusToWindow('Checking for update...');
-    });
-    autoUpdater.on('update-available', info => {
-        // sendStatusToWindow('Update available.');
-    });
-    autoUpdater.on('update-not-available', info => {
-        //  sendStatusToWindow('Update not available.');
-    });
-    autoUpdater.on('error', err => {
-        //  sendStatusToWindow(`Error in auto-updater: ${err.toString()}`);
-    });
-    autoUpdater.on('download-progress', progressObj => {
-        //  sendStatusToWindow(
-        `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred} + '/' + ${progressObj.total} + )`
-        //  );
-    });
-    autoUpdater.on('update-downloaded', info => {
-        sendStatusToWindow('Update downloaded; will install now');
+    // const got = require('got');
+
+    // let url = 'https://github.com/SchuBot/SchuBot/releases/latest'
+    // return got.head(url)
+    //     .then(res => {
+    //         let latestTag = res.socket._httpMessage.path.split('/').pop()
+    //         return latestTag
+    //     })
+    //     .catch(err => {
+    //         if (err) throw new Error('Unable to get latest release tag from Github.')
+    //     })
+
+    //back up first
+    /*     if (settings.backupBeforeUpdates()) {
+            backupManager.startBackup();
+        } */
+
+    // Download Update
+    let options = {
+        repo: 'SchuBot/SchuBot',
+        currentVersion: app.getVersion()
+    };
+
+    let updater = new GhReleases(options);
+
+
+
+    updater.check((err, status) => {
+        if (!err && status) {
+            // Download the update
+            updater.download()
+        }
+
+        if (err) {
+            log(err.message);
+        }
     });
 
-    autoUpdater.on('update-downloaded', info => {
-        // Wait 5 seconds, then quit and install
-        // In your application, you don't need to wait 500 ms.
-        // You could call autoUpdater.quitAndInstall(); immediately
-        autoUpdater.quitAndInstall();
+    // When an update has been downloaded
+    updater.on('update-downloaded', (info) => {
+        // Restart the app and install the update
+        updater.install()
     });
+
+    // Access electrons autoUpdater
+    updater.autoUpdater
+        // When an update has been downloaded
+
+
 });
 
 
