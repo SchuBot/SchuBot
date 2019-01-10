@@ -30,7 +30,6 @@
         "cookie-parser": "latest",
         "ejs": "latest",
         "electron": "^3.0.10",
-        "electron-builder": "^20.38.4",
         "electron-gh-releases": "^2.0.4",
         "electron-packager": "^13.0.1",
         "express": "^4.15.2",
@@ -77,10 +76,7 @@
         "socket.io": "^2.2.0",
         "socket.io-client": "^2.2.0",
         "ws": "^6.1.2",
-        "ejs": "latest",
-        "electron-builder": "^20.38.4",
         "electron-gh-releases": "^2.0.4",
         "electron-packager": "^13.0.1"
-
     }
 }

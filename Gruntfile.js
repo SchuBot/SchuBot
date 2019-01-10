@@ -26,6 +26,14 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         'create-windows-installer': {
+            copy: {
+
+                task0: {
+                    expand: true,
+                    src: ['jsondbfiles/**'],
+                    dest: 'app/'
+                },
+            },
             x64: {
 
                 appDirectory: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/dist/SchuBot-win32-x64',

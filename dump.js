@@ -768,7 +768,7 @@ function loadbot() {
 //     //                     // window.webContents.executeJavaScript(`document.body.innerHTML += '<div id="result">Error</div>'`)
 //     //                 }); */
 //     // });
-
+//&& xcopy /s /i app\\jsondbfiles .\\dist\\SchuBot-win32-x64\\app\\jsondbfiles
 
 //     // // loginwindow.webContents.session.cookies.remove("https://www.facebook.com/", 'c_user', () => {
 //     // //     login.oauth2(info, window)
