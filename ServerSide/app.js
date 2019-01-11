@@ -95,6 +95,8 @@
     myUITheme.reload();
     authDB.reload();
 
+    initializeData();
+
     let chatConnectedBot = false;
     let chatConnected = false;
     let timers = [];
@@ -834,6 +836,13 @@
     function StartCurrency() {
         var cm = new currencyManager(io);
         cm.createTimers(currency, currencyUsers);
+
+    }
+
+    function initializeData() {
+
+        //initially the json fiels will be empty so we need to populate the theme as a minimum
+
 
     }
 
@@ -3527,6 +3536,7 @@
         var tasks = [];
         var minimum = 10;
         var timeoutVar = null;
+        var startTimers = false;
         var output = {
             add: function(func, context, timer, once) {
                 var iTimer = parseInt(timer);
@@ -3566,8 +3576,10 @@
 
             //added this so that once tasks are finished they loop again in the same sequence
             if (tasks.length <= 0) {
-                if (myTimers.data.timers.length > 0) {
-                    addAlltimersSchedule(myTimers);
+                if (myTimers.data.timers != undefined) {
+                    if (myTimers.data.timers.length > 0) {
+                        addAlltimersSchedule(myTimers);
+                    }
                 }
             }
 

@@ -1,5 +1,6 @@
 {
-    "timers": [{
+    "timers": [
+        {
             "enabled": "Y",
             "id": "!rules",
             "text": "No Age in Chatioj",

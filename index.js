@@ -46,7 +46,7 @@ if (process.platform === 'win32') {
             // - Install desktop and start menu shortcuts
             // - Add your .exe to the PATH
             // - Write to the registry for things like file associations and explorer context menus
-
+            log.info('App Installing...');
             // Install shortcuts
             cp = require('child_process');
             updateDotExe = path.resolve(path.dirname(process.execPath), '..', 'update.exe');
@@ -62,6 +62,7 @@ if (process.platform === 'win32') {
                 //attempt to delete the user-settings folder
                 /*         let rimraf = require('rimraf');
                         rimraf.sync(dataAccess.getPathInUserData("/user-settings")); */
+                log.info('App Installing...');
 
                 // Remove shortcuts
                 cp = require('child_process');
@@ -147,6 +148,7 @@ ipcMain.on('autoUpdate', () => {
 
     updater.check((err, status) => {
         if (!err && status) {
+            log.info('Downloading Update...');
             // Download the update
             updater.download()
         }
@@ -158,6 +160,7 @@ ipcMain.on('autoUpdate', () => {
 
     // When an update has been downloaded
     updater.on('update-downloaded', (info) => {
+        log.info('Installing App...');
         // Restart the app and install the update
         updater.install()
     });
