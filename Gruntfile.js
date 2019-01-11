@@ -39,7 +39,8 @@ module.exports = function(grunt) {
                 appDirectory: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/dist/SchuBot-win32-x64',
                 outputDirectory: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/dist/installer64',
                 loadingGif: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/gui/images/animated.gif',
-
+                certificateFile: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/schubot_certificate.cer',
+                certificatePassword: 'schugyver23',
                 setupIcon: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/gui/images/logo.ico'
             }
         }
