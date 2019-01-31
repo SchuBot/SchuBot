@@ -2,6 +2,7 @@
 <!--<script src="./socket.io/socket.io.js"></script>-->
 
 <!-- <script src="./components/socket.io-client/socket.io.js"></script> -->
+<!---->
 <script>
     //these are the users in chat
     var chatUsrs = [];
@@ -773,6 +774,12 @@
 
         });
 
+        iosocket.on('setDefaultUIVisibility', function(data) {
+
+            setDefaultUIVisibility(data);
+
+        });
+
 
         iosocket.on('sendVideoFilesToDropDown', function(data) {
 
@@ -939,9 +946,9 @@
 
             var bringToBack = [];
             bringToBack.push("divWrapperChat");
-            bringToBack.push("divWrapperCommands");
+            // bringToBack.push("divWrapperCommands");
             bringToBack.push("divWrapperAlerts");
-            bringToBack.push("divWrapperTriggerPanel");
+            // bringToBack.push("divWrapperTriggerPanel");
             bringToBack.push("divWrapperMedia");
             bringToBack.push("divWrapperCommandsList");
             bringToBack.push("divWrapperFollowers");
@@ -949,12 +956,12 @@
             bringToBack.push("divWrapperHostAlertsList");
             bringToBack.push("divWrapperTimersList");
             bringToBack.push("divWrapperModMonitor");
-            bringToBack.push("divWrapperTimerPanel");
+            // bringToBack.push("divWrapperTimerPanel");
             bringToBack.push("divWrapperFollowAlertsList");
             bringToBack.push("divWrapperNarrowChatUsers");
             bringToBack.push("divWrapperNarrowRecentFollowers");
             bringToBack.push("divWrapperKeywordsList");
-            bringToBack.push("divWrapperNote");
+            //bringToBack.push("divWrapperNote");
             bringToBack.push("divWrapperNotesList");
             bringToBack.forEach(pushDivToBack, event.target.value);
 
@@ -1475,24 +1482,27 @@
 
         addTimersToTable = function(data) {
 
-            var tr;
-            for (var i = 0; i < data.length; i++) {
-                var rowID = data[i].id.replace("!", "x");
-                //var result = isFollowing(id);
-                console.log('timers data for table is:' + data[i])
+            if (data != null) {
 
-                var hidden = "display:none;";
+                var tr;
+                for (var i = 0; i < data.length; i++) {
+                    var rowID = data[i].id.replace("!", "x");
+                    //var result = isFollowing(id);
+                    console.log('timers data for table is:' + data[i])
 
-                tr = $('<tr id="TIM' + rowID + '" class /> ');
-                // tr = $('<tr class /> ');
-                tr.append("<td>" + data[i].id + "</td>");
-                tr.append("<td>" + data[i].enabled + "</td>");
-                tr.append("<td>" + data[i].text + "</td>");
-                tr.append("<td>" + data[i].interval + "</td>");
-                tr.append("<td>" + "N/A" + "</td>");
-                tr.append("<td>" + "N/A" + "</td>");
-                $('#tableTIM').append(tr);
+                    var hidden = "display:none;";
 
+                    tr = $('<tr id="TIM' + rowID + '" class /> ');
+                    // tr = $('<tr class /> ');
+                    tr.append("<td>" + data[i].id + "</td>");
+                    tr.append("<td>" + data[i].enabled + "</td>");
+                    tr.append("<td>" + data[i].text + "</td>");
+                    tr.append("<td>" + data[i].interval + "</td>");
+                    tr.append("<td>" + "N/A" + "</td>");
+                    tr.append("<td>" + "N/A" + "</td>");
+                    $('#tableTIM').append(tr);
+
+                }
             }
         }
 
@@ -1988,8 +1998,6 @@
                 x.style.display = "none";
             }
 
-
-
         }
 
 
@@ -2020,9 +2028,7 @@
             chkBoxToglModuleVisible('divWrapperNarrowPartyUsers');
         });
 
-        $("#commandsChkBox").change(function() {
-            chkBoxToglModuleVisible('divWrapperCommands');
-        });
+
 
         $("#mediafilesChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperMedia');
@@ -2049,18 +2055,15 @@
             chkBoxToglModuleVisible('divWrapperKeywordsList');
         });
 
-        $("#noteChkBox").change(function() {
-            chkBoxToglModuleVisible('divWrapperNote');
-        });
 
         $("#notesListChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperNotesList');
         });
 
 
-        $("#keywordPanelChkBox").change(function() {
-            chkBoxToglModuleVisible('divWrapperTriggerPanel');
-        });
+        /*         $("#keywordPanelChkBox").change(function() {
+                    chkBoxToglModuleVisible('divWrapperTriggerPanel');
+                }); */
 
         $("#timerListChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperTimersList');
@@ -2845,6 +2848,54 @@
 
     }
 
+    function setDefaultUIVisibility() {
+
+        /* 
+             $("#partyQChkBox").change(function() {
+                 chkBoxToglModuleVisible('divWrapperNarrowPartyUsers');
+             });
+          $("#managerTimersChkBox").change(function() {
+                 chkBoxToglModuleVisible('divWrapperTimerPanel');
+             }); */
+
+        /*         $("#switch1").change(function() {
+                    //timer switch
+                }); */
+
+        HideUIElementAndUncheckSwitch("divWrapperNarrowRecentFollowers", "recentFollowersChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperFollowing", "followingChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperFollowers", "followersChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperHostAlertsList", "hostalertsChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperFollowAlertsList", "followalertsChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperKeywordsList", "keywordsListChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperTimersList", "timerListChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperModMonitor", "modMonChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperNotesList", "notesListChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperAlerts", "alertfilesChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperMedia", "mediafilesChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperCommandsList", "commandsListChkBox")
+
+    }
+
+
+    function HideUIElementAndUncheckSwitch(panel, switchID) {
+        HideUIElement(panel);
+        UnCheckElement(switchID);
+    }
+
+
+    function HideUIElement(panel) {
+        panelID = document.getElementById(panel);
+
+        if (panelID != undefined) {
+            if (panelID.style.display === "none") {
+                panelID.style.display = "block";
+            } else {
+                panelID.style.display = "none";
+            }
+        }
+    }
+
 
 
     function setDefaultTheme(data) {
@@ -2913,11 +2964,11 @@
         themeElementsText.push("followCountUsrs");
         themeElementsText.push("followingCountUsrs");
         themeElementsText.push("recentFollowersCount");
-        themeElementsText.push("commandPanelHeaderText");
+        //themeElementsText.push("commandPanelHeaderText");
         themeElementsText.push("commandsListHeaderText");
-        themeElementsText.push("triggerPanelHeaderText");
-        themeElementsText.push("notePanelHeaderText");
-        themeElementsText.push("timerpanelPanelHeaderText");
+        //themeElementsText.push("triggerPanelHeaderText");
+        //themeElementsText.push("notePanelHeaderText");
+        //themeElementsText.push("timerpanelPanelHeaderText");
         themeElementsText.push("mediaPanelHeaderText");
         themeElementsText.push("alertsPanelHeaderText");
         themeElementsText.push("chatwindowText");
@@ -2955,6 +3006,7 @@
 
     }
 
+    //
     function changeOutsideBox(event) {
 
         var themeElementsMain = [];
@@ -2963,18 +3015,20 @@
         themeElementsMain.push("divWrapperNarrowChatUsers");
         themeElementsMain.push("divWrapperNarrowRecentFollowers");
         themeElementsMain.push("divWrapperChat");
-        themeElementsMain.push("divWrapperCommands");
+        // themeElementsMain.push("divWrapperCommands");
         themeElementsMain.push("divWrapperCommandsList");
         themeElementsMain.push("divWrapperMedia");
         themeElementsMain.push("divWrapperAlerts");
-        themeElementsMain.push("divWrapperTriggerPanel");
+        //
+        //themeElementsMain.push("divWrapperTriggerPanel");
+        //
         themeElementsMain.push("divWrapperNotesList");
         themeElementsMain.push("divWrapperModMonitor");
-        themeElementsMain.push("divWrapperTimerPanel");
+        //themeElementsMain.push("divWrapperTimerPanel");
         themeElementsMain.push("divWrapperTimersList");
         themeElementsMain.push("divWrapperFollowAlertsList");
         themeElementsMain.push("divWrapperKeywordsList");
-        themeElementsMain.push("divWrapperNote");
+        //themeElementsMain.push("divWrapperNote");
         themeElementsMain.push("divWrapperHostAlertsList");
 
         themeElementsMain.forEach(changeOutsideBoxItemChange, event.target.value);
@@ -2994,9 +3048,7 @@
         insideBoxElements.push("followingbox");
         insideBoxElements.push("narrowbox");
         insideBoxElements.push("recentFollowersbox");
-        //insideBoxElements.push("timerpanelbox");
-        //insideBoxElements.push("triggerlistbox");
-        //insideBoxElements.push("notelistbox");
+
         insideBoxElements.push("timersListbox");
 
 
@@ -3014,10 +3066,6 @@
         insideBoxCommandsElements.push("hostAlertsListbox");
         insideBoxCommandsElements.push("followAlertsListbox");
 
-        insideBoxCommandsElements.push("wrapperTriggerPanel");
-        insideBoxCommandsElements.push("wrapperNote");
-        insideBoxCommandsElements.push("wrapperTimerPanel");
-        // #wrapperTriggerPanel, #wrapperNote, #wrapperTimerPanel
 
         insideBoxCommandsElements.forEach(changeInsideBoxItemChange, event.target.value);
 
@@ -3043,12 +3091,11 @@
         toggleButtonElements.push("recentFollowersBtn");
         toggleButtonElements.push("flngActionBtn");
         toggleButtonElements.push("ChatActionBtn");
-        toggleButtonElements.push("flBtnWide");
+        //toggleButtonElements.push("flBtnWide");
         toggleButtonElements.push("flBtnWideAlerts");
-        toggleButtonElements.push("flBtnWideTimers");
+        //toggleButtonElements.push("flBtnWideTimers");
 
-        toggleButtonElements.push("flBtnWideTriggerManager");
-        toggleButtonElements.push("flBtnWideNoteManager");
+        //toggleButtonElements.push("flBtnWideNoteManager");
         toggleButtonElements.push("submitTPButton");
         toggleButtonElements.push("submitKWButton");
         toggleButtonElements.push("submitNTButton");
@@ -3063,14 +3110,14 @@
         toggleButtonElements.push("chatUsrTimeout5m");
 
         toggleButtonElements.push("KeywordsToggleBtn");
-        toggleButtonElements.push("KeywordsActionBtn");
+
 
         toggleButtonElements.push("NotesToggleBtn");
         toggleButtonElements.push("NotesActionBtn");
 
         toggleButtonElements.push("hostAlertsListBtn");
         toggleButtonElements.push("followAlertsListBtn");
-        toggleButtonElements.push("timersListBtn");
+        //toggleButtonElements.push("timersListBtn");
         toggleButtonElements.push("modmonListBtn");
 
 
@@ -3100,7 +3147,7 @@
         toggleButtonElements.push("recentFollowersBtn");
         toggleButtonElements.push("flngActionBtn");
         toggleButtonElements.push("ChatActionBtn");
-        toggleButtonElements.push("flBtnWide");
+        //toggleButtonElements.push("flBtnWide");
         toggleButtonElements.push("flBtnWideAlerts");
         toggleButtonElements.push("flBtnWideMedia");
         toggleButtonElements.push("commandListBtn");
@@ -3114,11 +3161,11 @@
         toggleButtonElements.push("chatUsrBan");
         toggleButtonElements.push("chatUsrTimeout5m");
         toggleButtonElements.push("modmonListBtn");
-        toggleButtonElements.push("timersListBtn");
+        //toggleButtonElements.push("timersListBtn");
 
         toggleButtonElements.push("hostAlertsListBtn");
         toggleButtonElements.push("followAlertsListBtn");
-        toggleButtonElements.push("KeywordsToggleBtn");
+        //toggleButtonElements.push("KeywordsToggleBtn");
 
         toggleButtonElements.push("NotesToggleBtn");
         toggleButtonElements.push("NotesActionBtn");
@@ -3126,10 +3173,10 @@
 
 
 
-        toggleButtonElements.push("flBtnWideTriggerManager");
-        toggleButtonElements.push("flBtnWideNoteManager");
-        toggleButtonElements.push("flBtnWideTimers");
-        toggleButtonElements.push("KeywordsActionBtn");
+
+        //toggleButtonElements.push("flBtnWideNoteManager");
+        //toggleButtonElements.push("flBtnWideTimers");
+
         toggleButtonElements.push("submitKWButton");
         toggleButtonElements.push("deleteKWButton");
 
@@ -3459,6 +3506,38 @@
             }
         }
         element.checked = check;
+    }
+
+    function UnCheckElement(id) {
+
+        var element = document.getElementById(id);
+        element.checked = false;
+
+        /* 
+        var element = document.getElementById(id).checked;
+
+        if (element != undefined) {
+            if (element == true) {
+                element.checked = false;
+            }
+        } */
+
+        /*         // Create a new 'change' event
+                var element = document.getElementById(id);
+                var event = new Event('change');
+                // Dispatch it.
+                element.dispatchEvent(event);
+         
+
+        var element = document.getElementById(id);
+        if ("createEvent" in document) {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent("change", false, true);
+            element.dispatchEvent(evt);
+        } else
+            element.fireEvent("onchange");
+*/
+
     }
 
 

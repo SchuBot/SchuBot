@@ -1,5 +1,123 @@
 /* color for the chat window text atm */
 
+div#wrapperCommandsInner {
+    display: block;
+    width: 670px;
+    margin-left: 0px;
+    margin-right: 0px;
+    float: left;
+    margin-top: 5px;
+}
+
+#commandSubmit {
+    float: left;
+}
+
+input#commandName,
+input#commandUser,
+input#mediaName,
+input#alertName,
+input#triggerName {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    width: 180px;
+    height: 30px;
+    font-size: 12pt;
+}
+
+#commandsbox {
+    text-align: left;
+    margin-top: 0px;
+    margin-left: 4px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    /* padding:10px; */
+    width: 680px;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+}
+
+.triggersWrapper {
+    float: left;
+    position: relative;
+}
+
+.triggerWrapperInner {
+    float: left;
+    position: relative;
+}
+
+.modulemenubartext2 {
+    color: black;
+    font-size: 18pt;
+    text-align: left;
+    padding: 2px;
+    margin-left: 25px;
+}
+
+#tplblinterval {
+    font-weight: bold;
+    font-size: 10pt;
+    /* width: 130px; */
+    float: left;
+    padding-top: 7px;
+    padding-left: 23px;
+}
+
+input#TPtimerID {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    width: 220px;
+    height: 30px;
+    font-size: 12pt;
+}
+
+input#tpInterval {
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    width: 120px;
+    height: 30px;
+    font-size: 12pt;
+    margin-left: 20px;
+    margin-top: 5px;
+}
+
+textarea#tpText {
+    font-size: 14pt;
+    padding-left: 5px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+#timersListbox {
+    text-align: left;
+    margin-top: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 6px;
+    /* padding:10px; */
+    height: 250px;
+    width: 395px;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+}
+
+#wrapperTimersList {
+    margin: 0 auto;
+    padding-bottom: 0px;
+    border: 0px solid #ACD8F0;
+    float: left;
+    width: 100%;
+}
+
+
+/* */
+
 .specialButton {
     text-align: center;
     float: right;
@@ -89,16 +207,6 @@ img.transparent {
     opacity: 0.15;
 }
 
-
-/* this makes images normal on hover */
-
-
-/* 
-img.transparent:hover {
-    opacity: 1;
-}
- */
-
 body {
     font: 12px arial;
     color: #222;
@@ -119,14 +227,24 @@ input {
 }
 
 #chkBoxList {
-    width: 170px;
-    padding: 1em;
-    float: left;
-    /*margin-left: 1220px;*/
-    margin-top: 20px;
-    text-align: left;
+    height: 95%;
+    position: absolute;
+    right: 2px;
+    top: 20px;
     overflow-y: auto;
-    height: 1000px;
+    padding: 1em;
+    text-align: left;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+}
+
+#menutextinchat,
+#chatCountUsrsDiv {
+    padding: 0;
+    margin: 0;
+    float: left;
+    font-size: 13pt;
 }
 
 .noteSpecial {
@@ -481,19 +599,6 @@ input#medVidOtherValue {
     padding-top: 3px;
 }
 
-input#commandName,
-input#commandUser,
-input#mediaName,
-input#alertName,
-input#triggerName {
-    -webkit-border-radius: 25px;
-    -moz-border-radius: 25px;
-    border-radius: 25px;
-    width: 220px;
-    height: 30px;
-    font-size: 12pt;
-}
-
 input#noteName {
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
@@ -614,12 +719,14 @@ button.square-buttonGroupVertical {
     margin-top: 5px;
 }
 
+
+/*#wrapperTriggerPanel,*/
+
 #wrapperFollowers,
 #wrapperFollowing,
 #wrapperHostAlertsList,
 #wrapperFollowAlertsList,
 #wrapperChatUsers,
-#wrapperTriggerPanel,
 #wrapperNoteList,
 #wrapperTimerPanel,
 #wrapperRecentFollowers,
@@ -639,7 +746,9 @@ button.square-buttonGroupVertical {
     width: 100%;
 }
 
-#wrapperTriggerPanel,
+
+/*#wrapperTriggerPanel,*/
+
 #wrapperNote,
 #wrapperTimerPanel {
     border: 1px solid #ACD8F0;
@@ -663,8 +772,7 @@ button.square-buttonGroupVertical {
 #commandsListbox,
 #hostAlertsListbox,
 #followAlertsListbox,
-#modmonListbox,
-#timersListbox {
+#modmonListbox {
     text-align: left;
     margin-top: 5px;
     margin-left: 0px;
@@ -725,7 +833,6 @@ div.menutextright,
     padding-right: 5px;
 }
 
-#commandsbox,
 #alertsbox {
     text-align: left;
     margin-top: 0px;
@@ -779,7 +886,6 @@ div.menutextright,
     width: 60px;
 }
 
-#commandSubmit,
 #alertSubmit {
     float: right;
 }
@@ -830,7 +936,6 @@ div.menutextright,
 #flBtnWide,
 #flBtnWideAlerts,
 #flBtnWideTimers,
-#flBtnWideTriggerManager,
 #flBtnWideNoteManager,
 #flBtnWideMedia {
     margin-top: 0px;
@@ -890,7 +995,6 @@ div.menutextright,
 #movMediaPanel,
 #movAlertsPanel,
 #movCommandsPanel,
-#movTriggerPanel,
 #movNotePanel,
 #movTimerPanel {
     margin-top: -18px;
@@ -1131,6 +1235,8 @@ div.menutext {
     position: absolute;
     /* background-color: black; */
     border: 1px solid #000000;
+    overflow: hidden;
+    height: 97%;
 }
 
 .footer {
@@ -1284,7 +1390,6 @@ div.followerbox {
 #alertListHeaderText,
 #triggerPanelHeaderText,
 #notePanelHeaderText,
-#timerpanelPanelHeaderText,
 #commandsListHeaderText,
 #chatwindowText {
     font-size: 14pt;

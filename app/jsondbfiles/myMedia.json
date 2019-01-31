@@ -109,6 +109,17 @@
             "videodur": "",
             "image": "",
             "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!audioTNS",
+            "type": "Image",
+            "audio": "",
+            "audiodur": "",
+            "video": "",
+            "videodur": "",
+            "image": "alert.gif",
+            "imagedur": 5000
         }
     ]
 }

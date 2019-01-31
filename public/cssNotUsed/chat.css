@@ -102,6 +102,7 @@ body {
     text-align: center;
     /*background-color: black;
      padding: 35px; */
+    /* added this to test something */
 }
 
 p,
@@ -478,19 +479,6 @@ input#medVidOtherValue {
     padding-top: 3px;
 }
 
-input#commandName,
-input#commandUser,
-input#mediaName,
-input#alertName,
-input#triggerName {
-    -webkit-border-radius: 25px;
-    -moz-border-radius: 25px;
-    border-radius: 25px;
-    width: 220px;
-    height: 30px;
-    font-size: 12pt;
-}
-
 input#noteName {
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
@@ -622,7 +610,9 @@ button.square-buttonGroupVertical {
     width: 100%;
 }
 
-#wrapperTriggerPanel,
+
+/*#wrapperTriggerPanel,*/
+
 #wrapperNote,
 #wrapperTimerPanel {
     border: 1px solid #ACD8F0;
@@ -1099,6 +1089,7 @@ div.menutext {
 }
 
 #container {
+    height: 100%;
     position: absolute;
     /* background-color: black; */
     border: 1px solid #000000;

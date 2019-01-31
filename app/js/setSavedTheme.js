@@ -20,6 +20,11 @@ function setSavedTheme(io) {
         io.emit('setDefaultTheme', myUITheme.data.uitheme[0]);
     }
 
+
+    this.sendUIPreferences = function() {
+        io.emit('setDefaultUIVisibility');
+    }
+
     async function myReaddir(fs, folder) {
         try {
             const file = await fs.readdir(folder);

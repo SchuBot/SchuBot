@@ -9,13 +9,6 @@
         },
         {
             "enabled": "Y",
-            "id": "Potato",
-            "text": "potato text",
-            "option1": "",
-            "option2": ""
-        },
-        {
-            "enabled": "Y",
             "id": "potato2",
             "text": "potato2",
             "option1": "",

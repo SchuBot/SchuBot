@@ -363,7 +363,8 @@ function createWindow() {
 
     // and load the index.html of the app.
     mainWindow.maximize();
-    mainWindow.loadURL('file://' + __dirname + '/views/pages/index.html')
+    //mainWindow.loadURL('file://' + __dirname + '/views/pages/index.html')
+    mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
     mainWindow.show();
 
     // Open the DevTools.

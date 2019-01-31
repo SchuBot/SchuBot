@@ -1,0 +1,33 @@
+<script>
+    function slide600() {
+
+        if (document.getElementById("triggersWrapper").style.display === "none") {
+            document.getElementById("divWrapperKeywordsList").style.width = "600px";
+            document.getElementById("triggersWrapper").style.display = "block";
+            mydragg3.slideLeft('divWrapperKeywordsList', 'container', event);
+
+        } else {
+            mydragg3.slideRight('divWrapperKeywordsList', 'container', '400', event);
+            document.getElementById("divWrapperKeywordsList").style.width = "200px";
+            document.getElementById("triggersWrapper").style.display = "none";
+
+
+        }
+    }
+
+    function slide800() {
+
+        if (document.getElementById("wrapperTimersInner").style.display === "none") {
+            document.getElementById("divWrapperTimersList").style.width = "800px";
+            document.getElementById("wrapperTimersInner").style.display = "block";
+            mydragg3.slideLeft('divWrapperTimersList', 'container', event);
+
+        } else {
+            mydragg3.slideRight('divWrapperTimersList', 'container', '400', event);
+            document.getElementById("divWrapperTimersList").style.width = "400px";
+            document.getElementById("wrapperTimersInner").style.display = "none";
+
+
+        }
+    }
+</script>

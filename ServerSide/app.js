@@ -944,8 +944,12 @@
 
         var uiThemeSettings = new setSavedTheme(io);
         uiThemeSettings.sendThemeToUI(myUITheme);
+        uiThemeSettings.sendUIPreferences();
 
     }
+
+
+
 
 
     function SendHostAlertsToBot(myHostAlerts) {
@@ -2049,7 +2053,6 @@
     }
 
 
-
     function processEditUIMedia(myMedia, mediaObject) {
         //need to work on feedback what happens if its successfull / unsuccessfull
 
@@ -3128,28 +3131,32 @@
     function addAlltimersSchedule(myTimers) {
         myTimers.reload();
 
-        var intervalCooldown = 0;
-        for (var timerCnt = 0, len = myTimers.data.timers.length; timerCnt < len; timerCnt++) {
 
-            var duration2 = myTimers.data.timers[timerCnt].interval;
-            let textForTimer = myTimers.data.timers[timerCnt].text;
+        if (myTimers.data.timers != undefined) {
 
+            var intervalCooldown = 0;
+            for (var timerCnt = 0, len = myTimers.data.timers.length; timerCnt < len; timerCnt++) {
 
-
-            //add minute to duration e.g. if timer is 5 minutes and its the 3rd timer this will be 8 minutes
-            duration2 = duration2 + intervalCooldown;
+                var duration2 = myTimers.data.timers[timerCnt].interval;
+                let textForTimer = myTimers.data.timers[timerCnt].text;
 
 
 
+                //add minute to duration e.g. if timer is 5 minutes and its the 3rd timer this will be 8 minutes
+                duration2 = duration2 + intervalCooldown;
 
-            //the boolean at the end false = repeat , true = once
-            Scheduler.add(function(myTimers) { SendMessageToBeam(textForTimer, bc, bcBot, "streamer") }, null, duration2 / 10, true);
 
-            //interval between timers 
-            //(first timer doesn't have an interval because interval increments after add is called)
-            intervalCooldown = intervalCooldown + 60000; //hardcoded to 1 minute for now
 
-        };
+
+                //the boolean at the end false = repeat , true = once
+                Scheduler.add(function(myTimers) { SendMessageToBeam(textForTimer, bc, bcBot, "streamer") }, null, duration2 / 10, true);
+
+                //interval between timers 
+                //(first timer doesn't have an interval because interval increments after add is called)
+                intervalCooldown = intervalCooldown + 60000; //hardcoded to 1 minute for now
+
+            };
+        }
 
     }
 
@@ -3531,7 +3538,6 @@
         return commandObjectJson;
     };
 
-
     var Scheduler = (function() {
         var tasks = [];
         var minimum = 10;
@@ -3583,12 +3589,10 @@
                 }
             }
 
-
         };
         timeoutVar = setInterval(schedule, minimum);
         return output;
     })();
-
 
     exports.SendCommandListToBot = SendCommandListToBot;
     exports.SetStreamerAuth = SetStreamerAuth;

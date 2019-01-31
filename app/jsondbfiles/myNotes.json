@@ -1,29 +1,9 @@
 {
     "notes": [
         {
-            "id": "",
-            "todo": "Y",
-            "note": "work on the \"bring to front\" aspect? causes issues with the layout of stuff on the screen. once it's brought in front of something can it stay until you toggle it away? instead of instantly going to the back when you click something else. Checkbox to keep on front\n"
-        },
-        {
-            "id": "n01810201891",
-            "todo": "Y",
-            "note": "have a text as streamer option in chat window"
-        },
-        {
-            "id": "n018102018107",
-            "todo": "Y",
-            "note": "how do we set up timers to not all go off at the same time?"
-        },
-        {
             "id": "n01810201878",
             "todo": "Y",
             "note": "i need a !tnslive command that works like this: $readapi(http://mixer.api.scorpstuff.com/teamlive.php?token=T3amNoSl33p&raw=0¬ag=0&sort=DESC)"
-        },
-        {
-            "id": "n01810201836",
-            "todo": "Y",
-            "note": "have to figure out how to get my api reader commands from scorp to work here"
         },
         {
             "id": "n01810201870",

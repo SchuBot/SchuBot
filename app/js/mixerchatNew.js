@@ -152,18 +152,18 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
             });
 
             socket.on('DeleteMessage', data => {
-                // self.emit('DeleteMessage', data);
+                self.emit('DeleteMessage', data);
             });
             socket.on('ClearMessages', data => {
-                //  self.emit('ClearMessages', data);
+                self.emit('ClearMessages', data);
             });
             socket.on('UserUpdate', data => {
-                // self.emit('UserUpdate', data);
+                self.emit('UserUpdate', data);
             });
 
             //don't think this one is ever fired
             socket.on('UserTimeout', data => {
-                //  self.emit('UserTimeout', data);
+                self.emit('UserTimeout', data);
             });
 
 
@@ -183,7 +183,12 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
         //exports
         self.say = function(msg) {
 
-            socket.call('msg', [`${msg}`]);
+            if (socket != undefined) {
+                socket.call('msg', [`${msg}`]);
+            } else {
+                //reauth required
+            }
+
         }
 
         self.whisper = function(username, msg) {
