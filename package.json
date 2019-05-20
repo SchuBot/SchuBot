@@ -1,7 +1,7 @@
 {
     "name": "schubot",
     "title": "SchuBot",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "repository": "https://github.com/SchuBot/SchuBot",
     "description": "SchuBot",
     "main": "index.js",
@@ -20,7 +20,7 @@
         "build": "npm run build64",
         "package": "echo Building Electron package && npm run pack:win64 && echo Packing the installer && grunt create-windows-installer && echo Installer package ready!"
     },
-    "author": "Schuster Efigenio",
+    "author": "SchuBot",
     "license": "GPL-3.0",
     "devDependencies": {
         "@mixer/client-node": "^3.3.0",
@@ -38,8 +38,8 @@
         "express-session": "latest",
         "http": "0.0.0",
         "https": "^1.0.0",
-        "jquery": "^3.1.1",
-        "morgan": "~1.5.2",
+        "jquery": "^3.4.1",
+        "morgan": "~1.9.1",
         "mz": "^2.7.0",
         "node-fetch": "^2.1.1",
         "node-json-db": "^0.7.5",
