@@ -9,15 +9,15 @@
         },
         {
             "enabled": "Y",
-            "id": "mod",
-            "text": "Don't Ask to be mod",
+            "id": "help",
+            "text": "If you have a question please feel free to ask",
             "option1": "",
             "option2": ""
         },
         {
             "enabled": "Y",
-            "id": "respect",
-            "text": "Respect everyone in chat",
+            "id": "rules",
+            "text": "Rules are for everybody",
             "option1": "",
             "option2": ""
         }

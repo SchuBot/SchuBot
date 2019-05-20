@@ -3006,13 +3006,18 @@
 
         if (bc != null) {
 
-            bc.getStreamerFollows(authDB.data.streamer.userId);
+            // this is usually null when you first install the bot
+            if (authDB.data.streamer.userId == null) {
+                bc.getStreamerFollows(authDB.data.streamer.userId);
 
-            bc.getfollowers(authDB.data.streamer.channelId);
+                bc.getfollowers(authDB.data.streamer.channelId);
 
-            bc.getChatUsers(authDB.data.streamer.channelId);
+                bc.getChatUsers(authDB.data.streamer.channelId);
 
-            someData = ["potato", "carrot"];
+                someData = ["potato", "carrot"];
+            }
+
+
 
             // addAlltimers(myTimers);
             addAlltimersSchedule(myTimers);

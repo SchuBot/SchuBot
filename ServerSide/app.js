@@ -190,6 +190,7 @@
     var connections = 0;
     var isConnected = false;
     var initialiseMixerData = false;
+    let startupBotDataSent = false;
 
     // ../media/sounds/sound1.mp3 - sound path
     //../media/images/alert.gif - images path
@@ -629,11 +630,17 @@
         });
 
 
-        loadBotData()
-        loadBotCurrencyAndTimers()
-        initBeamData(authDB);
 
-        ConnectToBeamAndConsellation();
+
+
+        if (!startupBotDataSent) {
+            loadBotData()
+            loadBotCurrencyAndTimers()
+            initBeamData(authDB);
+            ConnectToBeamAndConsellation();
+            startupBotDataSent = true;
+        }
+
 
     });
 
@@ -664,7 +671,8 @@
 
         //if (bc != null && bc != undefined) {
 
-        if (authDB.data.streamer.userId != undefined) {
+        // is there is no streamer id then this means fresh install
+        if (authDB.data.streamer.userId > 0) {
 
             mixerData = new mixerdata(authDB.data.streamer.accessToken);
 
@@ -1423,6 +1431,7 @@
 
                 //no authData don't save auth as token is valid but bot is only reconnecting not re-authing
                 if (authData != null) {
+
                     SaveAuth(type, Token, authData.refresh_token, res.body.username);
 
                 }
@@ -1655,6 +1664,8 @@
     }
 
     var MessageQueue = [];
+    var currentmessageBeingSent = 0;
+    var messageBeingSentID = 0;
 
     function sendMessageToChatWindow(data) {
 
@@ -1673,7 +1684,7 @@
         // console.info(colors.red(`ChatMessage`));
         // console.info(colors.red(JSON.stringify(data)));
 
-        log.info('Message is: ' + JSON.stringify(data));
+        //log.info('Message is: ' + JSON.stringify(data));
         let UserName = data.user_name;
 
         log.info('Sending Message username ' + UserName);
@@ -1685,10 +1696,6 @@
             t += data.message.message[key].text;
         }
 
-
-
-        log.info('message id is: ' + data.id)
-
         //check if there is already a message 
         //with that id in the queue if so don't send it
         //obviously the first message is ignored as the queue is empty
@@ -1697,7 +1704,7 @@
             var whereIs = MessageQueue.indexOf(data.id, 0);
             //if message is already in queue then don't send to window
             if (whereIs !== -1) {
-                log.info('Duplicate Message do not send');
+                //log.info('Duplicate Message do not send');
                 sendMessageBool = false;
             }
         }
@@ -1714,82 +1721,96 @@
 
             // keep the last 5 messages to allow checking for duplicate messages
             while (MessageQueue.length > 5) {
-                MessageQueue.shift();
+                MessageQueue.pop();
             }
         }
 
 
-        //send message or send first message of a duplicate 
-        if (sendMessageBool) {
+        //send message or send first message of a duplicate
 
-            if (data.user_level == undefined) {
-                log.info(`${data.user_name}` + ' has no Level Defined')
-            } else {
-                //  console.info(`${data.user_name}` + ' is level ' + `${data.user_level}` + 'and is a ' + `${data.user_roles[0]}`)
-            }
-
-            /*             let UserName = data.user_name;
-
-                        let t = '';
-
-                        for (var key in data.message.message) {
-
-                            t += data.message.message[key].text;
-                        } */
-
-            //send message to client window
-            // io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t );
+        messageBeingSentID = data.id;
 
 
-            //send message to client window better version
-            let avatarUrl = data.user_avatar;
-            if (avatarUrl == null) {
-                avatarUrl = "https://mixer.com/_latest/assets/images/main/avatars/default.png";
-            }
+        log.info('Is Duplicate' + sendMessageBool + ' message id is: ' + data.id + ' - with data ' + t);
 
-            io.emit('message', avatarUrl, data.user_roles[0], data.user_name, t);
+        if (currentmessageBeingSent != messageBeingSentID) {
 
-            /// TODO add these in db and fetch when triggered
-            var splitTxt = '';
-            for (var key in data.message.message) { splitTxt += data.message.message[key].text; };
-            var text = splitTxt.split(' ');
+            currentmessageBeingSent = messageBeingSentID;
 
-            if (text[0].substr(0, 1) == "!") {
+            log.info('previous msg id = ' + currentmessageBeingSent + ' current message id = ' + data.id)
 
-                //send to commandHandler to determine what to send to mixer
-                processChatCommand(userCommands, text[0], data.user_roles, UserName, ch, t, bc);
+            if (sendMessageBool) {
 
 
-            } else {
+                if (data.user_level == undefined) {
+                    log.info(`${data.user_name}` + ' has no Level Defined')
+                } else {
+                    //  console.info(`${data.user_name}` + ' is level ' + `${data.user_level}` + 'and is a ' + `${data.user_roles[0]}`)
+                }
 
-                //processes triggers
-                var outputArray = [];
+                /*             let UserName = data.user_name;
+
+                            let t = '';
+
+                            for (var key in data.message.message) {
+
+                                t += data.message.message[key].text;
+                            } */
+
+                //send message to client window
+                // io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t );
 
 
-                //reload triggers in case they have been changed
-                myTriggers.reload();
-                // triggers to output
-                myTriggers.data.triggers.forEach(element => {
+                //send message to client window better version
+                let avatarUrl = data.user_avatar;
+                if (avatarUrl == null) {
+                    avatarUrl = "https://mixer.com/_latest/assets/images/main/avatars/default.png";
+                }
 
-                    var isTriggerWord = t.includes(element.id, 0);
+                io.emit('message', avatarUrl, data.user_roles[0], data.user_name, t);
 
-                    if (isTriggerWord) {
-                        //also check that the chat message isn't exactly as per the trigger output
-                        if (t != element.text) {
-                            outputArray.push(element.text);
+                /// TODO add these in db and fetch when triggered
+                var splitTxt = '';
+                for (var key in data.message.message) { splitTxt += data.message.message[key].text; };
+                var text = splitTxt.split(' ');
+
+                if (text[0].substr(0, 1) == "!") {
+
+                    //send to commandHandler to determine what to send to mixer
+                    processChatCommand(userCommands, text[0], data.user_roles, UserName, ch, t, bc);
+
+
+                } else {
+
+                    //processes triggers
+                    var outputArray = [];
+
+
+                    //reload triggers in case they have been changed
+                    myTriggers.reload();
+                    // triggers to output
+                    myTriggers.data.triggers.forEach(element => {
+
+                        var isTriggerWord = t.includes(element.id, 0);
+
+                        if (isTriggerWord) {
+                            //also check that the chat message isn't exactly as per the trigger output
+                            if (t != element.text) {
+                                outputArray.push(element.text);
+                            }
+
                         }
 
-                    }
+                    });
 
-                });
-
-                //now send each message to mixer (add first , last , all options in configuration)
-                outputArray.forEach(element => {
-                    var triggerResult = sendTriggerToMixer(bcBot, element);
-                });
+                    //now send each message to mixer (add first , last , all options in configuration)
+                    outputArray.forEach(element => {
+                        var triggerResult = sendTriggerToMixer(bcBot, element);
+                    });
 
 
 
+                }
             }
         }
     }
@@ -3715,47 +3736,68 @@
             // Request channel info
             // We do this to get the sub icon to use in the chat window.
             request({
-                url: 'https://mixer.com/api/v1/channels/' + username
-            }, function(err, res) {
-                let data = JSON.parse(res.body);
+                    url: 'https://mixer.com/api/v1/channels/' + username
+                }, function(err, res) {
+                    let data = JSON.parse(res.body);
 
-                // Push all to db.
-                authDB.push('./' + type + '/username', data.user.username);
-                authDB.push('./' + type + '/userId', data.userId);
-                authDB.push('./' + type + '/channelId', data.id);
-                authDB.push('./' + type + '/avatar', data.user.avatarUrl);
-                authDB.push('./' + type + '/accessToken', accessToken);
-                authDB.push('./' + type + '/refreshToken', refreshToken);
-                authDB.push('./' + type + '/authedForClips', authedForClips === true);
+                    // if streamer account then check if the userId = 0 (i.e. new install) then get streamer data
+                    // also if userId != 0 and userId != data.userId then different streamer so get streamer data (future function)
+                    let isNewOrDiffStreamer = false;
+                    if (type == "streamer") {
+                        //
+                        if (authDB.data.streamer.userId == 0) {
 
-                // Push all to db.
-                if (data.partnered === true) {
-                    authDB.push('./' + type + '/subBadge', data.badge.url);
-                } else {
-                    authDB.push('./' + type + '/subBadge', false);
+                            isNewOrDiffStreamer = true;
+
+                        }
+                    }
+
+                    // Push all to db.
+                    authDB.push('./' + type + '/username', data.user.username);
+                    authDB.push('./' + type + '/userId', data.userId);
+                    authDB.push('./' + type + '/channelId', data.id);
+                    authDB.push('./' + type + '/avatar', data.user.avatarUrl);
+                    authDB.push('./' + type + '/accessToken', accessToken);
+                    authDB.push('./' + type + '/refreshToken', refreshToken);
+                    authDB.push('./' + type + '/authedForClips', authedForClips === true);
+
+                    // Push all to db.
+                    if (data.partnered === true) {
+                        authDB.push('./' + type + '/subBadge', data.badge.url);
+                    } else {
+                        authDB.push('./' + type + '/subBadge', false);
+                    }
+
+                    if (type === "streamer") {
+                        authDB.push('./' + type + '/partnered', data.partnered);
+                        //service.accounts.streamer.partnered = data.partnered;
+                        let groups = data.user.groups;
+
+                        let canClip = groups.some(g =>
+                            g.name === "Partner " ||
+                            g.name === "VerifiedPartner" ||
+                            g.name === "Staff" ||
+                            g.name === "Founder");
+                        //service.accounts.streamer.canClip = canClip;
+                        authDB.push('./' + type + '/canClip', canClip);
+                    }
+
+                    // Style up the login page.
+                    /*                $q.resolve(true, () => {
+                                       service.loadLogin();
+                                       $rootScope.showSpinner = false;
+                                   }); */
+
+                    if (isNewOrDiffStreamer) {
+                        initBeamData(authDB);
+                    }
+
                 }
 
-                if (type === "streamer") {
-                    authDB.push('./' + type + '/partnered', data.partnered);
-                    //service.accounts.streamer.partnered = data.partnered;
-                    let groups = data.user.groups;
 
-                    let canClip = groups.some(g =>
-                        g.name === "Partner " ||
-                        g.name === "VerifiedPartner" ||
-                        g.name === "Staff" ||
-                        g.name === "Founder");
-                    //service.accounts.streamer.canClip = canClip;
-                    authDB.push('./' + type + '/canClip', canClip);
-                }
+            );
 
-                // Style up the login page.
-                /*                $q.resolve(true, () => {
-                                   service.loadLogin();
-                                   $rootScope.showSpinner = false;
-                               }); */
 
-            });
         }
 
     }

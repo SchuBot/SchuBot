@@ -1,0 +1,32 @@
+{
+    "streamer": {
+        "channelName": "this is to hold the theme",
+        "accessToken": null,
+        "accessTokenExpiry": "",
+        "refreshToken": null,
+        "refreshTokenExpiry": "",
+        "username": "Schuster",
+        "userId": 0,
+        "channelId": 0,
+        "avatar": null,
+        "authedForClips": false,
+        "subBadge": false,
+        "partnered": false,
+        "canClip": false
+    },
+    "bot": {
+        "channelName": "this is to hold the theme",
+        "accessToken": null,
+        "accessTokenExpiry": "",
+        "refreshToken": null,
+        "refreshTokenExpiry": "",
+        "username": "",
+        "userId": 0,
+        "channelId": 0,
+        "avatar": null,
+        "authedForClips": false,
+        "subBadge": false,
+        "partnered": false,
+        "canClip": false
+    }
+}

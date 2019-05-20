@@ -99,6 +99,8 @@ const alertimageFolder = '../media/images/';
 //timer data
 var someData = [];
 
+let allDataSent = false;
+
 var dateIn = new Date();
 var dateStringTest = getLetterFullDateTimeString(dateIn);
 console.log(dateStringTest);
@@ -583,27 +585,29 @@ io.on('connection', function(socket) {
 
     });
 
-    SendUIThemeToBot(myUITheme);
 
-    LoadSoundFiles(soundFolder);
-    LoadVideoFiles(videoFolder);
-    LoadImageFiles(imageFolder);
-    SendCommandListToBot(userCommands);
+    if (!allDataSent) {
 
-    SendMediaListToBot(myMedia);
+        SendUIThemeToBot(myUITheme);
 
-    SendHostAlertsToBot(myHostAlerts);
-    SendFollowAlertsToBot(myFollowAlerts);
-    SendKeywordsToBot(myTriggers);
-    SendNotesToBot(myNotes);
-    SendTimersToBot(myTimers);
+        LoadSoundFiles(soundFolder);
+        LoadVideoFiles(videoFolder);
+        LoadImageFiles(imageFolder);
+        SendCommandListToBot(userCommands);
 
-    ConnectToBeamAndConsellation();
+        SendMediaListToBot(myMedia);
 
+        SendHostAlertsToBot(myHostAlerts);
+        SendFollowAlertsToBot(myFollowAlerts);
+        SendKeywordsToBot(myTriggers);
+        SendNotesToBot(myNotes);
+        SendTimersToBot(myTimers);
 
+        ConnectToBeamAndConsellation();
 
-
-    StartCurrency();
+        StartCurrency();
+        allDataSent = true;
+    }
 
 
 

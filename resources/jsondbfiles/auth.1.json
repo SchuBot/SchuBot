@@ -1,0 +1,32 @@
+{
+    "streamer": {
+        "channelName": "this is to hold the theme",
+        "accessToken": "7zvcdIN6jpuEpC8kJNB6b5XUiQK0pt02T6FhAG8CB8GFeQPpdUIKDIb7X2ev3XXS",
+        "accessTokenExpiry": "41MfOnODvMS266zbHdfzEOBkn9Ti5ZjG93MYxFbg1OCuv2ryAbbiac9UK2BasaAg",
+        "refreshTokenExpiry": "siL2ozuUKvq9N4Rhh5k5Kw8kIrpOKwDgQi3SYoWIjSRXMcH3rnN9EwPUoptE1giE",
+        "username": "Schuster",
+        "userId": 862913,
+        "channelId": 582310,
+        "avatar": "https://uploads.mixer.com/avatar/zu7uleuz-862913.jpg",
+        "authedForClips": false,
+        "subBadge": false,
+        "partnered": false,
+        "canClip": false,
+        "refreshToken": "iibmTSDmePxM6KGtJpU1qFmpYGTWCCx7vA8Pz1tbKDQI7gjAuiBrFbkTxS3JGmF4"
+    },
+    "bot": {
+        "channelName": "this is to hold the theme",
+        "accessToken": "5I0xL7L7qtIfGhNOqGz6zpaAUvERFdb90546Qpab0cmcGqOZXpvp9txs5oOeWQEC",
+        "accessTokenExpiry": "41MfOnODvMS266zbHdfzEOBkn9Ti5ZjG93MYxFbg1OCuv2ryAbbiac9UK2BasaAg",
+        "refreshToken": "SN72EWJ4zlbRrCUY1NfP5K4jfWnxW72aaMM5PyMZ2RIsNtjXduLlomo3OBvD4Zcw",
+        "refreshTokenExpiry": "siL2ozuUKvq9N4Rhh5k5Kw8kIrpOKwDgQi3SYoWIjSRXMcH3rnN9EwPUoptE1giE",
+        "username": "MilkChocolate",
+        "userId": 7985356,
+        "channelId": 6222934,
+        "avatar": null,
+        "authedForClips": false,
+        "subBadge": false,
+        "partnered": false,
+        "canClip": false
+    }
+}

@@ -3,7 +3,7 @@
         {
             "enabled": "Y",
             "id": "!rules",
-            "text": "If you wouldn't tell your mum then don't say it here in chat",
+            "text": "Sit back and relax",
             "interval": 60005,
             "option1": "",
             "option2": ""
@@ -11,7 +11,7 @@
         {
             "enabled": "Y",
             "id": "!rules2",
-            "text": "respect",
+            "text": "Respect Everyone in Chat",
             "interval": 50000,
             "option1": "",
             "option2": ""
@@ -19,7 +19,7 @@
         {
             "enabled": "Y",
             "id": "!test",
-            "text": "mod",
+            "text": "Don't Ask to be a mod",
             "interval": 70000,
             "option1": "",
             "option2": ""
