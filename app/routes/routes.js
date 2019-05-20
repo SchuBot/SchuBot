@@ -38,9 +38,9 @@ module.exports = function(app) {
 
         // electron.ipcMain.emit('loadbot', 'test');
 
-        // app.engine('html', engine.mustache);
+        //  app.engine('html', engine.mustache);
         //  app.set('view engine', 'html');
-        //app.set('views', pathdir + '/views');
+        //  app.set('views', pathdir + '/views');
         console.log('rendering streamer login (actually streamer login');
         res.render('pages/streamerlogin.html'); // load the dash.ejs file
     });
@@ -140,6 +140,8 @@ module.exports = function(app) {
     //  failureRedirect: '/'
     //  }));
 
+
+    //streamer auth route
     app.get('/auth/mixer2', function(req, res) {
 
         if (req.url != undefined) {
@@ -213,22 +215,23 @@ module.exports = function(app) {
 
                 req.write(postData);
                 req.end();
+
             } else
             if (error) {
                 alert("Oops! Something went wrong and we couldn't log you in using Mixer. Please try again.");
             }
         }
 
-        console.log('redirecting to page2');
         // Successful authentication, redirect home.
-        res.redirect('/streamerlogin');
-
+        // res.redirect('/streamerlogin');
+        electron.ipcMain.emit('closeauthwindow', null);
 
 
         //   res.redirect('/dragobject.html');
     });
 
 
+    //bot auth route
     app.get('/auth/mixer', function(req, res) {
 
         if (req.url != undefined) {
@@ -308,13 +311,15 @@ module.exports = function(app) {
             }
         }
 
-        console.log('redirecting to page2');
+
+        electron.ipcMain.emit('closeauthwindow', null);
         // Successful authentication, redirect home.
-        res.redirect('/streamerlogin');
+        // res.redirect('/streamerlogin');
 
 
 
         //   res.redirect('/dragobject.html');
+
     });
 
 

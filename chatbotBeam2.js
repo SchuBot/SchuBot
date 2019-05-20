@@ -1,5 +1,6 @@
 ﻿//import { chmod } from 'fs';
-
+//
+//
 const dateNow = Date.now();
 
 const beamchat = require('./app/js/mixerchatNew.js');
@@ -817,7 +818,10 @@ function StartCurrency() {
 function ConnectToBeamAndConsellation() {
 
     if (!isConnected) {
-
+        //
+        //
+        //
+        //
 
         CreateBeamObjects(passport.BBBToken, null, passport.username, chatConnected, passport.username, passport.usernameBot, globalFollowers);
         //console.log('streamer connected to socket ' + connections + ' times');
@@ -3151,7 +3155,7 @@ class NoteObject {
 
     constructor(data) {
 
-            var objt = BuildCommand(data);
+            var objt = BuildNote(data);
             //TODO build command object from chat command
             this.cid = objt.cid;
             this.cpermission = objt.cpermission;

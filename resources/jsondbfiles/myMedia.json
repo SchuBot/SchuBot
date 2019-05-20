@@ -1,0 +1,125 @@
+{
+    "media": [
+        {
+            "enabled": "Y",
+            "id": "!test123",
+            "type": "Audio",
+            "audio": "sound1.mp3",
+            "audiodur": 60000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!test34567",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 10000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!test2345",
+            "type": "Image",
+            "audio": "",
+            "audiodur": "",
+            "video": "",
+            "videodur": "",
+            "image": "alert.gif",
+            "imagedur": 5000
+        },
+        {
+            "enabled": "Y",
+            "id": "!test3456778",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 10000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!audio1",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 5000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!firehornAudio",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 15000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!image1",
+            "type": "Image",
+            "audio": "",
+            "audiodur": "",
+            "video": "",
+            "videodur": "",
+            "image": "alert2.gif",
+            "imagedur": 5000
+        },
+        {
+            "enabled": "Y",
+            "id": "!firehorn",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 30000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!audio111",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 5000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!so",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 10000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!audioTNS",
+            "type": "Image",
+            "audio": "",
+            "audiodur": "",
+            "video": "",
+            "videodur": "",
+            "image": "alert.gif",
+            "imagedur": 5000
+        }
+    ]
+}

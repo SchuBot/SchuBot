@@ -270,7 +270,7 @@ input#medVidOtherValue {
     /* background: rgb(133, 131, 131); */
     background: rgb(25, 25, 77);
     /* color: rgb(0, 0, 0); */
-    color: orange;
+    color: black;
     /* These below  aren't theme related */
 }
 
@@ -278,7 +278,7 @@ input#medVidOtherValue {
     /*  background: rgb(133, 131, 131); */
     background: rgb(25, 25, 77);
     /* color: rgb(0, 0, 0); */
-    color: orange;
+    color: black;
     /* These below  aren't theme related */
     font-weight: bold;
     width: 100%;

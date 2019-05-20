@@ -1,4 +1,5 @@
 <script>
+    //could make these sliders dynamic by parsing the both elements but meh
     function slide600() {
 
         if (document.getElementById("triggersWrapper").style.display === "none") {
@@ -26,6 +27,23 @@
             mydragg3.slideRight('divWrapperTimersList', 'container', '400', event);
             document.getElementById("divWrapperTimersList").style.width = "400px";
             document.getElementById("wrapperTimersInner").style.display = "none";
+
+
+        }
+    }
+
+
+    function slide1090() {
+
+        if (document.getElementById("wrapperCommandsInner").style.display === "none") {
+            document.getElementById("divWrapperCommandsList").style.width = "1090px";
+            document.getElementById("wrapperCommandsInner").style.display = "block";
+            mydragg3.slideLeft('divWrapperCommandsList', 'container', event);
+
+        } else {
+            mydragg3.slideRight('divWrapperCommandsList', 'container', '400', event);
+            document.getElementById("divWrapperCommandsList").style.width = "400px";
+            document.getElementById("wrapperCommandsInner").style.display = "none";
 
 
         }

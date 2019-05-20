@@ -34,10 +34,11 @@ let userInfo;
 
 let authTokenReconnectBot;
 
+const log = require('electron-log');
 
 
 //module
-let beamchatbot = function(authTokenBot, chatConnectedBot, streamerChannel) {
+let beamchatbot = function(authTokenBot, chatConnectedBot, streamerChannel, authDB) {
 
     if (authTokenBot) {
 
@@ -62,7 +63,7 @@ let beamchatbot = function(authTokenBot, chatConnectedBot, streamerChannel) {
         }));
 
         // Get's the user we have access to with the token
-        userInfo = connectToBeamBot(clientBot, authTokenBot, createChatSocketBot, self, false, chatConnectedBot, streamerChannel);
+        userInfo = connectToBeamBot(clientBot, authTokenBot, createChatSocketBot, self, false, chatConnectedBot, streamerChannel, authDB.data.bot.username);
 
         authTokenReconnectBot = authTokenBot;
 
@@ -115,7 +116,7 @@ let beamchatbot = function(authTokenBot, chatConnectedBot, streamerChannel) {
                 console.log('Chat Error...' + error.message);
                 if (!chatConnectedBot) {
                     console.log(' Reconnecting to chat...');
-                    connectToBeamBot(clientBot, authTokenReconnect, createChatSocketBot, self, true, chatConnectedBot, streamerChannel);
+                    connectToBeamBot(clientBot, authTokenReconnect, createChatSocketBot, self, true, chatConnectedBot, authDB.data.streamer.channelId, authDB.data.bot.username);
                 }
 
             });
@@ -164,8 +165,9 @@ let beamchatbot = function(authTokenBot, chatConnectedBot, streamerChannel) {
             return socketBot.auth(streamerChannel, userId, authkey)
                 .then(() => {
 
-                    console.log('Bot ' + userId + ' has joined channel ' + streamerChannel);
+                    log.info('Bot ' + userId + ' has joined channel ' + streamerChannel);
 
+                    self.emit('botLoggedIn', authDB.data.bot.username);
 
                     chatConnectedBot = true;
                     isConnected = true;
@@ -225,7 +227,7 @@ beamchatbot.prototype = new events.EventEmitter;
 
 module.exports = beamchatbot;
 //function connectToBeam(client, userInfo, authToken, createChatSocket, self) {
-function connectToBeamBot(clientBot, authTokenBot, createChatSocketBot, self, useAuth, chatConnectedBot, streamerChannel) {
+function connectToBeamBot(clientBot, authTokenBot, createChatSocketBot, self, useAuth, chatConnectedBot, streamerChannel, botName) {
 
     console.log('connecting to mixer chat');
     // console.log("use auth value is: " + useAuth);
@@ -268,6 +270,7 @@ function connectToBeamBot(clientBot, authTokenBot, createChatSocketBot, self, us
             /*         console.log('User ' + userInfo.id + ' special something ' + authToken); */
             // console.log(body)
             // return createChatSocket(userInfo.id, chanID, body.endpoints, body.authkey);
+
             return createChatSocketBot(userInfo.id, streamerChannel, body.endpoints, body.authkey, chatConnectedBot);
         })
         .catch(error => {

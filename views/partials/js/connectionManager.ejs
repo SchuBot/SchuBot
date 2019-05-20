@@ -13,6 +13,10 @@
         //todo add connection icon
         document.getElementById("beamConnection").innerHTML = '';
         document.getElementById("beamConnection").innerHTML += "Mixer: Connected";
+
+        // document.getElementById("mixericonleft").style.color = "white";
+        // document.getElementById("mixericonright").style.color = "lightskyblue";
+
     }
 
 
@@ -20,7 +24,7 @@
     disconnectedToBeam = function() {
         //todo add connection icon
         document.getElementById("beamConnection").innerHTML = '';
-        document.getElementById("beamConnection").innerHTML += "Mixer: Not Authenticated";
+        document.getElementById("beamConnection").innerHTML += "Mixer: Not Connected";
     }
 
 
@@ -29,5 +33,15 @@
         document.getElementById("casterAccount").innerHTML += streamer;
         document.getElementById("botAccount").innerHTML = '';
         document.getElementById("botAccount").innerHTML += bot;
+    }
+
+    setBotAccountLoggedIn = function(bot) {
+        document.getElementById("botAccount").innerHTML = '';
+        document.getElementById("botAccount").innerHTML += 'Connected Bot - ' + bot;
+    }
+
+    setStreamerAccountLoggedIn = function(streamer) {
+        document.getElementById("casterAccount").innerHTML = '';
+        document.getElementById("casterAccount").innerHTML += 'Connected Caster - ' + streamer;
     }
 </script>

@@ -1,8 +1,15 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 <!--<script src="./socket.io/socket.io.js"></script>-->
 
 <!-- <script src="./components/socket.io-client/socket.io.js"></script> -->
-<!---->
+<!--
+  //
+  //
+  /
+  /
+    
+-->
 <script>
     //these are the users in chat
     var chatUsrs = [];
@@ -21,9 +28,9 @@
 
     var iosocket = require('socket.io-client')('http://localhost:8081', {
         'reconnection': true,
-        'reconnectionDelay': 1000,
-        'reconnectionDelayMax': 5000,
-        'reconnectionAttempts': 5
+        'reconnectionDelay': 10000,
+        'reconnectionDelayMax': 50000,
+        'reconnectionAttempts': 100
     });
 
     /*     const iosocket = io.connect('http://localhost:8081', {
@@ -39,7 +46,7 @@
 
     if (performance.navigation.type == 1) {
         console.info("Page Reloaded");
-        pingBeam();
+        //  pingBeam();
     } else {
 
     }
@@ -47,6 +54,8 @@
     $(function() {
 
 
+        //build chart
+        buildChartUsingJson();
 
         ////validating duration input
         document.getElementById("medAudOtherValue").onkeypress = function(e) {
@@ -91,7 +100,6 @@
 
                 $("#flActionBtn").html(name + " - " + result);
             }
-
 
         });
 
@@ -145,19 +153,6 @@
                 var usernameName = array[0].toString() + '-' + array[2].toString();
                 $("#ChatActionBtn").html(usernameName);
             }
-
-
-
-
-
-            /*             var array = doThis.split('-');
-
-                        alert('Chat User ID is:' + array[2].toString());
-
-                                        var personData = {
-                                id: array[2].toString(),
-                                username: Audio
-                            }; */
 
         });
 
@@ -289,8 +284,6 @@
                 var TimerText = $(this).children('td').eq(2).text();
                 var Interval = $(this).children('td').eq(3).text();
 
-
-
                 var timerRowJson = {
                     cid: id,
                     ctext: TimerText,
@@ -298,12 +291,10 @@
                     cinterval: Interval
                 };
 
-
                 SetCheckboxElement("chkTPBoxInputEnabled", timerRowJson.cenabled);
                 SetSelectElement("TPtimerID", timerRowJson.cid);
                 SetSelectElement("tpText", timerRowJson.ctext);
                 SetSelectElement("tpInterval", timerRowJson.cinterval);
-
 
             }
 
@@ -315,8 +306,6 @@
             var value = $(this).find('tbody td:first').html();
             //alert(value);
         });
-
-
 
 
         $("#tableKW tr").live("click", function() {
@@ -341,11 +330,9 @@
                     cenabled: Enabled
                 };
 
-
                 SetCheckboxElement("chkKWBoxInputEnabled", commandRowJson.cenabled);
                 SetSelectElement("triggerName", commandRowJson.cid);
                 SetSelectElement("kwTrigText", commandRowJson.coutput);
-
 
             }
 
@@ -373,13 +360,11 @@
 
                 var Note = $(this).children('td').eq(2).text();
 
-
                 var commandRowJson = {
                     cid: id,
                     cnote: Note,
                     ctodo: ToDo
                 };
-
 
                 SetCheckboxElement("chkNTBoxInputEnabled", commandRowJson.ctodo);
                 SetSelectElement("noteName", commandRowJson.cid);
@@ -435,7 +420,6 @@
                     cenabled: Enabled
                 };
 
-
                 SetCheckboxElement("chkBoxInputEnabled", commandRowJson.cenabled);
                 SetSelectElement("commandName", commandRowJson.cid);
                 SetSelectElement("selOptPermission", commandRowJson.cpermission);
@@ -462,8 +446,6 @@
         ModuleTextColorPicker.addEventListener("change", changeTextOnModules, false);
         ModuleBackgroundColorPicker.addEventListener("change", changeBotBackgroundColor, false);
 
-
-
         //////// IOSOCKET CONFIGURATION
         iosocket.on('connect', function() {
 
@@ -477,15 +459,13 @@
             console.log('web socket connect timeout' + JSON.stringify(timeout));
         });
 
-        iosocket.on("seq-num", (msg) => console.info(msg));
+        // iosocket.on("seq-num", (msg) => console.info(msg));
 
         iosocket.on('connect_error', (error) => {
             disconnectedToSocket();
             console.log('web socket connect error' + JSON.stringify(error));
 
         });
-
-
 
         iosocket.on('error', (error) => {
             console.log('bot web socket client error: ' + error.message);
@@ -505,10 +485,92 @@
 
         });
 
-        iosocket.on('loginaccounts', function(streamer, bot) {
+        iosocket.on('reauthStreamer', function(data) {
 
+            //alert("Please Re-Auth");
+            $('#mixrConnection').attr('value', 100);
+            document.getElementById("mixrConnection").style.visibility = 'hidden';
+            document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
+
+
+
+            document.getElementById("casterAccount").innerHTML = '';
+            document.getElementById("casterAccount").innerHTML += "Streamer: Please Re-Auth";
+
+
+        });
+
+        iosocket.on('closeProgressBar', function(data) {
+
+            //alert("Please Re-Auth");
+            document.getElementById("mixrConnection").style.visibility = 'hidden';
+            document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
+
+        });
+
+        iosocket.on('startProgressBar', function(data) {
+
+            //show progressbar (TODO)
+            // document.getElementById("mixrConnection").style.visibility = 'hidden';
+            // document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
+
+
+        });
+
+        iosocket.on('reauthBot', function(data) {
+
+            //alert("Please Re-Auth");
+            $('#mixrConnection').attr('value', 100);
+            document.getElementById("mixrConnection").style.visibility = 'hidden';
+            document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
+
+            document.getElementById("botAccount").innerHTML = '';
+            document.getElementById("botAccount").innerHTML += "Bot: Please Re-Auth";
+
+
+        });
+
+        iosocket.on('botAuthenticated', function(data) {
+
+            //alert("Please Re-Auth");
+            $('#mixrConnection').attr('value', 100);
+            document.getElementById("mixrConnection").style.visibility = 'hidden';
+            document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
+
+            document.getElementById("botAccount").innerHTML = '';
+            document.getElementById("botAccount").innerHTML += "Bot: Authenticated";
+
+        });
+
+        iosocket.on('streamerAuthenticated', function(data) {
+
+            //alert("Please Re-Auth");
+            $('#mixrConnection').attr('value', 100);
+            document.getElementById("mixrConnection").style.visibility = 'hidden';
+            document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
+
+            document.getElementById("botAccount").innerHTML = '';
+            document.getElementById("botAccount").innerHTML += "Bot: Authenticated";
+
+        });
+
+        iosocket.on('botLoggedIn', function(bot) {
+
+            document.getElementById("botAccount").innerHTML = '';
+            document.getElementById("botAccount").innerHTML += "Bot: Authenticated";
+
+            //alert('bot logged in');
+            setBotAccountLoggedIn(bot);
+        });
+
+        iosocket.on('streamerLoggedIn', function(streamer) {
+            //alert('streamer logged in');
+            setStreamerAccountLoggedIn(streamer);
+        });
+
+        iosocket.on('loginaccounts', function(streamer, bot) {
+            //alert('accounts logged in - Issue here lot into it');
             setAccountsOnUi(streamer, bot);
-            console.log('client recieved unauthenticated message');
         });
 
         iosocket.on('followed', function(message) {
@@ -545,7 +607,6 @@
 
         });
 
-
         iosocket.on('UserPart', function(message) {
 
             removeSingleChatUserFromList(message);
@@ -573,7 +634,6 @@
 
         iosocket.on('RemoveAlertFromTable', function(message) {
 
-
             removeAlertFromTable(message);
 
         });
@@ -581,6 +641,13 @@
         iosocket.on('RemoveCommandFromTable', function(message) {
 
             removeCommandFromTable(message);
+
+        });
+
+        iosocket.on('outstandingNotes', function(message) {
+
+            //this is to warn the streamer they have outstanding items to do.
+            alert('You have Outstanding notes');
 
         });
 
@@ -605,13 +672,7 @@
 
         iosocket.on('message', function(avatarURL, primaryRole, UserName, message) {
 
-            //io.emit('message', data.user_avatar, data.user_roles[0], data.user_name, t);
-
-
-
-            // $('#incomingChatMessages').append($('<li style="color:black;"><img src="https://uploads.mixer.com/avatar/2dv5t7wv-862913.jpg" alt="avatar" id="itemImg"></li>').text(message));
-            /*            var objDiv = document.getElementById("chatbox");
-                       objDiv.scrollTop = objDiv.scrollHeight; */
+            //alert('Message Recieved');
             buildChatMessage(avatarURL, primaryRole, UserName, message);
             scrollToEnd("chatbox");
 
@@ -815,6 +876,9 @@
 
         });
 
+        //
+        //
+        //
         ////// SENDS MESSAGE TO MIXER VIA NODE JS SERVER
         $('#outgoingChatMessage').keypress(function(event) {
             if (event.which == 13) {
@@ -824,8 +888,9 @@
                     if ($('#outgoingChatMessage').val().length < 360) {
 
 
-
-                        iosocket.send($('#outgoingChatMessage').val(), "streamer");
+                        // var AccountType = document.getElementById('selMixerSendChatMessageVars').value;
+                        var AccountType = document.getElementById('selMixerSendChatMessageVars').selectedOptions[0].innerText;
+                        iosocket.send($('#outgoingChatMessage').val(), AccountType);
                         $('#outgoingChatMessage').val('');
                     } else {
                         alert('You cannot send a message longer than 360 characters');
@@ -860,13 +925,9 @@
             minimiseBoxFunction(dataElement, parentElement);
         }
 
-
-
-
         minimiseTimerBox = function(dataElement, parentElement) {
             minimiseBoxFunction(dataElement, parentElement);
         }
-
 
         minimiseModMonBox = function(dataElement, parentElement) {
             minimiseBoxFunction(dataElement, parentElement);
@@ -892,20 +953,6 @@
         minimiseCommandBoxFunction = function(dataElement, parentElement) {
             minimiseBoxFunction(dataElement, parentElement);
         }
-
-
-
-        /*            function changeThemeTextItemChange(value, index, array) {
-                document.getElementById(value).style.color = this;
-
-                var el = document.getElementById(value);
-                el.style.color = this;
-
-
-            } */
-
-
-
 
 
         minimiseBoxFunction = function(dataElement, parentElement) {
@@ -938,9 +985,6 @@
         }
 
 
-
-
-
         function pushAllToBackReturnIntIn(number) {
 
 
@@ -969,9 +1013,6 @@
         }
 
 
-
-
-
         toggleSwitchModules = function(parentElement) {
 
             var x = document.getElementById(parentElement);
@@ -985,24 +1026,6 @@
 
 
         addModeratorsActionToModMonitorList = function(data, type) {
-
-
-            /*       <
-                  th > ID < /th> <
-                      th > Moderator < /th> <
-                      th > Action < /th> <
-                      th > Username < /th> <
-                      th > Date < /th> */
-
-
-            /*                                  "id": "3f9f2580-dfb1-11e8-b318-cd5dc9b6c820",
-                       "date": "2018-11-03T21:41:49.855Z",
-                       "moderatorid": 52684962,
-                       "moderatorname": "HersheyBot",
-                       "rolewho": "Mod",
-                       "action": "delete",
-                       "user": "" */
-
 
             switch (type) {
 
@@ -1054,7 +1077,6 @@
             var tr;
             for (var i = 0; i < data.length; i++) {
 
-
                 //these are your followers (people that you follow)
                 tr = $('<tr id="YFL' + data[i].id + '" class /> ');
                 tr.append("<td>" + data[i].id + "</td>");
@@ -1065,8 +1087,6 @@
                 //updates chat user if exists
                 amendChatUserRowToFollower(data[i].id);
             }
-
-
 
         }
 
@@ -1090,7 +1110,6 @@
 
         //adds list of chat users to list
         addChatUsersToList = function(data) {
-
 
             var tr;
             for (var i = 0; i < data.length; i++) {
@@ -1122,7 +1141,6 @@
 
                 var hidden = "display:none;";
 
-
                 tr = $('<tr id="HAL' + data[i].id + '" class /> ');
                 // tr = $('<tr class /> ');
                 tr.append("<td>" + data[i].enabled + "</td>");
@@ -1144,7 +1162,6 @@
 
                 var hidden = "display:none;";
 
-
                 tr = $('<tr id="FAL' + data[i].id + '" class /> ');
                 // tr = $('<tr class /> ');
                 tr.append("<td>" + data[i].enabled + "</td>");
@@ -1157,7 +1174,6 @@
 
             }
         }
-
 
 
         addKeywordsToTable = function(data) {
@@ -1178,7 +1194,6 @@
 
             }
         }
-
 
 
         addNotesToTable = function(data) {
@@ -1205,7 +1220,6 @@
         addorAmendTimerToTable = function(data) {
 
             var tr;
-
 
             var rowID = data.id.replace("!", "x");
 
@@ -1238,11 +1252,6 @@
                 $('#tableTIM').append(tr);
             }
 
-
-
-
-
-
         }
 
 
@@ -1261,8 +1270,6 @@
                 x[1].innerHTML = data.text;
                 x[2].innerHTML = data.enabled;
 
-
-
             } else {
                 console.log('Trigger data for table is:' + data.id)
 
@@ -1278,8 +1285,6 @@
 
         }
 
-
-
         addorAmendCommandToTable = function(data) {
 
             var tr;
@@ -1293,17 +1298,6 @@
 
                 var x = document.getElementById("tableCO").rows[triggerRowIndex].cells;
 
-                /*                             "enabled": "Y",
-                            "id": "!test90809835",
-                            "permission": "+m",
-                            "user": "",
-                            "audio": "!test123",
-                            "video": "",
-                            "image": "",
-                            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] $target uptime is $uptime hiohdfgs $channelInfo$caster[$caster has $sparks sparks and is a level $level] $caster has been on for $uptime hiohdfgs",
-                            "cooldown": "" */
-
-
                 x[0].innerHTML = data.enabled;
                 x[2].innerHTML = data.text;
                 x[3].innerHTML = transformUIPermsToCommandPerms(data.permission);
@@ -1312,8 +1306,6 @@
                 x[6].innerHTML = data.video;
                 x[7].innerHTML = data.image;
                 // x[9].innerHTML = data.cooldown; not used
-
-
 
             } else {
                 console.log('Trigger data for table is:' + data.id)
@@ -1357,10 +1349,6 @@
                 x[5].innerHTML = data.text;
                 // x[6].innerHTML = data.audio;
 
-
-
-
-
             } else {
                 console.log('Note data for table is:' + data.id)
 
@@ -1376,13 +1364,6 @@
                 tr.append("<td>" + data.image + "</td>");
                 tr.append("<td>" + data.text + "</td>");
 
-                /*                           "id": "HAI2",
-                     "audio": "!test123",
-                     "video": "",
-                     "image": "!test2345",
-                     "text": "OMG  $user we have a new host",
-                     "enabled": "Y",
-                     "type": "altAlertHost" */
 
                 $('#tableFAL').append(tr);
             }
@@ -1410,10 +1391,6 @@
                 x[5].innerHTML = data.text;
                 // x[6].innerHTML = data.audio;
 
-
-
-
-
             } else {
                 console.log('Note data for table is:' + data.id)
 
@@ -1428,14 +1405,6 @@
                 tr.append("<td>" + data.video + "</td>");
                 tr.append("<td>" + data.image + "</td>");
                 tr.append("<td>" + data.text + "</td>");
-
-                /*                           "id": "HAI2",
-                     "audio": "!test123",
-                     "video": "",
-                     "image": "!test2345",
-                     "text": "OMG  $user we have a new host",
-                     "enabled": "Y",
-                     "type": "altAlertHost" */
 
                 $('#tableHAL').append(tr);
             }
@@ -1893,9 +1862,6 @@
         }
 
 
-
-
-
         isMyFollowingAFollower = function(userID) {
             //is the person I am following a follower i.e are they in my followers list?
             var FollowingRow = $("#YFL" + userID);
@@ -2061,10 +2027,6 @@
         });
 
 
-        /*         $("#keywordPanelChkBox").change(function() {
-                    chkBoxToglModuleVisible('divWrapperTriggerPanel');
-                }); */
-
         $("#timerListChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperTimersList');
         });
@@ -2089,6 +2051,8 @@
 
                 iosocket.emit('startTimers', null);
 
+
+
             } else {
                 // alert('unchecked');
                 $('.switch1').css({
@@ -2097,6 +2061,9 @@
 
                 iosocket.emit('stopTimers', null);
             }
+
+            //need to move this but in here for now
+            iosocket.emit('checkForOutstandingNotes', null);
 
         });
 
@@ -2747,8 +2714,6 @@
 
         }
 
-
-
         //this manages the device widths, its a start
         setDeviceWidthLayout();
 
@@ -2849,18 +2814,6 @@
     }
 
     function setDefaultUIVisibility() {
-
-        /* 
-             $("#partyQChkBox").change(function() {
-                 chkBoxToglModuleVisible('divWrapperNarrowPartyUsers');
-             });
-          $("#managerTimersChkBox").change(function() {
-                 chkBoxToglModuleVisible('divWrapperTimerPanel');
-             }); */
-
-        /*         $("#switch1").change(function() {
-                    //timer switch
-                }); */
 
         HideUIElementAndUncheckSwitch("divWrapperNarrowRecentFollowers", "recentFollowersChkBox")
         HideUIElementAndUncheckSwitch("divWrapperFollowing", "followingChkBox")
@@ -3035,9 +2988,6 @@
 
         saveUIThemeSetting('outside', event.target.value);
 
-        /*            document.querySelectorAll("p").forEach(function(p) {
-                       p.style.color = event.target.value;
-                   }); */
     }
 
     function changeInsideBox(event) {
@@ -3111,7 +3061,6 @@
 
         toggleButtonElements.push("KeywordsToggleBtn");
 
-
         toggleButtonElements.push("NotesToggleBtn");
         toggleButtonElements.push("NotesActionBtn");
 
@@ -3119,7 +3068,6 @@
         toggleButtonElements.push("followAlertsListBtn");
         //toggleButtonElements.push("timersListBtn");
         toggleButtonElements.push("modmonListBtn");
-
 
         toggleButtonElements.push("deleteKWButton");
         toggleButtonElements.push("deleteNTButton");
@@ -3156,8 +3104,6 @@
         toggleButtonElements.push("deleteCommandButton");
         toggleButtonElements.push("addVar");
 
-
-
         toggleButtonElements.push("chatUsrBan");
         toggleButtonElements.push("chatUsrTimeout5m");
         toggleButtonElements.push("modmonListBtn");
@@ -3170,17 +3116,8 @@
         toggleButtonElements.push("NotesToggleBtn");
         toggleButtonElements.push("NotesActionBtn");
 
-
-
-
-
-        //toggleButtonElements.push("flBtnWideNoteManager");
-        //toggleButtonElements.push("flBtnWideTimers");
-
         toggleButtonElements.push("submitKWButton");
         toggleButtonElements.push("deleteKWButton");
-
-
 
         toggleButtonElements.forEach(changeToggleButtonsTextItemChange, event.target.value);
 
@@ -3227,7 +3164,6 @@
         moduleDropdownElements.push("videoMedSelect");
         moduleDropdownElements.push("selVideoDurationMedVars");
 
-
         moduleDropdownElements.forEach(changeDropdownsTextItemChange, event.target.value);
         ///
 
@@ -3237,14 +3173,12 @@
 
     function changeDropdownsBackground(event) {
 
-
         //commands dropdowns
         var moduleDropdownElements = [];
         moduleDropdownElements.push("selOptPermission");
         moduleDropdownElements.push("audioSelect");
         moduleDropdownElements.push("videoSelect");
         moduleDropdownElements.push("imageSelect");
-
 
         //alert dropdowns
         moduleDropdownElements.push("selAlertTypeAltVars");
@@ -3261,9 +3195,7 @@
         moduleDropdownElements.push("videoMedSelect");
         moduleDropdownElements.push("selVideoDurationMedVars");
 
-
         moduleDropdownElements.forEach(changeDropdownsBackgroundItemChange, event.target.value);
-        ///
 
         saveUIThemeSetting('combocolour', event.target.value);
 
@@ -3275,7 +3207,6 @@
         var el = document.getElementById(value);
         el.style.color = this;
 
-
     }
 
     function changeThemeTextItemChangeFormatting(value, index, array) {
@@ -3283,8 +3214,6 @@
 
         el.style.color = this;
         el.style.fontWeight = "bold";
-        /*         el.style.float = "left";
-                el.style.paddingLeft = "40%"; */
 
     }
 
@@ -3334,10 +3263,7 @@
     }
 
     function changeDivTextItemChange(value, index, array) {
-        /*    var cols = document.getElementsByClassName(value);
-           for (i = 0; i < cols.length; i++) {
-               cols[i].style.backgroundColor = this;
-           } */
+
         var colour = this;
         var inner = document.querySelectorAll("div." + value);
 
@@ -3406,9 +3332,8 @@
     }
 
 
-
     function setUIToRefreshingData() {
-        refreshingMixerData();
+        // refreshingMixerData();
         //set UI to Refresh in progress here
     }
 
@@ -3416,12 +3341,15 @@
         //todo add connection icon
         document.getElementById("beamConnection").innerHTML = '';
         document.getElementById("beamConnection").innerHTML += "Mixer: Refreshing Data...";
+
+        document.getElementById("mixericonleft").style.color = "grey";
+        document.getElementById("mixericonright").style.color = "darkgrey";
     }
 
     function pingBeam() {
 
-        emptyTables();
-        setUIToRefreshingData();
+        //  emptyTables();
+        //  setUIToRefreshingData();
 
     }
 
@@ -3436,29 +3364,6 @@
     }
 
     function addSingleCommandToCommandListModule(data) {
-
-        /*                  <th>Enabled</th>
-                                    <th>Command Name</th>
-                                    <th>Text</th>
-                                    <th>Perms</th>
-                                    <th>User</th>
-                                    <th>Audio</th>
-                                    <th>Video</th>
-                                    <th>Image</th> 
-                                    
-                                        "id": "!test",
-            "permission": "SPECIFIC",
-            "user": "Schuster",
-            "audio": "sound1.mp3",
-            "video": "",
-            "image": "alert2.gif",
-            "text": "$user has been streaming for $uptime",
-            "cooldown": "5M",
-            "enabled": "Y"
-                                    
-                                    */
-
-
 
         var commandEnabled = data.enabled;
         var commandName = data.id;
@@ -3481,15 +3386,15 @@
         tr.append("<td>" + commandAudio + "</td>");
         tr.append("<td>" + commandVideo + "</td>");
         tr.append("<td>" + commandImage + "</td>");
-        //hidden sample
-        //tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
-        //add row to command list
+
         $('#tableCO').append(tr);
 
-        /* //adjust command list count
-                var chatCountStrNew = chatUsrs.length.toString();
-                $("#tableCL").empty();
-                $('#tableCL').append($('<p></p>').text(chatCountStrNew)); */
+    }
+
+    //
+
+    function mixerChatMessageAccountTypeSelected(id) {
+
     }
 
     function SetSelectElement(id, valueToSelect) {
@@ -3513,31 +3418,6 @@
         var element = document.getElementById(id);
         element.checked = false;
 
-        /* 
-        var element = document.getElementById(id).checked;
-
-        if (element != undefined) {
-            if (element == true) {
-                element.checked = false;
-            }
-        } */
-
-        /*         // Create a new 'change' event
-                var element = document.getElementById(id);
-                var event = new Event('change');
-                // Dispatch it.
-                element.dispatchEvent(event);
-         
-
-        var element = document.getElementById(id);
-        if ("createEvent" in document) {
-            var evt = document.createEvent("HTMLEvents");
-            evt.initEvent("change", false, true);
-            element.dispatchEvent(evt);
-        } else
-            element.fireEvent("onchange");
-*/
-
     }
 
 
@@ -3548,8 +3428,8 @@
 
     function setDeviceWidthLayout() {
         console.log('device width = ' + devicewidth.toString());
-        document.getElementById("container").style.width = Math.round((devicewidth / 100 * 85)) + 'px';
-        document.getElementsByTagName("BODY")[0].style.width = Math.round((devicewidth / 100 * 85)) + 'px';
+        document.getElementById("container").style.width = Math.round((devicewidth / 100 * 85) + 19) + 'px';
+        document.getElementsByTagName("BODY")[0].style.width = Math.round((devicewidth / 100 * 85) + 19) + 'px';
         document.getElementById("chkBoxList").style.marginLeft = Math.round((devicewidth / 100 * 85)) + 20 + 'px';
 
 
@@ -3586,12 +3466,6 @@
         var styleColour = 'color:' + colour + ';';
         var avatarURL = avatarURL;
 
-        /*  li = $('<li style="' + styleColour + ' list-style-type: none;" class /> ');
-          li.append('<img height="50" width="50" src="' + avatarURL + '" alt="avatar" id="itemImg" style="float:left;  border-radius: 50%;">');
-          li.append('<div style="float: left; padding-left:5px; display: table-cell; vertical-align: middle;"><p style="' + styleColour + ' display: table-cell; vertical-align: middle;">' + message + '</p></div>');
-          li.append('<div style="float: none; clear: both;"></div>'); */
-
-
         li = $('<li/> ');
         li.append('<img class="mixerChat" height="25" width="25" src="' + avatarURL + '" alt="avatar" id="itemImg" style="border-radius: 50%;">');
         li.append('<div><p style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</p><p style="color:black;">' + message + '</p></div>');
@@ -3599,5 +3473,53 @@
         $('#incomingChatMessages').append(li);
 
         $('#incomingChatMessages').append(li);
+    }
+
+
+
+    function buildChartUsingJson() {
+        var jsonfile = {
+            "jsonarray": [{
+                "name": "Joe",
+                "age": 12
+            }, {
+                "name": "Tom",
+                "age": 14
+            }, {
+                "name": "Peter",
+                "age": 16
+            }]
+        };
+
+        var labels = jsonfile.jsonarray.map(function(e) {
+            return e.name;
+        });
+        var data = jsonfile.jsonarray.map(function(e) {
+            return e.age;
+        });;
+
+        var ctx = document.getElementById("canvas").getContext('2d');
+        var config = {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Bar Graph',
+                    data: data,
+                    backgroundColor: 'rgba(0, 119, 204, 0.3)'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        };
+
+        var chart = new Chart(ctx, config);
     }
 </script>

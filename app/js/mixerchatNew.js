@@ -7,6 +7,11 @@ var JsonDB = require('node-json-db');
 const Mixer = require('@mixer/client-node');
 const ws = require('ws');
 
+const log = require('electron-log');
+log.transports.file.level = 'info';
+log.transports.file.format = '{h}:{i}:{s}:{ms} {text}'
+log.transports.file.maxSize = 5 * 1024 * 1024
+
 let beamChannelID;
 let numFollowers;
 
@@ -36,11 +41,12 @@ let authTokenReconnect;
 
 
 //module
-let beamchat = function(authToken, chatConnected, globalFollowers) {
+//authTokenBot, chatConnectedBot, streamerChannel, authDB
+let beamchat = function(authToken, chatConnected, authDB) {
 
     if (authToken) {
 
-        console.log('accessing beam chat js ' + authToken);
+        log.info('accessing beam chat js ' + authToken);
 
         const colors = require('colors');
         const client = new Mixer.Client(new Mixer.DefaultRequestRunner());
@@ -87,7 +93,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
             // const socket = new Mixer.Socket(ws, endpoints).boot();
             socket = new Mixer.Socket(ws, endpoints).boot();
 
-            console.log('accessing beam chat socket js');
+            log.info('accessing beam chat socket js');
 
             socket.on('UserJoin', data => {
                 // self.emit('UserJoin', data);
@@ -99,25 +105,27 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
 
             socket.on('ChatMessage', data => {
                 // messagessent = messagessent + 1;
-                //console.log('Message Sent from Beam ' + messagessent + ' times');
+                //log.info('Message Sent from Beam ' + messagessent + ' times');
 
                 try {
+
                     self.emit('ChatMessage', data);
+
                 } catch (error) {
-                    console.log('error sending to beam' + error);
+                    log.info('error sending to beam' + error);
                 }
 
             });
 
             socket.on('error', error => {
 
-                //console.log('socket error, Socket info is: ' + JSON.stringify(socket));
+                //log.info('socket error, Socket info is: ' + JSON.stringify(socket));
                 //need to work on connection retry but connect immediately everytime it errors out
 
 
 
                 if (!chatConnected) {
-                    console.log(' Reconnecting to chat...');
+                    log.info(' Reconnecting to chat...');
                     connectToBeam(client, authTokenReconnect, createChatSocket, self, true, chatConnected);
                 }
 
@@ -172,10 +180,11 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
                 .then(() => {
 
 
-                    console.log('User ' + userInfo.id + ' has joined channel ' + channelId);
-                    //console.log('logged into beam chat');
+                    log.info('User ' + userInfo.id + ' has joined channel ' + channelId);
+                    //log.info('logged into beam chat');
                     chatConnected = true;
-                    //   console.log(colors.yellow('Beam Chat Login'));
+                    //   log.info(colors.yellow('Beam Chat Login'));
+                    self.emit('streamerLoggedIn', authDB.data.streamer.username);
 
                 });
         }
@@ -192,7 +201,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
         }
 
         self.whisper = function(username, msg) {
-            console.log('in whisper function' + msg);
+            log.info('in whisper function' + msg);
             socket.call('whisper', [username, `${msg}`]);
         }
 
@@ -211,14 +220,17 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
                 //do something with the response
                 return res;
             }).catch(error => {
-                console.log(error);
+                log.info('Error :- ' + error);
             });
 
         }
 
         self.timeout = function(data) {
-            console.log('timing out ' + data.username + ' for ' + data.duration);
-            socketBot.call('timeout', [data.username, data.duration]).catch(error => { console.log('Bot Timeout caught', error.message) });
+            log.info('timing out ' + data.username + ' for ' + data.duration);
+            socketBot.call('timeout', [data.username, data.duration])
+                .catch(error => {
+                    log.info('Error : - Bot Timeout caught', error.message)
+                });
         }
 
         self.ban = function(userid) {
@@ -232,7 +244,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
                 //do something with the response
                 return res;
             }).catch(error => {
-                console.log(error);
+                log.info('Ban Error:- ' + error);
             });
 
         }
@@ -248,7 +260,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
                 //do something with the response
                 return res;
             }).catch(error => {
-                console.log(error);
+                log.info('unmod error:-' + error);
             });
 
         }
@@ -257,7 +269,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
             try {
 
                 if (socket.status == 1) {
-                    // console.log('sending msg to Mixer' + JSON.stringify(msg));
+                    // log.info('sending msg to Mixer' + JSON.stringify(msg));
                     socket.call('msg', [`${msg}`]);
                 } else {
 
@@ -265,7 +277,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
 
 
             } catch (error) {
-                console.log('error in beamchat.js self.clienthtml' + error)
+                log.info('error in beamchat.js self.clienthtml' + error)
             }
 
         }
@@ -433,7 +445,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
 
         function addChatUserItem(res) {
             res.body.forEach(function(element) {
-                //console.log(element.username);
+                //log.info(element.username);
                 var item = element.userName + ' - ' + element.userRoles[0] + ' - ' + element.userId
                 chatUsers.push(item);
             }, this);
@@ -460,7 +472,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
             var db = new JsonDB("myDataBase", true, true);
 
             if (type == "follower") {
-                console.log("follower " + username + " on: " + createdDate)
+                log.info("follower " + username + " on: " + createdDate)
                 addfollowerToDB(username, createdDate, updatedDate);
             }
 
@@ -484,7 +496,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
 
             var numDBFollowing = Object.keys(db.getData("/following")).length;
 
-            console.log("Following: " + numDBFollowers);
+            log.info("Following: " + numDBFollowers);
 
         }
 
@@ -503,7 +515,7 @@ let beamchat = function(authToken, chatConnected, globalFollowers) {
 
             var numDBFollowers = Object.keys(db.getData("/followers")).length;
 
-            console.log("Number Of Followers: " + numDBFollowers);
+            log.info("Number Of Followers: " + numDBFollowers);
 
             var data = db.getData("/followers");
 
@@ -535,8 +547,8 @@ module.exports = beamchat;
 //function connectToBeam(client, userInfo, authToken, createChatSocket, self) {
 function connectToBeam(client, authToken, createChatSocket, self, useAuth, chatConnected) {
 
-    // console.log("use auth value is: " + useAuth);
-    // console.log("use magic token is: " + authToken);
+    // log.info("use auth value is: " + useAuth);
+    // log.info("use magic token is: " + authToken);
     if (useAuth) {
 
         client.use(new Mixer.OAuthProvider(client, {
@@ -551,12 +563,12 @@ function connectToBeam(client, authToken, createChatSocket, self, useAuth, chatC
     client.request('GET', `users/current`)
         .then(response => {
 
-            console.log('Getting Current User data response 1 user id: ' + response.body.id + ' username:' + response.body.username);
+            log.info('Getting Current User data response 1 user id: ' + response.body.id + ' username:' + response.body.username);
             userInfo = response.body;
-            //console.log(JSON.stringify(userInfo));
+            //log.info(JSON.stringify(userInfo));
 
-            //  console.log('response 1 ' + userInfo.id + ' getting user info ');
-            //console.log(userInfo.channel.id);
+            //  log.info('response 1 ' + userInfo.id + ' getting user info ');
+            //log.info(userInfo.channel.id);
             //channel id
             beamChannelID = userInfo.channel.id;
             numFollowers = userInfo.channel.numFollowers;
@@ -567,14 +579,15 @@ function connectToBeam(client, authToken, createChatSocket, self, useAuth, chatC
         .then(response => {
             const body = response.body;
             //these are to be removed
-            /*             console.log('User ' + userInfo.id + ' has joined channel ' + beamChannelID);
-                        console.log('User ' + userInfo.id + ' special something ' + authToken); */
-            // console.log(body)
+            /*             log.info('User ' + userInfo.id + ' has joined channel ' + beamChannelID);
+                        log.info('User ' + userInfo.id + ' special something ' + authToken); */
+            // log.info(body)
             // return createChatSocket(userInfo.id, chanID, body.endpoints, body.authkey);
+
             return createChatSocket(userInfo.id, beamChannelID, body.endpoints, body.authkey, chatConnected);
         })
         .catch(error => {
-            console.log('error in chat connection request: ' + error);
+            log.info('error in chat connection request: ' + error);
             self.emit('socketerror', error);
         });
     // return userInfo;
@@ -636,7 +649,7 @@ function connectToBeam(client, authToken, createChatSocket, self, useAuth, chatC
 
                     // gets runs required
                     requestsToCompletion = totalFollowers - requestSize;
-                    //  console.log('requestsToCompletion: ' + requestsToCompletion);
+                    //  log.info('requestsToCompletion: ' + requestsToCompletion);
                     if (page == 0) {
 
                         if (requestsToCompletion > 0) {
@@ -647,7 +660,7 @@ function connectToBeam(client, authToken, createChatSocket, self, useAuth, chatC
                     }
 
                     if (numToGetAllFollowers == 0) {
-                        //  console.log('numFollowers: ' + res.headers["x-total-count"]);
+                        //  log.info('numFollowers: ' + res.headers["x-total-count"]);
                         self.emit('FollowerCount', followers.followers);
                         return;
                     }

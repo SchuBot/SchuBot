@@ -7,8 +7,8 @@
             "currencyid": "1",
             "currencyiddescription": "the currency id is to add points to the correct currency",
             "username": "Schuster",
-            "hours": 3764.250000020319,
-            "points": 751866435,
+            "hours": 3.6333333333333253,
+            "points": 436218,
             "currentrank": "Rank 1",
             "nextrank": "Rank 2",
             "type": "Regular"
@@ -20,8 +20,8 @@
             "currencyid": "2",
             "currencyiddescription": "the currency id is to add points to the correct currency",
             "username": "Schuster",
-            "hours": 3764.250000020319,
-            "points": 300789435,
+            "hours": 3.6333333333333253,
+            "points": 218,
             "currentrank": "Rank 1",
             "nextrank": "Rank 2",
             "type": "Regular"

@@ -8,12 +8,11 @@ let beamChannelID;
 
 
 //module
-let commandHandler = function(channelToken, commandsDB) {
+let commandHandler = function(channelToken) {
 
     //let userInfo;
     let self = this;
-    let channelName = channelToken;
-    let commandsList = commandsDB
+
 
     //exports
     self.say = function(userName, commandJSONData, roles, commandTriggered, fullcommand) {
@@ -204,7 +203,13 @@ function getChannelVariable(userName, streamer, msg, variableCommand, target) {
             text = streamer;
             break;
         case "target":
-            text = target.replace("@", "");
+
+            if (target != undefined) {
+                text = target.replace("@", "");
+            } else {
+                text = "";
+            }
+
             break;
         default:
             text = variableCommand;
@@ -506,7 +511,7 @@ async function processArray(commandData, channelName, commandTriggered, userName
                         var channel = getChannelVariable(userName, channelName, commandTriggered, userChannelVariable, target);
 
 
-                        if (channel != undefined) {
+                        if (channel != undefined || channel != "") {
 
 
                             let ChannelObject = await getChannel(channel.replace('@', ''));

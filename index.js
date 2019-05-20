@@ -26,6 +26,9 @@ const log = require('electron-log');
 // configure logging
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
+log.transports.file.level = 'info';
+log.transports.file.format = '{h}:{i}:{s}:{ms} {text}'
+log.transports.file.maxSize = 5 * 1024 * 1024
 log.info('App starting...');
 
 
@@ -83,10 +86,42 @@ if (process.platform === 'win32') {
 
 
 
+
+/*
+I think I'm using access-token. how do I get the bearer token?
+
+https://dev.mixer.com/rest/index.html#oauth_token_post
+for Authorization for endpoints, it says 
+HEADERS
+    Authorization: string
+        Used to send a valid OAuth 2 access token. Prefixed by "Bearer". Do not use with the "access_token" query string parameter.
+        Alternatively can be used to send an xbl authorization header.
+you auth your app, it gives you a code, then you use that to get your token
+
+it's an auth type
+when you auth your app it should redirect with a ?code={code} then you hit /oauth/token with a body of
+{
+    grant_type: 'authorization_code',
+    client_id: '',
+    code: '<your returned code>'
+    redirect_uri: '<same redirect as your oauth redirect URI>'
+}
+
+if that is successful, you should get the following in the payload from that
+{
+    access_token: <string>
+    token_type: <string>
+    expires_in: <uint>
+    refresh_token: <string>
+}
+anyways, good luck, I hope you figure it out from that :smile: I'm going to sleep now
+*/
+
 var Tray = require('electron').Tray; // jshint ignore:line
 var Menu = require('electron').Menu; // jshint ignore:line
 var fs = require('fs');
 var server = require('./ServerSide/app');
+
 
 let streamerScopes = "user:details:self interactive:robot:self chat:connect chat:chat chat:whisper chat:bypass_links chat:bypass_slowchat chat:bypass_catbot chat:bypass_filter chat:clear_messages chat:giveaway_start chat:poll_start chat:remove_message chat:timeout chat:view_deleted chat:purge channel:details:self channel:update:self channel:clip:create:self";
 
@@ -144,8 +179,6 @@ ipcMain.on('autoUpdate', () => {
 
     let updater = new GhReleases(options);
 
-
-
     updater.check((err, status) => {
         if (!err && status) {
             log.info('Downloading Update...');
@@ -180,25 +213,19 @@ ipcMain.on('loadbot', (event, arg) => {
 
 
 ipcMain.on('saveauthbot', (event, arg) => {
-
-    server.SaveAuth(event)
-
+    server.ConnectOnLogin(false, event);
 })
 
 
 ipcMain.on('saveauth', (event, arg) => {
-
-    server.SaveAuth(event)
-
-    ipcMain.emit('loadbot');
-
+    server.ConnectOnLogin(true, event);
 })
 
 
 //ipcMain.on will receive the “btnclick” info from renderprocess 
-ipcMain.on("btnclick", function(event, arg) {
+/* ipcMain.on("btnclick", function(event, arg) {
 
-});
+}); */
 
 ipcMain.addListener("fulfilled", function(event, arg) {
     console.log(event);
@@ -209,11 +236,11 @@ ipcMain.on("fulfilled", function(event, arg) {
     console.log(event);
 });
 
-ipcMain.on("btnclickstreamer", function(event, arg) {
+/* ipcMain.on("btnclickstreamer", function(event, arg) {
 
     //login4();
 
-});
+}); */
 
 
 
@@ -307,7 +334,7 @@ ipcMain.on('mixer-login', (event, arg) => {
 })
 
 
-ipcMain.on('login', (event, arg) => {
+/* ipcMain.on('login', (event, arg) => {
 
 
     // Mixer Applications Credentials
@@ -343,7 +370,7 @@ ipcMain.on('login', (event, arg) => {
 
 
 })
-
+ */
 
 
 
@@ -368,7 +395,7 @@ function createWindow() {
     mainWindow.show();
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     mainWindow.on('closed', () => {
@@ -393,6 +420,7 @@ app.on('window-all-closed', () => {
     // On macOS it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
     if (process.platform !== 'darwin') {
+        log.info('App Exiting');
         app.quit()
     }
 });
@@ -424,6 +452,19 @@ function loadbot() {
     authWindow.close();
     mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
 }
+
+function closeAuthWindow() {
+    authWindow.close();
+}
+
+
+
+ipcMain.on('closeauthwindow', (event, arg) => {
+    closeAuthWindow();
+})
+
+
+
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

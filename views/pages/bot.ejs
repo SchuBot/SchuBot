@@ -4,12 +4,15 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1 , shrink-to-fit=no">
     <title>iBot - Chat</title>
-    <link href="../css/bootstrap.css" rel="stylesheet" type="text/css">
 
-    <!-- <link rel="stylesheet" href="../css/style.css"> -->
+    <!--  
+        //<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
+
+    <!-- <link rel="stylesheet" href="../css/style.css">
+    https://glyphicons.bootstrapcheatsheets.com/# -->
+    <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/chat.css">
     <link rel="stylesheet" href="../css/toggle.css">
-
 
 </head>
 
@@ -19,18 +22,55 @@
 
 
 
+
+
+
 <body class="nav-md">
+
+
+
+
     <div id="chkBoxList" class="moduleToggleSwitches">
 
+        <div>
+            <label id="mixrConnectionLabel" for="mixrConnection">Connecting to Mixer:</label>
+            <!-- value="70"-->
+            <progress id="mixrConnection" max="100"></progress>
 
-        <div class="moduleText">
-            <p id="welcome"></p>
-            <p id="beamConnection"></p>
-            <p id="casterAccount"></p>
-            <p id="botAccount"></p>
+            <div class="btn-group">
+                <!-- /auth/beam "../botlogin.html" -->
+                <button id="BotLogin" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Bot Sign in with Mixer</button>
+                <button id="StreamerLogin" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Streamer Login</button>
+                <button id="AutoUpdate" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Update Bot</button>
+            </div>
 
-            <!-- uncomment if putting back to chat box  <div style="clear:both"></div> -->
         </div>
+
+
+        <!--<div class="moduleText">-->
+        <div style="margin-bottom:20px;">
+            <!-- Uncomment When Ready -->
+            <!--             <span class="glyphicon glyphicon-signal" style="float:left; color:green; font-size: 30px;"></span>
+            <span style="float:left;font-size: 10px;margin-top:10px;">Signal</span>
+            <span id="mixericonleft" class="glyphicon glyphicon-chevron-right" style="float:left;color:white; font-size: 30px; margin-right:-1px;"></span>
+            <span id="mixericonright" class="glyphicon glyphicon-chevron-left" style="float:left;color:blue; font-size: 30px;margin-left:-4px;"></span>
+            <span style="float:left;font-size: 10px;margin-top:10px;">Chat</span> -->
+        </div>
+
+        <div style="width:95%;">
+
+            <p style="padding-top: 20px;" id="welcome"></p>
+        </div>
+        <div style="width:95%;">
+            <p id="beamConnection"></p>
+        </div>
+
+        <p id="casterAccount"></p>
+        <p id="botAccount"></p>
+
+
+        <!-- uncomment if putting back to chat box  <div style="clear:both"></div> -->
+        <!--</div>-->
 
 
         <h4>Modules</h4>
@@ -260,13 +300,7 @@
                 </div>
                 <br>
 
-                <!-- <div>
-                    <label class="switch">
-                                            <input id="keywordPanelChkBox" type="checkbox" checked>
-                                            <span class="slider round"></span>
-                                            <p style="padding-left:42px;" class="slider-text">Triggers Panel</p>
-                         </label>
-                </div> -->
+
             </div>
         </div>
 
@@ -292,17 +326,7 @@
             <span class="switchModuleTextSmall">(Coming Soon)</span>
 
             <br></br>
-            <!--         <button id="PartySwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperPartySwitch');" type="button" class="btn">+/-</button>
-                    <div id="divwrapperPartySwitch">
-                        <div>
-                            <label class="switch">
-                                            <input id="partyQChkBox" type="checkbox" checked>
-                                            <span class="slider round"></span>
-                                            <p style="padding-left:42px;" class="slider-text">Party Queue (tm)</p>
-                                          </label>
-            
-                        </div>
-                    </div> -->
+
         </div>
 
         <div id="ModerationSwitches">
@@ -335,13 +359,7 @@
 
                 <br>
 
-                <!-- <div>
-                    <label class="switch">
-                                            <input id="managerTimersChkBox" type="checkbox" checked>
-                                            <span class="slider round"></span>
-                                            <p style="padding-left:42px;" class="slider-text">Manage Timers</p>
-                         </label>
-                </div> -->
+
             </div>
 
         </div>
@@ -362,8 +380,14 @@
     <div class="container body">
         <div class="main_container">
             <!-- width:1200px;height:1000px; -->
-            <div id="container" style="top:20px;left:1px;">
+            <div id="container" style="top:1px;left:1px;">
+
                 <img id="backgroundlogo" draggable="false" src="http://placekitten.com/500/500" class="transparent">
+
+                <!--Graphs for analysis uses chart.js-->
+                <!--                 <div class="chart-container" style="position: relative; height:10vh; width:20vw; ">
+                    <canvas style="background-color: white; " id="canvas"></canvas>
+                </div> -->
 
                 <div class="moduleTheme" id="divWrapperChat" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:460px; left: 0px; top: 100px;">
 
@@ -392,8 +416,8 @@
                         <div>
                             <div style='width: 350px;'>
                                 <p style="line-height:44px;height:44px;padding-left:10px;text-align:center;float:left;width:150px;clear:right;">Send Message As:</p>
-                                <select style="float:left;" id="selMixerSendChatMessageVars" class="dropdownTheme" onchange="mixerChatMessageTypeSelected(id);">
-                          
+                                <select style="float:left;" id="selMixerSendChatMessageVars" class="dropdownTheme">
+     
                                 <option value="default" >Bot</option>
                                 <option value="mixerSendStreamer" >Streamer</option>
                                     </select>
@@ -410,24 +434,10 @@
                 <div class="moduleTheme" id="divWrapperFollowers" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 400px; top: 100px;">
                     <div id="menubarnarrowfollowers">
 
-                        <!-- doesn't appear to be referenced anywhere-->
-                        <!--                         <span><div id="flActionSel" ></div></span>
-                        <div class="btn-group-vertical-right" role="group">
-                            <button class="toggleButton" id="flActionBtn" type="button" class="btn">-</button>
-                            <button class="toggleButton" id="flBtn" onclick="minimiseFollowersBox('wrapperFollowers', 'divWrapperFollowers')" type="button" class="btn">Toggle</button>
-                        </div>
-                        <br>
-                        <div style="float: left; width: 100%;">
-                            <div class="modulemenubartext" id="menutextfollowers">Your Followers</div>
-                            <div class="modulemenubartext" id="followCountUsrsDiv">
-                                <p id="followCountUsrs">0</p>
-                            </div>
-                        </div>
- -->
 
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="flActionBtn" type="button" class="btn" onclick="removeData()">-</button>
+                            <button class="toggleButton" id="flActionBtn" type="button" class="btn" onclick="searchFollowingFunction()">-</button>
                             <button class="toggleButton" id="flBtn" onclick="minimiseFollowersBox('wrapperFollowers', 'divWrapperFollowers')" type="button" class="btn">Toggle</button>
                         </div>
 
@@ -489,7 +499,7 @@
                     <div id="menubarnarrowcommandslist">
 
                         <div class="btn-group-vertical-right" role="group">
-                            <button class="toggleButton" id="commandListToggleBtn" onclick="sciFunction2()">+/-</button>
+                            <button class="toggleButton" id="commandListToggleBtn" onclick="slide1090()">+/-</button>
                             <button class="toggleButton" id="commandListBtn" onclick="minimiseCommandListBox('wrapperCommandsList','divWrapperCommandsList')" type="button">Toggle</button>
                         </div>
 
@@ -518,22 +528,22 @@
 
 
                         <div class="insideBox" id="commandsListbox" style="overflow-x:auto;float:left;">
-
+                            <div>
+                                <span> <p class="moduleText" style="width:50px;padding: 0; margin: 0;float: left;">Search:</p> 
+                                    <input type="text" id="myInputCO" class="moduleSearchBox" onkeyup="searchCommandsListFunction()" placeholder="Search for command.." style="background: rgb(204, 204, 204);width: 50%;padding: 0;margin: 0;float: left;"> </span>
+                            </div>
                             <table id="tableCO">
                                 <thead>
-
-                                    <th>Actv</th>
-                                    <th>Cmd Name</th>
-                                    <th>Text</th>
-                                    <th>Perms</th>
-                                    <th>User</th>
-                                    <th>Audio</th>
-                                    <th>Video</th>
-                                    <th>Image</th>
-
-
+                                    <th width="5%">Act</th>
+                                    <th width="15%">Cmd Name</th>
+                                    <th width="20%">Text</th>
+                                    <th width="8%">Perms</th>
+                                    <th width="12%">User</th>
+                                    <th width="13%">Audio</th>
+                                    <th width="13%">Video</th>
+                                    <th width="14%">Image</th>
                                 </thead>
-                                <tbody id="tableCOBody">
+                                <tbody style="width:300px;" id="tableCOBody">
 
                                 </tbody>
 
@@ -546,10 +556,7 @@
 
 
                                 <div id="commandparams" style="width:350px;float:left;padding-left:5px;">
-                                    <!-- This method is nice because it doesn't require extra div tags, but it also doesn't retain the style across all browsers.
-                                style="height:20px;width:20px;vertical-align:bottom;text-align:center;"
-                                -->
-                                    <span> <p class="moduleText">Search:</p> <input type="text" id="myInputCO" class="moduleSearchBox" onkeyup="searchCommandsListFunction()" placeholder="Search for names.."/> </span>
+
 
                                     <div id="cmdEnabled" style="margin-bottom:10px;">
                                         <div class="cmdSpans" id="cmdEnabledLabel">Enabled:-</div>
@@ -663,191 +670,6 @@
                 </div>
 
 
-                <!--
-                <div class="moduleTheme" id="divWrapperCommands" style="width:800px;height:380px; left: 0px; top: 500px;">
-
-                    <div id="commandsmenubarnarrow">
-
-                        <p id="commandPanelHeaderText">Commands Panel</p>
-
-                        <div class="btn-group-vertical-right" role="group">
-                          
-                            <button class="toggleButton" id="flBtnWide" onclick="minimiseCommandBoxFunction('wrapperCommands','divWrapperCommands')" type="button">Toggle</button>
-                            <br>
-                            <button type="button" id="movCommandsPanel" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperCommands','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                            <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
-                                        </button>
-                        </div>
-
-                    </div>
-
-                    <div id="wrapperCommands">
-
-                        <div id="commandsbox" class="insideBoxCommands">
-                            </br>
-                          
-
-                            <div id="commandparams" style="width:380px;float:left;padding-left:5px;">
-                              
-                                <div id="cmdEnabled" style="margin-bottom:10px;">
-                                    <div class="cmdSpans" id="cmdEnabledLabel">Enabled:-</div>
-                                    <div id="cmdBoxEnabled"> <input id="chkBoxInputEnabled" type="checkbox" checked="checked" /></div>
-                                </div>
-
-                                <div id="botCmdName">
-                                    <div class="cmdSpans" id="cmdNameLabel">Command Name:- </div>
-                                    <div>
-                                        <input id="commandName"></input>
-                                    </div>
-
-
-                                </div>
-
-                                <div>
-                                    <div class="cmdSpansCombo" id="cmdPermissionLabel">Permission</div>
-                                    <select id="selOptPermission" class="dropdownTheme" onchange="commandsPanelSelectPerms(value);">
-                                        <option value="default">Select an Option</option>
-                                        <option value="Mod" >Mod</option>
-                                        <option value="Viewer">Viewer</option>
-                                        <option value="Owner">Owner</option>
-                                        <option value="Follower">Follower</option>
-                                        <option value="Subscriber">Subscriber</option>
-                                        <option value="User">User Specific</option>
-                                        </select>
-                                    <div style="float:right;">
-                                        <img id="commandsDoneIcon" style="position:relative;margin-right:20px;margin-top:20px;height:10px;width:10px;" scr="../img/moveicon.png">
-                                    </div>
-                                </div>
-
-
-                                <div>
-                                    <div id="cmdUserLabel" class="cmdSpans">User </div>
-                                    <input id="commandUser" readonly>
-                                </div>
-
-                             
-                                <div>
-                                    <div id="cmdAudioFile" class="cmdSpansCombo">Audio File ...... </div>
-                                    <select id="audioSelect" class="dropdownTheme">
-                                        <option value="default">Select an audio file</option>
-                                    </select>
-                                </div>
-
-                                <div>
-                                    <div id="cmdVideoFile" class="cmdSpansCombo">Video File ...... </div>
-                                    <select id="videoSelect" class="dropdownTheme">
-                                <option value="default" class="moduleText">Select a video file</option>
-                                
-                                </select>
-                                </div>
-
-                                <div>
-                                    <div id="cmdImageFile" class="cmdSpansCombo">Image File ...... </div>
-                                    <select id="imageSelect" class="dropdownTheme">
-                                <option value="default">Select an image file</option>
-                                
-                                </select>
-                                </div>
-                            </div>
-
-                            <div id="commandtextbox" style="width:400px;float:left;">
-                                <div>
-                                    <span><div id="cmdTextLabel" class="cmdSpans">Text </div></span>
-                                    <textarea id="commandText" rows="9" cols="44" placeholder="Enter command text here" required></textarea>
-                                </div>
-
-
-                                <div style='float: left;width: 280px;'>
-                                    <div id="cmdVarsLabel" class="cmdSpansCombo" style="width:36px;">Vars</div>
-                                    <select id="selOptVars" class="dropdownTheme">
-                                        <option value="default">Select a variable</option>
-                                        <option value="uptime" >Uptime</option>
-                                        <option value="user">User</option>
-                                        <option value="target">Target</option>
-                                        <option value="caster">Caster</option>
-                                        <option value="sparks">Sparks</option>
-                                        <option value="chanellInfo">Channel Info</option>
-                                        <option value="level">Level</option>
-                                        <option value="joinedDatetime">Joined Date</option>
-                                        <option value="joinedUserFriendly">Joined</option>
-                                        <option value="random">Random User</option>
-                                        <option value="randomEx">Random User Excl Self </option>
-                                        </select>
-
-                                    <button class="toggleButton" type="button" id="addVar" style="height:25px;width:25px;"> + </button>
-
-                                </div>
-
-                                <div id="commandSubmit">
-
-                                    <div class="btn-group-vertical-right" role="group">
-                                        <button class="toggleButton" id="submitCommandButton" type="button" onclick="addSaveCommand()">Add/Save</button>
-                                        <br>
-                                        <button class="toggleButton" id="deleteCommandButton" type="button" onclick="deleteCommand()">Delete</button>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div id="divWrapperCommandsList" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 400px; top: 300px;">
-                    <div id="menubarnarrowcommandslist">
-
-                        <p id="commandsListHeaderText">Commands List</p>
-
-                        <div class="btn-group-vertical-rightcommandslist" role="group">
-                         
-                            <button class="toggleButton" id="commandListBtn" onclick="minimiseCommandListBox('wrapperCommandsList','divWrapperCommandsList')" type="button">Toggle</button>
-                            <br>
-                            <button type="button" id="movCommandsListModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperCommandsList','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                                        <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
-                                                    </button>
-                        </div>
-
-
-                    </div>
-
-                    <div id="wrapperCommandsList">
-                        <div>
-                            <span> <p class="moduleText">Search:</p> <input type="text" id="myInputCO" class="moduleSearchBox" onkeyup="searchCommandsListFunction()" placeholder="Search for names.."/> </span>
-                        </div>
-
-                        <div class="insideBox" id="commandsListbox" style="overflow-x:auto;float:left;">
-
-                            <table id="tableCO">
-                                <thead>
-
-                                    <th>Actv</th>
-                                    <th>Cmd Name</th>
-                                    <th>Text</th>
-                                    <th>Perms</th>
-                                    <th>User</th>
-                                    <th>Audio</th>
-                                    <th>Video</th>
-                                    <th>Image</th>
-
-
-                                </thead>
-                                <tbody id="tableCOBody">
-
-                                </tbody>
-
-                            </table>
-                        </div>
-
-                    </div>
-
-                </div>
-
-            -->
-
                 <div id="divWrapperFollowing" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 400px; top: 100px;">
                     <div id="menubarnarrowfollowing">
 
@@ -935,7 +757,7 @@
                         </div>
 
                         <div class="btn-group-vertical-rightsecond" role="group">
-                            <button type="button" id="movChatUsersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperTriggerPanel','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                            <button type="button" id="movChatUsersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNarrowChatUsers','container',event);" onmouseup="mydragg2.stopMoving('container');">
                                 <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
                             </button>
                         </div>
@@ -956,6 +778,40 @@
                         </div>
                         <button class="toggleButton" id="chatUsrBan" onclick="BanMixerUser()" type="button" class="btn">Ban</button>
                         <button class="toggleButton" id="chatUsrTimeout5m" onclick="TimeOutMixerUser()" type="button" class="btn">Timeout 5M</button>
+                    </div>
+                </div>
+
+
+                <div id="divWrapperAnalyticsViews" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 600px; top: 100px;">
+                    <div id="menubarnarrowanalyticsviews">
+                        <div class="btn-group-vertical-right" role="group">
+                            <!-- <button type="button" class="button">Button</button> -->
+                            <button class="toggleButton" id="avActionBtn2" style="height:20px;width:20px;visibility:hidden; " type="button" class="btn">-</button>
+                            <button class="toggleButton" id="avBtn2" onclick="minimiseChatUsersBox('wrapperAnalyticsViews','divWrapperAnalyticsViews')" type="button" class="btn">Toggle</button>
+                        </div>
+
+                        <div style="width:50%;clear:right;float:left;">
+                            <div class="modulemenubartext" id="menutextav">Viewer List</div>
+
+                            <div class="modulemenubartext" id="avCount">
+                                <p id="avCountNo">0</p>
+                            </div>
+                        </div>
+
+                        <div class="btn-group-vertical-rightsecond" role="group">
+                            <button type="button" id="movAnalyticsViewsModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperAnalyticsViews','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                            </button>
+                        </div>
+                    </div>
+                    <div id="wrapperAnalyticsViews">
+
+                        <div class="insideBox" id="analyticsViewsbox" style="overflow-x:auto;float:left;">
+                            <div class="chart-container" style="position: relative; height:100%; width:100%; ">
+                                <canvas style="background-color: white; " id="canvas"></canvas>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
@@ -999,155 +855,6 @@
                 </div>
 
 
-                <!--
-                <div class="moduleTheme" id="divWrapperNotesList" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:200px;height:380px; left: 600px; top: 100px;">
-                    <div id="menubarnarrownotes">
-
-                        <div class="btn-group-vertical-right" role="group">
-                            <button class="toggleButton" id="NotesActionBtn" type="button" class="btn">-</button>
-                            <button class="toggleButton" id="NotesToggleBtn" onclick="minimiseNotesBox('wrapperNoteList','divWrapperNotesList')" type="button" class="btn">Toggle</button>
-                        </div>
-
-                        <div style="width:50%;clear:right;float:left;">
-                            <div class="modulemenubartext" id="menutextnotes">Notes</div>
-
-                            <div class="modulemenubartext" id="chatCountNotesDiv">
-                                <p id="notesCount">0</p>
-                            </div>
-                        </div>
-
-                        <div class="btn-group-vertical-rightsecond" role="group">
-                            <button type="button" id="movNotesListModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNotesList','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                    <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
-                                </button>
-                        </div>
-
-                    </div>
-                    <div id="wrapperNoteList">
-                        <div class="insideBox" id="notesbox" style="overflow-x:auto;float:left;">
-                            <table id="tableNotes">
-                                <thead>
-                                    <th width="22%">To Do</th>
-                                    <th>Note</th>
-                                </thead>
-                                <tbody id="tableNTS">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="moduleTheme" id="divWrapperNote" style="width:400px;height:380px; left: 100px; top: 500px;">
-
-                    <div id="notemenubarnarrow">
-
-                        <p id="notePanelHeaderText">Note Panel</p>
-
-                        <div class="btn-group-vertical-right" role="group">
-                            <button class="toggleButton" id="flBtnWideNoteManager" onclick="minimiseCommandBoxFunction('wrapperNote','divWrapperNote')" type="button">Toggle</button>
-                            <br>
-                            <button type="button" id="movNotePanel" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNote','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                                <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
-                                            </button>
-
-                        </div>
-
-                    </div>
-
-                    <div id="wrapperNote">
-
-                        <div id="notelistbox" class="insideBoxNoteList">
-                            </br>
-                           
-
-                            <div id="notelistparams" style="width:380px;float:left;padding-left:5px;">
-                               
-                                <div id="botNotName">
-                                    <div class="notSpansFirst">Note ID: </div>
-                                    <div class="noteSpecial">
-                                        <input id="noteName" placeholder="Auto Generated" readonly></input>
-
-                                    </div>
-                                    <button class="toggleButton" id="newNTButton" type="button" onclick="newNote()">Create New Note</button>
-
-                                </div>
-
-                            </div>
-
-                            <div id="ntEnabled" class="notSpans">
-
-                                <label id="ntlblEnabled" for="chkNTBoxInputEnabled">To do: </label>
-                                <input type="checkbox" id="chkNTBoxInputEnabled" checked="checked">
-                            </div>
-
-                           
-
-                            <div id="notResponseText" class="notSpansMedium">
-                                <label id="lblntNoteText">Note Text</label>
-                                <textarea id="ntNoteText" rows="5" cols="44" placeholder="Note Text" required></textarea>
-
-                            </div>
-
-
-
-
-                            <div class="btn-group-vertical-right" role="group">
-                                <div id="ntSubmit" class="notSpans">
-                                  <button class="toggleButton" id="submitNTButton" type="button" onclick="addSaveNote()">Save Note</button>
-                                </div>
-
-                                <div id="ntDelete" class="notSpans">
-                                    <button class="toggleButton" id="deleteNTButton" type="button" onclick="deleteNote()">Delete Note</button>
-                                </div>
-
-                                <div id="ntComplete" class="notSpans">
-                                    <button class="toggleButton" id="completeNTButton" type="button" onclick="completeNote()">Complete Note</button>
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-            -->
-
-
-                <!-- Party Queue not working properly yet -->
-                <!-- <div id="divWrapperNarrowPartyUsers" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:200px;height:380px; left: 800px; top: 100px;">
-                    <div id="menubarnarrow">
-                        <button id="flBtn" onclick="minimisePartyUsersBox('wrapperPartyUsers','divWrapperNarrowPartyUsers')" type="button" class="btn">max / min</button>
-                        <span> <div id="menutext"> Party Queue - </div> <div id="partyCountUsrs">0</div></span>
-                    </div>
-
-                    <div id="wrapperPartyUsers">
-                        <div id="narrowbox">
-                            <table id="tablePartyUsers">
-                                <thead>
-                                    <tr>
-                                        <th>Username</th>
-                                        <th>Type</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                </tbody>
-
-                            </table>
-                        </div>
-
-                        <div>
-                            <input id="followOnlyChk" type="checkbox">Only Followers</input>
-                           
-                            <button id="addRandomUsersBtn" onclick="addRandomUsersToPartyQueue()" type="button" class="btn btn-info">Add</button>
-
-                            <input id="partySizeInput" type="number">Party size</input>
-
-                        </div>
-                    </div>
-
-
-                </div> -->
 
 
                 <div class="moduleTheme" id="divWrapperNotesList" style="width:600px;height:380px; left: 200px; top: 100px;">
@@ -1387,7 +1094,6 @@
                                     </button>
                         </div>
 
-
                     </div>
 
                     <div id="wrapperMMList">
@@ -1399,12 +1105,14 @@
 
                             <table id="tableMMO">
                                 <thead>
-                                    <th>Date</th>
-                                    <th>Role</th>
-                                    <th>Enforcer</th>
-                                    <th>Action</th>
-                                    <th>Victim ID</th>
-                                    <th>ID</th>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Role</th>
+                                        <th>Enforcer</th>
+                                        <th>Action</th>
+                                        <th>Victim ID</th>
+                                        <th>ID</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
 
@@ -1414,125 +1122,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-                <!--   <div class="moduleTheme" id="divWrapperTimersList" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 400px; top: 100px;">
-                    <div id="timersListmenubarnarrow">
-
-                        <div class="btn-group-vertical-right" role="group">
-                         
-                            <button class="toggleButton" id="TimersActionBtn" type="button" class="btn">-</button>
-                            <button class="toggleButton" id="timersListBtn" onclick="minimiseTimerBox('wrapperTimersList','divWrapperTimersList')" type="button" class="btn">Toggle</button>
-                        </div>
-
-                        <div style="width:74%;clear:right;">
-                            <div class="modulemenubartext" id="menutexttimerlist">Timers</div>
-                            <div class="modulemenubartext" id="timersCountDiv">
-                                <p id="timersCount">0</p>
-                            </div>
-                        </div>
-
-                        <div style="margin-top: -38px;" class="btn-group-vertical-rightsecond" role="group">
-                            <button type="button" id="movTimersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperTimersList','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                    <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
-                                </button>
-                        </div>
-                    </div>
-
-                    <div id="wrapperTimersList">
-                        <div>
-                            <span><input type="text" id="myInputTIM" class="moduleSearchBox" onkeyup="searchTimersListFunction('divWrapperTimersList')" placeholder="Search for names.."/> </span>
-                        </div>
-                        <div class="insideBox" id="timersListbox" style="overflow-x:auto;float:left;">
-
-                            <table id="tableTIM">
-                                <thead>
-                                    <th>ID</th>
-                                    <th>Enabled</th>
-                                    <th>Text</th>
-                                    <th>Interval</th>
-                                    <th>Opt1</th>
-                                    <th>Opt2</th>
-                                </thead>
-                                <tbody id="tableTIMS">
-
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                </div> -->
-
-
-                <!--  <div class="moduleTheme" id="divWrapperTimerPanel" style="width:400px;height:380px; left: 100px; top: 500px;">
-
-                    <div id="timerpanelmenubarnarrow">
-
-                        <p id="timerpanelPanelHeaderText">Timers Panel</p>
-
-                        <div class="btn-group-vertical-right" role="group">
-                          
-
-                            <button class="toggleButton" id="flBtnWideTimers" onclick="minimiseCommandBoxFunction('wrapperTimerPanel','divWrapperTimerPanel')" type="button">Toggle</button>
-                            <br>
-                            <button type="button" id="movTimerPanel" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperTimerPanel','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                                        <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
-                                                    </button>
-                        </div>
-                    </div>
-
-                    <div id="wrapperTimerPanel">
-
-                        <div id="timerpanelbox" class="insideBoxTimerPanel">
-                            </br>
-                            <div id="timerpanelparams" style="width:380px;float:left;padding-left:5px;">
-
-                                <div id="botTPName">
-                                    <div class="timSpansFirst" id="timSpans">Timer ID:- </div>
-                                    <div>
-                                        <input id="TPtimerID"></input>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div id="tpEnabled" class="timSpans">
-                                <label id="timlblEnabled" for="chkTPBoxInputEnabled">Enabled:-</label>
-                                <input id="chkTPBoxInputEnabled" type="checkbox" checked="checked" />
-                            </div>
-
-                            <div id="botTPinterval" class="timSpansMedium">
-                                <div class="timSpansInterval" id="tplblinterval">Timer Interval</div>
-
-                                <input class="timSpansInterval" id="tpInterval"></input>
-
-                            </div>
-
-                            <div id="timTimerText" class="timSpansMedium">
-
-                                <label id="lblTimText" for="tpText">Timer Text</label>
-                                <textarea id="tpText" rows="2" cols="44" placeholder="Timer Text" required></textarea>
-                            </div>
-
-
-
-                            <div id="tpSubmit" class="timSpans">
-                                
-                                <button class="toggleButton" id="submitTPButton" type="button" onclick="addSaveTimer()">Add/Save</button>
-
-                            </div>
-
-                            <div id="tpDelete" class="timSpans">
-                                <button class="toggleButton" id="deleteTPButton" type="button" onclick="deleteTimer()">Delete</button>
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                </div> -->
-
 
                 <div class="moduleTheme" id="divWrapperTimersList" style="width:800px;height:380px; left: 200px; top: 100px;">
                     <div id="timersListmenubarnarrow">
@@ -1558,12 +1147,10 @@
 
                     </div>
 
-
                     <div id="wrapperTimersList">
                         <div class="insideBox" id="timersListbox" style="overflow-x:auto;float:left;">
                             <table id="tableTIM">
                                 <thead>
-
                                     <th>ID</th>
                                     <th>Enabled</th>
                                     <th>Text</th>
@@ -1587,7 +1174,6 @@
 
                                 <div id="timerpanelparams" style="width:380px;float:left;padding-left:5px;">
 
-
                                     <!--  <div id="botTriName">
                                         <div class="triSpansFirst">Trigger Name: </div>
                                         <div>
@@ -1610,13 +1196,10 @@
                                     <input type="checkbox" id="chkKWBoxInputEnabled" checked="checked">
                                 </div> -->
 
-
-
                                 <div id="botTPinterval">
                                     <div class="timSpansInterval" id="tplblinterval">Timer Interval</div>
 
                                     <input class="timSpansInterval" id="tpInterval"></input>
-
                                 </div>
 
                                 <div id="wrapperTimerTextID">
@@ -1646,14 +1229,6 @@
 
                     </div>
                 </div>
-
-
-
-
-
-
-
-
 
                 <!--New Style Slider Panels-->
                 <div class="moduleTheme" id="divWrapperKeywordsList" style="width:600px;height:380px; left: 600px; top: 100px;">
@@ -1693,12 +1268,10 @@
                             </table>
                         </div>
 
-
                         <div id="triggersWrapper" style="display:block;">
 
                             <div id="triggerlistbox" class="insideBoxTriggerList">
                                 </br>
-
 
                                 <div id="triggerlistparams" style="width:380px;float:left;padding-left:5px;">
 
@@ -1711,7 +1284,6 @@
                                     </div>
 
                                 </div>
-
 
                                 <div id="kwEnabled" class="triSpans">
 
@@ -1741,9 +1313,6 @@
 
                     </div>
                 </div>
-
-
-
 
                 <div class="moduleTheme" id="divWrapperAlerts" style="width:800px;height:380px; left: 100px; top: 500px;">
 
@@ -1795,14 +1364,12 @@
 
                                 </div>
 
-
                                 <div>
                                     <div id="altAudioFile" class="altSpansCombo">Audio File ...... </div>
                                     <select id="audioAltSelect" class="dropdownTheme">
                                         <option value="default">Select an audio</option>
                                     </select>
                                 </div>
-
 
                                 <div>
                                     <div id="altImageFile" class="altSpansCombo">Image File ...... </div>
@@ -1819,7 +1386,6 @@
                                     </select>
                                 </div>
 
-
                             </div>
 
                             <div id="altEnabled" style="margin-bottom:10px;">
@@ -1827,13 +1393,7 @@
                                 <div id="altBoxEnabled"> <input id="chkaltBoxInputEnabled" type="checkbox" checked="checked" /></div>
                             </div>
 
-
-
                             <br>
-
-
-
-
 
                             <!--id="alttextbox" style="width:20%;"-->
                             <div>
@@ -1843,12 +1403,6 @@
                                 </div>
                             </div>
 
-
-
-                            <!-- <input class="toggleButton" id="submitCommandButton" type="submitgffg" onclick="runOverla()"> -->
-
-
-
                             <div id="alertSubmit" class="btn-group-vertical-right" role="group">
                                 <!-- <button type="button" class="button">Button</button> -->
                                 <button class="toggleAlertButtonSave" id="submitAlertButton" type="button" onclick="addEditAlert()">Add/Save</button>
@@ -1857,17 +1411,11 @@
 
                             </div>
 
-
-
-
                         </div>
-
 
                     </div>
 
-
                 </div>
-
 
                 <div class="moduleTheme" id="divWrapperMedia" style="width:800px;height:380px;left:50px;top:500px;">
 
@@ -1904,8 +1452,6 @@
                         </div>
 
                     </div>
-
-
 
                     <div id="wrapperMedia">
 
@@ -1970,17 +1516,9 @@
                                     </div>
                                 </div>
 
-
-
-
-
-
-
                             </div>
 
-
                             <div style="width:350px; float:left;">
-
 
                                 <div id="mediatxtImage" class="mediaPanelSmalllbl">Add Image:- </div>
                                 <div>
@@ -1990,8 +1528,6 @@
                                     <option value="default">Select an image file</option>
                                     
                                     </select>
-
-
 
                                     <div id="medialblImageDuration" class="medSpansCombo">Image Duration</div>
                                     <select id="selImageDurationMedVars" class="dropdownTheme" onchange="imageDurOtherSelected(id);" disabled="true">
@@ -2008,8 +1544,6 @@
                                     <input id="medImgOtherValue" type="text" readonly></input>
 
                                 </div>
-
-
 
                                 <div id="mediatxtVideo" class="mediaPanelSmalllbl">Add Video:- </div>
 
@@ -2034,13 +1568,7 @@
                                         <input id="medVidOtherValue" type="text" readonly />
                                     </div>
 
-
                                 </div>
-
-
-
-                                <!--id="alttextbox" style="width:20%;"-->
-
 
                             </div>
 
@@ -2057,33 +1585,23 @@
                             </div>
                         </div>
 
-
-
-
                     </div>
-
 
                 </div>
 
-
             </div>
-
-
-
-
-
 
         </div>
 
-
-
-
-
-
-
     </div>
 
-
+    <!-- Insert this line above script imports  -->
+    <script type="text/javascript">
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
 
     <% include ../partials/js/botio %>
         <% include ../partials/js/dragObject %>
@@ -2093,8 +1611,50 @@
 
 
 
+                        <!-- normal script imports etc  -->
+
+                        <!-- Insert this line after script imports -->
+                        <script type="text/javascript">
+                            if (window.module) module = window.module;
+                        </script>
+                        <script type="text/javascript">
+                            // include the ipc module to communicate with main process. 
+                            const ipcRenderer = require('electron').ipcRenderer;
+
+                            //const {session} = require('electron').remote;
 
 
+                            /*         const {
+                                        remote
+                                    } = require('electron');
+                                    const {
+                                        BrowserWindow
+                                    } = remote;
+                             */
+
+                            // this is the streamer login
+                            const btnclickStreamer = document.getElementById('StreamerLogin');
+                            btnclickStreamer.addEventListener('click', function() {
+
+                                ipcRenderer.send('mixer-login', 'streamer');
+
+                            });
+
+                            const btnclickBot = document.getElementById('BotLogin');
+                            btnclickBot.addEventListener('click', function() {
+
+                                ipcRenderer.send('mixer-login', 'bot');
+
+                            });
+
+
+                            const btnclickAutoUpdate = document.getElementById('AutoUpdate');
+                            btnclickAutoUpdate.addEventListener('click', function() {
+
+                                ipcRenderer.send('autoUpdate', 'bot');
+
+                            });
+                        </script>
 
 </body>
 
