@@ -1,28 +1,10 @@
 {
-    "timers": [
-        {
-            "enabled": "Y",
-            "id": "!rules",
-            "text": "Sit back and relax",
-            "interval": 60005,
-            "option1": "",
-            "option2": ""
-        },
-        {
-            "enabled": "Y",
-            "id": "!rules2",
-            "text": "Respect Everyone in Chat",
-            "interval": 50000,
-            "option1": "",
-            "option2": ""
-        },
-        {
-            "enabled": "Y",
-            "id": "!test",
-            "text": "Don't Ask to be a mod",
-            "interval": 70000,
-            "option1": "",
-            "option2": ""
-        }
-    ]
+    "timers": [{
+        "enabled": "Y",
+        "id": "!test",
+        "text": "Sit back and relax",
+        "interval": 60005,
+        "option1": "",
+        "option2": ""
+    }]
 }

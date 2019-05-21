@@ -1,25 +1,9 @@
 {
-    "triggers": [
-        {
-            "enabled": "Y",
-            "id": "bell",
-            "text": "ring ring",
-            "option1": "",
-            "option2": ""
-        },
-        {
-            "enabled": "Y",
-            "id": "help",
-            "text": "If you have a question please feel free to ask",
-            "option1": "",
-            "option2": ""
-        },
-        {
-            "enabled": "Y",
-            "id": "rules",
-            "text": "Rules are for everybody",
-            "option1": "",
-            "option2": ""
-        }
-    ]
+    "triggers": [{
+        "enabled": "Y",
+        "id": "test",
+        "text": "trigger text",
+        "option1": "",
+        "option2": ""
+    }]
 }
