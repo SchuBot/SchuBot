@@ -96,11 +96,13 @@ let beamchat = function(authToken, chatConnected, authDB) {
             log.info('accessing beam chat socket js');
 
             socket.on('UserJoin', data => {
-                // self.emit('UserJoin', data);
+                self.emit('UserJoin', data);
 
             });
+
+
             socket.on('UserLeave', data => {
-                // self.emit('UserLeave', data);
+                self.emit('UserLeave', data);
             });
 
             socket.on('ChatMessage', data => {
@@ -186,6 +188,8 @@ let beamchat = function(authToken, chatConnected, authDB) {
                     //   log.info(colors.yellow('Beam Chat Login'));
                     self.emit('streamerLoggedIn', authDB.data.streamer.username);
 
+                    //self.emit('streamerAuthenticated');
+
                 });
         }
 
@@ -193,7 +197,13 @@ let beamchat = function(authToken, chatConnected, authDB) {
         self.say = function(msg) {
 
             if (socket != undefined) {
-                socket.call('msg', [`${msg}`]);
+
+
+                socket.call('msg', [`${msg}`]).catch(error => {
+                    log.info('Owner Say caught', error.message)
+                });
+
+
             } else {
                 //reauth required
             }
@@ -202,11 +212,18 @@ let beamchat = function(authToken, chatConnected, authDB) {
 
         self.whisper = function(username, msg) {
             log.info('in whisper function' + msg);
-            socket.call('whisper', [username, `${msg}`]);
+
+            socket.call('whisper', [username, `${msg}`]).catch(error => {
+                log.info('Owner whisper caught', error.message)
+            });
         }
 
         self.poll = function(q, a, t) {
-            socket.call('vote:start', [q, a, t]);
+
+            socket.call('vote:start', [q, a, t]).catch(error => {
+                log.info('Owner poll caught', error.message)
+            });
+
         }
 
         self.mod = function(userid) {
@@ -220,20 +237,20 @@ let beamchat = function(authToken, chatConnected, authDB) {
                 //do something with the response
                 return res;
             }).catch(error => {
-                log.info('Error :- ' + error);
+                log.info('Error Modding someone :- ' + error);
             });
 
         }
 
         self.timeout = function(data) {
             log.info('timing out ' + data.username + ' for ' + data.duration);
-            socketBot.call('timeout', [data.username, data.duration])
+            socket.call('timeout', [data.username, data.duration])
                 .catch(error => {
-                    log.info('Error : - Bot Timeout caught', error.message)
+                    log.info('Error : - Timeout caught', error.message)
                 });
         }
 
-        self.ban = function(userid) {
+        self.ban = function(userid, channelId) {
 
             client.request('PATCH', `/channels/${channelId}/users/${userid}`, {
                 body: {
@@ -249,7 +266,7 @@ let beamchat = function(authToken, chatConnected, authDB) {
 
         }
 
-        self.unmod = function(userid) {
+        self.unmod = function(userid, channelId) {
 
             client.request('PATCH', `/channels/${channelId}/users/${userid}`, {
                 body: {
@@ -543,6 +560,7 @@ let beamchat = function(authToken, chatConnected, authDB) {
 
 beamchat.prototype = new events.EventEmitter;
 
+
 module.exports = beamchat;
 //function connectToBeam(client, userInfo, authToken, createChatSocket, self) {
 function connectToBeam(client, authToken, createChatSocket, self, useAuth, chatConnected) {
@@ -572,6 +590,7 @@ function connectToBeam(client, authToken, createChatSocket, self, useAuth, chatC
             //channel id
             beamChannelID = userInfo.channel.id;
             numFollowers = userInfo.channel.numFollowers;
+
 
             return new Mixer.ChatService(client).join(beamChannelID);
 

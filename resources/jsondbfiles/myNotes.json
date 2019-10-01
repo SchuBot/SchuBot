@@ -8,13 +8,6 @@
             "priority": "High"
         },
         {
-            "id": "n01810201840",
-            "todo": "Y",
-            "note": "either i did it wrong or the timeout 5m button doesn't work",
-            "private": false,
-            "priority": "High"
-        },
-        {
             "id": "n01810201867",
             "todo": "Y",
             "note": "can we add a \"quotes\" feature?",
@@ -29,13 +22,6 @@
             "priority": "High"
         },
         {
-            "id": "n11210201880",
-            "todo": "Y",
-            "note": "Variable adding to commands text on commands panel",
-            "private": false,
-            "priority": "High"
-        },
-        {
             "id": "n11210201881",
             "todo": "Y",
             "note": "Recent Followers Function",
@@ -46,13 +32,6 @@
             "id": "n41510201847",
             "todo": "Y",
             "note": "Lootation Game",
-            "private": false,
-            "priority": "High"
-        },
-        {
-            "id": "n41510201859",
-            "todo": "Y",
-            "note": "Check Unfollow Functionality",
             "private": false,
             "priority": "High"
         },
@@ -80,7 +59,7 @@
         {
             "id": "n51610201856",
             "todo": "Y",
-            "note": "Notes Notifications - Alerts",
+            "note": "Notes Notifications - Alerts . this is currently alerted when the timers switch is toggled",
             "private": false,
             "priority": "High"
         },
@@ -120,13 +99,6 @@
             "priority": "High"
         },
         {
-            "id": "n12610201869",
-            "todo": "Y",
-            "note": "Color chat window and view list by category - Mod , User , Owner , Staff etc...",
-            "private": false,
-            "priority": "High"
-        },
-        {
             "id": "n934201963",
             "todo": "Y",
             "note": "add priority category to notes ui module",
@@ -134,39 +106,35 @@
             "priority": "High"
         },
         {
-            "id": "n274201944",
-            "todo": "Y",
-            "note": "follower list module action button clears following and followers table"
-        },
-        {
-            "id": "n384201981",
-            "todo": "Y",
-            "note": "disabled commands can be triggered, need to only select enabled commands"
-        },
-        {
-            "id": "n51742019106",
-            "todo": "Y",
-            "note": "complete note button on notes module doesn't work"
-        },
-        {
-            "id": "n5174201969",
-            "todo": "Y",
-            "note": "add charts module switch on menu sidebar"
-        },
-        {
-            "id": "n5174201988",
-            "todo": "Y",
-            "note": "Mixer Not Connected if auth fails and you need to re-auth. Once re-authed clear the div"
-        },
-        {
-            "id": "n5174201984",
-            "todo": "Y",
-            "note": "Note Module Hide/show edit div"
-        },
-        {
             "id": "n5174201956",
             "todo": "Y",
-            "note": "clicking save on note without note id creates note without id in json file."
+            "note": "clicking save on note without note id creates note without id in json file.",
+            "private": false,
+            "priority": "High"
+        },
+        {
+            "id": "",
+            "todo": "Y",
+            "note": "can we change the layout of the notes panel? i keep hitting complete instead of save. is there any way we can put the save where complete is now and maybe move complete to the top under create new note? ",
+            "private": false,
+            "priority": "High"
+        },
+        {
+            "id": "n465201945",
+            "todo": "Y",
+            "note": "the timers panel has the colors of the toggle & +/- buttons switched from the rest, and aren't customizable. ",
+            "private": false,
+            "priority": "High"
+        },
+        {
+            "id": "n1105201933",
+            "todo": "Y",
+            "note": "memes feature - add meme similar to quotes and notes but just memes with a link to a gif maybe"
+        },
+        {
+            "id": "n1105201964",
+            "todo": "Y",
+            "note": "add event listener to chat li to enable message deletions and timeouts (in the future)"
         }
     ]
 }

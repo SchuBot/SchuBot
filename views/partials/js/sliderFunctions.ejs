@@ -16,6 +16,23 @@
         }
     }
 
+    function slide600A() {
+
+        if (document.getElementById("wrapperNotesInner").style.display === "none") {
+            document.getElementById("divWrapperNotesList").style.width = "600px";
+            document.getElementById("wrapperNotesInner").style.display = "block";
+            mydragg3.slideLeft('divWrapperNotesList', 'container', event);
+
+        } else {
+            mydragg3.slideRight('divWrapperNotesList', 'container', '400', event);
+            document.getElementById("divWrapperNotesList").style.width = "200px";
+            document.getElementById("wrapperNotesInner").style.display = "none";
+
+
+        }
+    }
+
+
     function slide800() {
 
         if (document.getElementById("wrapperTimersInner").style.display === "none") {

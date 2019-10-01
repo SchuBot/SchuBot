@@ -199,14 +199,14 @@ let beamchatbot = function(authTokenBot, chatConnectedBot, streamerChannel, auth
         self.botSay = function(msg) {
 
             socketBot.call('msg', [`${msg}`]).catch(error => {
-                console.log('Bot botSay caught', error.message)
+                log.info('Bot Say caught', error.message)
             });
         }
 
         self.say = function(msg) {
 
             socketBot.call('msg', [`${msg}`]).catch(error => {
-                console.log('Bot Say caught', error.message)
+                log.info('Bot Say caught', error.message)
             });
         }
 

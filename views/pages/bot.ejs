@@ -3,7 +3,7 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1 , shrink-to-fit=no">
-    <title>iBot - Chat</title>
+    <title>SchuBot</title>
 
     <!--  
         //<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
@@ -205,6 +205,23 @@
             </div>
         </div>
 
+
+        <div id="AnalyticsSwitches">
+            <span class="switchModuleText">Analytics</span>
+            <button id="AnalyticsSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperAnalyticswitch');" type="button" class="btn">+/-</button>
+            <br></br>
+            <div id="divwrapperAnalyticswitch">
+
+                <div>
+                    <label class="switch">
+                                        <input id="analyticsViewsChkBox" type="checkbox" checked>
+                                        <span class="slider round"></span>
+                                        <p style="padding-left:42px;" class="slider-text">Analytics</p>
+                                      </label>
+                </div>
+                <br>
+            </div>
+        </div>
 
         <div id="MediaSwitches">
             <span class="switchModuleText">Media</span>
@@ -411,7 +428,7 @@
                         <!-- welcome div was here-->
 
                         <div class="insideBox" id="chatbox">
-                            <ul id="incomingChatMessages"></ul>
+                            <ul style="padding-inline-start: 5px;" id="incomingChatMessages"></ul>
                         </div>
                         <div>
                             <div style='width: 350px;'>
@@ -509,7 +526,7 @@
                             <p id="commandsListHeaderText">Commands List</p>
                         </div>
 
-                        <div style="position:absolute;left:115px;top:20px;" class="modulemenubartext" id="chatCountCommandsDiv">
+                        <div style="position:absolute;left:135px;top:22px;" class="modulemenubartext" id="chatCountCommandsDiv">
                             <p id="commandsListCount">0</p>
                         </div>
 
@@ -625,7 +642,7 @@
                                         <textarea id="commandText" rows="5" cols="34" placeholder="Enter command text here" required></textarea>
                                     </div>
 
-
+                                    <!-- -->
                                     <div style='float: left;width: 200px;'>
                                         <div id="cmdVarsLabel" class="cmdSpansCombo" style="width:36px;">Vars</div>
                                         <select id="selOptVars" class="dropdownTheme">
@@ -643,7 +660,7 @@
                                         <option value="randomEx">Random User Excl Self </option>
                                         </select>
 
-                                        <button class="toggleButton" type="button" id="addVar" style="height:25px;width:25px;"> + </button>
+                                        <button class="toggleButton" type="button" id="addCommandVar" onclick="addCommandVarToTextBox()" style="height:25px;width:25px;"> + </button>
 
                                     </div>
 
@@ -740,7 +757,7 @@
 
                 </div>
 
-                <div class="moduleTheme" id="divWrapperNarrowChatUsers" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:200px;height:380px; left: 600px; top: 100px;">
+                <div class="moduleTheme" id="divWrapperNarrowChatUsers" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:200px;height:460px; left: 600px; top: 100px;">
                     <div id="menubarnarrowinchat">
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
@@ -748,11 +765,13 @@
                             <button class="toggleButton" id="chtUsersBtn" onclick="minimiseChatUsersBox('wrapperChatUsers','divWrapperNarrowChatUsers')" type="button" class="btn">Toggle</button>
                         </div>
 
-                        <div style="width:50%;clear:right;float:left;">
-                            <div class="modulemenubartext" id="menutextinchat">Viewer List</div>
+                        <div style="width:74%;clear:right;float:left;">
+                            <div class="modulemenubartext" id="menutextinchat">&nbsp;Viewer List &nbsp;&nbsp;</div>
 
                             <div class="modulemenubartext" id="chatCountUsrsDiv">
-                                <p id="chatCountUsrs">0</p>
+
+                                <p id="chatCountUsrs">(0)</p>
+
                             </div>
                         </div>
 
@@ -769,7 +788,7 @@
 
                                     <th>Username</th>
                                     <th>Type</th>
-                                    <th>ID</th>
+                                    <th style="display:none;">ID</th>
 
                                 </thead>
                                 <tbody id="tableChatUsersBody">
@@ -791,7 +810,7 @@
                         </div>
 
                         <div style="width:50%;clear:right;float:left;">
-                            <div class="modulemenubartext" id="menutextav">Viewer List</div>
+                            <div class="modulemenubartext" id="menutextav">Analytics</div>
 
                             <div class="modulemenubartext" id="avCount">
                                 <p id="avCountNo">0</p>
@@ -809,6 +828,7 @@
                         <div class="insideBox" id="analyticsViewsbox" style="overflow-x:auto;float:left;">
                             <div class="chart-container" style="position: relative; height:100%; width:100%; ">
                                 <canvas style="background-color: white; " id="canvas"></canvas>
+                                <p>Coming soon</p>
                             </div>
                         </div>
 
@@ -857,12 +877,12 @@
 
 
 
-                <div class="moduleTheme" id="divWrapperNotesList" style="width:600px;height:380px; left: 200px; top: 100px;">
+                <div id="divWrapperNotesList" style="width:600px;height:380px; left: 200px; top: 100px;">
                     <div id="menubarnarrownotes">
 
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="NotesActionBtn" type="button" class="btn">-</button>
+                            <button class="toggleButton" id="NotesActionBtn" type="button" class="btn" onclick="slide600A()">-</button>
                             <button class="toggleButton" id="NotesToggleBtn" onclick="minimiseNotesBox('wrapperNoteList','divWrapperNotesList')" type="button" class="btn">Toggle</button>
                         </div>
 

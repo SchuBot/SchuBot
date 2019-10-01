@@ -192,6 +192,21 @@ module.exports = function(app) {
                         var json = JSON.parse(result.toString());
                         console.log("access token recieved: " + json.access_token);
 
+                        //now set expiry date
+                        //set token expiry in milliseconds 
+                        // (remove 10 seconds just because)
+                        var expiryInSeconds = json.expires_in - 10;
+                        var expiryInMilliSeconds = expiryInSeconds * 1000;
+
+                        //get milliseconds from 1970 till now and add milliseconds
+                        var milliseconds = Date.now() + expiryInMilliSeconds;
+
+                        //
+                        var accessTokenExpiry = new Date(milliseconds);
+
+                        var type = "streamer";
+                        json["access_token_expiry_date"] = accessTokenExpiry;
+
                         electron.ipcMain.emit('saveauth', json);
 
 
@@ -282,14 +297,22 @@ module.exports = function(app) {
                         var json = JSON.parse(result.toString());
                         console.log("access token recieved: " + json.access_token);
 
+                        //now set expiry date
+                        //set token expiry in milliseconds 
+                        // (remove 10 seconds just because)
+                        var expiryInSeconds = json.expires_in - 10;
+                        var expiryInMilliSeconds = expiryInSeconds * 1000;
+
+                        //get milliseconds from 1970 till now and add milliseconds
+                        var milliseconds = Date.now() + expiryInMilliSeconds;
+
+                        //
+                        var accessTokenExpiry = new Date(milliseconds);
+
+                        var type = "streamer";
+                        json["access_token_expiry_date"] = accessTokenExpiry;
+
                         electron.ipcMain.emit('saveauthbot', json);
-
-
-
-                        //userInfo("streamer", json.access_token, json.refresh_token, null, authDB)
-
-                        //   mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
-
 
 
                         if (response && response.ok) {

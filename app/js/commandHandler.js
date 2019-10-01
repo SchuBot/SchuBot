@@ -2,20 +2,20 @@
 let util = require('util');
 let events = require('events');
 var request = require('request');
-var JsonDB = require('node-json-db');
 
-let beamChannelID;
 
 
 //module
-let commandHandler = function(channelToken) {
+let commandHandler = function(channelToken, streamID) {
 
     //let userInfo;
     let self = this;
+    let mixerStreamId = streamID;
+
 
 
     //exports
-    self.say = function(userName, commandJSONData, roles, commandTriggered, fullcommand) {
+    self.say = function(userName, commandJSONData, roles, commandTriggered, fullcommand, mixerStreamId) {
 
         //var userName = userNameStr;
         console.log(commandJSONData[0].text.split(' '));
@@ -24,7 +24,7 @@ let commandHandler = function(channelToken) {
         var commandToChat = "";
         var target = fullcommand.split(' ')[1];
 
-        processArray(commandData, channelToken, commandTriggered, userName, target).then(function(response) {
+        processArray(commandData, channelToken, commandTriggered, userName, target, mixerStreamId).then(function(response) {
             commandToChat = response.join(' ');
             console.log("Success!", response);
             //emit event and send message to mixer
@@ -43,17 +43,21 @@ commandHandler.prototype = new events.EventEmitter;
 
 module.exports = commandHandler;
 
-async function getSubstitutionVariable(userName, variableCommand, array, index, channelToken, target) {
+async function getSubstitutionVariable(userName, variableCommand, array, index, channelToken, target, targetMixerUrl, userMixerUrl, casterMixerUrl, cid) {
 
+    var removeAt = true;
     switch (variableCommand) {
         case "$user":
             text = userName;
+            userMixerUrl = "mixer.com/" + removeAtSymbol(text)
             break;
         case "$caster":
             text = channelToken;
+            casterMixerUrl = "mixer.com/" + removeAtSymbol(text)
             break;
         case "$target":
             text = target;
+            targetMixerUrl = "mixer.com/" + removeAtSymbol(text)
             break;
         case "$randusr":
             text = getRandomUser();
@@ -62,12 +66,43 @@ async function getSubstitutionVariable(userName, variableCommand, array, index, 
             text = getRandomUserExceptSelf(userName);
             break;
         case "$uptime":
-            text = getUptime(channelToken);
+            text = getUptime(cid);
             break;
 
             /*           case "$readapi":
                       text = getapi(url);
                       break; */
+        case "$targetMixerUrl":
+            if (target != undefined || target != "") {
+                if (targetMixerUrl == "") {
+                    text = "mixer.com/" + removeAtSymbol(target)
+                }
+            } else {
+                if (targetMixerUrl != "") {
+                    text = targetMixerUrl;
+                } else {
+                    text = "target not set"
+                }
+
+            }
+
+            break;
+
+        case "$userMixerUrl":
+            if (userName != undefined || userName != "") {
+                if (userMixerUrl == "") {
+                    text = "mixer.com/" + removeAtSymbol(userName)
+                }
+            } else {
+                if (userMixerUrl != "") {
+                    text = userMixerUrl;
+                } else {
+                    text = "target not set"
+                }
+
+            }
+
+            break;
 
         case "$date":
             text = getDateFromVariable();
@@ -77,15 +112,28 @@ async function getSubstitutionVariable(userName, variableCommand, array, index, 
             break;
         default:
             text = variableCommand + ' Not found';
+
+
+
     }
 
+    return text;
+}
+
+function removeAtSymbol(text) {
+    //removes at symbol from begining of string
+    if (text.substr(0, 1) == "@") {
+        text = text.substr(1, text.length - 1);
+    }
     return text;
 }
 
 function getChannelObjectVariable(channelObject, variable) {
 
 
+
     switch (variable) {
+
 
 
         case "$joinedWeeksAgo":
@@ -188,7 +236,13 @@ function getChannelObjectVariable(channelObject, variable) {
             break;
         default:
             text = variable + ' - Not found';
+
+
+
+
     }
+
+
 
     return text;
 }
@@ -229,7 +283,6 @@ function getRandomUserExceptSelf(userName) {
 
 async function getUptime(channelID) {
 
-    var channelIDTest = 582310;
     const fetch = require("node-fetch");
     const url = "https://mixer.com/api/v1/channels/" + `${channelID}` + "/broadcast";
     var d;
@@ -379,10 +432,6 @@ class ChannelObject {
 }
 
 
-
-
-
-
 function getDateName(monthStr) {
 
     switch (monthStr) {
@@ -463,14 +512,22 @@ function getTimeFromVariable() {
 }
 
 //userName is person who triggered command
-async function processArray(commandData, channelName, commandTriggered, userName, target) {
+async function processArray(commandData, channelName, commandTriggered, userName, target, mixerStreamId) {
 
     var channelInfo = null;
+
 
     //sets the api number
     var channelAPIVar = 0;
     //
     var APITexts = "";
+
+    //global variables
+    var targetMixerUrl = "";
+    var userMixerUrl = "";
+    var casterMixerUrl = "";
+    var targetSelected = target;
+    var userSelected = userName;
 
     // var bracketContents = arrayofstrings.match(/\[(.*?)\]/);
     //extract all bracket data objects
@@ -506,8 +563,7 @@ async function processArray(commandData, channelName, commandTriggered, userName
                     var userChannelVariable = channelVariable[2];
 
                     if (userChannelVariable != undefined) {
-                        // work on this schuster
-                        //getChannelVariable(userName, streamer, msg, channelTokenVariable);
+
                         var channel = getChannelVariable(userName, channelName, commandTriggered, userChannelVariable, target);
 
 
@@ -567,7 +623,7 @@ async function processArray(commandData, channelName, commandTriggered, userName
                     for (var iii = 0, len3 = commandTextRoundBrackets.length; iii < len3; iii++) {
                         if (commandTextRoundBrackets[iii].length > 0) {
                             if (commandTextRoundBrackets[iii].substr(0, 1) == "$") {
-                                let resultApiVariable = await getSubstitutionVariable(userName, commandTextRoundBrackets[iii], commandData, i, channelName, target);
+                                let resultApiVariable = await getSubstitutionVariable(userName, commandTextRoundBrackets[iii], commandData, i, channelName, target, targetMixerUrl, userMixerUrl, casterMixerUrl, mixerStreamId);
                                 commandTextRoundBrackets[iii] = resultApiVariable;
                             }
 
@@ -579,7 +635,7 @@ async function processArray(commandData, channelName, commandTriggered, userName
                     commandData[i] = resultReadApi;
 
                 } else {
-                    let result2 = await getSubstitutionVariable(userName, commandData[i], commandData, i, channelName, target);
+                    let result2 = await getSubstitutionVariable(userName, commandData[i], commandData, i, channelName, target, targetMixerUrl, userMixerUrl, casterMixerUrl, mixerStreamId);
 
                     if (result2 === undefined) {
                         commandData[i] = ' [Variable] - ' + commandData[i].toString() + ' errored or returned no value';

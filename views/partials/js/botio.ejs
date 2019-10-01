@@ -1,15 +1,9 @@
+<!-- -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-<!--<script src="./socket.io/socket.io.js"></script>-->
 
+<!--<script src="./socket.io/socket.io.js"></script>-->
 <!-- <script src="./components/socket.io-client/socket.io.js"></script> -->
-<!--
-  //
-  //
-  /
-  /
-    
--->
 <script>
     //these are the users in chat
     var chatUsrs = [];
@@ -84,6 +78,8 @@
             $("#flActionBtn").html(name);
 
         });
+        //
+        //
 
         $("#tableF tr").live("click", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
@@ -142,18 +138,13 @@
             $(this).addClass('selected').siblings().removeClass('selected');
 
             var $this = $(this);
-
             var doThis = $(this).children('td').eq(0).text();
-
-
             var array = doThis.split('-');
 
-
             if (doThis != "") {
-                var usernameName = array[0].toString() + '-' + array[2].toString();
+                var usernameName = array[0].toString();
                 $("#ChatActionBtn").html(usernameName);
             }
-
         });
 
         $("#tableRecentFollowers tr").click(function() {
@@ -503,6 +494,7 @@
         iosocket.on('closeProgressBar', function(data) {
 
             //alert("Please Re-Auth");
+            $('#mixrConnection').attr('value', 100);
             document.getElementById("mixrConnection").style.visibility = 'hidden';
             document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
 
@@ -537,8 +529,9 @@
             document.getElementById("mixrConnection").style.visibility = 'hidden';
             document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
 
-            document.getElementById("botAccount").innerHTML = '';
-            document.getElementById("botAccount").innerHTML += "Bot: Authenticated";
+            //document.getElementById("botAuthAccount").innerHTML = '';
+            //document.getElementById("botAuthAccount").innerHTML += "Bot: Authenticated";
+            connectedToBeam();
 
         });
 
@@ -549,15 +542,14 @@
             document.getElementById("mixrConnection").style.visibility = 'hidden';
             document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
 
-            document.getElementById("botAccount").innerHTML = '';
-            document.getElementById("botAccount").innerHTML += "Bot: Authenticated";
+            //document.getElementById("streamerAuthAccount").innerHTML = '';
+            // document.getElementById("streamerAuthAccount").innerHTML += "Streamer: Authenticated";
+
+            connectedToBeam();
 
         });
 
         iosocket.on('botLoggedIn', function(bot) {
-
-            document.getElementById("botAccount").innerHTML = '';
-            document.getElementById("botAccount").innerHTML += "Bot: Authenticated";
 
             //alert('bot logged in');
             setBotAccountLoggedIn(bot);
@@ -670,11 +662,17 @@
 
         });
 
-        iosocket.on('message', function(avatarURL, primaryRole, UserName, message) {
+        iosocket.on('message', function(avatarURL, primaryRole, UserName, message, isWhisper) {
 
             //alert('Message Recieved');
-            buildChatMessage(avatarURL, primaryRole, UserName, message);
+            buildChatMessage(avatarURL, primaryRole, UserName, message, isWhisper);
             scrollToEnd("chatbox");
+
+        });
+
+        iosocket.on('NoAlertsSetup', function(message) {
+
+            alert("You have no alerts setup on the bot");
 
         });
 
@@ -746,7 +744,7 @@
             var chatCountStr = chatUsrs.length.toString();
             //$('#followCountUsrs').remove($('<p></p>'));
             $("#chatCountUsrs").empty();
-            $('#chatCountUsrs').append($('<p></p>').text(chatCountStr));
+            $('#chatCountUsrs').append($('<p>&nbsp;</p>').text(' (' + chatCountStr + ')'));
 
         });
 
@@ -922,7 +920,7 @@
         }
 
         minimiseChatUsersBox = function(dataElement, parentElement) {
-            minimiseBoxFunction(dataElement, parentElement);
+            minimiseBoxFunction460(dataElement, parentElement);
         }
 
         minimiseTimerBox = function(dataElement, parentElement) {
@@ -1116,6 +1114,10 @@
 
                 var res = data[i].split(" - ", 3);
                 var hidden = "display:none;";
+
+                var userType = res[1];
+                var colorToUse = getColorFromUserType(userType);
+                var colorStyle = "color:" + colorToUse + ";";
                 var isChatUrsFollowing = checkIfFollowing(res[2]);
                 var ChatUrsFollowerResult = checkIfFollower(res[2]);
 
@@ -1123,14 +1125,41 @@
                 var addToTable = isInChat(res[2]);
 
                 if (!addToTable) {
-                    tr = $('<tr id="CU' + res[2] + '" class /> ');
+                    tr = $('<tr id="CU' + res[2] + '" style="' + colorStyle + '" class /> ');
                     // tr = $('<tr class /> ');
-                    tr.append("<td>" + data[i] + "</td>");
+                    //tr.append("<td>" + data[i] + "</td>"); this contains username , userid and type (user,mod etc.)
+                    tr.append("<td>" + res[0] + "</td>"); //show only name
                     tr.append("<td>" + ChatUrsFollowerResult + "</td>");
                     tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
                     $('#tableChatUsers').append(tr);
                 }
             }
+        }
+
+
+        //get this from user
+        getColorFromUserType = function(type) {
+
+            switch (type) {
+                case "User":
+                    type = "blue";
+                    break;
+                case "Mod":
+                    type = "green";
+                    break;
+                case "ChannelEditor":
+                    type = "green";
+                    break;
+                case "Owner":
+                    type = "gray";
+                case "Pro":
+                    type = "purple";
+                default:
+                    type = "blue";
+                    break;
+            }
+
+            return type;
         }
 
 
@@ -1529,32 +1558,79 @@
 
             //check these and whats in them
             newUser.push(res);
-            chatUsrs.push(newUser);
 
-            console.log('New Chat Usrs array is now ' + JSON.stringify(chatUsrs));
+            //alert('addSingleChatUserToList ' + res[0]);
 
-            // am I following chat user ?
-            var ChatUsrFollowing = checkIfFollowing(res[2]);
-            // is chat user following me ?
-            var ChatUsrFollowerResult = checkIfFollower(res[2]);
-
-            //delete any entries of that user
-            isInChatDelete(res[2]);
-
-            var hidden = "display:none;";
-            var tr;
-            tr = $('<tr id="CU' + res[2] + '" class /> ');
-            tr.append("<td>" + data + "</td>");
-            tr.append("<td>" + ChatUsrFollowerResult + "</td>");
-            // tr.append("<td>" + ChatUsrFollowerResult + "</td>");
-            tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
-            $('#tableChatUsers').append(tr);
-
-            var chatCountStrNew = chatUsrs.length.toString();
-            $("#chatCountUsrs").empty();
-            $('#chatCountUsrs').append($('<p></p>').text(chatCountStrNew));
+            if (!doesUserExistInChat(newUser, chatUsrs)) {
+                chatUsrs.push(newUser);
 
 
+
+                console.log('New Chat Usrs array is now ' + JSON.stringify(chatUsrs));
+
+                // am I following chat user ?
+                var ChatUsrFollowing = checkIfFollowing(res[2]);
+                // is chat user following me ?
+                var ChatUsrFollowerResult = checkIfFollower(res[2]);
+
+                //delete any entries of that user
+                //isInChatDelete(res[2]);
+
+                var hidden = "display:none;";
+
+                var colorToUse = getColorFromUserType(res[1]);
+                var colorStyle = "color:" + colorToUse + ";"
+                var tr;
+                //tr = $('<tr id="CU' + res[2] + '" class /> ');
+                tr = $('<tr id="CU' + res[2] + '" style="' + colorStyle + '" class /> ');
+                tr.append("<td>" + res[0] + "</td>");
+                tr.append("<td>" + ChatUsrFollowerResult + "</td>");
+                // tr.append("<td>" + ChatUsrFollowerResult + "</td>");
+                tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
+                $('#tableChatUsers').append(tr);
+
+                var chatCountStrNew = chatUsrs.length.toString();
+                $("#chatCountUsrs").empty();
+                $('#chatCountUsrs').append($('<p>&nbsp;</p>').text(' (' + chatCountStrNew + ')'));
+
+            }
+
+        }
+
+
+        function doesUserExistInChat(obj, list) {
+            var x;
+            for (x in list) {
+                console.log(list.hasOwnProperty(x));
+                console.log(list[x].toString());
+                console.log(obj[0][0] + ',' + obj[0][1] + ',' + obj[0][2]);
+
+                console.log('Object to find:- ' + obj[0][0]);
+
+                //var userName = list[x].split('-');
+
+                var userName = "";
+
+
+                if (Array.isArray(list)) {
+                    userName = obj[0][0];
+                } else {
+                    userName = list[x].split('-')[0];
+                }
+
+                console.log('userName from Object :- ' + obj[0][0]);
+
+                //alert('username ' + userName[0]);
+
+                //if (list.hasOwnProperty(x) && list[x].toString() === obj[0][0] + ',' + obj[0][1] + ',' + obj[0][2]) {
+
+                //match by username for now
+                if (list.hasOwnProperty(x) && userName === obj[0][0]) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 
@@ -1575,7 +1651,13 @@
                     //amend chat user to follower
                     var hidden = "display:none;";
 
-                    var row = '<tr id="' + elid + '" class /> ' + "<td>" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
+                    var dataSplit = chatUserdata.split('-');
+                    var colorToUse = getColorFromUserType(res[1]);
+                    var userTypecolor = "color:" + colorToUse + ";"
+
+                    //alert('color to use on amend to follower ' + colorToUse);
+
+                    var row = '<tr id="' + elid + '" class /> ' + "<td style=\"" + userTypecolor + "\">" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
                     document.getElementById(elid).innerHTML = row;
                 }
             }
@@ -1604,7 +1686,16 @@
                     //amend chat user to follower
                     var hidden = "display:none;";
 
-                    var row = '<tr id="' + elid + '" class /> ' + "<td>" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
+                    var dataSplit = chatUserdata.split('-');
+                    var colorToUse = getColorFromUserType(res[1]);
+                    var userTypecolor = "color:" + colorToUse + ";"
+
+                    //alert('color to use on amend to not follower ' + colorToUse);
+
+                    //var row = '<tr id="' + elid + '" class /> ' + "<td>" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
+
+                    var row = '<tr id="' + elid + '" class /> ' + "<td style=\"" + userTypecolor + "\">" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
+
                     document.getElementById(elid).innerHTML = row;
                 }
             }
@@ -1626,7 +1717,7 @@
 
             var chatCountStrNew = chatUsrs.length.toString();
             $("#chatCountUsrs").empty();
-            $('#chatCountUsrs').append($('<p></p>').text(chatCountStrNew));
+            $('#chatCountUsrs').append($('<p>&nbsp;</p>').text(' (' + chatCountStrNew + ')'));
 
         }
 
@@ -2000,6 +2091,13 @@
             chkBoxToglModuleVisible('divWrapperMedia');
         });
 
+
+
+        $("#analyticsViewsChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperAnalyticsViews');
+        });
+
+
         $("#alertfilesChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperAlerts');
         });
@@ -2043,7 +2141,7 @@
 
             if (document.getElementById('switch1').checked) {
 
-                alert('checked');
+                //alert('checked');
                 $('.switch1').css({
                     "background-color": "green"
                 });
@@ -2091,6 +2189,74 @@
             }
 
             setAddSaveDeleteCommandDefaults();
+
+
+        }
+
+        //
+        addCommandVarToTextBox = function() {
+
+            //
+            ///
+
+            // addCommandVar id of the button
+            var commandTextVal = document.getElementById('commandText').value;
+            var commandVarString = document.getElementById('selOptVars').selectedOptions[0].innerText
+
+            var commandVarValue = getCommandVariableValue(commandVarString);
+
+            var commandTextAddVar = commandTextVal + commandVarValue;
+
+            document.getElementById('commandText').value = commandTextAddVar;
+
+            // commandText id of the text box
+
+        }
+
+        getCommandVariableValue = function(commandVarVal) {
+
+            switch (commandVarVal) {
+                case "select a variable":
+                    commandVarVal = ''
+                    break;
+                case "Uptime":
+                    commandVarVal = '$uptime'
+                    break;
+                case "User":
+                    commandVarVal = '$user'
+                    break;
+                case "Target":
+                    commandVarVal = '$target'
+                    break;
+                case "Caster":
+                    commandVarVal = '$caster'
+                    break;
+                case "Sparks":
+                    commandVarVal = '$sparks'
+                    break;
+                case "Channel Info":
+                    commandVarVal = '$channelInfo'
+                    break;
+                case "Level":
+                    commandVarVal = '$level'
+                    break;
+                case "Joined Date":
+                    commandVarVal = '$joinedDate'
+                    break;
+                case "Joined":
+                    commandVarVal = '$joined'
+                    break;
+                case "Random User":
+                    commandVarVal = '$randUser'
+                    break;
+                case "Random User Excl Self":
+                    commandVarVal = '$randUserExclSelf'
+                    break;
+                default:
+                    break;
+            }
+
+            return commandVarVal;
 
 
         }
@@ -2827,6 +2993,7 @@
         HideUIElementAndUncheckSwitch("divWrapperAlerts", "alertfilesChkBox")
         HideUIElementAndUncheckSwitch("divWrapperMedia", "mediafilesChkBox")
         HideUIElementAndUncheckSwitch("divWrapperCommandsList", "commandsListChkBox")
+        HideUIElementAndUncheckSwitch("divWrapperAnalyticsViews", "analyticsViewsChkBox")
 
     }
 
@@ -2910,6 +3077,7 @@
 
     }
 
+
     function changeTextOnModules(event) {
 
         var themeElementsText = [];
@@ -2932,8 +3100,6 @@
         themeElementsText.push("menutextmodmonitor");
         themeElementsText.push("menutextrecentfollowers");
         themeElementsText.forEach(changeThemeTextItemChange, event.target.value);
-
-
 
 
         //change div text colour by class name 
@@ -2959,7 +3125,7 @@
 
     }
 
-    //
+    //add all outer divs here so that they are used in the theme
     function changeOutsideBox(event) {
 
         var themeElementsMain = [];
@@ -2984,6 +3150,10 @@
         //themeElementsMain.push("divWrapperNote");
         themeElementsMain.push("divWrapperHostAlertsList");
 
+        //this is the analytis module div wrapper
+        themeElementsMain.push("divWrapperAnalyticsViews");
+
+
         themeElementsMain.forEach(changeOutsideBoxItemChange, event.target.value);
 
         saveUIThemeSetting('outside', event.target.value);
@@ -3000,6 +3170,9 @@
         insideBoxElements.push("recentFollowersbox");
 
         insideBoxElements.push("timersListbox");
+
+        insideBoxElements.push("analyticsViewsbox");
+
 
 
 
@@ -3038,6 +3211,7 @@
         toggleButtonElements.push("flBtn");
         toggleButtonElements.push("flingBtn");
         toggleButtonElements.push("chtUsersBtn");
+        toggleButtonElements.push("avBtn2");
         toggleButtonElements.push("recentFollowersBtn");
         toggleButtonElements.push("flngActionBtn");
         toggleButtonElements.push("ChatActionBtn");
@@ -3054,7 +3228,7 @@
         toggleButtonElements.push("commandListBtn");
         toggleButtonElements.push("submitCommandButton");
         toggleButtonElements.push("deleteCommandButton");
-        toggleButtonElements.push("addVar");
+        toggleButtonElements.push("addCommandVar");
 
         toggleButtonElements.push("chatUsrBan");
         toggleButtonElements.push("chatUsrTimeout5m");
@@ -3083,6 +3257,7 @@
 
     }
 
+    //
     function changeToggleButtonsText(event) {
 
         var toggleButtonElements = [];
@@ -3092,6 +3267,8 @@
         toggleButtonElements.push("flBtn");
         toggleButtonElements.push("flingBtn");
         toggleButtonElements.push("chtUsersBtn");
+        toggleButtonElements.push("avBtn2");
+
         toggleButtonElements.push("recentFollowersBtn");
         toggleButtonElements.push("flngActionBtn");
         toggleButtonElements.push("ChatActionBtn");
@@ -3102,7 +3279,7 @@
 
         toggleButtonElements.push("submitCommandButton");
         toggleButtonElements.push("deleteCommandButton");
-        toggleButtonElements.push("addVar");
+        toggleButtonElements.push("addCommandVar");
 
         toggleButtonElements.push("chatUsrBan");
         toggleButtonElements.push("chatUsrTimeout5m");
@@ -3435,10 +3612,15 @@
 
     }
 
-    function buildChatMessage(avatarURL, primaryRole, UserName, message) {
+    function buildChatMessage(avatarURL, primaryRole, UserName, message, isWhisper) {
 
         var li;
         var colour = "black";
+
+        var messageDateTime = new Date();
+        var messageDateString = messageDateTime.toLocaleDateString();
+        var messageTimeString = messageDateTime.toLocaleTimeString();
+        var messageDate = messageDateString + ' ' + messageTimeString;
 
         switch (primaryRole) {
             case "Owner":
@@ -3468,7 +3650,14 @@
 
         li = $('<li/> ');
         li.append('<img class="mixerChat" height="25" width="25" src="' + avatarURL + '" alt="avatar" id="itemImg" style="border-radius: 50%;">');
-        li.append('<div><p style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</p><p style="color:black;">' + message + '</p></div>');
+
+        if (isWhisper) {
+            li.append('<div style="float:left; font-style: italic;font-weight:lighter;font_family:arial;"><p style="' + styleColour + '">' + UserName + ' - ' + primaryRole + ' <span style="color:midnightblue;padding-left:5px;">' + messageDate + '</span></p> <p style="color:blue;">Whisper: ' + message + '</p></div>');
+
+        } else {
+            li.append('<p style="margin-left:25px;' + styleColour + '">' + UserName + ' - ' + primaryRole + ' <span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span></p>  <p style="color:black; margin-bottom:10px; margin-left: 25px;">' + message + '</p>');
+
+        }
         li.append('<div style="float: none; clear: both;"></div>');
         $('#incomingChatMessages').append(li);
 
@@ -3521,5 +3710,6 @@
         };
 
         var chart = new Chart(ctx, config);
+        //
     }
 </script>

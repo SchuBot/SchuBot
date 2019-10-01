@@ -25,6 +25,15 @@
         //todo add connection icon
         document.getElementById("beamConnection").innerHTML = '';
         document.getElementById("beamConnection").innerHTML += "Mixer: Not Connected";
+
+        //this needs to be refined as we want to use the progressbar to show chat drop outs
+        setProgressBarToHidden();
+    }
+
+    setProgressBarToHidden = function() {
+        $('#mixrConnection').attr('value', 100);
+        document.getElementById("mixrConnection").style.visibility = 'hidden';
+        document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
     }
 
 
@@ -37,11 +46,11 @@
 
     setBotAccountLoggedIn = function(bot) {
         document.getElementById("botAccount").innerHTML = '';
-        document.getElementById("botAccount").innerHTML += 'Connected Bot - ' + bot;
+        document.getElementById("botAccount").innerHTML += 'Authed Bot - ' + bot;
     }
 
     setStreamerAccountLoggedIn = function(streamer) {
         document.getElementById("casterAccount").innerHTML = '';
-        document.getElementById("casterAccount").innerHTML += 'Connected Caster - ' + streamer;
+        document.getElementById("casterAccount").innerHTML += 'Authed Caster - ' + streamer;
     }
 </script>

@@ -1,6 +1,8 @@
 (function() {
     //github access token for schubot 61ea34e9ffd423d3ebc9f5bf4ca19f43f7763c1c
     //
+    //
+    //
     'use strict';
     const dateNow = Date.now();
 
@@ -50,6 +52,8 @@
     const path = require('path');
 
     var JsonDB = require('node-json-db');
+    var querystring = require('querystring');
+    var https = require("https");
 
     ////const server = require('http').createServer(app);
     //var app = require('express').createServer();
@@ -73,6 +77,7 @@
     var co;
     var ch;
     let botName = null
+
 
     let dbAlerts = new JsonDB("./resources/jsondbfiles/myAlerts", true, true);
     let userCommands = new JsonDB("./resources/jsondbfiles/myCommands", true, true);
@@ -618,7 +623,7 @@
                 console.log('ban user');
 
                 if (bc != null) {
-                    bc.ban(data.userid);
+                    bc.ban(data.userid, authDB.data.streamer.channelId);
                 }
 
 
@@ -640,6 +645,8 @@
             ConnectToBeamAndConsellation();
             startupBotDataSent = true;
         }
+
+        //performRefreshMixerWithRefreshToken(authDB, "streamer");
 
 
     });
@@ -941,7 +948,7 @@
             authDB.reload();
             log.info('Auth File Loaded');
 
-            CreateBeamObjects(authDB.data.streamer.accessToken, null, authDB.data.streamer.username, chatConnected, authDB.data.streamer.username, authDB.data.bot.username, globalFollowers);
+            CreateBeamObjects(authDB.data.streamer.accessToken, null, authDB.data.streamer.username, chatConnected, authDB.data.streamer.username, authDB.data.bot.username, globalFollowers, authDB);
             //console.log('streamer connected to socket ' + connections + ' times');
 
 
@@ -951,7 +958,7 @@
                   } */
 
 
-            CreateBeamBotObjects(authDB.data.bot.accessToken, null, authDB.data.bot.username, chatConnectedBot, authDB.data.streamer.username, authDB.data.bot.username, authDB.data.streamer.channelId);
+            CreateBeamBotObjects(authDB.data.bot.accessToken, null, authDB.data.bot.username, chatConnectedBot, authDB.data.streamer.username, authDB.data.bot.username, authDB.data.streamer.channelId, authDB);
 
 
             /*             //this will not load unless beam is connected, need to fix this
@@ -1108,10 +1115,10 @@
 
         if (IsStreamer) {
             //streamerToken = authDB.data.streamer.accessToken;
-            checkStreamerTokenAndConnect(authData, authData.access_token);
+            checkStreamerTokenAndConnect(authData, authData.access_token, authData);
         } else {
             // botToken = authDB.data.bot.accessToken;
-            checkBotTokenAndConnect(authData, authData.access_token);
+            checkBotTokenAndConnect(authData, authData.access_token, authData);
         }
 
 
@@ -1119,7 +1126,7 @@
     }
 
 
-    function checkStreamerTokenAndConnect(authData, Token) {
+    function checkStreamerTokenAndConnect(authData, Token, authDBData) {
 
         let type = "streamer";
 
@@ -1142,8 +1149,10 @@
 
                 //no authData don't save auth as token is valid but bot is only reconnecting not re-authing
                 if (authData != null) {
-                    log.info('Saving Auth');
-                    SaveAuth(type, Token, authData.refresh_token, res.body.username);
+                    log.info('Saving Streamer Auth');
+                    SaveAuth(type, Token, authData.refresh_token, res.body.username, authData.access_token_expiry_date);
+
+
                 }
 
 
@@ -1160,10 +1169,13 @@
                     authDB.reload();
                     //streamer object
                     bc = new beamchat(Token, chatConnected, authDB);
+
+
                     co = new constellation();
-                    ch = new commandHandler(res.body.username);
+                    ch = new commandHandler(res.body.username, authDB.data.streamer.channelId);
 
 
+                    io.emit('streamerAuthenticated');
                     //console.log('Authenticated To Beam');
                     //io.emit('authenticated');
 
@@ -1205,7 +1217,12 @@
 
                     bc.on('ChatMessage', function(data) {
 
-                        sendMessageToChatWindow(data);
+                        if (data.message.meta.whisper) {
+                            sendMessageToChatWindow(data, true);
+                        } else {
+                            sendMessageToChatWindow(data, false);
+                        }
+
 
 
                     });
@@ -1247,7 +1264,7 @@
                                 }
 
                                 //send message to client window
-                                io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t);
+                                //io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t);
 
 
                                 /// TODO add these in db and fetch when triggered
@@ -1389,9 +1406,9 @@
                 }
             } else {
 
-                log.info('refresh Token Required')
+                log.info('refresh Token Required access token expired')
 
-                refreshToken(authData, "streamer");
+                refreshToken(authDB, "streamer");
 
 
             }
@@ -1408,7 +1425,7 @@
 
     }
 
-    function checkBotTokenAndConnect(authData, Token) {
+    function checkBotTokenAndConnect(authData, Token, authDBData) {
 
         let type = "bot";
 
@@ -1431,8 +1448,8 @@
 
                 //no authData don't save auth as token is valid but bot is only reconnecting not re-authing
                 if (authData != null) {
-
-                    SaveAuth(type, Token, authData.refresh_token, res.body.username);
+                    log.info('Saving Streamer Auth');
+                    SaveAuth(type, Token, authData.refresh_token, res.body.username, authData.access_token_expiry_date);
 
                 }
 
@@ -1550,7 +1567,11 @@
 
                         bcBot.on('ChatMessage', function(data) {
 
-                            sendMessageToChatWindow(data);
+                            if (data.message.meta.whisper) {
+                                sendMessageToChatWindow(data, true);
+                            } else {
+                                sendMessageToChatWindow(data, false);
+                            }
 
 
                         });
@@ -1574,7 +1595,7 @@
 
                 log.info('Re auth Bot:')
 
-                refreshToken(authData, "bot");
+                refreshToken(authDB, "bot");
             }
 
 
@@ -1605,6 +1626,7 @@
             if (new Date(tokenExpiryDate).getTime() < Date.now()) {
                 //auth using refresh token TODO
                 log.info('Token Expired need to obtain another with Refresh Token');
+                performRefreshMixerWithRefreshToken(authData, type);
 
             } else {
                 //ask user to re-auth as token is expired
@@ -1616,11 +1638,137 @@
                     log.info('Re-auth bot Needed');
                 }
             }
+        } else {
+            log.info('Could Not Authenticate with Refresh Token as no auth data is available - please re-auth');
         }
 
     }
 
-    function CreateBeamObjects(BBBToken, message, channelToken, chatConnected, streamerName, botName, globalFollowers) {
+
+    function performRefreshMixerWithRefreshToken(authDB, type) {
+
+        if (authDB != undefined) {
+
+            //get refresh_token for type
+            var refreshToken = authDB.getData('./' + type + '/refreshToken');
+            var userName = authDB.getData('./' + type + '/username');
+
+
+
+            var options = {
+                client_id: '5ca546b27d464fc8e8fc8ac42e38380c5917710bbdf9545d',
+                response_type: 'code',
+                grant_type: 'refresh_token',
+                scopes: ["user:details:self interactive:robot:self chat:connect chat:chat chat:whisper chat:bypass_links chat:bypass_slowchat chat:bypass_catbot chat:bypass_filter chat:clear_messages chat:giveaway_start chat:poll_start chat:remove_message chat:timeout chat:view_deleted chat:purge channel:details:self channel:update:self channel:clip:create:self"], // Scopes limit access for OAuth tokens.
+                //redirectUri: "http://localhost:8081/auth/mixer2"
+
+            };
+
+            /*             var raw_code = /code=([^&]*)/.exec(req.url) || null,
+                            code = (raw_code && raw_code.length > 1) ? raw_code[1] : null,
+                            error = /\?error=(.+)$/.exec(req.url); */
+
+            // If there is a code in the callback, proceed to get token from mixer
+            if (1 === 1) {
+                // console.log("code recieved: " + code);
+
+                var postData = querystring.stringify({
+                    "grant_type": options.grant_type,
+                    "client_id": options.client_id,
+                    "refresh_token": refreshToken
+                });
+
+                var post = {
+                    host: "mixer.com",
+                    path: "/api/v1/oauth/token",
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Content-Length': postData.length,
+                        "Accept": "application/json"
+                    }
+                };
+
+                var req = https.request(post, function(response) {
+                    var result = '';
+                    response.on('data', function(data) {
+                        result = result + data;
+                    });
+                    response.on('end', function() {
+
+
+
+                        var invalid_grant = new RegExp("invalid_grant");
+
+
+                        var raw_code = /code=([^&]*)/.exec(result.toString()) || null,
+                            code = (raw_code && raw_code.length > 1) ? raw_code[1] : null,
+                            error = invalid_grant.exec(result.toString());
+
+
+                        if (error != null) {
+                            log.info('invalid grant');
+
+                            //return false
+                        } else {
+                            var json = JSON.parse(result.toString());
+                            console.log("access token recieved: " + json.access_token);
+
+                            //now set expiry date
+                            //set token expiry in milliseconds 
+                            // (remove 10 seconds just because)
+                            var expiryInSeconds = json.expires_in - 10;
+                            var expiryInMilliSeconds = expiryInSeconds * 1000;
+
+                            //get milliseconds from 1970 till now and add milliseconds
+                            var milliseconds = Date.now() + expiryInMilliSeconds;
+
+                            //
+                            var accessTokenExpiry = new Date(milliseconds);
+
+
+                            json["access_token_expiry_date"] = accessTokenExpiry;
+
+
+                            if (type == "streamer") {
+                                checkStreamerTokenAndConnect(null, json.access_token, authDB);
+                                SaveAuth(type, json.access_token, json.refresh_token, userName, accessTokenExpiry);
+
+                            } else {
+                                checkBotTokenAndConnect(null, json.access_token, authDB);
+                                SaveAuth(type, json.access_token, json.refresh_token, userName, accessTokenExpiry);
+
+                            }
+
+                            //SaveAuth(type, json.access_token, json.refresh_token, json.username, accessTokenExpiry);
+
+
+                        }
+                        if (response && response.ok) {
+                            // Success - Received Token.
+                            // Store it in localStorage maybe?
+                            console.log(response.body.access_token);
+                        }
+
+
+                    });
+                    response.on('error', function(err) {
+                        console.log("MIXER OAUTH REQUEST ERROR: " + err.message);
+                    });
+                });
+
+                req.write(postData);
+                req.end();
+
+            } else
+            if (error) {
+                log.info("Oops! Something went wrong and we couldn't refresh token. Please try again.");
+            }
+        }
+
+    }
+
+    function CreateBeamObjects(BBBToken, message, channelToken, chatConnected, streamerName, botName, globalFollowers, authDBData) {
 
 
 
@@ -1631,7 +1779,7 @@
             //check token with introspect upon start of bot
             log.info('Checking Streamer Token');
 
-            checkStreamerTokenAndConnect(null, BBBToken);
+            checkStreamerTokenAndConnect(null, BBBToken, authDBData);
 
 
 
@@ -1646,13 +1794,13 @@
 
     }
 
-    function CreateBeamBotObjects(BBBTokenBot, message, channelToken, chatConnected, streamerName, botName, streamerChannel, globalFollowers) {
+    function CreateBeamBotObjects(BBBTokenBot, message, channelToken, chatConnected, streamerName, botName, streamerChannel, globalFollowers, authDBData) {
 
         console.log('is Connected ?' + isConnected);
 
         if (BBBTokenBot != null) {
             log.info('Checking Bot Token');
-            checkBotTokenAndConnect(null, BBBTokenBot);
+            checkBotTokenAndConnect(null, BBBTokenBot, authDBData);
 
         } else {
             io.emit('unauthenticatedBot', 'false');
@@ -1667,7 +1815,7 @@
     var currentmessageBeingSent = 0;
     var messageBeingSentID = 0;
 
-    function sendMessageToChatWindow(data) {
+    function sendMessageToChatWindow(data, isWhisper) {
 
         log.info('Sending Message to Chat window');
 
@@ -1767,7 +1915,7 @@
                     avatarUrl = "https://mixer.com/_latest/assets/images/main/avatars/default.png";
                 }
 
-                io.emit('message', avatarUrl, data.user_roles[0], data.user_name, t);
+                io.emit('message', avatarUrl, data.user_roles[0], data.user_name, t, isWhisper);
 
                 /// TODO add these in db and fetch when triggered
                 var splitTxt = '';
@@ -1958,7 +2106,7 @@
 
                 if (userAllowed) {
                     // process command and send to mixer
-                    ch.say(username, commandInDB, user_roles, command, fullcommand);
+                    ch.say(username, commandInDB, user_roles, command, fullcommand, authDB.data.streamer.channelId);
 
                     //queue alert
                     //graphicsFolder, soundFolder, videoFolder, graphicFile, soundFile, videoFile
@@ -2924,93 +3072,102 @@
         }
 
         //randomize the alert number
-        var randomAlertNumber = randomNumberFrom0(myHostAlerts.data.hostalerts.length);
 
-        var imagePath = myHostAlerts.data.hostalerts[randomAlertNumber].image;
-        var audioPath = myHostAlerts.data.hostalerts[randomAlertNumber].audio;
-        var videoPath = myHostAlerts.data.hostalerts[randomAlertNumber].video;
-        var hostText = myHostAlerts.data.hostalerts[randomAlertNumber].text;
-
-        if (imagePath.length > 0) {
+        if (myHostAlerts.data.hostalerts.length > 0) {
+            var randomAlertNumber = randomNumberFrom0(myHostAlerts.data.hostalerts.length);
 
 
-            var imageFileName = myMedia.data.media.filter(function(item) { return (item.type == 'Image' && item.id == imagePath); });
 
-            imagePath = imageFolder + imageFileName[0].image; // commandInDB.image
+            var imagePath = myHostAlerts.data.hostalerts[randomAlertNumber].image;
+            var audioPath = myHostAlerts.data.hostalerts[randomAlertNumber].audio;
+            var videoPath = myHostAlerts.data.hostalerts[randomAlertNumber].video;
+            var hostText = myHostAlerts.data.hostalerts[randomAlertNumber].text;
 
-            //   imagePath = imageFolder + imagePath;
-        }
-
-        if (audioPath.length > 0) {
-
-            var audioFileName = myMedia.data.media.filter(function(item) { return (item.type == 'Audio' && item.id == audioPath); });
-
-            audioPath = audioFolder + audioFileName[0].audio; //commandInDB.audio
-
-            //  audioPath = audioFolder + audioPath;
-        }
-
-        if (videoPath.length > 0) {
-
-            var videoFileName = myMedia.data.media.filter(function(item) { return (item.type == 'Video' && item.id == videoPath); });
-            videoPath = videoFolder + videoFileName[0].video; //commandInDB.video
-
-            //  videoPath = videoFolder + videoPath
-        }
-        var AVElements = {
-            image: imagePath,
-            sound: audioPath,
-            video: videoPath,
-            hostText: hostText
-        };
-
-        var playType = GetAlertsAudioVideoVariables(AVElements);
+            if (imagePath.length > 0) {
 
 
-        /*     "id": "2",
-            "audio": "",
-            "audiodur": "",
-            "video": "",
-            "videodur": "5000",
-            "image": "alert1.gif",
-            "imagedur": "6000",
-            "text": "Muchas Gracias",
-            "enabled": "Y" */
+                var imageFileName = myMedia.data.media.filter(function(item) { return (item.type == 'Image' && item.id == imagePath); });
 
-        var alertMsg = {
-            dateid: new Date().toString() + Math.floor((Math.random() * 100) + 1).toString(),
-            commandName: "",
-            user_id: "No ID on host",
-            userName: UserName,
-            image: AVElements.image,
-            sound: AVElements.sound,
-            video: AVElements.video,
-            following: "",
-            type: "host",
-            play: playType,
-            text: AVElements.hostText
-        };
+                imagePath = imageFolder + imageFileName[0].image; // commandInDB.image
 
-        try {
-            console.log('host event triggered');
-
-            //valid alert
-            if (playType > 0) {
-                addAlertToDB(dbAlerts, alertMsg);
+                //   imagePath = imageFolder + imagePath;
             }
 
-            /*        app.get('/overlay', function(req, res) {
-                       console.log('got response from overlay')
-                       res.render('overlays/overlay.ejs');
-                   }); */
+            if (audioPath.length > 0) {
 
-            /*io.emit('followalert1');
-            io.emit('followalert2');*/
+                var audioFileName = myMedia.data.media.filter(function(item) { return (item.type == 'Audio' && item.id == audioPath); });
+
+                audioPath = audioFolder + audioFileName[0].audio; //commandInDB.audio
+
+                //  audioPath = audioFolder + audioPath;
+            }
+
+            if (videoPath.length > 0) {
+
+                var videoFileName = myMedia.data.media.filter(function(item) { return (item.type == 'Video' && item.id == videoPath); });
+                videoPath = videoFolder + videoFileName[0].video; //commandInDB.video
+
+                //  videoPath = videoFolder + videoPath
+            }
+            var AVElements = {
+                image: imagePath,
+                sound: audioPath,
+                video: videoPath,
+                hostText: hostText
+            };
+
+            var playType = GetAlertsAudioVideoVariables(AVElements);
 
 
-        } catch (error) {
-            console.log('error in follow message in chatbotbeam2.js' + error);
+            /*     "id": "2",
+                "audio": "",
+                "audiodur": "",
+                "video": "",
+                "videodur": "5000",
+                "image": "alert1.gif",
+                "imagedur": "6000",
+                "text": "Muchas Gracias",
+                "enabled": "Y" */
+
+            var alertMsg = {
+                dateid: new Date().toString() + Math.floor((Math.random() * 100) + 1).toString(),
+                commandName: "",
+                user_id: "No ID on host",
+                userName: UserName,
+                image: AVElements.image,
+                sound: AVElements.sound,
+                video: AVElements.video,
+                following: "",
+                type: "host",
+                play: playType,
+                text: AVElements.hostText
+            };
+
+            try {
+                console.log('host event triggered');
+
+                //valid alert
+                if (playType > 0) {
+                    addAlertToDB(dbAlerts, alertMsg);
+                }
+
+                /*        app.get('/overlay', function(req, res) {
+                           console.log('got response from overlay')
+                           res.render('overlays/overlay.ejs');
+                       }); */
+
+                /*io.emit('followalert1');
+                io.emit('followalert2');*/
+
+
+            } catch (error) {
+                console.log('error in follow message in chatbotbeam2.js' + error);
+            }
+        } else {
+            //
+            io.emit('NoAlertsSetup', 'You Have no Alerts setup on the bot');
         }
+
 
     }
 
@@ -3710,14 +3867,14 @@
         return commandObjectJson;
     };
 
-    function SaveAuth(type, token, refresh_token, username) {
+    function SaveAuth(type, token, refresh_token, username, authTokenExpiry) {
         //type = streamer or bot
-        userInfo(type, token, refresh_token, null, username)
+        userInfo(type, token, refresh_token, null, username, authTokenExpiry)
     }
 
-    function userInfo(type, accessToken, refreshToken, authedForClips = false, username) {
+    function userInfo(type, accessToken, refreshToken, authedForClips = false, username, authTokenExpiry) {
 
-        authDB.reload();
+
 
         let otherType = type.toLowerCase() === "bot" ? "streamer" : "bot";
 
@@ -3752,6 +3909,8 @@
                         }
                     }
 
+
+
                     // Push all to db.
                     authDB.push('./' + type + '/username', data.user.username);
                     authDB.push('./' + type + '/userId', data.userId);
@@ -3760,6 +3919,9 @@
                     authDB.push('./' + type + '/accessToken', accessToken);
                     authDB.push('./' + type + '/refreshToken', refreshToken);
                     authDB.push('./' + type + '/authedForClips', authedForClips === true);
+                    authDB.push('./' + type + '/accessTokenExpiry', authTokenExpiry);
+
+
 
                     // Push all to db.
                     if (data.partnered === true) {
@@ -3791,6 +3953,8 @@
                     if (isNewOrDiffStreamer) {
                         initBeamData(authDB);
                     }
+
+                    authDB.reload();
 
                 }
 
@@ -4017,6 +4181,7 @@
         timeoutVar = setInterval(schedule, minimum);
         return output;
     })();
+
 
     exports.SendCommandListToBot = SendCommandListToBot;
     exports.SetStreamerAuth = SetStreamerAuth;

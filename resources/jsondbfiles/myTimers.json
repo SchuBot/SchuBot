@@ -1,10 +1,20 @@
 {
-    "timers": [{
-        "enabled": "Y",
-        "id": "!test",
-        "text": "Sit back and relax",
-        "interval": 60005,
-        "option1": "",
-        "option2": ""
-    }]
+    "timers": [
+        {
+            "enabled": "Y",
+            "id": "!test",
+            "text": "Hello people from the interwebs we all a fun bunch here. We hope you enjoy it here.",
+            "interval": 1200005,
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "enabled": "N",
+            "id": "!test2",
+            "text": "Hi",
+            "interval": 60005,
+            "option1": "",
+            "option2": ""
+        }
+    ]
 }
