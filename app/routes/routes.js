@@ -1,5 +1,6 @@
 //var User = require('./models/user');
 var engine = require('consolidate');
+const resourceTokenManager = require('../js/tokenManager');
 var querystring = require('querystring');
 var https = require("https");
 const electron = require('electron');
@@ -347,7 +348,21 @@ module.exports = function(app) {
 
 
 
+    // set up resource endpoint
+    app.get('/resource/:token', function(req, res) {
 
+        let token = req.params.token || null;
+        if (token !== null) {
+            let resourcePath = resourceTokenManager.getResourcePath(token) || null;
+            if (resourcePath !== null) {
+                resourcePath = resourcePath.replace(/\\/g, "/");
+                res.sendFile(resourcePath);
+                return;
+            }
+        }
+
+        res.status(404).send({ status: "error", message: req.originalUrl + ' not found' });
+    });
 
 
     app.get('/auth/mixer/callback2',

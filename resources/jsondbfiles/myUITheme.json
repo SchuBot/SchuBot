@@ -6,10 +6,10 @@
             "inside": "#c0c0c0",
             "searchbg": "#cccccc",
             "bgcolor": "#000000",
-            "panelheadertextcolor": "#400040",
-            "buttontextcolor": "#ffffff",
-            "buttoncolor": "#8080c0",
-            "combocolour": "#804000",
+            "panelheadertextcolor": "#000000",
+            "buttontextcolor": "#000000",
+            "buttoncolor": "#808080",
+            "combocolour": "#808080",
             "combotextcolor": "#000000"
         }
     ]

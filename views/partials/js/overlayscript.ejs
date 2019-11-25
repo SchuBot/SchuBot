@@ -171,44 +171,71 @@
             var div = document.getElementById('Oimage');
             var div2 = document.getElementById('Owrap');
 
-            var img = new Image();
-            img.src = src;
-            img.height = height;
-            img.width = width;
+            /*             var img = new Image();
+                        img.src = src;
+                        img.height = height;
+                        img.width = width; */
+
+
+            //
+            /*             audio_file.onchange = function() {
+                            var files = this.files;
+                            var location1 = document.getElementById("testfile");
+                            //https://jsfiddle.net/jo4yxt1f/
+
+                            var file = URL.createObjectURL(files[0]);
+
+                            audio_player.src = file;
+                            audio_player.play();
+                        }; */
+            //
 
             //sound
-            var sound = new Audio();
-            sound.id = "sound1";
-            sound.src = audiosrc; //"../sounds/sound1.mp3";
-            sound.preload = "none"; //"auto";
-            var duration = sound.duration;
+            //block comment to remove when ready
+            /*  var sound = new Audio();
+             sound.id = "sound1";
+             var token = encodeURIComponent("C:\\Users\\Schuster\\Documents\\Visual Studio 2015\\Projects\\MixerBotV2 - Copy\\views\\media\\sounds\\sound1.mp3");
 
-            if (isNaN(duration)) {
+             var resourcePath = `http://${window.location.hostname}:8081/resource/${token}`;
 
-                duration = 10000;
-                console.log('no alert duration setting default: ' + duration);
-            } else {
+             //let audioElement = `<audio id="${uuid}" src="${resourcePath}" type="${mediaType}"></audio>`;
 
-                duration = duration * 3000;
-                console.log('alert sound duration: ' + duration);
-            }
+             let mediaType = "audio/mpeg"
+                 // resourcePath = `file:///${token}`
+             sound.src = resourcePath;
+             sound.type = mediaType;
+             sound.preload = "none"; //"auto";
+             var duration = sound.duration;
+
+             if (isNaN(duration)) {
+
+                 duration = 10000;
+                 console.log('no alert duration setting default: ' + duration);
+             } else {
+
+                 duration = duration * 3000;
+                 console.log('alert sound duration: ' + duration);
+             } */
 
 
             if (div2 != null) {
-                div2.appendChild(sound);
+                /*                 div2.appendChild(sound);
 
-                var isPlaying = sound.currentTime > 0 && !sound.paused && !sound.ended &&
-                    sound.readyState > 2;
+                                var isPlaying = sound.currentTime > 0 && !sound.paused && !sound.ended &&
+                                    sound.readyState > 2; */
 
-                if (!isPlaying) {
+                if (finishedPlaying) {
 
 
                     switch (play) {
                         case 1:
-                            playSoundsAndImagesText(sound, div, img, dateid, type, duration, divFol, followText);
+                            playSoundsAndImagesText(null, div, null, dateid, type, null, divFol, followText);
+                            //playSoundsAndImagesText(sound, div, img, dateid, type, duration, divFol, followText);
+
                             break;
                         case 2:
-                            playSoundsAndTextOnly(sound, dateid, type, duration, divFol, followText);
+                            //playSoundsAndTextOnly(sound, dateid, type, duration, divFol, followText);
+                            playSoundsAndTextOnly(null, dateid, type, null, divFol, followText);
 
                             break;
                         case 3:
@@ -265,7 +292,7 @@
         var sound = new Audio();
         sound.id = "sound1";
         sound.src = audiosrc; //"../sounds/sound1.mp3";
-        sound.preload = "none"; //"auto";
+        sound.preload = "auto"; //"auto";
         var duration = sound.duration;
 
         if (isNaN(duration)) {
@@ -310,7 +337,7 @@
     };
 
     /////// FOLLOW / HOST ALERT FUNCTION requires text on image/video 
-    function playSoundsAndImagesText(sound, div, img, dateid, type, duration, divFol, followText) {
+    function playSoundsAndImagesTextOriginal(sound, div, img, dateid, type, duration, divFol, followText) {
         var playPromise = sound.play();
 
         if (playPromise !== undefined) {
@@ -343,6 +370,76 @@
                 });
         }
     }
+
+
+    function playSoundsAndImagesText(sound, div, img, dateid, type, duration, divFol, followText) {
+
+
+        finishedPlaying = false;
+
+        var token = encodeURIComponent("C:\\Users\\Schuster\\Documents\\Visual Studio 2015\\Projects\\MixerBotV2 - Copy\\views\\media\\sounds\\sound1.mp3");
+
+        var resourcePath = `http://${window.location.hostname}:8081/resource/${token}`;
+
+
+        var token2 = encodeURIComponent("C:\\Users\\Schuster\\Documents\\Visual Studio 2015\\Projects\\MixerBotV2 - Copy\\views\\media\\images\\alert.gif");
+
+        var resourcePath2 = `http://${window.location.hostname}:8081/resource/${token2}`;
+
+
+        // Get time in milliseconds to use as class name.
+        var d = new Date();
+        var uuid = d.getTime().toString();
+
+        var uuid2 = d.getTime().toString();
+
+        let filepath = token.toLowerCase();
+        let mediaType;
+        if (filepath.endsWith('mp3')) {
+            mediaType = "audio/mpeg";
+        } else if (filepath.endsWith('ogg')) {
+            mediaType = "audio/ogg";
+        } else if (filepath.endsWith('wav')) {
+            mediaType = "audio/wav";
+        }
+
+        let audioElement = `<audio id="${uuid}" src="${resourcePath}" type="${mediaType}"></audio>`;
+
+        var imageElement = `<img id="1" src="${resourcePath2}" height="300" width="300">`;
+        // Throw audio element on page.
+        $('#divWrapper').append(audioElement);
+
+        let audio = document.getElementById(uuid);
+        audio.volume = parseFloat(1); //parseFloat(data.volume);
+
+
+        if (div != null) {
+            var para = document.createElement("P"); // Create a <p> node
+            var t = document.createTextNode(followText); // Create a text node
+            para.appendChild(t);
+
+            //div.appendChild(img);
+            $('#Oimage').append(imageElement);
+            divFol.appendChild(para);
+        }
+
+        audio.oncanplay = () => {
+
+            audio.play();
+
+            setTimeout(function() {
+                removeImageAndGetNextAlertInQueue(dateid, type);
+            }, 10000);
+        }
+
+        audio.onended = () => {
+            $("#" + uuid).remove();
+            finishedPlaying = true;
+        }
+
+    }
+
+
 
     function playSoundsAndImages(sound, div, img, dateid, type, duration) {
         var playPromise = sound.play();
@@ -399,7 +496,9 @@
     }
 
     /////// FOLLOW / HOST ALERT FUNCTION requires text on image/video 
-    function playSoundsAndTextOnly(sound, dateid, type, duration, divFol, followText) {
+
+    //original function
+    function playSoundsAndTextOnlyOriginal(sound, dateid, type, duration, divFol, followText) {
         var playPromise = sound.play();
 
         if (playPromise !== undefined) {
@@ -427,6 +526,63 @@
 
                 });
         }
+    }
+
+
+    //new one
+    function playSoundsAndTextOnly(sound, dateid, type, duration, divFol, followText) {
+
+        finishedPlaying = false;
+
+        var token = encodeURIComponent("C:\\Users\\Schuster\\Documents\\Visual Studio 2015\\Projects\\MixerBotV2 - Copy\\views\\media\\sounds\\sound1.mp3");
+
+        var resourcePath = `http://${window.location.hostname}:8081/resource/${token}`;
+
+
+        // Get time in milliseconds to use as class name.
+        var d = new Date();
+        var uuid = d.getTime().toString();
+
+        let filepath = token.toLowerCase();
+        let mediaType;
+        if (filepath.endsWith('mp3')) {
+            mediaType = "audio/mpeg";
+        } else if (filepath.endsWith('ogg')) {
+            mediaType = "audio/ogg";
+        } else if (filepath.endsWith('wav')) {
+            mediaType = "audio/wav";
+        }
+
+        let audioElement = `<audio id="${uuid}" src="${resourcePath}" type="${mediaType}"></audio>`;
+
+        // Throw audio element on page.
+        $('#divWrapper').append(audioElement);
+
+        let audio = document.getElementById(uuid);
+        audio.volume = parseFloat(1); //parseFloat(data.volume);
+
+        audio.oncanplay = () => {
+            audio.play();
+
+            if (divFol != null) {
+
+                var para = document.createElement("P"); // Create a <p> node
+                var t = document.createTextNode(followText); // Create a text node
+                para.appendChild(t);
+                divFol.appendChild(para);
+            }
+
+            setTimeout(function() {
+                removeImageAndGetNextAlertInQueue(dateid, type);
+            }, 10000);
+        }
+
+        audio.onended = () => {
+            $("#" + uuid).remove();
+            finishedPlaying = true;
+        }
+
+
     }
 
     function playImageOnly(div, img, dateid, type, duration) {

@@ -14,8 +14,19 @@
         document.getElementById("beamConnection").innerHTML = '';
         document.getElementById("beamConnection").innerHTML += "Mixer: Connected";
 
-        // document.getElementById("mixericonleft").style.color = "white";
-        // document.getElementById("mixericonright").style.color = "lightskyblue";
+        document.getElementById("mixericonleft").style.color = "white";
+        document.getElementById("mixericonright").style.color = "lightskyblue";
+        document.getElementById("mixericonleft").style.opacity = "0.9";
+        document.getElementById("mixericonright").style.opacity = "0.9";
+
+    }
+
+    processOutstandingNotes = function() {
+
+        //as soon io connects check for outstanding notes
+        iosocket.emit('checkForOutstandingNotes', null);
+
+
 
     }
 
@@ -27,14 +38,15 @@
         document.getElementById("beamConnection").innerHTML += "Mixer: Not Connected";
 
         //this needs to be refined as we want to use the progressbar to show chat drop outs
-        setProgressBarToHidden();
+        document.getElementById("mixericonleft").style.color = "white";
+        document.getElementById("mixericonright").style.color = "lightskyblue";
+        document.getElementById("mixericonleft").style.opacity = 0.4;
+        document.getElementById("mixericonright").style.color = 0.4;
+
+        hideMixerProgressBar();
     }
 
-    setProgressBarToHidden = function() {
-        $('#mixrConnection').attr('value', 100);
-        document.getElementById("mixrConnection").style.visibility = 'hidden';
-        document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
-    }
+
 
 
     setAccountsOnUi = function(streamer, bot) {
@@ -52,5 +64,22 @@
     setStreamerAccountLoggedIn = function(streamer) {
         document.getElementById("casterAccount").innerHTML = '';
         document.getElementById("casterAccount").innerHTML += 'Authed Caster - ' + streamer;
+    }
+
+
+    setBotAccountUnAuthed = function(bot) {
+        document.getElementById("botAccount").innerHTML = '';
+        document.getElementById("botAccount").innerHTML += 'Authed Bot - Please Re-Auth';
+    }
+
+    setStreamerUnAuthed = function(streamer) {
+        document.getElementById("casterAccount").innerHTML = '';
+        document.getElementById("casterAccount").innerHTML += 'Authed Caster - Please Re-Auth';
+    }
+
+    hideMixerProgressBar = function() {
+        $('#mixrConnection').attr('value', 100);
+        document.getElementById("mixrConnection").style.visibility = 'hidden';
+        document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
     }
 </script>

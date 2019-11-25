@@ -1,6 +1,7 @@
 <!-- -->
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<script src="https://kit.fontawesome.com/e110218193.js" crossorigin="anonymous"></script>
 
 <!--<script src="./socket.io/socket.io.js"></script>-->
 <!-- <script src="./components/socket.io-client/socket.io.js"></script> -->
@@ -48,8 +49,24 @@
     $(function() {
 
 
+
         //build chart
         buildChartUsingJson();
+
+
+
+        $("div notesNotification").hover(function() {
+            $(this).addClass("specialOne");
+        }, function() {
+            $(this).removeClass("specialOne");
+        });
+
+
+        /*                 $("div input").hover(function() {
+          $(this).addClass("blue");
+        }, function() {
+          $(this).removeClass("blue");
+        }); */
 
         ////validating duration input
         document.getElementById("medAudOtherValue").onkeypress = function(e) {
@@ -358,6 +375,8 @@
                 };
 
                 SetCheckboxElement("chkNTBoxInputEnabled", commandRowJson.ctodo);
+                SetCheckboxElement("chkNTBoxInputPriority", commandRowJson.cpriority);
+
                 SetSelectElement("noteName", commandRowJson.cid);
                 SetSelectElement("ntNoteText", commandRowJson.cnote);
 
@@ -443,6 +462,9 @@
             console.log('socket connected');
             connectedToSocket();
 
+            processOutstandingNotes();
+
+
         });
 
         iosocket.on('connect_timeout', (timeout) => {
@@ -509,15 +531,30 @@
 
         });
 
-        iosocket.on('reauthBot', function(data) {
+        iosocket.on('reauthbot', function(data) {
+            /* 
+                        //alert("Please Re-Auth");
+                        $('#mixrConnection').attr('value', 100);
+                        document.getElementById("mixrConnection").style.visibility = 'hidden';
+                        document.getElementById("mixrConnectionLabel").style.visibility = 'hidden'; */
 
-            //alert("Please Re-Auth");
-            $('#mixrConnection').attr('value', 100);
-            document.getElementById("mixrConnection").style.visibility = 'hidden';
-            document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
+            hideMixerProgressBar();
 
-            document.getElementById("botAccount").innerHTML = '';
-            document.getElementById("botAccount").innerHTML += "Bot: Please Re-Auth";
+            setBotAccountUnAuthed();
+
+
+
+        });
+
+        iosocket.on('reauthstreamer', function(data) {
+
+            /*             //alert("Please Re-Auth");
+                        $('#mixrConnection').attr('value', 100);
+                        document.getElementById("mixrConnection").style.visibility = 'hidden';
+                        document.getElementById("mixrConnectionLabel").style.visibility = 'hidden'; */
+            hideMixerProgressBar();
+            setStreamerUnAuthed();
+
 
 
         });
@@ -639,7 +676,8 @@
         iosocket.on('outstandingNotes', function(message) {
 
             //this is to warn the streamer they have outstanding items to do.
-            alert('You have Outstanding notes');
+            //alert('You have Outstanding notes');
+            document.getElementById("notesNotification").style.color = "red";
 
         });
 
@@ -908,11 +946,11 @@
         }
 
         minimiseFollowersBox = function(dataElement, parentElement) {
-            minimiseBoxFunction(dataElement, parentElement);
+            minimiseBoxFunction460(dataElement, parentElement);
         }
 
         minimiseFollowingBox = function(dataElement, parentElement) {
-            minimiseBoxFunction(dataElement, parentElement);
+            minimiseBoxFunction460(dataElement, parentElement);
         }
 
         minimiseChatBox = function(dataElement, parentElement) {
@@ -1641,25 +1679,25 @@
 
             if (el !== null) {
 
-                var chatUserdata = document.getElementById(elid).cells[0].innerHTML.toString();
+                //var chatUserdata = document.getElementById(elid).cells[0].innerHTML.toString();
+                document.getElementById(elid).cells[1].innerText = "Follower";
 
+                /*                 if (document.getElementById(elid).firstChild == '[object HTMLTableCellElement]') {
 
-                if (document.getElementById(elid).firstChild == '[object HTMLTableCellElement]') {
+                                    //Get contents off "cell clicked
+                                    var content = "Follower";
+                                    //amend chat user to follower
+                                    var hidden = "display:none;";
 
-                    //Get contents off "cell clicked
-                    var content = "Follower";
-                    //amend chat user to follower
-                    var hidden = "display:none;";
+                                    var dataSplit = chatUserdata.split('-');
+                                    var colorToUse = getColorFromUserType(res[1]);
+                                    var userTypecolor = "color:" + colorToUse + ";"
 
-                    var dataSplit = chatUserdata.split('-');
-                    var colorToUse = getColorFromUserType(res[1]);
-                    var userTypecolor = "color:" + colorToUse + ";"
+                                    //alert('color to use on amend to follower ' + colorToUse);
 
-                    //alert('color to use on amend to follower ' + colorToUse);
-
-                    var row = '<tr id="' + elid + '" class /> ' + "<td style=\"" + userTypecolor + "\">" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
-                    document.getElementById(elid).innerHTML = row;
-                }
+                                    var row = '<tr id="' + elid + '" class /> ' + "<td style=\"" + userTypecolor + "\">" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
+                                    document.getElementById(elid).innerHTML = row;
+                                } */
             }
 
 
@@ -1677,27 +1715,27 @@
                 console.log(" unfollowed event entire element html is: " + document.getElementById(elid).innerHTML.toString());
 
 
-                var chatUserdata = document.getElementById(elid).cells[0].innerHTML.toString();
+                //var chatUserdata = document.getElementById(elid).cells[0].innerHTML.toString();
+                document.getElementById(elid).cells[1].innerText = "Not a Follower";
+                /*                 if (document.getElementById(elid).firstChild == '[object Text]') {
 
-                if (document.getElementById(elid).firstChild == '[object Text]') {
+                                    //Get contents off "cell clicked
+                                    var content = "Not a Follower";
+                                    //amend chat user to follower
+                                    var hidden = "display:none;";
 
-                    //Get contents off "cell clicked
-                    var content = "Not a Follower";
-                    //amend chat user to follower
-                    var hidden = "display:none;";
+                                    var dataSplit = chatUserdata.split('-');
+                                    var colorToUse = getColorFromUserType(res[1]);
+                                    var userTypecolor = "color:" + colorToUse + ";"
 
-                    var dataSplit = chatUserdata.split('-');
-                    var colorToUse = getColorFromUserType(res[1]);
-                    var userTypecolor = "color:" + colorToUse + ";"
+                                    //alert('color to use on amend to not follower ' + colorToUse);
 
-                    //alert('color to use on amend to not follower ' + colorToUse);
+                                    //var row = '<tr id="' + elid + '" class /> ' + "<td>" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
 
-                    //var row = '<tr id="' + elid + '" class /> ' + "<td>" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
+                                    var row = '<tr id="' + elid + '" class /> ' + "<td style=\"" + userTypecolor + "\">" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
 
-                    var row = '<tr id="' + elid + '" class /> ' + "<td style=\"" + userTypecolor + "\">" + chatUserdata + "</td>" + "<td>" + content + "</td>" + "<td style=\"" + hidden + "\">" + id + "</td>";
-
-                    document.getElementById(elid).innerHTML = row;
-                }
+                                    document.getElementById(elid).innerHTML = row;
+                                } */
             }
 
 
@@ -2160,8 +2198,7 @@
                 iosocket.emit('stopTimers', null);
             }
 
-            //need to move this but in here for now
-            iosocket.emit('checkForOutstandingNotes', null);
+
 
         });
 
@@ -2302,6 +2339,8 @@
             }
 
             setSaveNoteDefaults();
+
+            processOutstandingNotes();
         }
 
         deleteNote = function() {
@@ -2322,6 +2361,8 @@
         completeNote = function() {
 
             SetCheckboxElement("chkNTBoxInputEnabled", false);
+            SetCheckboxElement("chkNTBoxInputPriority", false);
+
             var notObject = getNoteVariablesFromUI();
 
             if (notObject != undefined) {
@@ -2385,6 +2426,16 @@
                 iosocket.emit('addSaveMedia', mediaObject);
             }
 
+        }
+
+
+        deleteMedia = function() {
+
+            var mediaObject = getMediaVariablesFromUI();
+
+            if (mediaObject != undefined) {
+                iosocket.emit('deleteMedia', mediaObject);
+            }
         }
 
 
@@ -2568,8 +2619,20 @@
 
 
             var noteEnabled = document.getElementById('chkNTBoxInputEnabled').checked;
+            var notePriority = document.getElementById('chkNTBoxInputPriority').checked;
+
             var noteName = document.getElementById('noteName').value;
             var noteText = document.getElementById('ntNoteText').value;
+
+            if (noteName == "") {
+                alert("Click on the Plus Icon to create a new note id then enter note details");
+                return;
+            }
+
+            if (noteText == "") {
+                alert("Enter notes detail");
+                return;
+            }
 
             var noteObject = new Object();
 
@@ -2577,6 +2640,8 @@
             noteObject["id"] = noteName;
             noteObject["todo"] = convertEnabledBoolToYORN(noteEnabled);
             noteObject["note"] = noteText;
+            noteObject["priority"] = convertEnabledBoolToYORN(notePriority);
+
 
 
             return noteObject;
@@ -3207,7 +3272,7 @@
         var toggleButtonElements = [];
         toggleButtonElements.push("cbBtn");
         toggleButtonElements.push("flActionBtn");
-        toggleButtonElements.push("RecentFollowersActionBtn");
+        //toggleButtonElements.push("RecentFollowersActionBtn");
         toggleButtonElements.push("flBtn");
         toggleButtonElements.push("flingBtn");
         toggleButtonElements.push("chtUsersBtn");
@@ -3263,7 +3328,7 @@
         var toggleButtonElements = [];
         toggleButtonElements.push("cbBtn");
         toggleButtonElements.push("flActionBtn");
-        toggleButtonElements.push("RecentFollowersActionBtn");
+        //toggleButtonElements.push("RecentFollowersActionBtn");
         toggleButtonElements.push("flBtn");
         toggleButtonElements.push("flingBtn");
         toggleButtonElements.push("chtUsersBtn");
@@ -3414,6 +3479,7 @@
         var elTextValue = document.getElementById('TogglesTextColorPicker').value;
         el.style.background = this;
         el.style.color = elTextValue;
+
     }
 
     function changeToggleButtonsTextItemChange(value, index, array) {

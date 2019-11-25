@@ -1,8 +1,12 @@
+//
 (function() {
     //github access token for schubot 61ea34e9ffd423d3ebc9f5bf4ca19f43f7763c1c
     //
     //
     //
+    //
+
+
     'use strict';
     const dateNow = Date.now();
 
@@ -149,15 +153,21 @@
 
     var pathdir = __dirname.replace("ServerSide", "");
 
+
+    //appex.use(express.static(pathdir + '/resources/media'));
+    //appex.use(serveStatic(__dirname + '/resources/media'));
+
+    //  app.set('views', path.join(__dirname, '/views'));
+    appex.set('views', pathdir + '/views');
+    appex.set('view engine', 'ejs');
+
     appex.use(express.static(pathdir + '/public'));
     /////////////////////////////app.use(express.static(__dirname + '/public/build'));
     ///////////////////////////////////////app.use(express.static(__dirname + '/vendors'));
     // app.use(express.static(__dirname + '/views'));
     appex.use(express.static(pathdir + '/public/img'));
+    appex.use(express.static(pathdir + '/resources/media'));
 
-    //  app.set('views', path.join(__dirname, '/views'));
-    appex.set('views', pathdir + '/views');
-    appex.set('view engine', 'ejs');
     //console.log(JSON.stringify(passport));
 
     appex.use(cookieParser());
@@ -602,6 +612,35 @@
 
         });
 
+
+
+
+        socket.on('deleteMedia', function(cmdMedia) {
+
+
+            try {
+
+                console.log('Deleting Media');
+
+                var mediaExists = checkMediaUIExists(myMedia, cmdMedia);
+
+                if (mediaExists.length > 0) {
+
+                    deleteMediaFromList(myMedia, cmdMedia);
+
+                    //io.emit("RemoveMediaFromTable", cmdMedia);
+
+                }
+
+                // io.emit('addSaveCommandResult', cmdObject);
+            } catch (error) {
+                console.log('error deleting media ' + error.message);
+            }
+
+        });
+
+
+
         socket.on('TimeoutMixerUser', function(data) {
             try {
                 console.log('timing out user');
@@ -793,6 +832,23 @@
 
     }
 
+
+    function deleteMediaFromList(myMedia, cmdObject) {
+
+        for (var i = 0, len = myMedia.data.media.length; i < len; i++) {
+
+            //array = alertsinqueue and index = i
+            var iii = myMedia.data.media[i].id;
+
+            if (iii == cmdObject.id) {
+
+                myMedia.delete(("/media[" + i + "]"));
+                break;
+            }
+        }
+
+    }
+
     function deleteAlertFromList(myHostAlerts, myFollowAlerts, cmdObject) {
 
         var commandID = cmdObject.id;
@@ -810,6 +866,8 @@
                 }
             }
         }
+
+
 
 
         if (cmdObject.type == 'altAlertHost') {
@@ -1629,14 +1687,14 @@
                 performRefreshMixerWithRefreshToken(authData, type);
 
             } else {
-                //ask user to re-auth as token is expired
-                if (type == "streamer") {
-                    io.emit('reauthStreamer', 'true');
-                    log.info('Re-auth Streamer Needed');
-                } else {
-                    io.emit('reauthBot', 'true');
-                    log.info('Re-auth bot Needed');
-                }
+                /*                 //ask user to re-auth as token is expired
+                                if (type == "streamer") {
+                                    io.emit('reauthstreamer', 'true');
+                                    log.info('Re-auth Streamer Needed');
+                                } else {
+                                    io.emit('reauthbot', 'true');
+                                    log.info('Re-auth bot Needed');
+                                } */
             }
         } else {
             log.info('Could Not Authenticate with Refresh Token as no auth data is available - please re-auth');
@@ -1708,6 +1766,13 @@
 
                         if (error != null) {
                             log.info('invalid grant');
+                            if (type === 'streamer') {
+                                //does not work atm 01/10/2019
+                                io.emit('reauthstreamer', true);
+                            } else {
+                                //does not work atm 01/10/2019
+                                io.emit('reauthbot', true);
+                            }
 
                             //return false
                         } else {
@@ -1834,6 +1899,11 @@
 
         //log.info('Message is: ' + JSON.stringify(data));
         let UserName = data.user_name;
+        let channelIdMessageIsFor = data.channelId;
+
+        //this is to check if message is for caster's channel (turn into a method/fucntion)
+        let streamerChannel = authDB.data.streamer.channelId;
+        let botChannel = authDB.data.bot.channelId;
 
         log.info('Sending Message username ' + UserName);
 
@@ -4024,6 +4094,7 @@
             return commandObjectJson;
         }; */
 
+    //this is called when a note is added in chat
     function BuildNote(data) {
         console.log('test');
         //var data = document.getElementById('test').value;
@@ -4096,20 +4167,23 @@
 
             switch (cPriority) {
                 case "h":
-                    cPriority = "High"
+                    //cPriority = "High"
+                    cPriority = "Y"
                     break;
                 case "m":
-                    cPriority = "Medium"
+                    //cPriority = "Medium"
+                    cPriority = "N"
                     break;
                 case "l":
-                    cPriority = "Low"
+                    //cPriority = "Low"
+                    cPriority = "N"
                     break;
                 default:
                     break;
             }
 
         } else {
-            cPriority = "Low";
+            cPriority = "N";
         }
 
         console.log(commandText);

@@ -8,8 +8,11 @@
     <!--  
         //<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
 
-    <!-- <link rel="stylesheet" href="../css/style.css">
-    https://glyphicons.bootstrapcheatsheets.com/# -->
+
+
+
+
+
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/chat.css">
     <link rel="stylesheet" href="../css/toggle.css">
@@ -33,6 +36,10 @@
     <div id="chkBoxList" class="moduleToggleSwitches">
 
         <div>
+            <i id="notesNotification" class="fas fa-bell" style="font-size:24px"></i>
+        </div>
+
+        <div>
             <label id="mixrConnectionLabel" for="mixrConnection">Connecting to Mixer:</label>
             <!-- value="70"-->
             <progress id="mixrConnection" max="100"></progress>
@@ -50,16 +57,20 @@
         <!--<div class="moduleText">-->
         <div style="margin-bottom:20px;">
             <!-- Uncomment When Ready -->
-            <!--             <span class="glyphicon glyphicon-signal" style="float:left; color:green; font-size: 30px;"></span>
-            <span style="float:left;font-size: 10px;margin-top:10px;">Signal</span>
-            <span id="mixericonleft" class="glyphicon glyphicon-chevron-right" style="float:left;color:white; font-size: 30px; margin-right:-1px;"></span>
-            <span id="mixericonright" class="glyphicon glyphicon-chevron-left" style="float:left;color:blue; font-size: 30px;margin-left:-4px;"></span>
-            <span style="float:left;font-size: 10px;margin-top:10px;">Chat</span> -->
+
+            <div style="margin:0;
+            float: left; padding-right:15px;"><i class="fas fa-signal" style="color:green;font-size:24px;margin-top:5px;"></i><span style="float:left;font-size: 10px;margin-top:10px;">Signal</span></div>
+
+
+            <div><i id="mixericonleft" class="fas fa-chevron-right" style="color:white;font-size:24px;margin-top:5px;"></i>
+                <i id="mixericonright" class="fas fa-chevron-left" style="color:lightskyblue;font-size:24px;margin-top:5px;margin-left:-2px;"></i>
+                <span style="float:left;font-size: 10px;margin-top:10px;">Mixer Chat</span></div>
+
         </div>
 
         <div style="width:95%;">
 
-            <p style="padding-top: 20px;" id="welcome"></p>
+            <p id="welcome"></p>
         </div>
         <div style="width:95%;">
             <p id="beamConnection"></p>
@@ -72,12 +83,24 @@
         <!-- uncomment if putting back to chat box  <div style="clear:both"></div> -->
         <!--</div>-->
 
+        <div>
+            <br>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
 
-        <h4>Modules</h4>
+
+        </div>
+
 
         <div>
             <span class="switchModuleText">UI Theme</span>
-            <button id="UIthemeSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperuithemeswitch');" type="button" class="btn">+/-</button>
+            <button id="UIthemeSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperuithemeswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
 
 
             <div id="divwrapperuithemeswitch">
@@ -136,7 +159,7 @@
         <br>
         <div id="chatSwitches">
             <span class="switchModuleText">Chat</span>
-            <button id="chatSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperchatswitch');" type="button" class="btn">+/-</button>
+            <button id="chatSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperchatswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
 
             <div id="divwrapperchatswitch">
@@ -167,7 +190,7 @@
 
         <div id="FollowingSwitches">
             <span class="switchModuleText">Following</span>
-            <button id="FollowingSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperFollowingswitch');" type="button" class="btn">+/-</button>
+            <button id="FollowingSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperFollowingswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperFollowingswitch">
 
@@ -208,7 +231,7 @@
 
         <div id="AnalyticsSwitches">
             <span class="switchModuleText">Analytics</span>
-            <button id="AnalyticsSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperAnalyticswitch');" type="button" class="btn">+/-</button>
+            <button id="AnalyticsSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperAnalyticswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperAnalyticswitch">
 
@@ -225,7 +248,7 @@
 
         <div id="MediaSwitches">
             <span class="switchModuleText">Media</span>
-            <button id="MediaSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperMediaSwitch');" type="button" class="btn">+/-</button>
+            <button id="MediaSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperMediaSwitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperMediaSwitch">
                 <div>
@@ -251,7 +274,7 @@
 
         <div id="CommandsSwitches">
             <span class="switchModuleText">Commands</span>
-            <button id="CommandsSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperCommandsSwitch');" type="button" class="btn">+/-</button>
+            <button id="CommandsSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperCommandsSwitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperCommandsSwitch">
                 <div>
@@ -268,7 +291,7 @@
 
         <div id="AlertSwitches">
             <span class="switchModuleText">Alerts</span>
-            <button id="AlertSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperAlertsSwitches');" type="button" class="btn">+/-</button>
+            <button id="AlertSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperAlertsSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperAlertsSwitches">
                 <div>
@@ -305,7 +328,7 @@
 
         <div id="TriggerSwitches">
             <span class="switchModuleText">Keywords</span>
-            <button id="TriggerSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperTriggerSwitches');" type="button" class="btn">+/-</button>
+            <button id="TriggerSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperTriggerSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperTriggerSwitches">
                 <div>
@@ -323,7 +346,7 @@
 
         <div id="NotesSwitches">
             <span class="switchModuleText">Notes</span>
-            <button id="NotesSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperNotesSwitches');" type="button" class="btn">+/-</button>
+            <button id="NotesSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperNotesSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperNotesSwitches">
                 <div>
@@ -348,7 +371,7 @@
 
         <div id="ModerationSwitches">
             <span class="switchModuleText">Monitors</span>
-            <button id="ModerationSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperModerationSwitches');" type="button" class="btn">+/-</button>
+            <button id="ModerationSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperModerationSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperModerationSwitches">
                 <div>
@@ -363,7 +386,7 @@
 
         <div id="TimerSwitches">
             <span class="switchModuleText">Timers</span>
-            <button id="TimerSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperTimerSwitches');" type="button" class="btn">+/-</button>
+            <button id="TimerSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperTimerSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
             <br></br>
             <div id="divwrapperTimerSwitches">
                 <div>
@@ -416,11 +439,18 @@
                     <div class="btn-group-vertical-rightcommandslist" role="group">
                         <!-- <button type="button" class="button">Button</button> divWrapperTimerPanel -->
 
-                        <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperChat','divWrapperChat')" type="button">Toggle</button>
+                        <!--   <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperChat','divWrapperChat')" type="button">Toggle</button>-->
+                        <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperChat','divWrapperChat')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
+
+
                         <br>
-                        <button type="button" id="movChatBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperChat','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                        <!--                         <button type="button" id="movChatBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperChat','container',event);" onmouseup="mydragg2.stopMoving('container');">
                                                     <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
-                                                </button>
+                                                </button> -->
+
+                        <button type="button" id="movChatBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperChat','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                                    <i class='fas fa-arrows-alt' style='font-size:24px;'></i></button>
+
                     </div>
 
 
@@ -448,27 +478,42 @@
                     </div>
                 </div>
 
-                <div class="moduleTheme" id="divWrapperFollowers" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 400px; top: 100px;">
+                <div class="moduleTheme" id="divWrapperFollowers" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:460px; left: 400px; top: 100px;">
                     <div id="menubarnarrowfollowers">
 
 
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
                             <button class="toggleButton" id="flActionBtn" type="button" class="btn" onclick="searchFollowingFunction()">-</button>
-                            <button class="toggleButton" id="flBtn" onclick="minimiseFollowersBox('wrapperFollowers', 'divWrapperFollowers')" type="button" class="btn">Toggle</button>
+                            <button class="toggleButton" id="flBtn" onclick="minimiseFollowersBox('wrapperFollowers', 'divWrapperFollowers')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
 
-                        <div style="width:74%;clear:right;">
+
+
+
+
+
+
+                        <div style="width:74%;height:40px;">
                             <div class="modulemenubartext" id="menutextfollowers">Your Followers</div>
-                            <div class="modulemenubartext" id="followCountUsrsDiv">
+                            <div class="modulemenubartext" id="followCountUsrsDiv" style="margin-top:-4px;height:24px;">
                                 <p id="followCountUsrs">0</p>
                             </div>
                         </div>
 
-                        <div style="margin-top: -38px;" class="btn-group-vertical-rightsecond" role="group">
-                            <button type="button" id="movFollowersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperFollowers','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                        <div class="btn-group-vertical-rightsecond" role="group">
+                            <!--  <button type="button" id="movFollowersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperFollowers','container',event);" onmouseup="mydragg2.stopMoving('container');">
                                                 <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
-                                            </button>
+                                            </button> -->
+
+
+                            <button type="button" id="movFollowersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperFollowers','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i></button>
+
+
+
+
+
                         </div>
 
                     </div>
@@ -516,9 +561,12 @@
                     <div id="menubarnarrowcommandslist">
 
                         <div class="btn-group-vertical-right" role="group">
-                            <button class="toggleButton" id="commandListToggleBtn" onclick="slide1090()">+/-</button>
-                            <button class="toggleButton" id="commandListBtn" onclick="minimiseCommandListBox('wrapperCommandsList','divWrapperCommandsList')" type="button">Toggle</button>
+                            <button class="toggleButton" id="commandListToggleBtn" onclick="slide1090()"><i class='fas fa-arrows-alt-h' style='font-size:20px;color:white;'></i></button>
+                            <button class="toggleButton" id="commandListBtn" onclick="minimiseCommandListBox('wrapperCommandsList','divWrapperCommandsList')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
+
+
+
 
 
                         <div style="width:50%;clear:right;float:left;">
@@ -534,7 +582,7 @@
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> divWrapperTimerPanel -->
                             <button type="button" id="movCommandsListModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperCommandsList','container',event);" onmouseup="mydragg2.stopMoving('container');">
-								<img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
+                                <i class='fas fa-arrows-alt' style='font-size:20px;color:white;'></i>
 							</button>
                         </div>
 
@@ -660,16 +708,20 @@
                                         <option value="randomEx">Random User Excl Self </option>
                                         </select>
 
-                                        <button class="toggleButton" type="button" id="addCommandVar" onclick="addCommandVarToTextBox()" style="height:25px;width:25px;"> + </button>
+                                        <!-- <button class="toggleButton" type="button" id="addCommandVar" onclick="addCommandVarToTextBox()" style="height:25px;width:25px;"> + </button> -->
 
                                     </div>
+
+
+                                    <button class="toggleButton" type="button" id="addCommandVar" onclick="addCommandVarToTextBox()" style="height:25px;width:25px;margin-top: 40px;"><i class='fas fa-plus' style='font-size:14px;color:yellowgreen;'></i> </button>
+
 
                                     <div id="commandSubmit">
 
                                         <div class="btn-group-vertical-right" role="group">
-                                            <button class="toggleButton" id="submitCommandButton" type="button" onclick="addSaveCommand()">Add/Save</button>
-                                            <br>
-                                            <button class="toggleButton" id="deleteCommandButton" type="button" onclick="deleteCommand()">Delete</button>
+                                            <button class="toggleButton" id="submitCommandButton" type="button" onclick="addSaveCommand()">Save <i class='far fa-save' style='font-size:20px;color:white;'></i></button>
+
+                                            <button class="toggleButton" id="deleteCommandButton" type="button" onclick="deleteCommand()">Del <i class='far fa-trash-alt' style='font-size:20px;color:darkred;'></i></button>
 
                                         </div>
 
@@ -687,7 +739,7 @@
                 </div>
 
 
-                <div id="divWrapperFollowing" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 400px; top: 100px;">
+                <div id="divWrapperFollowing" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:460px; left: 400px; top: 100px;">
                     <div id="menubarnarrowfollowing">
 
 
@@ -695,20 +747,24 @@
                         <div class="btn-group-vertical-right" role="group">
 
                             <button class="toggleButton" id="flngActionBtn" type="button" class="btn">-</button>
-                            <button class="toggleButton" id="flingBtn" onclick="minimiseFollowingBox('wrapperFollowing','divWrapperFollowing')" type="button" class="btn">Toggle</button>
+                            <button class="toggleButton" id="flingBtn" onclick="minimiseFollowingBox('wrapperFollowing','divWrapperFollowing')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
 
-                        <div style="width:74%;clear:right;">
+
+                        <div style="width:74%;height:40px;">
                             <div class="modulemenubartext" id="menutextfollowing">You're Following</div>
                             <div class="modulemenubartext" id="followingCountUsrsDiv">
                                 <p id="followingCountUsrs">0</p>
                             </div>
                         </div>
 
-                        <div style="margin-top: -38px;" class="btn-group-vertical-rightsecond" role="group">
-                            <button type="button" id="movFollowingModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperFollowing','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                        <div class="btn-group-vertical-rightsecond" role="group">
+                            <!--                      <button type="button" id="movFollowingModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperFollowing','container',event);" onmouseup="mydragg2.stopMoving('container');">
                                             <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
-                                        </button>
+                                        </button> -->
+
+                            <button type="button" id="movFollowingModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNotesList','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                            <i class='fas fa-arrows-alt' style='font-size:24px;'></i></button>
                         </div>
 
 
@@ -757,12 +813,26 @@
 
                 </div>
 
+
+
+                <!--               <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperChat','divWrapperChat')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
+
+
+                <br>
+                                     <button type="button" id="movChatBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperChat','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                            <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
+                                        </button> 
+
+                <button type="button" id="movChatBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperChat','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                            <i class='fas fa-arrows-alt' style='font-size:24px;'></i></button> -->
+
+
                 <div class="moduleTheme" id="divWrapperNarrowChatUsers" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:200px;height:460px; left: 600px; top: 100px;">
                     <div id="menubarnarrowinchat">
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="ChatActionBtn" style="height:20px;width:20px;visibility:hidden; " type="button" class="btn">-</button>
-                            <button class="toggleButton" id="chtUsersBtn" onclick="minimiseChatUsersBox('wrapperChatUsers','divWrapperNarrowChatUsers')" type="button" class="btn">Toggle</button>
+                            <button class="toggleButton" id="ChatActionBtn" style="height:20px;width:20px;visibility:hidden;display: none; " type="button" class="btn">-</button>
+                            <button class="toggleButton" id="chtUsersBtn" onclick="minimiseChatUsersBox('wrapperChatUsers','divWrapperNarrowChatUsers')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
 
                         <div style="width:74%;clear:right;float:left;">
@@ -776,9 +846,16 @@
                         </div>
 
                         <div class="btn-group-vertical-rightsecond" role="group">
-                            <button type="button" id="movChatUsersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNarrowChatUsers','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                            <!--         <button type="button" id="movChatUsersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNarrowChatUsers','container',event);" onmouseup="mydragg2.stopMoving('container');">
                                 <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                            </button> -->
+
+                            <button type="button" id="movChatUsersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNarrowChatUsers','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i>
                             </button>
+
+
+
                         </div>
                     </div>
                     <div id="wrapperChatUsers">
@@ -805,11 +882,11 @@
                     <div id="menubarnarrowanalyticsviews">
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="avActionBtn2" style="height:20px;width:20px;visibility:hidden; " type="button" class="btn">-</button>
-                            <button class="toggleButton" id="avBtn2" onclick="minimiseChatUsersBox('wrapperAnalyticsViews','divWrapperAnalyticsViews')" type="button" class="btn">Toggle</button>
+                            <button class="toggleButton" id="avActionBtn2" style="height:20px;width:20px;visibility:hidden;display:none; " type="button" class="btn">-</button>
+                            <button class="toggleButton" id="avBtn2" onclick="minimiseChatUsersBox('wrapperAnalyticsViews','divWrapperAnalyticsViews')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
 
-                        <div style="width:50%;clear:right;float:left;">
+                        <div style="width:50%;height:30px;">
                             <div class="modulemenubartext" id="menutextav">Analytics</div>
 
                             <div class="modulemenubartext" id="avCount">
@@ -817,10 +894,15 @@
                             </div>
                         </div>
 
-                        <div class="btn-group-vertical-rightsecond" role="group">
+                        <div class="btn-group-vertical-right" role="group">
                             <button type="button" id="movAnalyticsViewsModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperAnalyticsViews','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                                <i class='fas fa-arrows-alt' style='font-size:20px;color:white;'></i>
                             </button>
+
+
+
+
+
                         </div>
                     </div>
                     <div id="wrapperAnalyticsViews">
@@ -840,11 +922,13 @@
 
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="RecentFollowersActionBtn" type="button" class="btn">-</button>
-                            <button class="toggleButton" id="recentFollowersBtn" onclick="minimiseRecentFollowersBox('wrapperRecentFollowers','divWrapperNarrowRecentFollowers')" type="button" class="btn">Toggle</button>
+                            <!--<button class="toggleButton" id="RecentFollowersActionBtn" type="button" class="btn">-</button> -->
+                            <button class="toggleButton" id="recentFollowersBtn" onclick="minimiseRecentFollowersBox('wrapperRecentFollowers','divWrapperNarrowRecentFollowers')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
+
                         </div>
 
-                        <div style="width:74%;clear:right;float:left;">
+                        <!-- clear:right;-->
+                        <div style="width:74%;float:left;">
                             <div class="modulemenubartext" id="menutextrecentfollowers">Recent Follows</div>
 
                             <div class="modulemenubartext" id="recentFollowersCountDiv">
@@ -854,7 +938,7 @@
 
                         <div class="btn-group-vertical-rightsecond" role="group">
                             <button type="button" id="movRecentFollowersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNarrowRecentFollowers','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                    <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i>
                                 </button>
                         </div>
                     </div>
@@ -875,29 +959,31 @@
                 </div>
 
 
-
-
                 <div id="divWrapperNotesList" style="width:600px;height:380px; left: 200px; top: 100px;">
                     <div id="menubarnarrownotes">
 
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="NotesActionBtn" type="button" class="btn" onclick="slide600A()">-</button>
-                            <button class="toggleButton" id="NotesToggleBtn" onclick="minimiseNotesBox('wrapperNoteList','divWrapperNotesList')" type="button" class="btn">Toggle</button>
+                            <button class="toggleButton" id="NotesActionBtn" type="button" onclick="slide600A()"><i class='fas fa-arrows-alt-h' style='font-size:20px;color:white;'></i></button>
+                            <button class="toggleButton" id="NotesToggleBtn" onclick="minimiseNotesBox('wrapperNoteList','divWrapperNotesList')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
 
-                        <div style="width:50%;clear:right;float:left;">
+                        <div style="width:74%;height: 40px;">
                             <div class="modulemenubartext" id="menutextnotes">Notes</div>
-                        </div>
-
-                        <div style="position:absolute;left:100px;top:22px;" class="modulemenubartext" id="chatCountNotesDiv">
-                            <p id="notesCount">0</p>
+                            <div class="modulemenubartext" id="chatCountNotesDiv">
+                                <p id="notesCount">0</p>
+                            </div>
                         </div>
 
                         <div class="btn-group-vertical-rightsecond" role="group">
-                            <button type="button" id="movNotesListModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNotesList','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                            <!--  <button type="button" id="movNotesListModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNotesList','container',event);" onmouseup="mydragg2.stopMoving('container');">
                                     <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
-                                </button>
+                                </button> -->
+
+                            <button type="button" id="movNotesListModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperNotesList','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                            <i class='fas fa-arrows-alt' style='font-size:24px;'></i></button>
+
+
                         </div>
 
                     </div>
@@ -933,7 +1019,8 @@
                                             <input id="noteName" placeholder="Auto Generated" readonly></input>
 
                                         </div>
-                                        <button class="toggleButton" id="newNTButton" type="button" onclick="newNote()">Create New Note</button>
+                                        <!-- <button class="toggleButton" id="newNTButton" type="button" onclick="newNote()">New Note</button> -->
+                                        <button class="toggleButton" id="newNTButton" type="button" onclick="newNote()">New <i class='fas fa-plus' style='font-size:24px;color:white;'></i></button>
 
                                     </div>
 
@@ -944,6 +1031,15 @@
                                     <label id="ntlblEnabled" for="chkNTBoxInputEnabled">To do: </label>
                                     <input type="checkbox" id="chkNTBoxInputEnabled" checked="checked">
                                 </div>
+
+
+
+                                <div id="ntPriority" class="notSpans">
+
+                                    <label id="ntlblPriority" for="chkNTBoxInputPriority">High Priority: </label>
+                                    <input type="checkbox" id="chkNTBoxInputPriority" checked="checked">
+                                </div>
+
 
                                 <!--id="alttextbox" style="width:20%;"-->
 
@@ -956,17 +1052,33 @@
 
 
 
-                                <div id="ntSubmit" class="notSpans">
-                                    <button class="toggleButton" id="submitNTButton" type="button" onclick="addSaveNote()">Save Note</button>
+
+
+                                <div id="ntComplete" class="notSpans">
+                                    <!-- <button class="toggleButton" id="completeNTButton" type="button" onclick="completeNote()">Complete Note</button> -->
+                                    <button class="toggleButton" id="completeNTButton" type="button" onclick="completeNote()">Done <i class='far fa-check-square' style='font-size:24px;color:darkgreen;'></i></button>
+
+
                                 </div>
 
                                 <div id="ntDelete" class="notSpans">
-                                    <button class="toggleButton" id="deleteNTButton" type="button" onclick="deleteNote()">Delete Note</button>
+                                    <!--  <button class="toggleButton" id="deleteNTButton" type="button" onclick="deleteNote()">Delete Note</button> -->
+                                    <button class="toggleButton" id="deleteNTButton" type="button" onclick="deleteNote()">Delete 
+                                        <i class='far fa-trash-alt' style='font-size:24px;color:darkred;'></i></button>
+
                                 </div>
 
-                                <div id="ntComplete" class="notSpans">
-                                    <button class="toggleButton" id="completeNTButton" type="button" onclick="completeNote()">Complete Note</button>
+                                <div id="ntSubmit" class="notSpans">
+
+                                    <button class="toggleButton" id="submitNTButton" type="button" onclick="addSaveNote()">Save 
+                                        <i class='far fa-save' style='font-size:24px;color:yellowgreen;'></i>
+                                    </button>
+
+
                                 </div>
+
+
+
 
 
                             </div>
@@ -989,20 +1101,20 @@
 
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="flAlertsActionBtn" type="button" class="btn">-</button>
-                            <button class="toggleButton" id="followAlertsListBtn" onclick="minimiseFollowersBox('wrapperFollowAlertsList','divWrapperFollowAlertsList')" type="button" class="btn">Toggle</button>
+                            <!-- <button class="toggleButton" id="flAlertsActionBtn" type="button" class="btn">-</button> -->
+                            <button class="toggleButton" id="followAlertsListBtn" onclick="minimiseFollowersBox('wrapperFollowAlertsList','divWrapperFollowAlertsList')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
 
-                        <div style="width:74%;clear:right;">
+                        <div style="width:74%;height:30px;">
                             <div class="modulemenubartext" id="menutextfollowalerts">Follow Alerts: </div>
                             <div class="modulemenubartext" id="followalertslistCountUsrsDiv">
                                 <p id="followalertslistCountUsrs">0</p>
                             </div>
                         </div>
 
-                        <div style="margin-top: -45px;" class="btn-group-vertical-rightsecond" role="group">
+                        <div class="btn-group-vertical-rightsecond" role="group">
                             <button type="button" id="movFollowAlertsListModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperFollowAlertsList','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                    <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i>
                             </button>
                         </div>
 
@@ -1041,24 +1153,22 @@
                         <!--                         <button id="hostAlertsListBtn" class="toggleButton" onclick="minimiseFollowingBox('wrapperHostAlertsList','divWrapperHostAlertsList')" type="button" class="btn">Toggle</button>
                         <div id="menutexthostalerts">Host Alerts: </div> -->
 
-
-
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="hostAlertsListActionBtn" type="button" class="btn">-</button>
-                            <button class="toggleButton" id="hostAlertsListBtn" onclick="minimiseFollowingBox('wrapperHostAlertsList','divWrapperHostAlertsList')" type="button" class="btn">Toggle</button>
+                            <!-- <button class="toggleButton" id="hostAlertsListActionBtn" type="button" class="btn">-</button> -->
+                            <button class="toggleButton" id="hostAlertsListBtn" onclick="minimiseFollowingBox('wrapperHostAlertsList','divWrapperHostAlertsList')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
 
-                        <div style="width:74%;clear:right;">
+                        <div style="width:74%;height:30px;">
                             <div class="modulemenubartext" id="menutexthostalerts">Host Alerts: </div>
                             <div class="modulemenubartext" id="hostalertslistCountUsrsDiv">
                                 <p id="hostalertslistCountUsrs">0</p>
                             </div>
                         </div>
 
-                        <div style="margin-top: -45px;" class="btn-group-vertical-rightsecond" role="group">
+                        <div class="btn-group-vertical-rightsecond" role="group">
                             <button type="button" id="movHostAlertsListModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperHostAlertsList','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                        <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i>
                                 </button>
                         </div>
 
@@ -1097,20 +1207,20 @@
 
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="ModMonitorActionBtn" type="button" class="btn">-</button>
-                            <button class="toggleButton" id="modmonListBtn" onclick="minimiseModMonBox('wrapperMMList','divWrapperModMonitor')" type="button" class="btn">Toggle</button>
+                            <!-- <button class="toggleButton" id="ModMonitorActionBtn" type="button" class="btn">-</button> -->
+                            <button class="toggleButton" id="modmonListBtn" onclick="minimiseModMonBox('wrapperMMList','divWrapperModMonitor')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                         </div>
 
-                        <div style="width:74%;clear:right;">
+                        <div style="width:74%;height:40px;">
                             <div class="modulemenubartext" id="menutextmodmonitor">Mod Monitor</div>
                             <div class="modulemenubartext" id="modmonCountDiv">
                                 <p id="modmonCount">0</p>
                             </div>
                         </div>
 
-                        <div style="margin-top: -38px;" class="btn-group-vertical-rightsecond" role="group">
+                        <div class="btn-group-vertical-rightsecond" role="group">
                             <button type="button" id="movModMonitorModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperModMonitor','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                        <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i>
                                     </button>
                         </div>
 
@@ -1147,22 +1257,29 @@
                     <div id="timersListmenubarnarrow">
 
                         <div class="btn-group-vertical-right" role="group">
-                            <button class="toggleButton" id="KeywordsToggleBtn" onclick="slide800()">+/-</button>
-                            <button class="toggleButton" id="KeywordsToggleBtn" onclick="minimiseKeywordsBox('wrapperTimersList','divWrapperTimersList')" type="button" class="btn">Toggle</button>
+                            <button class="toggleButton" id="TimersOpenBtn" onclick="slide800()"><i class='fas fa-arrows-alt-h' style='font-size:24px;'></i></button>
+                            <button class="toggleButton" id="TimersToggleBtn" onclick="minimiseKeywordsBox('wrapperTimersList','divWrapperTimersList')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:24px;color:white;'></i></button>
+
+
                         </div>
 
-                        <div style="width:50%;clear:right;float:left;">
+
+                        <div style="width:74%;height: 40px;">
                             <div class="modulemenubartext" id="menutexttimerlist">Timers</div>
+                            <div class="modulemenubartext" id="chatCountTimersDiv">
+                                <p id="timersCount">0</p>
+                            </div>
                         </div>
 
-                        <div style="position:absolute;left:100px;top:22px;" class="modulemenubartext" id="chatCountKeywordsDiv">
-                            <p id="keywordsCount">0</p>
-                        </div>
+
 
                         <div class="btn-group-vertical-rightsecond" role="group">
                             <button type="button" id="movTimersModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperTimersList','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                    <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i>
                                 </button>
+
+
+
                         </div>
 
                     </div>
@@ -1234,14 +1351,17 @@
                                     <button class="toggleButton" id="deleteKWButton" type="button" onclick="deleteTrigger()">Delete</button>
                                 </div> -->
 
-                                <div id="tpSubmit" class="timSpans">
-                                    <!-- <input class="toggleButton" id="submitCommandButton" type="submitgffg" onclick="runOverla()"> -->
-                                    <button class="toggleButton" id="submitTPButton" type="button" onclick="addSaveTimer()">Add/Save</button>
 
-                                </div>
 
                                 <div id="tpDelete" class="timSpans">
-                                    <button class="toggleButton" id="deleteTPButton" type="button" onclick="deleteTimer()">Delete</button>
+                                    <button class="toggleButton" id="deleteTPButton" type="button" onclick="deleteTimer()">Del <i class='far fa-trash-alt' style='font-size:24px;color:darkred;'></i></button>
+                                </div>
+
+                                <div id="tpSubmit" class="timSpans">
+                                    <!-- <input class="toggleButton" id="submitCommandButton" type="submitgffg" onclick="runOverla()"> -->
+                                    <button class="toggleButton" id="submitTPButton" type="button" onclick="addSaveTimer()">Save <i class='far fa-save' style='font-size:24px;color:yellowgreen;'></i>
+                                    </button>
+
                                 </div>
 
                             </div>
@@ -1255,21 +1375,23 @@
                     <div id="menubarkeywords">
 
                         <div class="btn-group-vertical-right" role="group">
-                            <button class="toggleButton" id="KeywordsToggleSlideBtn" onclick="slide600()">Open</button>
-                            <button class="toggleButton" id="KeywordsToggleBtn" onclick="minimiseKeywordsBox('wrapperKeywords','divWrapperKeywordsList')" type="button" class="btn">Toggle</button>
+                            <button class="toggleButton" id="KeywordsToggleSlideBtn" onclick="slide600()"><i class='fas fa-arrows-alt-h' style='font-size:24px;'></i></button>
+                            <button class="toggleButton" id="KeywordsToggleBtn" onclick="minimiseKeywordsBox('wrapperKeywords','divWrapperKeywordsList')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:24px;'></i></button>
                         </div>
 
-                        <div style="width:50%;clear:right;float:left;">
-                            <div class="modulemenubartext2" id="menutextkeywords">Triggers</div>
+
+                        <div style="width:74%;height: 40px;">
+                            <div class="modulemenubartext" id="menutextkeywords">Triggers</div>
+                            <div class="modulemenubartext" id="chatCountKeywordsDiv">
+                                <p id="keywordsCount">0</p>
+                            </div>
                         </div>
 
-                        <div style="position:absolute;left:100px;top:22px;" class="modulemenubartext2" id="chatCountKeywordsDiv">
-                            <p id="keywordsCount">0</p>
-                        </div>
+
 
                         <div class="btn-group-vertical-rightsecond" role="group">
                             <button type="button" id="movKeywordsModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperKeywordsList','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                    <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="">
+                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i>
                                 </button>
                         </div>
 
@@ -1342,10 +1464,10 @@
 
                         <div class="btn-group-vertical-right" role="group">
                             <!-- <button type="button" class="button">Button</button> -->
-                            <button class="toggleButton" id="flBtnWideAlerts" onclick="minimiseCommandBoxFunction('wrapperAlerts','divWrapperAlerts')" type="button">Toggle</button>
+                            <button class="toggleButton" id="flBtnWideAlerts" onclick="minimiseCommandBoxFunction('wrapperAlerts','divWrapperAlerts')" type="button"> <i class='fas fa-arrows-alt-v' style='font-size:24px;'></i></button>
                             <br>
-                            <button type="button" id="movAlertsPanel" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperAlerts','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                        <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
+                            <button style="margin-top: -2px;" type="button" id="movAlertsPanel" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperAlerts','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                <i class='fas fa-arrows-alt' style='font-size:24px;'></i>
                                     </button>
                         </div>
 
@@ -1445,10 +1567,10 @@
 
                             <div class="btn-group-vertical-right" role="group">
                                 <!-- <button type="button" class="button">Button</button> -->
-                                <button class="toggleButton" id="flBtnWideMedia" onclick="minimiseCommandBoxFunction('wrapperMedia','divWrapperMedia')" type="button">Toggle</button>
+                                <button class="toggleButton" id="flBtnWideMedia" onclick="minimiseCommandBoxFunction('wrapperMedia','divWrapperMedia')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
                                 <br>
                                 <button type="button" id="movMediaPanel" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperMedia','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                        <img draggable="false" class="small-img" src="../img/moveicon.png" on-drag="" /><br/>
+                                    <i class='fas fa-arrows-alt' style='font-size:20px;color:white;'></i>
                                     </button>
                             </div>
 
@@ -1596,9 +1718,15 @@
 
 
                                 <div class="btn-group-vertical-right" role="group">
-                                    <button class="toggleButtonSave" id="submitMediaButton" type="button" onclick="addSaveMedia()">Add/Edit</button>
+                                    <button class="toggleButtonSave" id="submitMediaButton" type="button" onclick="addSaveMedia()">Save 
+                                        <i class='far fa-save' style='font-size:24px;color:yellowgreen;'></i>
+                                    </button>
 
-                                    <button class="toggleButtonDelete" id="deleteMediaButton" type="button" onclick="addSaveMedia()">Delete</button>
+
+
+                                    <button class="toggleButtonDelete" id="deleteMediaButton" type="button" onclick="deleteMedia()">Del 
+                                        <i class='far fa-trash-alt' style='font-size:24px;color:darkred;'></i></button>
+
 
                                 </div>
 
@@ -1622,6 +1750,8 @@
             module = undefined;
         }
     </script>
+
+
 
     <% include ../partials/js/botio %>
         <% include ../partials/js/dragObject %>

@@ -1,3 +1,22 @@
 {
-    "followalerts": []
+    "followalerts": [
+        {
+            "enabled": "Y",
+            "id": "!follow2",
+            "audio": "!burp",
+            "video": "",
+            "image": "!image2",
+            "text": "OMG a new follower",
+            "type": "altAlertFollow"
+        },
+        {
+            "enabled": "Y",
+            "id": "!follow1",
+            "audio": "!test",
+            "video": "",
+            "image": "!image1",
+            "text": "follower alert 1",
+            "type": "altAlertFollow"
+        }
+    ]
 }

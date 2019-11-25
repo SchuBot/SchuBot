@@ -14,22 +14,24 @@
         {
             "enabled": "Y",
             "id": "!sample2",
-            "permission": "+m",
+            "permission": "+v",
             "user": "",
             "audio": "",
             "video": "",
             "image": "",
-            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] \n$target uptime is $uptime hiohdf $channelInfo$caster[$caster has $sparks sparks and is a level $level] \n$caster has been on for $uptime hiohdfgsi iyu eswfsr $readapi(http://mixer.api.scorpstuff.com/multistream2.php?caster=$caster&partners=$msg) hello"
+            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] \n$target uptime is $uptime hiohdf $channelInfo$caster[$caster has $sparks sparks and is a level $level] \n$caster has been on for $uptime hiohdfgsi iyu eswfsr $readapi(http://mixer.api.scorpstuff.com/multistream2.php?caster=$caster&partners=$msg) hello",
+            "cooldown": ""
         },
         {
-            "enabled": "Y",
+            "enabled": "N",
             "id": "!sample3",
             "permission": "+m",
             "user": "",
             "audio": "",
             "video": "",
             "image": "",
-            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] \n$target uptime is $uptime hiohdf $channelInfo$caster[$caster has $sparks sparks and is a level $level] \n$caster has been on for $uptime hiohdfgsi iyu eswfsr $readapi(http://mixer.api.scorpstuff.com/multistream2.php?caster=$caster&partners=$msg) hello"
+            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] ",
+            "cooldown": ""
         },
         {
             "enabled": "Y",
@@ -124,6 +126,77 @@
             "video": "",
             "image": "",
             "text": "$uptime"
+        },
+        {
+            "enabled": "Y",
+            "id": "!test",
+            "permission": "+v",
+            "user": "",
+            "audio": "",
+            "video": "",
+            "image": "",
+            "text": "test"
+        },
+        {
+            "enabled": "Y",
+            "id": "!test2",
+            "permission": "+v",
+            "user": "",
+            "audio": "",
+            "video": "",
+            "image": "",
+            "text": "test $uptime"
+        },
+        {
+            "enabled": "Y",
+            "id": "!followage",
+            "permission": "+v",
+            "user": "",
+            "audio": "",
+            "video": "",
+            "image": "",
+            "text": "$readapi(https://mixer.api.scorpstuff.com/followed.php?caster=$caster&follower=$user)"
+        },
+        {
+            "enabled": "Y",
+            "id": "!mixerage",
+            "permission": "+v",
+            "user": "",
+            "audio": "",
+            "video": "",
+            "image": "",
+            "text": "$readapi(https://mixer.api.scorpstuff.com/accountcreated.php?user=$user)",
+            "cooldown": ""
+        },
+        {
+            "enabled": "N",
+            "id": "!sparks",
+            "permission": "+v",
+            "user": "",
+            "audio": "",
+            "video": "",
+            "image": "",
+            "text": "$channelInfo$user[$user has $sparks sparks and is a level $level] "
+        },
+        {
+            "enabled": "N",
+            "id": "!sparks2",
+            "permission": "+v",
+            "user": "",
+            "audio": "",
+            "video": "",
+            "image": "",
+            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] "
+        },
+        {
+            "enabled": "N",
+            "id": "!rules",
+            "permission": "+v",
+            "user": "",
+            "audio": "",
+            "video": "",
+            "image": "",
+            "text": "Only one rule, respect everyone in chat."
         }
     ]
 }

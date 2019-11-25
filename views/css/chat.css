@@ -1,5 +1,15 @@
 /* color for the chat window text atm */
 
+.fa-arrows-alt-v,
+.fa-arrows-alt,
+.fa-arrows-alt-h {
+    color: black;
+}
+
+i#notesNotification.fas.fa-bell:hover {
+    color: green;
+}
+
 div#wrapperCommandsInner {
     display: block;
     width: 670px;
@@ -221,9 +231,19 @@ span {
     padding: 0;
 }
 
+span.switchModuleText {
+    font-variant: all-small-caps;
+}
+
+h6 {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
 input {
     font: 12px arial;
     text-indent: 14px;
+    border-radius: 50px;
 }
 
 #chkBoxList {
@@ -316,7 +336,7 @@ input#medVidOtherValue {
     /* background: rgb(133, 131, 131);*/
     background: #616161;
     /*color: rgb(0, 0, 0);*/
-    color: orange;
+    color: black;
     /* These below  aren't theme related */
     border-radius: 3em;
     font-weight: bold;
@@ -641,12 +661,14 @@ textarea#kwTrigText {
 button#submitCommandButton,
 button#deleteCommandButton {
     margin-top: 0px;
-    margin-bottom: 2px;
-    height: 24px;
+    /*margin-bottom: 2px; */
+    /*height: 24px;*/
     width: 80px;
     padding-top: 0px;
     padding-left: 0px;
     margin-right: 15px;
+    margin-bottom: 5px;
+    height: 42px;
 }
 
 button.square-button {
@@ -691,8 +713,15 @@ button.square-buttonGroupVertical {
     border: 0px solid #ACD8F0;
 }
 
+#wrapperAlerts {
+    padding-bottom: 0px;
+    width: 775px;
+    height: 300px;
+    border: 0px solid #ACD8F0;
+    float: left;
+}
+
 #wrapperCommands,
-#wrapperAlerts,
 #wrapperMedia {
     /*  margin:0 auto;
     padding-bottom:25px;
@@ -768,11 +797,23 @@ button.square-buttonGroupVertical {
     margin-left: 40%;
 }
 
+#hostAlertsListbox,
+#followAlertsListbox {
+    text-align: left;
+    margin-top: 5px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 6px;
+    /* padding:10px; */
+    height: 260px;
+    width: 395px;
+    border: 1px solid #ACD8F0;
+    overflow: auto;
+}
+
 #followerbox,
 #followingbox,
 #commandsListbox,
-#hostAlertsListbox,
-#followAlertsListbox,
 #modmonListbox,
 #analyticsViewsbox {
     text-align: left;
@@ -842,7 +883,7 @@ div.menutextright,
     margin-right: 0px;
     margin-bottom: 0px;
     /* padding:10px; */
-    width: 790px;
+    width: 770px;
     border: 1px solid #ACD8F0;
     overflow: auto;
 }
@@ -964,21 +1005,20 @@ div.menutextright,
     position: relative;
     vertical-align: middle;
     float: right;
-    margin-top: 4px;
+    margin-top: 3px;
 }
 
 .btn-group-vertical-rightsecond {
     position: relative;
     vertical-align: middle;
     float: right;
-    margin-top: 12px;
 }
 
 .btn-group-vertical-rightcommandslist {
     position: relative;
     vertical-align: middle;
     float: right;
-    margin-top: -18px;
+    margin-top: -21px;
 }
 
 .square-buttonGroupVertical {
@@ -994,8 +1034,10 @@ div.menutextright,
     padding-left: 2px;
 }
 
-#movMediaPanel,
-#movAlertsPanel,
+#movMediaPanel {
+    margin-top: -4px;
+}
+
 #movCommandsPanel,
 #movNotePanel,
 #movTimerPanel {
@@ -1014,7 +1056,6 @@ div.menutextright,
     margin-right: 6px;
 }
 
-#movRecentFollowersModule,
 #movKeywordsModule,
 #movTimersModule,
 #movModMonitorModule,
@@ -1022,8 +1063,12 @@ div.menutextright,
 #movFollowersModule,
 #movNotesListModule {
     margin-top: -8px;
-    margin-bottom: 5px;
-    margin-right: 6px;
+    /*margin-bottom: 5px; */
+    margin-right: 2px;
+}
+
+#movRecentFollowersModule {
+    margin-top: 2px;
 }
 
 #KeywordsToggleBtn,
@@ -1032,17 +1077,12 @@ div.menutextright,
 }
 
 #movChatUsersModule {
-    margin-top: -8px;
-    margin-bottom: 5px;
+    margin-top: 2px;
 }
 
 #movHostAlertsListModule,
 #movFollowAlertsListModule {
-    margin-right: 6px;
-}
-
-#movChatUsersModule {
-    margin-right: 6px;
+    margin-right: 3px;
 }
 
 .square-buttonGroupVertical {

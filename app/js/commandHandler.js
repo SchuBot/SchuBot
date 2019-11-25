@@ -630,7 +630,7 @@ async function processArray(commandData, channelName, commandTriggered, userName
                         }
                         console.log('Hey');
                     }
-                    var apiURL = commandTextRoundBrackets.join();
+                    var apiURL = commandTextRoundBrackets.join().replace(",", "");
                     let resultReadApi = await callApi(apiURL.replace(",", ""));
                     commandData[i] = resultReadApi;
 

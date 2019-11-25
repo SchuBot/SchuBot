@@ -50,20 +50,6 @@
             "priority": "High"
         },
         {
-            "id": "n41510201853",
-            "todo": "Y",
-            "note": "Fix Connection Icons ",
-            "private": false,
-            "priority": "High"
-        },
-        {
-            "id": "n51610201856",
-            "todo": "Y",
-            "note": "Notes Notifications - Alerts . this is currently alerted when the timers switch is toggled",
-            "private": false,
-            "priority": "High"
-        },
-        {
             "id": "n51610201842",
             "todo": "Y",
             "note": "Help Manual and Video",
@@ -106,27 +92,6 @@
             "priority": "High"
         },
         {
-            "id": "n5174201956",
-            "todo": "Y",
-            "note": "clicking save on note without note id creates note without id in json file.",
-            "private": false,
-            "priority": "High"
-        },
-        {
-            "id": "",
-            "todo": "Y",
-            "note": "can we change the layout of the notes panel? i keep hitting complete instead of save. is there any way we can put the save where complete is now and maybe move complete to the top under create new note? ",
-            "private": false,
-            "priority": "High"
-        },
-        {
-            "id": "n465201945",
-            "todo": "Y",
-            "note": "the timers panel has the colors of the toggle & +/- buttons switched from the rest, and aren't customizable. ",
-            "private": false,
-            "priority": "High"
-        },
-        {
             "id": "n1105201933",
             "todo": "Y",
             "note": "memes feature - add meme similar to quotes and notes but just memes with a link to a gif maybe"
@@ -135,6 +100,47 @@
             "id": "n1105201964",
             "todo": "Y",
             "note": "add event listener to chat li to enable message deletions and timeouts (in the future)"
+        },
+        {
+            "id": "n0209201984",
+            "todo": "Y",
+            "note": "when user unfollows , viewer list isn't updating. "
+        },
+        {
+            "id": "n1219201959",
+            "todo": "Y",
+            "note": "predefined commands to reset to defaults"
+        },
+        {
+            "id": "n1219201960",
+            "todo": "Y",
+            "note": "fix the crap out of the alerts panel"
+        },
+        {
+            "id": "n42492019126",
+            "todo": "Y",
+            "note": "work on follow alerts"
+        },
+        {
+            "id": "n0310201998",
+            "todo": "Y",
+            "note": "auto hosts whispers not aligning on chat window - remove div"
+        },
+        {
+            "id": "n51510201955",
+            "todo": "Y",
+            "note": "testing high priority note"
+        },
+        {
+            "id": "n51510201977",
+            "todo": "Y",
+            "note": "testing note"
+        },
+        {
+            "id": "n51510201983",
+            "todo": "Y",
+            "note": "huhiuh",
+            "priority": "Y"
         }
     ]
 }
