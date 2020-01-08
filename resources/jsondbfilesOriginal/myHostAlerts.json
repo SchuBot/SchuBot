@@ -1,0 +1,13 @@
+{
+    "hostalerts": [
+        {
+            "enabled": "Y",
+            "id": "!host1",
+            "audio": "!burp",
+            "video": "",
+            "image": "",
+            "text": "",
+            "type": "altAlertHost"
+        }
+    ]
+}

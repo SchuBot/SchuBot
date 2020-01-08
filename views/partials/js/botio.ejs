@@ -368,15 +368,21 @@
 
                 var Note = $(this).children('td').eq(2).text();
 
+                var Private = $(this).children('td').eq(3).text();
+
+                var Priority = $(this).children('td').eq(4).text();
+
                 var commandRowJson = {
                     cid: id,
                     cnote: Note,
-                    ctodo: ToDo
+                    ctodo: ToDo,
+                    cprivate: Private,
+                    cpriority: Priority
                 };
 
                 SetCheckboxElement("chkNTBoxInputEnabled", commandRowJson.ctodo);
-                SetCheckboxElement("chkNTBoxInputPriority", commandRowJson.cpriority);
-
+                SetCheckboxElement("chkNTBoxInputPrivate", commandRowJson.cprivate);
+                SetSelectElement("chkNTBoxInputPriority", commandRowJson.cpriority);
                 SetSelectElement("noteName", commandRowJson.cid);
                 SetSelectElement("ntNoteText", commandRowJson.cnote);
 
@@ -541,6 +547,7 @@
             hideMixerProgressBar();
 
             setBotAccountUnAuthed();
+            turnOffMixerIcons();
 
 
 
@@ -554,7 +561,7 @@
                         document.getElementById("mixrConnectionLabel").style.visibility = 'hidden'; */
             hideMixerProgressBar();
             setStreamerUnAuthed();
-
+            turnOffMixerIcons();
 
 
         });
@@ -710,7 +717,8 @@
 
         iosocket.on('NoAlertsSetup', function(message) {
 
-            alert("You have no alerts setup on the bot");
+            log.info('You have no Alerts setup', 'You have no Alerts setup')
+                //alert("You have no alerts setup on the bot");
 
         });
 
@@ -1277,6 +1285,23 @@
                 tr.append("<td style=\"" + hidden + "\">" + data.id + "</td>");
                 tr.append("<td>" + data[i].todo + "</td>");
                 tr.append("<td>" + data[i].note + "</td>");
+
+                if (data[i].hasOwnProperty('private')) {
+                    tr.append("<td>" + data[i].private + "</td>");
+                } else {
+                    tr.append("<td>false</td>");
+                }
+
+                if (data[i].hasOwnProperty('priority')) {
+                    tr.append("<td>" + data[i].priority + "</td>");
+                } else {
+                    tr.append("<td>Low</td>");
+                }
+
+
+
+
+
                 $('#tableNotes').append(tr);
 
             }
@@ -2619,8 +2644,8 @@
 
 
             var noteEnabled = document.getElementById('chkNTBoxInputEnabled').checked;
-            var notePriority = document.getElementById('chkNTBoxInputPriority').checked;
-
+            var notePriority = document.getElementById('chkNTBoxInputPriority').value;
+            var notePrivate = document.getElementById('chkNTBoxInputPrivate').checked;
             var noteName = document.getElementById('noteName').value;
             var noteText = document.getElementById('ntNoteText').value;
 
@@ -2640,7 +2665,9 @@
             noteObject["id"] = noteName;
             noteObject["todo"] = convertEnabledBoolToYORN(noteEnabled);
             noteObject["note"] = noteText;
-            noteObject["priority"] = convertEnabledBoolToYORN(notePriority);
+            noteObject["priority"] = notePriority;
+            noteObject["private"] = convertEnabledBoolToYORN(notePrivate);
+
 
 
 
@@ -3650,6 +3677,8 @@
         var check = false;
         if (valueToSelect != undefined) {
             if (valueToSelect == "Y") {
+                check = true;
+            } else if (valueToSelect == "true") {
                 check = true;
             }
         }

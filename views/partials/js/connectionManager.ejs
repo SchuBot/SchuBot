@@ -38,12 +38,20 @@
         document.getElementById("beamConnection").innerHTML += "Mixer: Not Connected";
 
         //this needs to be refined as we want to use the progressbar to show chat drop outs
+        /* document.getElementById("mixericonleft").style.color = "white";
+        document.getElementById("mixericonright").style.color = "lightskyblue";
+        document.getElementById("mixericonleft").style.opacity = 0.4;
+        document.getElementById("mixericonright").style.color = 0.4; */
+        turnOffMixerIcons();
+
+        hideMixerProgressBar();
+    }
+
+    turnOffMixerIcons = function() {
         document.getElementById("mixericonleft").style.color = "white";
         document.getElementById("mixericonright").style.color = "lightskyblue";
         document.getElementById("mixericonleft").style.opacity = 0.4;
         document.getElementById("mixericonright").style.color = 0.4;
-
-        hideMixerProgressBar();
     }
 
 

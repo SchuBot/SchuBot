@@ -1404,7 +1404,15 @@
                                         //  io.emit('followed', data);
                                         //this adds the follow to an alert queue
                                         //, images, sounds, followGfx
-                                        FollowEvent(data, alertsoundFolder, alertimageFolder, alertvideoFolder, myFollowAlerts);
+
+                                        if (myFollowAlerts.data.followalerts.length > 0) {
+                                            FollowEvent(data, alertsoundFolder, alertimageFolder, alertvideoFolder, myFollowAlerts);
+                                        } else {
+                                            log.info('You have no follow alerts setup', 'You have no follow alerts setup');
+                                        }
+
+
+
                                     } catch (error) {
                                         console.log('error in mixer chat follow');
                                     }
@@ -1414,7 +1422,7 @@
                                 } else {
 
 
-                                    sendTriggerToMixer(bcBot, `User ${data.info.user.username} UnFollowed the Channel!`);
+                                    sendTriggerToMixer(bcBot, `User ${data.info.user.username} UnFollowed the Channel!`, true);
                                     // bcBot.say(`User ${data.info.user.username} UnFollowed the Channel!`)
                                     io.emit('unfollowed', data);
 
@@ -1839,17 +1847,25 @@
 
 
 
-        if (BBBToken != null) {
+        if (BBBToken !== null) {
 
-            //check token with introspect upon start of bot
-            log.info('Checking Streamer Token');
+            if (BBBToken !== "") {
+                //check token with introspect upon start of bot
+                log.info('Checking Streamer Token');
 
-            checkStreamerTokenAndConnect(null, BBBToken, authDBData);
+                checkStreamerTokenAndConnect(null, BBBToken, authDBData);
+
+            } else {
+                //io.emit('unauthenticated', 'false');
+                io.emit('reauthstreamer', 'false');
+                log.info('ERROR - No Token found for Streamer account please authenticate');
+            }
 
 
 
         } else {
-            io.emit('unauthenticated', 'false');
+            //io.emit('unauthenticated', 'false');
+            io.emit('reauthstreamer', 'false');
             log.info('ERROR - No Token found for Streamer account please authenticate');
 
 
@@ -1863,12 +1879,19 @@
 
         console.log('is Connected ?' + isConnected);
 
+
         if (BBBTokenBot != null) {
-            log.info('Checking Bot Token');
-            checkBotTokenAndConnect(null, BBBTokenBot, authDBData);
+
+            if (BBBTokenBot !== "") {
+                log.info('Checking Bot Token');
+                checkBotTokenAndConnect(null, BBBTokenBot, authDBData);
+            } else {
+                io.emit('reauthbot', 'false');
+                log.error('No Token found for Bot account please authenticate');
+            }
 
         } else {
-            io.emit('unauthenticatedBot', 'false');
+            io.emit('reauthbot', 'false');
             log.error('No Token found for Bot account please authenticate');
 
 
@@ -2023,7 +2046,7 @@
 
                     //now send each message to mixer (add first , last , all options in configuration)
                     outputArray.forEach(element => {
-                        var triggerResult = sendTriggerToMixer(bcBot, element);
+                        var triggerResult = sendTriggerToMixer(bcBot, element, false);
                     });
 
 
@@ -2110,11 +2133,16 @@
     }
 
     //change this to be either bot or streamer
-    function sendTriggerToMixer(bcBot, message) {
+    function sendTriggerToMixer(bcBot, message, isWhisper) {
 
 
         try {
-            var returnResult = bcBot.botSay(message);
+            if (!isWhisper) {
+                var returnResult = bcBot.botSay(message);
+            } else {
+                var returnResult = bc.whisper(authDB.data.streamer.username, message);
+            }
+
         } catch (error) {
             console.log("trigger error" + error.message);
         } finally {

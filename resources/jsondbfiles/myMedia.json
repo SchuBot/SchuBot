@@ -1,48 +1,5 @@
 {
     "media": [
-        {
-            "enabled": "Y",
-            "id": "!test",
-            "type": "Audio",
-            "audio": "firehorn.mp3",
-            "audiodur": 15000,
-            "video": "",
-            "videodur": "",
-            "image": "",
-            "imagedur": ""
-        },
-        {
-            "enabled": "Y",
-            "id": "!burp",
-            "type": "Audio",
-            "audio": "firehorn.mp3",
-            "audiodur": "Other",
-            "video": "",
-            "videodur": "",
-            "image": "",
-            "imagedur": ""
-        },
-        {
-            "enabled": "Y",
-            "id": "!image1",
-            "type": "Image",
-            "audio": "",
-            "audiodur": "",
-            "video": "",
-            "videodur": "",
-            "image": "alert.gif",
-            "imagedur": 5000
-        },
-        {
-            "enabled": "Y",
-            "id": "!image2",
-            "type": "Image",
-            "audio": "",
-            "audiodur": "",
-            "video": "",
-            "videodur": "",
-            "image": "alert2.gif",
-            "imagedur": 5000
-        }
+
     ]
 }

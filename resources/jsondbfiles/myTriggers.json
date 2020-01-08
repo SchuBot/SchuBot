@@ -1,18 +1,5 @@
 {
     "triggers": [
-        {
-            "enabled": "Y",
-            "id": "fortnite",
-            "text": "Dis game will not be played here",
-            "option1": "",
-            "option2": ""
-        },
-        {
-            "enabled": "Y",
-            "id": "brb",
-            "text": "we'll be right here :)",
-            "option1": "",
-            "option2": ""
-        }
+
     ]
 }
