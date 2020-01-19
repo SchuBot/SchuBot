@@ -2586,6 +2586,8 @@
                     myNotes.data.notes[i].id = fullcommand.id;
                     myNotes.data.notes[i].note = fullcommand.note;
                     myNotes.data.notes[i].todo = fullcommand.todo;
+                    myNotes.data.notes[i].priority = fullcommand.priority;
+                    myNotes.data.notes[i].private = fullcommand.private;
                     myNotes.save();
                     // db.delete(("/commands[" + i + "]"));    
                 }

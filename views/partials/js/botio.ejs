@@ -1286,17 +1286,20 @@
                 tr.append("<td>" + data[i].todo + "</td>");
                 tr.append("<td>" + data[i].note + "</td>");
 
-                if (data[i].hasOwnProperty('private')) {
-                    tr.append("<td>" + data[i].private + "</td>");
-                } else {
-                    tr.append("<td>false</td>");
-                }
 
                 if (data[i].hasOwnProperty('priority')) {
                     tr.append("<td>" + data[i].priority + "</td>");
                 } else {
-                    tr.append("<td>Low</td>");
+                    tr.append("<td>N</td>");
                 }
+
+                if (data[i].hasOwnProperty('private')) {
+                    tr.append("<td>" + data[i].private + "</td>");
+                } else {
+                    tr.append("<td>N</td>");
+                }
+
+
 
 
 
@@ -1503,8 +1506,6 @@
 
         }
 
-
-
         addorAmendNoteToTable = function(data) {
 
             var tr;
@@ -1521,6 +1522,14 @@
                 x[1].innerHTML = data.todo;
                 x[2].innerHTML = data.note;
 
+                if (data.hasOwnProperty("priority")) {
+                    x[3].innerHTML = data.priority;
+                }
+
+                if (data.hasOwnProperty("private")) {
+                    x[4].innerHTML = data.private;
+                }
+
 
 
             } else {
@@ -1533,12 +1542,13 @@
                 tr.append("<td style=\"" + hidden + "\">" + data.id + "</td>");
                 tr.append("<td>" + data.todo + "</td>");
                 tr.append("<td>" + data.note + "</td>");
+                tr.append("<td>" + data.priority + "</td>");
+                tr.append("<td>" + data.private + "</td>");
 
                 $('#tableNotes').append(tr);
             }
 
         }
-
 
 
         addTimersToTable = function(data) {
@@ -2696,6 +2706,8 @@
             SetCheckboxElement("chkNTBoxInputEnabled", "Y");
             SetSelectElement("noteName", "");
             SetSelectElement("ntNoteText", "");
+            SetSelectElement("chkNTBoxInputPriority", "Low");
+            SetCheckboxElement("chkNTBoxInputPrivate", "N");
 
         }
 
@@ -2751,6 +2763,9 @@
             SetCheckboxElement("chkNTBoxInputEnabled", "Y");
             SetSelectElement("noteName", "");
             SetSelectElement("ntNoteText", "");
+            SetSelectElement("chkNTBoxInputPriority", "Low");
+            SetCheckboxElement("chkNTBoxInputPrivate", "N");
+
 
         }
 

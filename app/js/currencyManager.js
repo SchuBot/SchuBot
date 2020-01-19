@@ -162,18 +162,26 @@ class currencyManager {
         function OnlinePayOut(onlineinterval, currency, currencyUsers) {
             //self.emit('addOnlineCurrencyPoints', currency);
 
-            self.addOnlinePointsToUsers(currency, currencyUsers);
-            //console.log("Online Payout Triggered");
-            setTimeout(function() { OnlinePayOut(onlineinterval, currency, currencyUsers); }, 60000 * onlineinterval);
+            //is streamer Online (TODO)
+            if (1 == 1) {
+                self.addOnlinePointsToUsers(currency, currencyUsers);
+                //console.log("Online Payout Triggered");
+                setTimeout(function() { OnlinePayOut(onlineinterval, currency, currencyUsers); }, 60000 * onlineinterval);
+
+            }
 
         };
 
         //not called at the moment but will be implemented
         function OfflinePayOut(offlineinterval, currency, currencyUsers) {
             //self.emit('addOfflineCurrencyPoints', currency);
-            self.addOfflinePointsToUsers(currency, currencyUsers);
-            console.log("Offline Payout Triggered");
-            setTimeout(function() { OfflinePayOut(offlineinterval, currency, currencyUsers); }, 60000 * offlineinterval);
+            //is streamer not online
+            if (1 == 2) {
+                self.addOfflinePointsToUsers(currency, currencyUsers);
+                console.log("Offline Payout Triggered");
+                setTimeout(function() { OfflinePayOut(offlineinterval, currency, currencyUsers); }, 60000 * offlineinterval);
+
+            }
 
         };
 
@@ -271,8 +279,6 @@ class currencyManager {
 
             var count = 0;
 
-
-
             currencyUsers.reload();
 
             var userCurrency = currencyUsers.data.currencyUsers.filter(function(item) {
@@ -291,9 +297,7 @@ class currencyManager {
 
             }
 
-
         };
-
 
     }
 }

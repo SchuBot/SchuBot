@@ -1,13 +1,3 @@
 {
-    "timers": [
-
-        {
-            "enabled": "Y",
-            "id": "!FLD",
-            "text": "I'm proud to be a member of the Fight Like A Dragon giveaway, in support of Tempest and to bring awareness to Sarcoma. Check out  https://playr.gg/MommaB365/fld for details on how to enter, and each item of merch purchased gets you a secret code to enter there for more chances to win!",
-            "interval": 300000,
-            "option1": "",
-            "option2": ""
-        }
-    ]
+    "timers": []
 }

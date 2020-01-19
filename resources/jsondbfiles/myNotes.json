@@ -24,9 +24,9 @@
         {
             "id": "n11210201881",
             "todo": "Y",
-            "note": "Recent Followers Function",
-            "private": false,
-            "priority": "High"
+            "note": "Recent Followers Function - Add Item to tableRecentFollowers",
+            "private": "N",
+            "priority": "false"
         },
         {
             "id": "n41510201847",
@@ -125,29 +125,6 @@
             "id": "n0310201998",
             "todo": "Y",
             "note": "auto hosts whispers not aligning on chat window - remove div"
-        },
-        {
-            "id": "n51510201955",
-            "todo": "Y",
-            "note": "testing high priority note"
-        },
-        {
-            "id": "n51510201977",
-            "todo": "Y",
-            "note": "testing note"
-        },
-        {
-            "id": "n51510201983",
-            "todo": "Y",
-            "note": "huhiuh",
-            "priority": "Y"
-        },
-        {
-            "id": "n0111201948",
-            "todo": "Y",
-            "note": "test note add",
-            "private": false,
-            "priority": "N"
         }
     ]
 }
