@@ -19,15 +19,6 @@ div#wrapperCommandsInner {
     margin-top: 5px;
 }
 
-div#wrapperCurrencyInner {
-    display: block;
-    width: 670px;
-    margin-left: 0px;
-    margin-right: 0px;
-    float: left;
-    margin-top: 5px;
-}
-
 #commandSubmit {
     float: left;
 }
@@ -45,8 +36,7 @@ input#triggerName {
     font-size: 12pt;
 }
 
-#commandsbox,
-#currencybox {
+#commandsbox {
     text-align: left;
     margin-top: 0px;
     margin-left: 4px;
@@ -195,14 +185,6 @@ textarea#tpText {
     overflow: hidden;
     padding: 5px 10px;
     text-overflow: ellipsis;
-    /* -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #AAA;
-    white-space: nowrap;
-    width: 180px;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    color: rgb(0, 0, 0);
-    background-image: url('/css/comboboxarrow.png'), -webkit-linear-gradient( #616161, #616161 40%, #616161);
-    background-color: #616161; */
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
     border-radius: 20px;
@@ -220,9 +202,6 @@ select.dropdownTheme {
 
 /* comobox commands */
 
-
-/* this makes images opaque */
-
 img.transparent {
     opacity: 0.15;
 }
@@ -231,8 +210,6 @@ body {
     font: 12px arial;
     color: #222;
     text-align: center;
-    /*background-color: black;
-     padding: 35px; */
 }
 
 p,
@@ -420,7 +397,7 @@ input#medVidOtherValue {
     /* background: rgb(133, 131, 131); */
     background: rgb(25, 25, 77);
     /* color: rgb(0, 0, 0); */
-    color: black;
+    color: white;
     /* These below  aren't theme related */
 }
 
@@ -428,7 +405,7 @@ input#medVidOtherValue {
     /*  background: rgb(133, 131, 131); */
     background: rgb(25, 25, 77);
     /* color: rgb(0, 0, 0); */
-    color: black;
+    color: white;
     /* These below  aren't theme related */
     font-weight: bold;
     width: 100%;
@@ -457,113 +434,6 @@ input#medVidOtherValue {
 .outsideBoxText {
     color: orange;
 }
-
-
-/* This is the LIGHT theme */
-
-
-/* 
-#divWrapperFollowers.moduleThemeLight,
-#divWrapperFollowing.moduleThemeLight,
-#divWrapperNarrowChatUsers.moduleThemeLight,
-#divWrapperNarrowRecentFollowers.moduleThemeLight,
-#divWrapperKeywordsList.moduleThemeLight,
-#divWrapperChat.moduleThemeLight,
-#divWrapperCommands.moduleThemeLight,
-#divWrapperAlerts.moduleThemeLight,
-#divWrapperMedia.moduleThemeLight,
-#divWrapperCommandsList.moduleThemeLight {
-    background: rgb(81, 92, 250);
-}
-
-.toggleButtonLight {
-    background: rgb(81, 168, 250);
-    color: rgb(0, 0, 0);
-    border-radius: 3em;
-    font-weight: bold;
-}
-
-.moduleSearchBoxLight {
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    background: rgb(81, 168, 250);
-}
-
-.insideBoxLight {
-    background: rgb(81, 168, 250);
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-}
-
-.insideBoxCommandsLight {
-    background: rgb(81, 168, 250);
-    color: rgb(0, 0, 0);
-}
-
-.dropdownThemeLight {
-    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #AAA;
-    white-space: nowrap;
-    width: 180px;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    color: rgb(0, 0, 0);
-    background-image: url('/css/comboboxarrow.png'), -webkit-linear-gradient( rgb(134, 183, 255), rgb(81, 168, 250) 40%, rgb(81, 168, 250));
-    background-color: rgb(81, 168, 250);
-} */
-
-
-/* This is the blue theme
-
-#divWrapperFollowers.moduleThemeBlue,
-#divWrapperFollowing.moduleThemeBlue,
-#divWrapperNarrowChatUsers.moduleThemeBlue,
-#divWrapperNarrowRecentFollowers.moduleThemeBlue,
-#divWrapperKeywordsList.moduleThemeBlue,
-#divWrapperChat.moduleThemeBlue,
-#divWrapperCommands.moduleThemeBlue,
-#divWrapperAlerts.moduleThemeBlue,
-#divWrapperMedia.moduleThemeBlue,
-#divWrapperCommandsList.moduleThemeBlue {
-    background: #8691fc;
-}
-
-.toggleButtonBlue {
-    background: #8691fc;
-    color: rgb(0, 0, 0);
-    border-radius: 3em;
-    font-weight: bold;
-}
-
-.moduleSearchBoxBlue {
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-    background: #8691fc;
-}
-
-.insideBoxBlue {
-    background: #9293e6;
-    color: rgb(0, 0, 0);
-    font-weight: bold;
-}
-
-.insideBoxCommandsBlue {
-    background: #9293e6;
-    color: rgb(0, 0, 0);
-}
-
-.dropdownThemeBlue {
-    -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #AAA;
-    white-space: nowrap;
-    width: 180px;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    color: rgb(0, 0, 0);
-    background-image: url('/css/comboboxarrow.png'), -webkit-linear-gradient(#8691fc, #8691fc 40%, #8691fc);
-    background-color: #8691fc;
-} 
-
-
-/* End of Modules Theme */
 
 .mediaPanelSmalllbl {
     width: 99%;
@@ -824,7 +694,6 @@ button.square-buttonGroupVertical {
 #followerbox,
 #followingbox,
 #commandsListbox,
-#currencyListbox,
 #modmonListbox,
 #analyticsViewsbox {
     text-align: left;
@@ -1041,11 +910,6 @@ div.menutextright,
 }
 
 #menubarnarrowcommandslist {
-    text-align: left;
-    padding-left: 2px;
-}
-
-#menubarnarrowcurrencylist {
     text-align: left;
     padding-left: 2px;
 }
@@ -1582,15 +1446,4 @@ button#submitRankButton {
     margin-right: 15px;
     margin-bottom: 5px;
     height: 30px;
-}
-
-table#tableCR {
-    text-align: left;
-    position: relative;
-}
-
-table#tableCR th {
-    background: white;
-    position: sticky;
-    top: 0;
 }

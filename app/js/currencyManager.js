@@ -299,6 +299,99 @@ class currencyManager {
 
         };
 
+        function CreateAmendCurrency(data) {
+            // //this updates the rank at index for currency at first index (0 based)
+            // //Newcurrency.push('/currency[0]/ranks[0]', { name: "test9", requirement: "50" }, true);
+
+            // //this adds a new rank for currency at first index (0 based)
+            // //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);
+            // //db.push("/test1","super test")
+
+            // //get currency by id
+            // let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == '1'); });
+
+            // //find index for currency
+            // let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == "2")
+            //     //find index for rank at currency
+            // let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
+            //     //push rank to currency
+            // currencyObject[0].ranks.findIndex({ name: "tets56", requirement: "504" });
+
+
+            //
+
+            // var newcurrencyobj = {
+            //     "id": "5",
+            //     "enabled": "Y",
+            //     "currencyname": "Points",
+            //     "commandname": "!Points",
+            //     "info": "ranks based on hours or points",
+            //     "info2": "missing some other currency functions on other bots",
+            //     "ranksbasedon": "points",
+            //     "onlinepayintervalminutes": 1,
+            //     "offlinepayintervalminutes": 1,
+            //     "activeuserbonuspoints": 2,
+            //     "viewerpointsbonus": 1,
+            //     "regularbonuspoints": 1,
+            //     "moderatorbonuspoints": 3,
+            //     "subscriberbonuspoints": 4,
+            //     "onfollowbonuspoints": 5,
+            //     "onsubscribebonuspoints": 6,
+            //     "donationbonuspoints": 7,
+            //     "multiplybydonationamount": "N",
+            //     "ranks": []
+            // };
+            // //create object
+            // // Newcurrency[].push(newcurrencyobj);
+
+            // Newcurrency.push('/currency[]', newcurrencyobj);
+
+            // let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == "5")
+            // Newcurrency.push(`/currency[${currencyIndexNum}]/ranks[]`, { name: "test9", requirement: "50" }, true);
+            // //     //find index for rank at currency
+            // //let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
+
+            // //
+
+
+            let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == data.id); });
+
+            if (currencyObject > 0) {
+                //update object
+
+            } else {
+
+                var newcurrencyobj = {
+                    "id": "1",
+                    "enabled": "Y",
+                    "currencyname": "Points",
+                    "commandname": "!Points",
+                    "info": "ranks based on hours or points",
+                    "info2": "missing some other currency functions on other bots",
+                    "ranksbasedon": "points",
+                    "onlinepayintervalminutes": 1,
+                    "offlinepayintervalminutes": 1,
+                    "activeuserbonuspoints": 2,
+                    "viewerpointsbonus": 1,
+                    "regularbonuspoints": 1,
+                    "moderatorbonuspoints": 3,
+                    "subscriberbonuspoints": 4,
+                    "onfollowbonuspoints": 5,
+                    "onsubscribebonuspoints": 6,
+                    "donationbonuspoints": 7,
+                    "multiplybydonationamount": "N",
+                    "ranks": []
+                };
+                //create object
+                // Newcurrency[].push(newcurrencyobj);
+
+                Newcurrency.push('/currency[]', newcurrencyobj);
+            }
+
+
+
+        };
+
     }
 }
 

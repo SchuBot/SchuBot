@@ -93,7 +93,7 @@
             "audio": "",
             "video": "",
             "image": "",
-            "text": "go follow them on $targetMixerUrl",
+            "text": "go follow $target at $targetMixerUrl",
             "cooldown": ""
         },
         {
@@ -145,7 +145,8 @@
             "audio": "",
             "video": "",
             "image": "",
-            "text": "test $uptime"
+            "text": "go follow $target at $targetMixerUrl $channelInfo$target[he was last seen playing $game] ",
+            "cooldown": ""
         },
         {
             "enabled": "Y",
@@ -197,6 +198,17 @@
             "video": "",
             "image": "",
             "text": "Only one rule, respect everyone in chat."
+        },
+        {
+            "enabled": "Y",
+            "id": "",
+            "permission": "+v",
+            "user": "",
+            "audio": "",
+            "video": "",
+            "image": "",
+            "text": "",
+            "cooldown": ""
         }
     ]
 }

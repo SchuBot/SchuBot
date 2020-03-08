@@ -23,7 +23,7 @@
         },
         {
             "id": "n11210201881",
-            "todo": "Y",
+            "todo": "N",
             "note": "Recent Followers Function - Add Item to tableRecentFollowers",
             "private": "N",
             "priority": "false"
@@ -45,9 +45,9 @@
         {
             "id": "n41510201895",
             "todo": "Y",
-            "note": "Currency Panel",
-            "private": false,
-            "priority": "High"
+            "note": "Currency Panel functionality",
+            "private": "N",
+            "priority": "false"
         },
         {
             "id": "n51610201842",
@@ -60,13 +60,6 @@
             "id": "n51610201829",
             "todo": "Y",
             "note": "Viewer Groups for things",
-            "private": false,
-            "priority": "High"
-        },
-        {
-            "id": "n51610201872",
-            "todo": "Y",
-            "note": "media panel - add doesn't clear defaults",
             "private": false,
             "priority": "High"
         },
@@ -87,9 +80,9 @@
         {
             "id": "n934201963",
             "todo": "Y",
-            "note": "add priority category to notes ui module",
-            "private": true,
-            "priority": "High"
+            "note": "add priority category dropdown to notes panel",
+            "private": "N",
+            "priority": "true"
         },
         {
             "id": "n1105201933",
@@ -114,12 +107,16 @@
         {
             "id": "n1219201960",
             "todo": "Y",
-            "note": "fix the crap out of the alerts panel"
+            "note": "combine alerts panel (follow/host/subs) into one",
+            "priority": "N",
+            "private": "N"
         },
         {
             "id": "n42492019126",
             "todo": "Y",
-            "note": "work on follow alerts"
+            "note": "test follow alerts",
+            "priority": "N",
+            "private": "N"
         },
         {
             "id": "n0310201998",

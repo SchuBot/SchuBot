@@ -59,6 +59,10 @@ async function getSubstitutionVariable(userName, variableCommand, array, index, 
             text = target;
             targetMixerUrl = "mixer.com/" + removeAtSymbol(text)
             break;
+            /*         case "$targetMixerUrl":
+                        text = "https://mixer.com/" + removeAtSymbol(target);
+                        targetMixerUrl = "https://mixer.com/" + removeAtSymbol(target)
+                        break; */
         case "$randusr":
             text = getRandomUser();
             break;
@@ -74,9 +78,10 @@ async function getSubstitutionVariable(userName, variableCommand, array, index, 
                       break; */
         case "$targetMixerUrl":
             if (target != undefined || target != "") {
-                if (targetMixerUrl == "") {
-                    text = "mixer.com/" + removeAtSymbol(target)
-                }
+
+                text = "https://mixer.com/" + removeAtSymbol(target);
+                targetMixerUrl = "https://mixer.com/" + removeAtSymbol(target)
+
             } else {
                 if (targetMixerUrl != "") {
                     text = targetMixerUrl;

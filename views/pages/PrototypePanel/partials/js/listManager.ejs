@@ -1,0 +1,537 @@
+<script>
+    function searchFollowersFunction() {
+        // Declare variables 
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputF");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tableF");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+    function searchHostAlertListFunction() {
+        // Declare variables 
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputHAL");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tableHAL");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function searchFollowAlertListFunction() {
+        // Declare variables 
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputFAL");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tableFAL");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function searchCommandsListFunction() {
+        // Declare variables 
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputCO");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tableCO");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function searchTimersListFunction() {
+        // Declare variables 
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputTIM");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tableTIM");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+
+    function searchFollowingFunction() {
+        // Declare variables 
+        var input, filter, table, tr, td, i;
+        input = document.getElementById("myInputFl");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("tableCF");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[1];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+    var selection = [];
+
+    function fisherYates(myArray, nb_picks) {
+        for (i = myArray.length - 1; i > 1; i--) {
+            var r = Math.floor(Math.random() * i);
+            var t = myArray[i];
+            myArray[i] = myArray[r];
+            myArray[r] = t;
+        }
+
+        return myArray.slice(0, nb_picks);
+    }
+
+    //this selects random number of people
+    function selectKOutOfN(k, n) {
+        if (k > n) throw "k>n";
+
+        var sorted = [];
+        for (var i = 0; i < k; i++) {
+            var rand = Math.floor(Math.random() * (n - i)) + 1;
+            for (var j = 0; j < i; j++) {
+                if (sorted[j] <= rand)
+                    rand++;
+                else
+                    break;
+            }
+            selection.push(rand);
+            sorted.splice(j, 0, rand);
+        }
+
+        return selection;
+    }
+
+
+    function addRandomUsersToPartyQueue() {
+
+        var partySize = document.getElementById("partySizeInput").value;
+
+        if (partySize != "") {
+
+            if (partySize < chatUsrs.length) {
+
+
+                var chatUsers = chatUsrs.length;
+
+                // alert(chatUsers);
+
+                selectKOutOfN(partySize, 10);
+
+                var randomPartyUsers = [];
+                for (i = 0; i < (selection.length); i++) {
+                    var item = selection[i];
+
+                    var table = document.getElementById("tableF");
+                    var x = table.getElementsByTagName("tr");
+
+                    var txt = "";
+                    //  var i;
+
+                    txt = txt + "The index of Row " + (item) + " is: " + x[item].firstElementChild.innerText + "<br>";
+                    //alert(x[item].firstElementChild.innerText);
+
+
+                    randomPartyUsers.push(x[item].firstElementChild.innerText);
+
+
+
+                }
+
+                addUsersToPartyQueue(randomPartyUsers);
+            } else {
+                alert("PartySize is larger than the number in chat!");
+            }
+        } else {
+            alert("Party Size has not been selected");
+        }
+
+    }
+
+    function addUsersToPartyQueue(data) {
+
+        // console.log('Adding Users to chat user box');
+
+        var tr;
+        for (var i = 0; i < data.length; i++) {
+
+            var res = data[i].split(" ", 1);
+
+            tr = $('<tr id="' + res + '" class /> ');
+            // tr = $('<tr class /> ');
+            tr.append("<td>" + data[i] + "</td>");
+            tr.append("<td>" + 'chat user' + "</td>");
+            $('#tablePartyUsers').append(tr);
+        }
+    }
+
+    function addSoundMediaItems(data) {
+
+        var x = document.getElementById("audioMedSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.text = item;
+
+            //loops through all existing options to check if there are any new ones 
+            //and sets exists to true if item exists so to prevent dupes
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+
+    function addImageMediaItems(data) {
+
+        var x = document.getElementById("imageMedSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.text = item;
+
+            //loops through all existing options to check if there are any new ones 
+            //and sets exists to true if item exists so to prevent dupes
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+
+    function addVideoMediaItems(data) {
+
+        var x = document.getElementById("videoMedSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.text = item;
+
+            //loops through all existing options to check if there are any new ones 
+            //and sets exists to true if item exists so to prevent dupes
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+
+    function addAllMediaToAlertAndCommandModules(audioData, imageData, videoData) {
+
+        if (audioData.length > 0) {
+            addCommandAudioItems(audioData);
+            addAlertAudioItems(audioData);
+        }
+
+        if (imageData.length > 0) {
+            addCommandImageItems(imageData);
+            addAlertImageItems(imageData);
+        }
+
+        if (videoData.length > 0) {
+            addCommandVideoItems(videoData);
+            addAlertVideoItems(videoData);
+        }
+
+
+    }
+
+    //adds items to command audio dropdown 
+    function addCommandAudioItems(data) {
+
+
+        var x = document.getElementById("audioSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.value = item.id;
+            option.text = item.id + ' - ' + item.audio;
+
+            // don't think this for loop works anymore CHECK
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+
+    function addCommandImageItems(data) {
+
+        var x = document.getElementById("imageSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.value = item.id;
+            option.text = item.id + ' - ' + item.image;
+
+            //loops through all existing options to check if there are any new ones 
+            //and sets exists to true if item exists so to prevent dupes
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+
+    function addCommandVideoItems(data) {
+
+        var x = document.getElementById("videoSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.value = item.id;
+            option.text = item.id + ' - ' + item.video;
+
+            //loops through all existing options to check if there are any new ones 
+            //and sets exists to true if item exists so to prevent dupes
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+
+
+    function addAlertAudioItems(data) {
+
+
+
+
+        var x = document.getElementById("audioAltSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.value = item.id;
+            option.text = item.id + ' - ' + item.audio;
+
+            // don't think this for loop works anymore CHECK
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+
+    function addAlertImageItems(data) {
+
+
+        var x = document.getElementById("imageAltSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.value = item.id;
+            option.text = item.id + ' - ' + item.image;
+
+            //loops through all existing options to check if there are any new ones 
+            //and sets exists to true if item exists so to prevent dupes
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+
+    function addAlertVideoItems(data) {
+
+        var x = document.getElementById("videoAltSelect");
+
+        for (i = 0; i < (data.length); i++) {
+
+            //builds the option element
+            var item = data[i];
+            var option = document.createElement("option");
+            option.value = item.id;
+            option.text = item.id + ' - ' + item.video;
+
+            //loops through all existing options to check if there are any new ones 
+            //and sets exists to true if item exists so to prevent dupes
+            var exists = false;
+            for (ii = 0; ii < x.length; ii++) {
+
+                if (x.options[ii].text == item) {
+                    exists = true;
+                }
+
+            }
+
+            //if items doesn't exist add to list
+            if (!exists) {
+                x.add(option);
+            }
+
+        }
+
+    }
+</script>

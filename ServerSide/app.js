@@ -26,19 +26,6 @@
 
     const colors = require('colors');
 
-    // "beam-client-node": "^0.10.4",
-    // "passport-beam": "^1.0.4",
-    // "passport": "^0.3.2",
-    // "passport-local": "~1.0.0",
-    // "passport-mixer": "^1.0.1",
-    //"node-windows": "^0.1.14",
-    //"rethinkdb": "^2.3.3", 
-    // "oauth-electron": "^1.1.1",
-    // "electron-oauth-helper": "^3.0.0",
-    // "electron-oauth2": "^3.0.0",
-    //        "ejs": "latest",
-
-
     //var app = express();
     var port = process.env.PORT || 8081;
     //var r = require('rethinkdb');
@@ -98,6 +85,8 @@
     let myQuotes = new JsonDB("./resources/jsondbfiles/myQuotes", true, true);
     let myUITheme = new JsonDB("./resources/jsondbfiles/myUITheme", true, true);
     let authDB = new JsonDB("./resources/jsondbfiles/auth", true, true);
+    let Newcurrency = new JsonDB("./resources/jsondbfiles/Newcurrency", true, true);
+
     //https://github.com/Belphemur/node-json-db this is info on jsondb
 
 
@@ -111,6 +100,7 @@
     myHostAlerts.reload();
     myMedia.reload();
     myTriggers.reload();
+    Newcurrency.reload();
     currency.reload();
     currencyUsers.reload();
     currencyUserTypes.reload();
@@ -122,6 +112,10 @@
     authDB.reload();
 
     initializeData();
+
+
+
+
 
     let chatConnectedBot = false;
     let chatConnected = false;
@@ -343,6 +337,34 @@
             } catch (error) {
                 log.error('error saving command' + error.message);
             }
+
+        });
+
+        socket.on('addSaveCurrency', function(currObject) {
+
+
+            try {
+
+                log.info('Saving UI Currency');
+
+                var commandExists = checkCurrencyUIExists(Newcurrency, currObject);
+
+                if (commandExists.length == 0) {
+                    //check if there are any ranks in the table
+                    //if no ranks then popup a message and if no don't add else add
+                    processAddUICurrency(Newcurrency, currObject);
+                    io.emit('addSaveSingleCurrency', currObject);
+                } else {
+                    processEditUICurrency(Newcurrency, currObject);
+                    io.emit('addSaveSingleCurrency', currObject);
+                }
+
+                // io.emit('addSaveCommandResult', cmdObject);
+            } catch (error) {
+                log.error('error saving command' + error.message);
+            }
+
+
 
         });
 
@@ -717,7 +739,7 @@
 
         //if (bc != null && bc != undefined) {
 
-        // is there is no streamer id then this means fresh install
+        // if there is no streamer id then this means fresh install
         if (authDB.data.streamer.userId > 0) {
 
             mixerData = new mixerdata(authDB.data.streamer.accessToken);
@@ -2380,6 +2402,19 @@
         myTriggers.push("/triggers[]", fullcommand, true);
     }
 
+
+    function processAddUICurrency(Newcurrency, currency) {
+
+        //we can mutate the object here
+        currency.option1 = "";
+        currency.option2 = "";
+        //add currency to the file
+        Newcurrency.push("/currency[]", currency, true);
+
+        //add a rank
+        //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);
+    }
+
     function processAddUINote(myNotes, fullcommand) {
         //push command to the file
         myNotes.push("/notes[]", fullcommand, true);
@@ -2735,6 +2770,12 @@
         var commandExists = userCommands.data.commands.filter(function(item) { return (item.id == fullcommand.id); });
         //if exists it returns the command if not the length of var = 0
         return commandExists;
+    }
+
+    function checkCurrencyUIExists(Newcurrency, fullcommand) {
+        var currencyExists = Newcurrency.data.currency.filter(function(item) { return (item.id == fullcommand.id); });
+        //if exists it returns the command if not the length of var = 0
+        return currencyExists;
     }
 
     function getActiveTimers(timerList) {

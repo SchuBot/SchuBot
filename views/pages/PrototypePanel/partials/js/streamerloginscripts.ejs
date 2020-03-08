@@ -1,0 +1,25 @@
+<!-- Insert this line above script imports  -->
+<script>
+    if (typeof module === 'object') {
+        window.module = module;
+        module = undefined;
+    }
+</script>
+<!-- normal script imports etc  -->
+
+<!-- Insert this line after script imports -->
+<script type="text/javascript">
+    if (window.module) module = window.module;
+</script>
+<script type="text/javascript">
+    // include the ipc module to communicate with main process. 
+    const ipcRenderer = require('electron').ipcRenderer;
+    alert('streamer scripts loading');
+    const btnclick = document.getElementById('StreamerLogin');
+    btnclick.addEventListener('click', function() {
+        var arg = "secondparam";
+        //send the info to main process . we can pass any arguments as second param. 
+        ipcRenderer.send("btnclickstreamer", arg);
+        // ipcRender.send will pass the information to main process 
+    });
+</script>

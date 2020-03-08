@@ -97,8 +97,6 @@ let beamchatbot = function(authTokenBot, chatConnectedBot, streamerChannel, auth
             });
 
             socketBot.on('ChatMessage', data => {
-                // messagessent = messagessent + 1;
-                //console.log('Message Sent from Beam ' + messagessent + ' times');
 
                 try {
 
@@ -230,8 +228,7 @@ module.exports = beamchatbot;
 function connectToBeamBot(clientBot, authTokenBot, createChatSocketBot, self, useAuth, chatConnectedBot, streamerChannel, botName) {
 
     console.log('connecting to mixer chat');
-    // console.log("use auth value is: " + useAuth);
-    // console.log("use magic token is: " + authToken);
+
     if (useAuth) {
         console.log('Use bot Auth in connectToBeamBot method ' + useAuth);
         clientBot.use(new Mixer.OAuthProvider(client, {
@@ -263,13 +260,7 @@ function connectToBeamBot(clientBot, authTokenBot, createChatSocketBot, self, us
         })
         .then(response => {
             const body = response.body;
-            //these are to be removed
-            // console.log('Bot ' + userInfo.id + ' has joined channel ' + schuChanID);
-            // console.log('bot body auth key is ' + body.authkey);
-            // console.log('bot auth key is ' + authTokenBot);
-            /*         console.log('User ' + userInfo.id + ' special something ' + authToken); */
-            // console.log(body)
-            // return createChatSocket(userInfo.id, chanID, body.endpoints, body.authkey);
+
 
             return createChatSocketBot(userInfo.id, streamerChannel, body.endpoints, body.authkey, chatConnectedBot);
         })

@@ -1,0 +1,167 @@
+<style>
+    .is-hidden {
+        display: none;
+    }
+    
+    .btn {
+        background: #ccc;
+        border-radius: 3px;
+        display: inline-block;
+    }
+</style>
+
+
+<span class="js-btn btn">Click me</span>
+<div class='js-fade is-hidden'>
+    <img src="https://media.giphy.com/media/MlX8bnGj2HS7e/giphy.gif" />
+</div>
+
+<div id='div'>
+    content
+</div>
+
+<script>
+    /*
+                          function fadeOut(e) {
+                            e.style.opacity = 1;
+                            (function fade() {
+                              if ((e.style.opacity -= fadeSpd) < 0) e.style.display = 'none'
+                              requestAnimationFrame(fade)
+                            })()
+                          }
+                        */
+
+
+
+
+    // fade out
+
+    function fadeOut(el) {
+        el.style.opacity = 1;
+
+        (function fade() {
+            if ((el.style.opacity -= fadeSpd) < 0) {
+                el.style.display = 'none';
+                el.classList.add('is-hidden');
+            } else {
+                requestAnimationFrame(fade);
+            }
+        })();
+    }
+
+
+
+    // fade in
+
+    function fadeIn(el, display) {
+        if (el.classList.contains('is-hidden')) {
+            el.classList.remove('is-hidden');
+        }
+        el.style.opacity = 0;
+        el.style.display = display || "block";
+
+        (function fade() {
+            var val = parseFloat(el.style.opacity);
+            if (!((val += fadeSpd) > 1)) {
+                el.style.opacity = val;
+                requestAnimationFrame(fade);
+            }
+        })();
+    }
+
+    /*
+
+      function fadeIn(e, display) {
+        e.style.opacity = 0, e.style.display = display || 'block',
+        (function fade(val) {
+          val = parseFloat(e.style.opacity)
+          if (!((val += fadeSpd) > 1))
+            e.style.opacity = val, requestAnimationFrame(fade)
+        })()
+      } 
+       */
+
+
+    var bootSpd = 1800,
+        fadeSpd = 0.010
+
+
+
+
+
+    var btn = document.querySelector(".js-btn");
+    var el = document.querySelector('.js-fade');
+
+    btn.addEventListener('click', function(e) {
+        if (el.classList.contains('is-hidden')) {
+            fadeIn(el);
+        } else {
+            fadeOut(el);
+        }
+    });
+
+
+
+    function slideDown(element, duration, finalheight) {
+
+        var img1 = document.getElementById("image").style;
+
+        var s = element.style;
+        s.height = '0px';
+        img1.height = '0px';
+        img1.width = '400px'; //this makes it slide down
+
+
+        var y = 0;
+        var framerate = 15;
+        var totalframes = duration / framerate;
+        var heightincrement = finalheight / totalframes;
+        var one_second = 1000;
+        var interval = one_second / framerate;
+        var tween = function() {
+            y += heightincrement;
+            s.height = y + 'px';
+            img1.height = y + 'px';
+            if (y < finalheight) {
+                setTimeout(tween, interval);
+            }
+        }
+        tween();
+    }
+
+    requestAnimationFrame(slideDown(document.getElementById('div'), 400, 400));
+    /* slideDown(document.getElementById('div'),400,400); call with requestAnimationFrame to remove flashing first */
+
+
+
+
+
+
+
+    function slideUp(element, duration, finalheight) {
+
+        var img1 = document.getElementById("image").style;
+
+        var s = element.style;
+        s.height = '100px';
+        img1.height = '400px';
+
+
+        var y = 400;
+        var framerate = 10;
+        var totalframes = duration / framerate;
+        var heightincrement = y / totalframes;
+        var one_second = 1000;
+        var interval = one_second / framerate;
+        var tween = function() {
+            y -= heightincrement;
+            s.height = y + 'px';
+            img1.height = y + 'px';
+            if (y > finalheight) {
+                setTimeout(tween, interval);
+            }
+        }
+        tween();
+    }
+    requestAnimationFrame(slideUp(document.getElementById('div'), 400, 0));
+</script>

@@ -2,8 +2,8 @@
     "uitheme": [
         {
             "info": "this is to hold the theme",
-            "outside": "#808080",
-            "inside": "#c0c0c0",
+            "outside": "#c0c0c0",
+            "inside": "#808080",
             "searchbg": "#cccccc",
             "bgcolor": "#000000",
             "panelheadertextcolor": "#000000",

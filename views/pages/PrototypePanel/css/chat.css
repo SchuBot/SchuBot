@@ -19,15 +19,6 @@ div#wrapperCommandsInner {
     margin-top: 5px;
 }
 
-div#wrapperCurrencyInner {
-    display: block;
-    width: 670px;
-    margin-left: 0px;
-    margin-right: 0px;
-    float: left;
-    margin-top: 5px;
-}
-
 #commandSubmit {
     float: left;
 }
@@ -45,8 +36,7 @@ input#triggerName {
     font-size: 12pt;
 }
 
-#commandsbox,
-#currencybox {
+#commandsbox {
     text-align: left;
     margin-top: 0px;
     margin-left: 4px;
@@ -824,7 +814,6 @@ button.square-buttonGroupVertical {
 #followerbox,
 #followingbox,
 #commandsListbox,
-#currencyListbox,
 #modmonListbox,
 #analyticsViewsbox {
     text-align: left;
@@ -1041,11 +1030,6 @@ div.menutextright,
 }
 
 #menubarnarrowcommandslist {
-    text-align: left;
-    padding-left: 2px;
-}
-
-#menubarnarrowcurrencylist {
     text-align: left;
     padding-left: 2px;
 }
@@ -1470,127 +1454,4 @@ div ul li {
     margin: 0 0 10px 0;
     padding: 2px;
     vertical-align: middle/top/bottom;
-}
-
-
-/* new changes to css file */
-
-#divWrapperCurrencyList {
-    position: absolute;
-    /*background-color: green; */
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -o-user-select: none;
-    -ms-user-select: none;
-    -khtml-user-select: none;
-    user-select: none;
-    overflow: auto;
-    margin: 0, 0, 0, 0;
-    border-radius: 5px;
-    border: 1px solid #000000;
-    background: #EBF4FB;
-}
-
-#wrapperCurrencyList {
-    /*  margin:0 auto;
-    padding-bottom:25px;
-    background:#EBF4FB;
-    width:395px;
-    border:1px solid #ACD8F0; */
-    margin: 0 auto;
-    padding-bottom: 0px;
-    /*background: #EBF4FB;*/
-    border: 0px solid #ACD8F0;
-    float: left;
-    width: 100%;
-}
-
-#currencyListHeaderText {
-    font-size: 14pt;
-}
-
-#movCurrencyListModule {
-    margin-top: 4px;
-    float: right;
-    margin-right: 6px;
-}
-
-#currencyRatioSelect,
-#currencyBasedOnSelect,
-#currencyParentSelect {
-    -webkit-appearance: button;
-    -webkit-padding-end: 20px;
-    -webkit-padding-start: 2px;
-    -webkit-user-select: none;
-    background-position: 97% center;
-    background-repeat: no-repeat;
-    font-size: inherit;
-    margin: 6px;
-    overflow: hidden;
-    padding: 5px 10px;
-    text-overflow: ellipsis;
-    height: 25px;
-    /* -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    border: 1px solid #AAA;
-    white-space: nowrap;
-    width: 180px;
-    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-    color: rgb(0, 0, 0);
-    background-image: url('/css/comboboxarrow.png'), -webkit-linear-gradient( #616161, #616161 40%, #616161);
-    background-color: #616161; */
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-}
-
-input#currencyName,
-input#currencyId,
-input#currencyPerMin,
-input#currencyRatio,
-input#currencyRankAmount,
-input#currencyRankName {
-    -webkit-border-radius: 25px;
-    -moz-border-radius: 25px;
-    border-radius: 25px;
-    width: 180px;
-    height: 25px;
-    font-size: 12pt;
-    margin-top: 3px;
-    color: black;
-}
-
-button#submitCurrencyButton,
-button#deleteCurrencyButton {
-    margin-top: 0px;
-    /*margin-bottom: 2px; */
-    /*height: 24px;*/
-    width: 80px;
-    padding-top: 0px;
-    padding-left: 0px;
-    margin-right: 15px;
-    margin-bottom: 5px;
-    height: 30px;
-}
-
-button#submitRankButton {
-    margin-top: 0px;
-    /*margin-bottom: 2px; */
-    /*height: 24px;*/
-    width: 100px;
-    padding-top: 0px;
-    padding-left: 0px;
-    margin-right: 15px;
-    margin-bottom: 5px;
-    height: 30px;
-}
-
-table#tableCR {
-    text-align: left;
-    position: relative;
-}
-
-table#tableCR th {
-    background: white;
-    position: sticky;
-    top: 0;
 }

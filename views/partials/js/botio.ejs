@@ -12,6 +12,7 @@
     //these are people that follow you
     var followerUsrs = [];
     var followerUsrsData = [];
+    let recentFollowers = [];
 
     //these are people you follow
     var followingUsrsData = [];
@@ -616,6 +617,9 @@
 
             addSingleFollowerToList(message);
 
+            //add item to recent followers ui table
+            addSingleRecentFollower(message);
+
         });
 
         iosocket.on('UserJoined', function(message) {
@@ -836,6 +840,12 @@
 
         });
 
+        iosocket.on('addSaveSingleCurrency', function(data) {
+
+            addorAmendTriggerToTable(data);
+
+        });
+
         iosocket.on('addSaveSingleCommand', function(data) {
 
             addorAmendCommandToTable(data);
@@ -869,6 +879,7 @@
         iosocket.on('sendSoundFilesToDropDown', function(data) {
 
             addSoundMediaItems(data);
+
 
         });
 
@@ -1027,6 +1038,11 @@
             }
 
         }
+
+        minimiseCurrencyListBox = function(dataElement, parentElement) {
+            minimiseBoxFunction(dataElement, parentElement);
+        }
+
 
 
         function pushAllToBackReturnIntIn(number) {
@@ -1424,6 +1440,37 @@
 
         }
 
+
+        addorAmendCurrencyToTable = function(data) {
+
+            var tr;
+
+            var triggerRow = document.getElementById("tableKW").rows.namedItem("KW" + data.id);
+
+            if (triggerRow != null) {
+
+                var triggerRowIndex = triggerRow.rowIndex;
+
+                var x = document.getElementById("tableKW").rows[triggerRowIndex].cells;
+
+                x[1].innerHTML = data.text;
+                x[2].innerHTML = data.enabled;
+
+            } else {
+                console.log('Trigger data for table is:' + data.id)
+
+                tr = $('<tr id="KW' + data.id + '" class /> ');
+                // tr = $('<tr class /> ');
+                tr.append("<td>" + data.id + "</td>");
+                tr.append("<td>" + data.text + "</td>");
+                tr.append("<td>" + data.enabled + "</td>");
+
+
+                $('#tableKW').append(tr);
+            }
+
+        }
+
         addorAmendFollowAlertToTable = function(data) {
 
             var tr;
@@ -1618,6 +1665,30 @@
 
             //updates chat user list if exists
             amendChatUserRowToFollower(data.info.user.id);
+        }
+
+        addSingleRecentFollower = function(data) {
+
+            const followerID = data.info.user.id;
+
+            if (recentFollowers.length > 0) {
+                var result = recentFollowers.find(followerID)
+            }
+
+
+            recentFollowers.push(data.info.user.id);
+
+            var tr;
+
+            var d = new Date();
+            var hidden = "display:none;";
+
+            tr = $('<tr id="RFL' + data.info.user.id + '" class /> ');
+            tr.append("<td style=\"" + hidden + "\">" + data.info.user.id + "</td>");
+            tr.append("<td>" + data.info.user.username + "</td>");
+            tr.append("<td>" + d.toDateString() + "</td>");
+            $('#tableRecentFollowers').append(tr);
+
         }
 
 
@@ -2193,6 +2264,11 @@
         });
 
 
+        $("#CurrencySwitchChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperKeywordsList');
+        });
+
+
         $("#notesListChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperNotesList');
         });
@@ -2264,6 +2340,19 @@
 
 
         }
+
+        addSaveCurrency = function() {
+
+            var currObject = getCurrencyVariablesFromUI();
+
+            if (currObject != undefined) {
+                iosocket.emit('addSaveCurrency', currObject);
+            }
+
+            setAddSaveDeleteCurrencyDefaults();
+
+        }
+
 
         //
         addCommandVarToTextBox = function() {
@@ -2460,6 +2549,9 @@
             if (mediaObject != undefined) {
                 iosocket.emit('addSaveMedia', mediaObject);
             }
+
+
+            setAddSaveDeleteMediaDefaults();
 
         }
 
@@ -2744,6 +2836,21 @@
 
         }
 
+        function setAddSaveDeleteCurrencyDefaults() {
+
+            SetCheckboxElement("chkBoxInputEnabled", "Y");
+            SetSelectElement("commandUser", "");
+            SetSelectElement("commandText", "");
+            SetSelectElement("commandName", "");
+
+            document.getElementById('audioSelect').value = "default";
+            document.getElementById('videoSelect').value = "default";
+            document.getElementById('imageSelect').value = "default";
+            document.getElementById('selOptVars').value = "default";
+            document.getElementById('selOptPermission').value = "default";
+
+        }
+
 
         function setAddSaveDeleteAlertDefaults() {
 
@@ -2757,6 +2864,29 @@
             document.getElementById('selAlertTypeAltVars').value = "default";
 
         }
+
+        function setAddSaveDeleteMediaDefaults() {
+
+
+            SetCheckboxElement("chkmedBoxInputEnabled", "Y");
+            SetSelectElement("mediaName", "");
+
+            SetSelectElement("medAudOtherValue", "");
+            SetSelectElement("medVidOtherValue", "");
+            SetSelectElement("medImgOtherValue", "");
+
+            document.getElementById('audioMedSelect').value = "default";
+            document.getElementById('videoMedSelect').value = "default";
+            document.getElementById('imageMedSelect').value = "default";
+
+            document.getElementById('selMediaTypeMedVars').value = "default";
+            document.getElementById('selAudioDurationMedVars').value = "default";
+            document.getElementById('selVideoDurationMedVars').value = "default";
+            document.getElementById('selImageDurationMedVars').value = "default";
+
+        }
+
+
 
         function setDeleteNoteDefaults() {
 
@@ -2807,6 +2937,48 @@
             }
 
             return commandObject;
+        }
+
+
+        function getCurrencyVariablesFromUI() {
+
+            // chkBoxInputEnabled
+            // currencyId 
+            // currencyName
+            // currencyCommand doesn't exist but will be created from name
+            // currencyPerMin
+            // currencyRatio
+
+            // currencyBasedOnSelect //select
+            // currencyParentSelect
+
+
+            var currEnabled = document.getElementById('chkBoxInputEnabled').checked;
+            var currName = document.getElementById('currencyName').value;
+            var currId = document.getElementById('currencyId').value;
+            var currPerMin = document.getElementById('currencyPerMin').value;
+            var currRatio = document.getElementById('currencyRatio').value;
+
+
+
+            var currBasedOn = document.getElementById('currencyBasedOnSelect').value;
+
+            //currency can't be its own parent
+            var currParent = document.getElementById('currencyParentSelect').value;
+
+            var currObject = new Object();
+
+            //creates the command object
+            currObject["id"] = currId;
+            currObject["enabled"] = currEnabled;
+            currObject["currencyName"] = currName
+            currObject["currencyPerMin"] = currPerMin;
+            currObject["currencyRatio"] = currRatio; //only required if parent exists
+            currObject["currencyBasedOn"] = currBasedOn;
+            currObject["currencyParent"] = currParent;
+
+            return currObject;
+
         }
 
 
@@ -2955,7 +3127,7 @@
 
                 if (mediaType == "Video") {
 
-                    if (mediaVideoFile.startsWith("Select") | mediaVideoDur.startsWith("Select")) {
+                    if (mediaVideoFile.startsWith("Select") | mediaVideoDur.startsWith("select")) {
                         alert("Please select a video file and video duration");
                         return;
                     } else {
@@ -3206,6 +3378,10 @@
         themeElementsText.push("menutexttimerlist");
         themeElementsText.push("menutextmodmonitor");
         themeElementsText.push("menutextrecentfollowers");
+        themeElementsText.push("rankHeaderText");
+        themeElementsText.push("currencyListHeaderText");
+        themeElementsText.push("currencyHeaderText");
+
         themeElementsText.forEach(changeThemeTextItemChange, event.target.value);
 
 
@@ -3243,6 +3419,7 @@
         themeElementsMain.push("divWrapperChat");
         // themeElementsMain.push("divWrapperCommands");
         themeElementsMain.push("divWrapperCommandsList");
+        themeElementsMain.push("divWrapperCurrencyList");
         themeElementsMain.push("divWrapperMedia");
         themeElementsMain.push("divWrapperAlerts");
         //
@@ -3287,9 +3464,12 @@
 
         var insideBoxCommandsElements = [];
         insideBoxCommandsElements.push("commandsbox");
+        insideBoxCommandsElements.push("currencybox");
         insideBoxCommandsElements.push("alertsbox");
         insideBoxCommandsElements.push("mediabox");
         insideBoxCommandsElements.push("commandsListbox");
+        insideBoxCommandsElements.push("currencyListbox");
+
         insideBoxCommandsElements.push("keywordsbox");
         insideBoxCommandsElements.push("notesbox");
         insideBoxCommandsElements.push("modmonListbox");
