@@ -95,6 +95,17 @@
             "currencyParent": "default",
             "option1": "",
             "option2": ""
+        },
+        {
+            "id": "uyttuy",
+            "enabled": true,
+            "currencyName": "iiuyuiy",
+            "currencyPerMin": "5",
+            "currencyRatio": "5",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
         }
     ]
 }

@@ -385,7 +385,7 @@ class currencyManager {
                 //create object
                 // Newcurrency[].push(newcurrencyobj);
 
-                Newcurrency.push('/currency[]', newcurrencyobj);
+                Newcurrency.push('/currency[]', data);
             }
 
 
