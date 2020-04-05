@@ -1516,8 +1516,8 @@
                             <table id="tableCR">
                                 <thead>
                                     <th width="5%">Act</th>
-                                    <th width="5%">CurrencyID</th>
-                                    <th width="40%">Currency Name</th>
+                                    <th width="15%">Curr ID</th>
+                                    <th width="30%">Curr Name</th>
                                     <th width="20%">Based On</th>
                                     <th width="10%">CPM</th>
                                     <th width="10%">Parent</th>
@@ -1536,14 +1536,14 @@
                                     <div id="currencyparams2" style="width:50%;float:left;padding-left:5px;">
                                         <div style="width:100%;float:left;" id="cmdEnabled4">
                                             <h3 id="currencyHeaderText" style="width:45%;clear:right;float:left; margin-top:0px;">Currency</h3>
-                                            <button style="width:20%; margin-top:5px;" class="toggleButton" id="submitCurrencyButton" type="button" onclick="addNewCurrency()">New <i class='fas fa-plus' style='font-size:20px;color:white;'></i></button>
+                                            <button style="width:20%; margin-top:5px;" class="toggleButton" id="newCurrencyButton" type="button" onclick="newCurrency()">New <i class='fas fa-plus' style='font-size:20px;color:white;'></i></button>
                                         </div>
 
 
 
                                         <div id="cmdEnabled">
                                             <div class="cmdSpans" id="cmdEnabledLabel">Enabled:-</div>
-                                            <div id="cmdBoxEnabled">
+                                            <div id="cmdBoxCurrEnabled">
                                                 <input id="chkBoxCurrInputEnabled" type="checkbox" checked="checked" />
                                             </div>
 
@@ -1551,30 +1551,32 @@
 
 
                                         <div id="cmdEnabled">
-                                            <div id="cmdBoxEnabled" class="cmdSpans" id="cmdNameLabel">Currency ID:- </div>
+                                            <div id="cmdBoxCurrIDEnabled" class="cmdSpans" id="cmdCurrIDLabel">Currency ID:- </div>
                                             <div>
-                                                <input id="currencyId"></input>
+                                                <input id="inputCurrencyId" placeholder="Click New to Create" readonly></input>
                                             </div>
                                         </div>
 
                                         <div>
                                             <div class="cmdSpans" id="cmdNameLabel">Currency Name:- </div>
                                             <div>
-                                                <input id="currencyName"></input>
+                                                <input id="inputCurrencyName"></input>
                                             </div>
                                         </div>
 
                                         <div>
                                             <div id="currencyBasedOnDD" class="cmdSpansCombo">Based On:- </div>
                                             <select id="currencyBasedOnSelect" class="dropdownTheme">
-                                            <option value="default">Select an Option</option>   
+                                            <option value="default">Select an Option</option>
+                                            <option value="currBasedHours">Hours</option>
+                                            <option value="currBasedPoints">Points</option>
                                             </select>
                                         </div>
 
 
 
                                         <div>
-                                            <div class="cmdSpans" id="cmdNameLabel">Currency Per Min:- </div>
+                                            <div class="cmdSpans" id="currCPMLabel">Currency Per Min:- </div>
                                             <div>
                                                 <input id="currencyPerMin"></input>
                                             </div>
@@ -1591,7 +1593,7 @@
 
 
                                         <div>
-                                            <div class="cmdSpans" id="cmdNameLabel">Ratio:- </div>
+                                            <div class="cmdSpans" id="currRatioLabel">Ratio:- </div>
                                             <div>
                                                 <input id="currencyRatio"></input>
                                             </div>
@@ -1615,21 +1617,21 @@
                                         <h3 id="rankHeaderText">Ranks</h3>
 
                                         <div>
-                                            <div class="cmdSpans" id="cmdNameLabel">Rank Name:- </div>
+                                            <div class="cmdSpans" id="rnkNameLabel">Rank Name:- </div>
                                             <div>
-                                                <input id="currencyRankName"></input>
+                                                <input id="inputRankName"></input>
                                             </div>
                                         </div>
 
                                         <div>
-                                            <div class="cmdSpans" id="cmdNameLabel">Amount:- </div>
+                                            <div class="cmdSpans" id="rnkAmountLabel">Amount:- </div>
                                             <div>
-                                                <input id="currencyRankAmount"></input>
+                                                <input id="inputRankAmount"></input>
                                             </div>
                                         </div>
 
 
-                                        <div id="commandSubcmit">
+                                        <div id="rankSubmit">
                                             <div class="btn-group-vertical-right" role="group">
                                                 <button class="toggleButton" id="submitRankButton" type="button" onclick="addSaveCurrencyRank()">Add to List <i class='far fa-save' style='font-size:20px;color:white;'></i></button>
                                             </div>
@@ -1716,52 +1718,53 @@
         }
     </script>
 
-    <% include ../partials/js/botio %>
-        <% include ../partials/js/dragObject %>
-            <% include ../partials/js/listManager %>
-                <% include ../partials/js/connectionManager %>
-                    <% include ../partials/js/sliderFunctions %>
-                        <!-- normal script imports etc  -->
-                        <!-- Insert this line after script imports -->
-                        <script type="text/javascript">
-                            if (window.module) module = window.module;
-                        </script>
-                        <script type="text/javascript">
-                            // include the ipc module to communicate with main process. 
-                            const ipcRenderer = require('electron').ipcRenderer;
+    <% include ../partials/js/clicklisteners %>
+        <% include ../partials/js/botio %>
+            <% include ../partials/js/dragObject %>
+                <% include ../partials/js/listManager %>
+                    <% include ../partials/js/connectionManager %>
+                        <% include ../partials/js/sliderFunctions %>
+                            <!-- normal script imports etc  -->
+                            <!-- Insert this line after script imports -->
+                            <script type="text/javascript">
+                                if (window.module) module = window.module;
+                            </script>
+                            <script type="text/javascript">
+                                // include the ipc module to communicate with main process. 
+                                const ipcRenderer = require('electron').ipcRenderer;
 
-                            //const {session} = require('electron').remote;
+                                //const {session} = require('electron').remote;
 
-                            /*         const {
-                                        remote
-                                    } = require('electron');
-                                    const {
-                                        BrowserWindow
-                                    } = remote;
-                             */
+                                /*         const {
+                                            remote
+                                        } = require('electron');
+                                        const {
+                                            BrowserWindow
+                                        } = remote;
+                                 */
 
-                            // this is the streamer login
-                            const btnclickStreamer = document.getElementById('StreamerLogin');
-                            btnclickStreamer.addEventListener('click', function() {
+                                // this is the streamer login
+                                const btnclickStreamer = document.getElementById('StreamerLogin');
+                                btnclickStreamer.addEventListener('click', function() {
 
-                                ipcRenderer.send('mixer-login', 'streamer');
+                                    ipcRenderer.send('mixer-login', 'streamer');
 
-                            });
+                                });
 
-                            const btnclickBot = document.getElementById('BotLogin');
-                            btnclickBot.addEventListener('click', function() {
+                                const btnclickBot = document.getElementById('BotLogin');
+                                btnclickBot.addEventListener('click', function() {
 
-                                ipcRenderer.send('mixer-login', 'bot');
+                                    ipcRenderer.send('mixer-login', 'bot');
 
-                            });
+                                });
 
-                            const btnclickAutoUpdate = document.getElementById('AutoUpdate');
-                            btnclickAutoUpdate.addEventListener('click', function() {
+                                const btnclickAutoUpdate = document.getElementById('AutoUpdate');
+                                btnclickAutoUpdate.addEventListener('click', function() {
 
-                                ipcRenderer.send('autoUpdate', 'bot');
+                                    ipcRenderer.send('autoUpdate', 'bot');
 
-                            });
-                        </script>
+                                });
+                            </script>
 
 </body>
 

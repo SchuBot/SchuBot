@@ -1544,12 +1544,12 @@ div ul li {
     border-radius: 20px;
 }
 
-input#currencyName,
-input#currencyId,
+input#inputCurrencyName,
+input#inputCurrencyId,
 input#currencyPerMin,
 input#currencyRatio,
-input#currencyRankAmount,
-input#currencyRankName {
+input#inputRankAmount,
+input#inputRankName {
     -webkit-border-radius: 25px;
     -moz-border-radius: 25px;
     border-radius: 25px;
@@ -1561,6 +1561,7 @@ input#currencyRankName {
 }
 
 button#submitCurrencyButton,
+button#newCurrencyButton,
 button#deleteCurrencyButton {
     margin-top: 0px;
     /*margin-bottom: 2px; */

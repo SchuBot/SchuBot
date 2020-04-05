@@ -198,17 +198,6 @@
             "video": "",
             "image": "",
             "text": "Only one rule, respect everyone in chat."
-        },
-        {
-            "enabled": "Y",
-            "id": "",
-            "permission": "+v",
-            "user": "",
-            "audio": "",
-            "video": "",
-            "image": "",
-            "text": "",
-            "cooldown": ""
         }
     ]
 }

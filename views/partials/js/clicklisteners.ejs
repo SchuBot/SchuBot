@@ -1,0 +1,369 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<script src="https://kit.fontawesome.com/e110218193.js" crossorigin="anonymous"></script>
+
+
+
+<script>
+    let commonfunctions = require('../partials/js/commonfunctions.js');
+
+
+    $(function() {
+        ////////////////// TABLE ONCLICK LISTENERS 
+        $("#tableF tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+            var name = $(this).attr('id');
+
+            $("#flActionBtn").html(name);
+
+        });
+
+        $("#tableF tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
+                var name = $(this).children('td').eq(1).text();
+
+                var result = isFollowingMyFollower(id);
+
+                $("#flActionBtn").html(name + " - " + result);
+            }
+
+        });
+
+        $("#tableCF tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+            var name = $(this).attr('id');
+
+            $("#flngActionBtn").html(name);
+
+        });
+
+        $("#tableCF tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
+                var name = $(this).children('td').eq(1).text();
+
+                var result = checkIfFollowing(id);
+
+                $("#flngActionBtn").html(name + " - " + result);
+            }
+
+        });
+
+        $("#tableChatUsers tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+        });
+
+        $("#tableChatUsers tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+            var doThis = $(this).children('td').eq(0).text();
+            var array = doThis.split('-');
+
+            if (doThis != "") {
+                var usernameName = array[0].toString();
+                $("#ChatActionBtn").html(usernameName);
+            }
+        });
+
+        $("#tableRecentFollowers tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+        });
+
+        $("#tableRecentFollowers tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+        });
+
+        $("#tableFAL tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+        });
+
+        $("#tableFAL tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+
+                var Enabled = $(this).children('td').eq(0).text();
+                var Name = $(this).children('td').eq(1).text();
+
+                var Audio = $(this).children('td').eq(2).text();
+                var Video = $(this).children('td').eq(3).text();
+                var Image = $(this).children('td').eq(4).text();
+                var text = $(this).children('td').eq(5).text();
+
+                Audio = commonfunctions.setFileDefaults(Audio);
+                Video = commonfunctions.setFileDefaults(Video);
+                Image = commonfunctions.setFileDefaults(Image);
+
+                var followAlertRowJson = {
+                    cid: Name,
+                    caudio: Audio,
+                    cvideo: Video,
+                    cimage: Image,
+                    ctext: text,
+                    cenabled: Enabled
+                };
+
+                commonfunctions.SetCheckboxElement("altEnabled", followAlertRowJson.cenabled);
+                commonfunctions.SetSelectElement("alertName", followAlertRowJson.cid);
+                commonfunctions.SetSelectElement("selAlertTypeAltVars", "altAlertFollow");
+                commonfunctions.SetSelectElement("audioAltSelect", followAlertRowJson.caudio);
+                commonfunctions.SetSelectElement("videoAltSelect", followAlertRowJson.cvideo);
+                commonfunctions.SetSelectElement("imageAltSelect", followAlertRowJson.cimage);
+                commonfunctions.SetSelectElement("altText", followAlertRowJson.ctext);
+
+            }
+
+        });
+
+        $("#tableHAL tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+            //alert(value);
+        });
+
+        $("#tableHAL tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+
+                var Enabled = $(this).children('td').eq(0).text();
+                var Name = $(this).children('td').eq(1).text();
+
+                var Audio = $(this).children('td').eq(2).text();
+                var Video = $(this).children('td').eq(3).text();
+                var Image = $(this).children('td').eq(4).text();
+                var text = $(this).children('td').eq(5).text();
+
+                Audio = commonfunctions.setFileDefaults(Audio);
+                Video = commonfunctions.setFileDefaults(Video);
+                Image = commonfunctions.setFileDefaults(Image);
+
+                var hostAlertRowJson = {
+                    cid: Name,
+                    caudio: Audio,
+                    cvideo: Video,
+                    cimage: Image,
+                    ctext: text,
+                    cenabled: Enabled
+                };
+
+                commonfunctions.SetCheckboxElement("altEnabled", hostAlertRowJson.cenabled);
+                commonfunctions.SetSelectElement("alertName", hostAlertRowJson.cid);
+                commonfunctions.SetSelectElement("selAlertTypeAltVars", "altAlertHost");
+                commonfunctions.SetSelectElement("audioAltSelect", hostAlertRowJson.caudio);
+                commonfunctions.SetSelectElement("videoAltSelect", hostAlertRowJson.cvideo);
+                commonfunctions.SetSelectElement("imageAltSelect", hostAlertRowJson.cimage);
+                commonfunctions.SetSelectElement("altText", hostAlertRowJson.ctext);
+
+            }
+
+        });
+
+        $("#tableTIM tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+            //alert(value);
+        });
+
+        $("#tableTIM tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $(this).children('td').eq(0).text();
+
+            if (doThis != undefined) {
+                var id = doThis;
+
+                var Enabled = $(this).children('td').eq(1).text();
+
+                var TimerText = $(this).children('td').eq(2).text();
+                var Interval = $(this).children('td').eq(3).text();
+
+                var timerRowJson = {
+                    cid: id,
+                    ctext: TimerText,
+                    cenabled: Enabled,
+                    cinterval: Interval
+                };
+
+                commonfunctions.SetCheckboxElement("chkTPBoxInputEnabled", timerRowJson.cenabled);
+                commonfunctions.SetSelectElement("TPtimerID", timerRowJson.cid);
+                commonfunctions.SetSelectElement("tpText", timerRowJson.ctext);
+                commonfunctions.SetSelectElement("tpInterval", timerRowJson.cinterval);
+
+            }
+
+        });
+
+        $("#tableKW tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+            //alert(value);
+        });
+
+        $("#tableKW tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(2, $this.closest('tr').attr('id').length);
+
+                var Enabled = $(this).children('td').eq(2).text();
+
+                var output = $(this).children('td').eq(1).text();
+
+
+                var commandRowJson = {
+                    cid: id,
+                    coutput: output,
+                    cenabled: Enabled
+                };
+
+                commonfunctions.SetCheckboxElement("chkKWBoxInputEnabled", commandRowJson.cenabled);
+                commonfunctions.SetSelectElement("triggerName", commandRowJson.cid);
+                commonfunctions.SetSelectElement("kwTrigText", commandRowJson.coutput);
+
+            }
+
+        });
+
+        $("#tableNotes tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+            //alert(value);
+        });
+
+        $("#tableNotes tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(2, $this.closest('tr').attr('id').length);
+
+                var ToDo = $(this).children('td').eq(1).text();
+
+                var Note = $(this).children('td').eq(2).text();
+
+                var Private = $(this).children('td').eq(3).text();
+
+                var Priority = $(this).children('td').eq(4).text();
+
+                var commandRowJson = {
+                    cid: id,
+                    cnote: Note,
+                    ctodo: ToDo,
+                    cprivate: Private,
+                    cpriority: Priority
+                };
+
+                commonfunctions.SetCheckboxElement("chkNTBoxInputEnabled", commandRowJson.ctodo);
+                commonfunctions.SetCheckboxElement("chkNTBoxInputPrivate", commandRowJson.cprivate);
+                commonfunctions.SetSelectElement("chkNTBoxInputPriority", commandRowJson.cpriority);
+                commonfunctions.SetSelectElement("noteName", commandRowJson.cid);
+                commonfunctions.SetSelectElement("ntNoteText", commandRowJson.cnote);
+
+
+            }
+
+        });
+
+        $("#tableCO tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+
+        });
+
+        $("#tableCO tr").live("click", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
+
+                var getPerms = getPermFromCommand($(this).children('td').eq(3).text());
+
+                var Enabled = $(this).children('td').eq(0).text();
+                var Name = $(this).children('td').eq(1).text();
+                var text = $(this).children('td').eq(2).text();
+                var Perms = getPerms;
+                var User = $(this).children('td').eq(4).text();
+                var Audio = $(this).children('td').eq(5).text();
+                var Video = $(this).children('td').eq(6).text();
+                var Image = $(this).children('td').eq(7).text();
+
+
+                Audio = commonfunctions.setFileDefaults(Audio);
+                Video = commonfunctions.setFileDefaults(Video);
+                Image = commonfunctions.setFileDefaults(Image);
+
+                var commandRowJson = {
+                    cid: Name,
+                    cpermission: Perms,
+                    cuser: User,
+                    caudio: Audio,
+                    cvideo: Video,
+                    cimage: Image,
+                    ctext: text,
+                    ccooldown: "",
+                    cenabled: Enabled
+                };
+
+                commonfunctions.SetCheckboxElement("chkBoxInputEnabled", commandRowJson.cenabled);
+                commonfunctions.SetSelectElement("commandName", commandRowJson.cid);
+                commonfunctions.SetSelectElement("selOptPermission", commandRowJson.cpermission);
+                commonfunctions.SetSelectElement("audioSelect", commandRowJson.caudio);
+                commonfunctions.SetSelectElement("videoSelect", commandRowJson.cvideo);
+                commonfunctions.SetSelectElement("imageSelect", commandRowJson.cimage);
+                commonfunctions.SetSelectElement("commandText", commandRowJson.ctext);
+
+            }
+
+
+        });
+    });
+</script>

@@ -68,6 +68,7 @@
     var co;
     var ch;
     let botName = null
+    let cm;
 
 
     let dbAlerts = new JsonDB("./resources/jsondbfiles/myAlerts", true, true);
@@ -345,6 +346,9 @@
 
             try {
 
+
+
+
                 log.info('Saving UI Currency');
 
                 var commandExists = checkCurrencyUIExists(Newcurrency, currObject);
@@ -352,10 +356,10 @@
                 if (commandExists.length == 0) {
                     //check if there are any ranks in the table
                     //if no ranks then popup a message and if no don't add else add
-                    processAddUICurrency(Newcurrency, currObject);
+                    processAddUICurrency(Newcurrency, currObject, 'Add');
                     io.emit('addSaveSingleCurrency', currObject);
                 } else {
-                    processEditUICurrency(Newcurrency, currObject);
+                    processEditUICurrency(Newcurrency, currObject, 'Edit');
                     io.emit('addSaveSingleCurrency', currObject);
                 }
 
@@ -1004,7 +1008,7 @@
     //
 
     function StartCurrency() {
-        var cm = new currencyManager(io);
+        cm = new currencyManager(io);
         cm.createTimers(currency, currencyUsers);
 
     }
@@ -2403,13 +2407,17 @@
     }
 
 
-    function processAddUICurrency(Newcurrency, currency) {
+    function processAddUICurrency(Newcurrency, currency, action) {
 
         //we can mutate the object here
         currency.option1 = "";
         currency.option2 = "";
         //add currency to the file
-        Newcurrency.push("/currency[]", currency, true);
+        //Newcurrency.push("/currency[]", currency, true);
+
+
+
+        cm.CreateAmendCurrency(Newcurrency, currency, action);
 
         //add a rank
         //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);

@@ -13,6 +13,8 @@ const electron = require('electron');
 const ejse = require('ejs-electron');
 const app = electron.app;
 var BrowserWindow = require('electron').BrowserWindow; // jshint ignore:line
+
+
 //const { ipcRenderer } = electron;
 const { ipcMain } = electron;
 //const { remote } = electron;
@@ -406,12 +408,25 @@ function createWindow() {
     })
 
 
+    mainWindow.on('move', function() {
+        // Do move event action
+        log.info('window moved');
+    });
+
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', () => {
+
+    var screens = require('electron').screen;
+    createWindow();
+    //this is to be used for when electron switches display
+    let displays = screens.getAllDisplays();
+
+
+});
 
 
 

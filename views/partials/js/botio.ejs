@@ -1,10 +1,3 @@
-<!-- -->
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-<script src="https://kit.fontawesome.com/e110218193.js" crossorigin="anonymous"></script>
-
-<!--<script src="./socket.io/socket.io.js"></script>-->
-<!-- <script src="./components/socket.io-client/socket.io.js"></script> -->
 <script>
     //these are the users in chat
     var chatUsrs = [];
@@ -49,12 +42,8 @@
 
     $(function() {
 
-
-
         //build chart
         buildChartUsingJson();
-
-
 
         $("div notesNotification").hover(function() {
             $(this).addClass("specialOne");
@@ -86,369 +75,6 @@
                 return false;
         };
 
-        ////////////////// TABLE ONCLICK LISTENERS 
-        $("#tableF tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-
-            var name = $(this).attr('id');
-
-            $("#flActionBtn").html(name);
-
-        });
-        //
-        //
-
-        $("#tableF tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-            var $this = $(this);
-
-            var doThis = $this.closest('tr').attr('id');
-
-            if (doThis != undefined) {
-                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
-                var name = $(this).children('td').eq(1).text();
-
-                var result = isFollowingMyFollower(id);
-
-                $("#flActionBtn").html(name + " - " + result);
-            }
-
-        });
-
-        $("#tableCF tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-
-            var name = $(this).attr('id');
-
-            $("#flngActionBtn").html(name);
-
-        });
-
-        $("#tableCF tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-            var $this = $(this);
-
-            var doThis = $this.closest('tr').attr('id');
-
-            if (doThis != undefined) {
-                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
-                var name = $(this).children('td').eq(1).text();
-
-                var result = checkIfFollowing(id);
-
-                $("#flngActionBtn").html(name + " - " + result);
-            }
-
-        });
-
-
-        $("#tableChatUsers tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-
-        });
-
-        $("#tableChatUsers tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-            var $this = $(this);
-            var doThis = $(this).children('td').eq(0).text();
-            var array = doThis.split('-');
-
-            if (doThis != "") {
-                var usernameName = array[0].toString();
-                $("#ChatActionBtn").html(usernameName);
-            }
-        });
-
-        $("#tableRecentFollowers tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-
-        });
-
-        $("#tableRecentFollowers tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-        });
-
-        $("#tableFAL tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-
-        });
-
-        $("#tableFAL tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-            var $this = $(this);
-
-            var doThis = $this.closest('tr').attr('id');
-
-            if (doThis != undefined) {
-
-                var Enabled = $(this).children('td').eq(0).text();
-                var Name = $(this).children('td').eq(1).text();
-
-                var Audio = $(this).children('td').eq(2).text();
-                var Video = $(this).children('td').eq(3).text();
-                var Image = $(this).children('td').eq(4).text();
-                var text = $(this).children('td').eq(5).text();
-
-                Audio = setFileDefaults(Audio);
-                Video = setFileDefaults(Video);
-                Image = setFileDefaults(Image);
-
-                var followAlertRowJson = {
-                    cid: Name,
-                    caudio: Audio,
-                    cvideo: Video,
-                    cimage: Image,
-                    ctext: text,
-                    cenabled: Enabled
-                };
-
-                SetCheckboxElement("altEnabled", followAlertRowJson.cenabled);
-                SetSelectElement("alertName", followAlertRowJson.cid);
-                SetSelectElement("selAlertTypeAltVars", "altAlertFollow");
-                SetSelectElement("audioAltSelect", followAlertRowJson.caudio);
-                SetSelectElement("videoAltSelect", followAlertRowJson.cvideo);
-                SetSelectElement("imageAltSelect", followAlertRowJson.cimage);
-                SetSelectElement("altText", followAlertRowJson.ctext);
-
-            }
-
-        });
-
-        $("#tableHAL tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-            //alert(value);
-        });
-
-        $("#tableHAL tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-            var $this = $(this);
-
-            var doThis = $this.closest('tr').attr('id');
-
-            if (doThis != undefined) {
-
-                var Enabled = $(this).children('td').eq(0).text();
-                var Name = $(this).children('td').eq(1).text();
-
-                var Audio = $(this).children('td').eq(2).text();
-                var Video = $(this).children('td').eq(3).text();
-                var Image = $(this).children('td').eq(4).text();
-                var text = $(this).children('td').eq(5).text();
-
-                Audio = setFileDefaults(Audio);
-                Video = setFileDefaults(Video);
-                Image = setFileDefaults(Image);
-
-                var hostAlertRowJson = {
-                    cid: Name,
-                    caudio: Audio,
-                    cvideo: Video,
-                    cimage: Image,
-                    ctext: text,
-                    cenabled: Enabled
-                };
-
-                SetCheckboxElement("altEnabled", hostAlertRowJson.cenabled);
-                SetSelectElement("alertName", hostAlertRowJson.cid);
-                SetSelectElement("selAlertTypeAltVars", "altAlertHost");
-                SetSelectElement("audioAltSelect", hostAlertRowJson.caudio);
-                SetSelectElement("videoAltSelect", hostAlertRowJson.cvideo);
-                SetSelectElement("imageAltSelect", hostAlertRowJson.cimage);
-                SetSelectElement("altText", hostAlertRowJson.ctext);
-
-            }
-
-        });
-
-        $("#tableTIM tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-            //alert(value);
-        });
-
-        $("#tableTIM tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-            var $this = $(this);
-
-            var doThis = $(this).children('td').eq(0).text();
-
-            if (doThis != undefined) {
-                var id = doThis;
-
-                var Enabled = $(this).children('td').eq(1).text();
-
-                var TimerText = $(this).children('td').eq(2).text();
-                var Interval = $(this).children('td').eq(3).text();
-
-                var timerRowJson = {
-                    cid: id,
-                    ctext: TimerText,
-                    cenabled: Enabled,
-                    cinterval: Interval
-                };
-
-                SetCheckboxElement("chkTPBoxInputEnabled", timerRowJson.cenabled);
-                SetSelectElement("TPtimerID", timerRowJson.cid);
-                SetSelectElement("tpText", timerRowJson.ctext);
-                SetSelectElement("tpInterval", timerRowJson.cinterval);
-
-            }
-
-        });
-
-
-        $("#tableKW tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-            //alert(value);
-        });
-
-
-        $("#tableKW tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-
-            var $this = $(this);
-
-            var doThis = $this.closest('tr').attr('id');
-
-            if (doThis != undefined) {
-                var id = $this.closest('tr').attr('id').substr(2, $this.closest('tr').attr('id').length);
-
-                var Enabled = $(this).children('td').eq(2).text();
-
-                var output = $(this).children('td').eq(1).text();
-
-
-                var commandRowJson = {
-                    cid: id,
-                    coutput: output,
-                    cenabled: Enabled
-                };
-
-                SetCheckboxElement("chkKWBoxInputEnabled", commandRowJson.cenabled);
-                SetSelectElement("triggerName", commandRowJson.cid);
-                SetSelectElement("kwTrigText", commandRowJson.coutput);
-
-            }
-
-        });
-
-        $("#tableNotes tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-            //alert(value);
-        });
-
-
-        $("#tableNotes tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-
-            var $this = $(this);
-
-            var doThis = $this.closest('tr').attr('id');
-
-            if (doThis != undefined) {
-                var id = $this.closest('tr').attr('id').substr(2, $this.closest('tr').attr('id').length);
-
-                var ToDo = $(this).children('td').eq(1).text();
-
-                var Note = $(this).children('td').eq(2).text();
-
-                var Private = $(this).children('td').eq(3).text();
-
-                var Priority = $(this).children('td').eq(4).text();
-
-                var commandRowJson = {
-                    cid: id,
-                    cnote: Note,
-                    ctodo: ToDo,
-                    cprivate: Private,
-                    cpriority: Priority
-                };
-
-                SetCheckboxElement("chkNTBoxInputEnabled", commandRowJson.ctodo);
-                SetCheckboxElement("chkNTBoxInputPrivate", commandRowJson.cprivate);
-                SetSelectElement("chkNTBoxInputPriority", commandRowJson.cpriority);
-                SetSelectElement("noteName", commandRowJson.cid);
-                SetSelectElement("ntNoteText", commandRowJson.cnote);
-
-
-            }
-
-        });
-
-
-        $("#tableCO tr").click(function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-            var value = $(this).find('tbody td:first').html();
-
-        });
-
-        $("#tableCO tr").live("click", function() {
-            $(this).addClass('selected').siblings().removeClass('selected');
-
-            var $this = $(this);
-
-            var doThis = $this.closest('tr').attr('id');
-
-            if (doThis != undefined) {
-                var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
-
-                var getPerms = getPermFromCommand($(this).children('td').eq(3).text());
-
-                var Enabled = $(this).children('td').eq(0).text();
-                var Name = $(this).children('td').eq(1).text();
-                var text = $(this).children('td').eq(2).text();
-                var Perms = getPerms;
-                var User = $(this).children('td').eq(4).text();
-                var Audio = $(this).children('td').eq(5).text();
-                var Video = $(this).children('td').eq(6).text();
-                var Image = $(this).children('td').eq(7).text();
-
-
-                Audio = setFileDefaults(Audio);
-                Video = setFileDefaults(Video);
-                Image = setFileDefaults(Image);
-
-                var commandRowJson = {
-                    cid: Name,
-                    cpermission: Perms,
-                    cuser: User,
-                    caudio: Audio,
-                    cvideo: Video,
-                    cimage: Image,
-                    ctext: text,
-                    ccooldown: "",
-                    cenabled: Enabled
-                };
-
-                SetCheckboxElement("chkBoxInputEnabled", commandRowJson.cenabled);
-                SetSelectElement("commandName", commandRowJson.cid);
-                SetSelectElement("selOptPermission", commandRowJson.cpermission);
-                SetSelectElement("audioSelect", commandRowJson.caudio);
-                SetSelectElement("videoSelect", commandRowJson.cvideo);
-                SetSelectElement("imageSelect", commandRowJson.cimage);
-                SetSelectElement("commandText", commandRowJson.ctext);
-
-            }
-
-
-        });
 
 
         //////////////// THEME COLOUR PICKER LISTENERS
@@ -628,7 +254,6 @@
 
         });
 
-
         iosocket.on('MixerPurgeOrTimeoutMessage', function(message) {
 
             addModeratorsActionToModMonitorList(message, 'PurgeOrTimeout');
@@ -660,28 +285,19 @@
         });
 
         iosocket.on('RemoveTriggerFromTable', function(noteID) {
-
             removeTriggerFromTable(noteID);
-
-
         });
 
         iosocket.on('RemoveTimerFromTable', function(timerID) {
-
             removeTimerFromTable(timerID);
-
         });
 
         iosocket.on('RemoveAlertFromTable', function(message) {
-
             removeAlertFromTable(message);
-
         });
 
         iosocket.on('RemoveCommandFromTable', function(message) {
-
             removeCommandFromTable(message);
-
         });
 
         iosocket.on('outstandingNotes', function(message) {
@@ -701,14 +317,11 @@
         });
 
         iosocket.on('unfollowed', function(message) {
-
-
             //this works but uncommented for now
             /*             console.log('User Unfollowed');
                         console.log(JSON.stringify(message));
                         $('#incomingChatMessages').append($('<li></li>').text(JSON.stringify(message, null, 2)));
                         removeSingleFollowerFromList(message); */
-
         });
 
         iosocket.on('message', function(avatarURL, primaryRole, UserName, message, isWhisper) {
@@ -720,14 +333,10 @@
         });
 
         iosocket.on('NoAlertsSetup', function(message) {
-
             log.info('You have no Alerts setup', 'You have no Alerts setup')
                 //alert("You have no alerts setup on the bot");
 
         });
-
-
-
 
         iosocket.on('timer', function(message) {
 
@@ -799,57 +408,39 @@
         });
 
         iosocket.on('hostalertlist', function(data) {
-
             addHostAlertsToTable(data);
-
         });
 
         iosocket.on('followalertlist', function(data) {
-
             addFollowAlertsToTable(data);
-
         });
 
         iosocket.on('keywordlist', function(data) {
-
             addKeywordsToTable(data);
-
         });
 
         iosocket.on('notelist', function(data) {
-
             addNotesToTable(data);
-
         });
 
         iosocket.on('timerlist', function(data) {
-
             addTimersToTable(data);
-
         });
 
         iosocket.on('addSaveSingleTimer', function(data) {
-
             addorAmendTimerToTable(data);
-
         });
 
         iosocket.on('addSaveSingleTrigger', function(data) {
-
             addorAmendTriggerToTable(data);
-
         });
 
         iosocket.on('addSaveSingleCurrency', function(data) {
-
-            addorAmendTriggerToTable(data);
-
+            addorAmendCurrencyToTable(data);
         });
 
         iosocket.on('addSaveSingleCommand', function(data) {
-
             addorAmendCommandToTable(data);
-
         });
 
         iosocket.on('addSaveSingleAlert', function(data) {
@@ -863,77 +454,45 @@
                 console.log('adding or ammending follow alerts');
                 addorAmendFollowAlertToTable(data);
             }
-
-
         });
-
 
         iosocket.on('addSaveSingleNote', function(data) {
-
             addorAmendNoteToTable(data);
-
         });
-
-
 
         iosocket.on('sendSoundFilesToDropDown', function(data) {
-
             addSoundMediaItems(data);
-
-
         });
 
-
         iosocket.on('setDefaultTheme', function(data) {
-
             setDefaultTheme(data);
-
         });
 
         iosocket.on('setDefaultUIVisibility', function(data) {
-
             setDefaultUIVisibility(data);
-
         });
 
-
         iosocket.on('sendVideoFilesToDropDown', function(data) {
-
-
             addVideoMediaItems(data);
-
-
         });
 
         iosocket.on('sendImageFilesToDropDown', function(data) {
-
             addImageMediaItems(data);
-
         });
 
         //processes command result
         iosocket.on('addSaveCommandResult', function(data) {
-
             var doSomethingWithResult = data;
-
         });
 
         iosocket.on('loadCommandsToList', function(data) {
-
             addCommandsToListModule(data);
-
         });
-
 
         iosocket.on('loadMediaToList', function(audioMedia, imageMedia, videoMedia) {
-
             addAllMediaToAlertAndCommandModules(audioMedia, imageMedia, videoMedia);
-
         });
 
-        //
-        //
-        //
         ////// SENDS MESSAGE TO MIXER VIA NODE JS SERVER
         $('#outgoingChatMessage').keypress(function(event) {
             if (event.which == 13) {
@@ -957,7 +516,6 @@
 
             }
         });
-
 
         /////// 
         minimisePartyUsersBox = function(dataElement, parentElement) {
@@ -1004,11 +562,9 @@
             minimiseBoxFunction(dataElement, parentElement);
         }
 
-
         minimiseCommandBoxFunction = function(dataElement, parentElement) {
             minimiseBoxFunction(dataElement, parentElement);
         }
-
 
         minimiseBoxFunction = function(dataElement, parentElement) {
 
@@ -1023,7 +579,6 @@
             }
 
         }
-
 
         minimiseBoxFunction460 = function(dataElement, parentElement) {
 
@@ -1043,10 +598,7 @@
             minimiseBoxFunction(dataElement, parentElement);
         }
 
-
-
         function pushAllToBackReturnIntIn(number) {
-
 
             var bringToBack = [];
             bringToBack.push("divWrapperChat");
@@ -1072,7 +624,6 @@
             return number;
         }
 
-
         toggleSwitchModules = function(parentElement) {
 
             var x = document.getElementById(parentElement);
@@ -1083,7 +634,6 @@
             }
 
         }
-
 
         addModeratorsActionToModMonitorList = function(data, type) {
 
@@ -1129,7 +679,6 @@
             //scroll table to end
             scrollToEnd('modmonListbox');
 
-
         }
 
         //adds list of followers to list
@@ -1167,7 +716,6 @@
 
         }
 
-
         //adds list of chat users to list
         addChatUsersToList = function(data) {
 
@@ -1198,7 +746,6 @@
             }
         }
 
-
         //get this from user
         getColorFromUserType = function(type) {
 
@@ -1224,7 +771,6 @@
             return type;
         }
 
-
         addHostAlertsToTable = function(data) {
 
             var tr;
@@ -1244,7 +790,6 @@
 
             }
         }
-
 
         addFollowAlertsToTable = function(data) {
 
@@ -1266,7 +811,6 @@
             }
         }
 
-
         addKeywordsToTable = function(data) {
 
             var tr;
@@ -1285,7 +829,6 @@
 
             }
         }
-
 
         addNotesToTable = function(data) {
 
@@ -1315,17 +858,10 @@
                     tr.append("<td>N</td>");
                 }
 
-
-
-
-
-
-
                 $('#tableNotes').append(tr);
 
             }
         }
-
 
         //this is when its a new table
         addorAmendTimerToTable = function(data) {
@@ -1347,7 +883,6 @@
                 x[4].innerHTML = data.option1;
                 x[5].innerHTML = data.option2;
 
-
             } else {
                 console.log('Timers data for table is:' + data.id)
 
@@ -1364,7 +899,6 @@
             }
 
         }
-
 
         addorAmendTriggerToTable = function(data) {
 
@@ -1390,8 +924,48 @@
                 tr.append("<td>" + data.text + "</td>");
                 tr.append("<td>" + data.enabled + "</td>");
 
-
                 $('#tableKW').append(tr);
+            }
+
+        }
+
+        addorAmendCurrencyToTable = function(data) {
+
+            var tr;
+
+            var currencyRow = document.getElementById("tableCR").rows.namedItem("CR" + data.id);
+
+            if (currencyRow != null) {
+
+                var currencyRowIndex = currencyRow.rowIndex;
+
+                var x = document.getElementById("tableCR").rows[currencyRowIndex].cells;
+
+            } else {
+                console.log('Currency data for table is:' + data.id)
+
+                tr = $('<tr id="CR' + data.id + '" class /> ');
+                // tr = $('<tr class /> ');
+                tr.append("<td>" + data.enabled + "</td>");
+                tr.append("<td>" + data.id + "</td>");
+                tr.append("<td>" + data.currencyName + "</td>");
+                tr.append("<td>" + data.currencyBasedOn + "</td>");
+                tr.append("<td>" + data.currencyPerMin + "</td>");
+                tr.append("<td>" + data.currencyParent + "</td>");
+                tr.append("<td>" + data.currencyRatio + "</td>");
+
+                //     "id": "test65",
+                // "enabled": true,
+                // "currencyName": "ewrst",
+                // "currencyPerMin": "5",
+                // "currencyRatio": "5",
+                // "currencyBasedOn": "default",
+                // "currencyParent": "default",
+                // "option1": "",
+                // "option2": ""
+
+
+                $('#tableCR').append(tr);
             }
 
         }
@@ -1424,7 +998,6 @@
                 tr = $('<tr id="CO' + rowID + '" class /> ');
                 // tr = $('<tr class /> ');
 
-
                 tr.append("<td>" + data.enabled + "</td>");
                 tr.append("<td>" + data.id + "</td>");
                 tr.append("<td>" + data.text + "</td>");
@@ -1436,37 +1009,6 @@
 
 
                 $('#tableCO').append(tr);
-            }
-
-        }
-
-
-        addorAmendCurrencyToTable = function(data) {
-
-            var tr;
-
-            var triggerRow = document.getElementById("tableKW").rows.namedItem("KW" + data.id);
-
-            if (triggerRow != null) {
-
-                var triggerRowIndex = triggerRow.rowIndex;
-
-                var x = document.getElementById("tableKW").rows[triggerRowIndex].cells;
-
-                x[1].innerHTML = data.text;
-                x[2].innerHTML = data.enabled;
-
-            } else {
-                console.log('Trigger data for table is:' + data.id)
-
-                tr = $('<tr id="KW' + data.id + '" class /> ');
-                // tr = $('<tr class /> ');
-                tr.append("<td>" + data.id + "</td>");
-                tr.append("<td>" + data.text + "</td>");
-                tr.append("<td>" + data.enabled + "</td>");
-
-
-                $('#tableKW').append(tr);
             }
 
         }
@@ -1506,12 +1048,10 @@
                 tr.append("<td>" + data.image + "</td>");
                 tr.append("<td>" + data.text + "</td>");
 
-
                 $('#tableFAL').append(tr);
             }
 
         }
-
 
         addorAmendHostAlertToTable = function(data) {
 
@@ -1577,8 +1117,6 @@
                     x[4].innerHTML = data.private;
                 }
 
-
-
             } else {
                 console.log('Note data for table is:' + data.id)
 
@@ -1596,7 +1134,6 @@
             }
 
         }
-
 
         addTimersToTable = function(data) {
 
@@ -1656,7 +1193,6 @@
             tr.append("<td>" + d.toDateString() + "</td>");
             $('#tableF').append(tr);
 
-
             var rowCount = document.getElementById('tableF').rows.length - 1;
 
             //var followCountStr = followerUsrs.length.toString();
@@ -1675,7 +1211,6 @@
                 var result = recentFollowers.find(followerID)
             }
 
-
             recentFollowers.push(data.info.user.id);
 
             var tr;
@@ -1690,7 +1225,6 @@
             $('#tableRecentFollowers').append(tr);
 
         }
-
 
         addSingleChatUserToList = function(data) {
 
@@ -1707,8 +1241,6 @@
 
             if (!doesUserExistInChat(newUser, chatUsrs)) {
                 chatUsrs.push(newUser);
-
-
 
                 console.log('New Chat Usrs array is now ' + JSON.stringify(chatUsrs));
 
@@ -1741,7 +1273,6 @@
 
         }
 
-
         function doesUserExistInChat(obj, list) {
             var x;
             for (x in list) {
@@ -1754,7 +1285,6 @@
                 //var userName = list[x].split('-');
 
                 var userName = "";
-
 
                 if (Array.isArray(list)) {
                     userName = obj[0][0];
@@ -1776,7 +1306,6 @@
 
             return false;
         }
-
 
         amendChatUserRowToFollower = function(id) {
 
@@ -1888,22 +1417,14 @@
         }
 
         removeTriggerFromTable = function(triggerID) {
-
-
             console.log("Trigger to remove is" + triggerID);
-
             //check these and whats in them
-
             $("#KW" + triggerID.replace("!", "x")).remove();
-
         }
 
         removeAlertFromTable = function(alertObj) {
-
-
             if (alertObj.type == 'altAlertHost') {
                 //check these and whats in them
-
                 $("#HAL" + alertObj.id).remove();
             }
 
@@ -1917,20 +1438,14 @@
         }
 
         removeCommandFromTable = function(commandID) {
-
             //check these and whats in them
             console.log("Command ID to remove is: " + commandID);
             $("#CO" + commandID).remove();
-
         }
-
 
         commandsPanelSelectPerms = function(data) {
             if (data === "User") {
-
                 document.getElementById("commandUser").readOnly = false;
-
-
             } else {
                 document.getElementById("commandUser").readOnly = true;
             }
@@ -2056,7 +1571,6 @@
             }
         }
 
-
         videoDurOtherSelected = function(data) {
             data = document.getElementById(data).selectedOptions[0].innerText;
             if (data === "Other") {
@@ -2082,8 +1596,6 @@
 
         };
 
-
-
         isFollowing = function(userID) {
             //check if chat user is following
             var FollowingRow = $("#FLW" + userID);
@@ -2095,7 +1607,6 @@
             }
 
         }
-
 
         isMyFollowingAFollower = function(userID) {
             //is the person I am following a follower i.e are they in my followers list?
@@ -2112,8 +1623,6 @@
 
         }
 
-
-        //
         isFollowingMyFollower = function(userID) {
             //check if I am following my follower
             var FollowingRow = $("#FLW" + userID);
@@ -2128,9 +1637,6 @@
             }
 
         }
-
-
-
 
         //check if user is follower
         function checkIfFollower(data) {
@@ -2176,7 +1682,6 @@
 
             var FollowerRow = document.getElementById("tableChatUsers").rows.namedItem("CU" + userID);
 
-
             if (FollowerRow !== null) {
                 return true;
             } else {
@@ -2185,13 +1690,10 @@
 
         }
 
-
         //this deals with themodules switches
         chkBoxToglModuleVisible = function(div) {
 
-
             var x = document.getElementById(div);
-
 
             if (x.style.display === "none") {
                 x.style.display = "block";
@@ -2200,9 +1702,6 @@
             }
 
         }
-
-
-        // var switch1var = document.getElementById('switch1').checked;
 
         //#region 
         $("#chtUsrChkBox").change(function() {
@@ -2229,18 +1728,13 @@
             chkBoxToglModuleVisible('divWrapperNarrowPartyUsers');
         });
 
-
-
         $("#mediafilesChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperMedia');
         });
 
-
-
         $("#analyticsViewsChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperAnalyticsViews');
         });
-
 
         $("#alertfilesChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperAlerts');
@@ -2263,16 +1757,14 @@
             chkBoxToglModuleVisible('divWrapperKeywordsList');
         });
 
-
         $("#CurrencySwitchChkBox").change(function() {
-            chkBoxToglModuleVisible('divWrapperKeywordsList');
+            chkBoxToglModuleVisible('divWrapperCurrencyList');
         });
 
 
         $("#notesListChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperNotesList');
         });
-
 
         $("#timerListChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperTimersList');
@@ -2299,7 +1791,6 @@
                 iosocket.emit('startTimers', null);
 
 
-
             } else {
                 // alert('unchecked');
                 $('.switch1').css({
@@ -2308,8 +1799,6 @@
 
                 iosocket.emit('stopTimers', null);
             }
-
-
 
         });
 
@@ -2345,6 +1834,8 @@
 
             var currObject = getCurrencyVariablesFromUI();
 
+            convertEnabledBoolToYORN(currObject)
+
             if (currObject != undefined) {
                 iosocket.emit('addSaveCurrency', currObject);
             }
@@ -2353,12 +1844,14 @@
 
         }
 
+        newCurrency = function() {
+
+            newCurrencyDefaults();
+
+        }
 
         //
         addCommandVarToTextBox = function() {
-
-            //
-            ///
 
             // addCommandVar id of the button
             var commandTextVal = document.getElementById('commandText').value;
@@ -2369,8 +1862,6 @@
             var commandTextAddVar = commandTextVal + commandVarValue;
 
             document.getElementById('commandText').value = commandTextAddVar;
-
-            // commandText id of the text box
 
         }
 
@@ -2419,9 +1910,7 @@
 
             return commandVarVal;
 
-
         }
-
 
         deleteCommand = function() {
 
@@ -2477,9 +1966,7 @@
         }
 
         newNote = function() {
-
             newNoteDefaults();
-
         }
 
         completeNote = function() {
@@ -2503,7 +1990,6 @@
             if (triObject != undefined) {
                 iosocket.emit('deleteTrigger', triObject);
             }
-
             setSaveDeleteTriggerDefaults();
         }
 
@@ -2517,54 +2003,35 @@
             setSaveDeleteTimerDefaults();
         }
 
-
         //need to work on this
         addEditAlert = function() {
-
             var cmdObject = getAlertVariablesFromUI();
-
-
             iosocket.emit('addEditAlert', cmdObject);
-
             setAddSaveDeleteAlertDefaults();
-
         }
 
-
         deleteAlert = function() {
-
             var cmdObject = getAlertVariablesFromUI();
-
             if (cmdObject != undefined) {
                 iosocket.emit('deleteAlert', cmdObject);
             }
-
             setAddSaveDeleteAlertDefaults();
         }
 
         addSaveMedia = function() {
-
             var mediaObject = getMediaVariablesFromUI();
-
             if (mediaObject != undefined) {
                 iosocket.emit('addSaveMedia', mediaObject);
             }
-
-
             setAddSaveDeleteMediaDefaults();
-
         }
 
-
         deleteMedia = function() {
-
             var mediaObject = getMediaVariablesFromUI();
-
             if (mediaObject != undefined) {
                 iosocket.emit('deleteMedia', mediaObject);
             }
         }
-
 
         function getLetterFullDateTimeString(dateIn) {
 
@@ -2579,18 +2046,18 @@
 
         function getFullDateTimeStringForID(dateIn) {
 
-            var dayWeek = dateIn.getDay();
-            var dayNo = dateIn.getDate();
-            var monthName = dateIn.getMonth();
-            var yearstr = dateIn.getFullYear();
-            var hoursValue = dateIn.getHours() + dateIn.getMinutes() + dateIn.getSeconds();
+            var dayWeek = dateIn.getDay().toString();
+            var dayNo = dateIn.getDate().toString();
+            var monthName = (dateIn.getMonth() + 1).toString();
+            var yearstr = dateIn.getFullYear().toString();
+            var hoursValue = dateIn.getHours().toString()
+            var mins = dateIn.getMinutes().toString()
+            var seconds = dateIn.getSeconds().toString();
 
-
-
-            return "n" + dayWeek + dayNo + monthName + yearstr + hoursValue;
+            var id = "";
+            id = id.concat(dayNo, monthName, dayWeek, yearstr, hoursValue, mins, seconds);
+            return "n" + id;
         }
-
-
 
         function getDateMonthName(monthStr) {
 
@@ -2714,16 +2181,11 @@
             timerObject["option1"] = "";
             timerObject["option2"] = "";
 
-
             return timerObject;
 
         }
 
-
-
-
         function getTriggerVariablesFromUI() {
-
 
             var triggerEnabled = document.getElementById('chkKWBoxInputEnabled').checked;
             var triggerName = document.getElementById('triggerName').value;
@@ -2743,7 +2205,6 @@
         }
 
         function getNoteVariablesFromUI() {
-
 
             var noteEnabled = document.getElementById('chkNTBoxInputEnabled').checked;
             var notePriority = document.getElementById('chkNTBoxInputPriority').value;
@@ -2770,21 +2231,31 @@
             noteObject["priority"] = notePriority;
             noteObject["private"] = convertEnabledBoolToYORN(notePrivate);
 
-
-
-
             return noteObject;
+
+        }
+
+        function newCurrencyDefaults() {
+
+            var datetimeNow = new Date();
+
+            var currNewID = document.getElementById("inputCurrencyId").value;
+
+            //new currency set id and disable new button
+            if (currNewID.length < 1) {
+                var newID = getFullDateTimeStringForID(datetimeNow);
+                //inputCurrencyId
+                SetSelectElement("inputCurrencyId", newID.toString());
+                document.getElementById("newCurrencyButton,").disabled = true
+            }
 
         }
 
         function newNoteDefaults() {
 
-
             var datetimeNow = new Date();
 
             var newID = getFullDateTimeStringForID(datetimeNow);
-
-
 
             SetCheckboxElement("chkNTBoxInputEnabled", "Y");
             SetSelectElement("noteName", newID);
@@ -2793,7 +2264,6 @@
         }
 
         function setSaveNoteDefaults() {
-
 
             SetCheckboxElement("chkNTBoxInputEnabled", "Y");
             SetSelectElement("noteName", "");
@@ -2820,7 +2290,6 @@
 
         }
 
-
         function setAddSaveDeleteCommandDefaults() {
 
             SetCheckboxElement("chkBoxInputEnabled", "Y");
@@ -2838,19 +2307,21 @@
 
         function setAddSaveDeleteCurrencyDefaults() {
 
+            SetSelectElement("inputCurrencyId", "");
             SetCheckboxElement("chkBoxCurrInputEnabled", "Y");
-            SetSelectElement("commandUser", "");
-            SetSelectElement("commandText", "");
-            SetSelectElement("commandName", "");
+            SetSelectElement("inputCurrencyName", "");
+            SetSelectElement("currencyPerMin", "");
+            SetSelectElement("currencyRatio", "");
 
-            document.getElementById('audioSelect').value = "default";
-            document.getElementById('videoSelect').value = "default";
-            document.getElementById('imageSelect').value = "default";
-            document.getElementById('selOptVars').value = "default";
-            document.getElementById('selOptPermission').value = "default";
+
+            SetSelectElement("inputRankName", "");
+            SetSelectElement("inputRankAmount", "");
+
+
+            document.getElementById('currencyBasedOnSelect').value = "default";
+            document.getElementById('currencyParentSelect').value = "default";
 
         }
-
 
         function setAddSaveDeleteAlertDefaults() {
 
@@ -2866,7 +2337,6 @@
         }
 
         function setAddSaveDeleteMediaDefaults() {
-
 
             SetCheckboxElement("chkmedBoxInputEnabled", "Y");
             SetSelectElement("mediaName", "");
@@ -2886,8 +2356,6 @@
 
         }
 
-
-
         function setDeleteNoteDefaults() {
 
             SetCheckboxElement("chkNTBoxInputEnabled", "Y");
@@ -2895,11 +2363,7 @@
             SetSelectElement("ntNoteText", "");
             SetSelectElement("chkNTBoxInputPriority", "Low");
             SetCheckboxElement("chkNTBoxInputPrivate", "N");
-
-
         }
-
-
 
         function getCommandVariablesFromUI() {
 
@@ -2942,26 +2406,19 @@
 
         function getCurrencyVariablesFromUI() {
 
-            // chkBoxInputEnabled
-            // currencyId 
-            // currencyName
-            // currencyCommand doesn't exist but will be created from name
-            // currencyPerMin
-            // currencyRatio
-
-            // currencyBasedOnSelect //select
-            // currencyParentSelect
-
-
-            var currEnabled = document.getElementById('chkBoxInputEnabled').checked;
-            var currName = document.getElementById('currencyName').value;
-            var currId = document.getElementById('currencyId').value;
+            var currEnabled = document.getElementById('chkBoxCurrInputEnabled').checked;
+            var currName = document.getElementById('inputCurrencyName').value;
+            var currId = document.getElementById('inputCurrencyId').value;
             var currPerMin = document.getElementById('currencyPerMin').value;
             var currRatio = document.getElementById('currencyRatio').value;
 
+            currEnabled = convertEnabledBoolToYORN(currEnabled);
 
 
-            var currBasedOn = document.getElementById('currencyBasedOnSelect').value;
+            //document.getElementById('currencyBasedOnSelect').value;
+            var currBasedOn = document.getElementById('currencyBasedOnSelect').selectedOptions[0].innerText;
+
+
 
             //currency can't be its own parent
             var currParent = document.getElementById('currencyParentSelect').value;
@@ -3204,8 +2661,6 @@
         return durValue;
     }
 
-
-
     function convertUIDurationToMilliseconds(durationIn) {
 
         switch (durationIn) {
@@ -3276,12 +2731,10 @@
 
     }
 
-
     function HideUIElementAndUncheckSwitch(panel, switchID) {
         HideUIElement(panel);
         UnCheckElement(switchID);
     }
-
 
     function HideUIElement(panel) {
         panelID = document.getElementById(panel);
@@ -3294,8 +2747,6 @@
             }
         }
     }
-
-
 
     function setDefaultTheme(data) {
 
@@ -3350,12 +2801,10 @@
 
     function changeBotBackgroundColor(event) {
 
-
         changeBotBackgroundItemChange(event.target.value);
         saveUIThemeSetting('bgcolor', event.target.value);
 
     }
-
 
     function changeTextOnModules(event) {
 
@@ -3452,14 +2901,8 @@
         insideBoxElements.push("followingbox");
         insideBoxElements.push("narrowbox");
         insideBoxElements.push("recentFollowersbox");
-
         insideBoxElements.push("timersListbox");
-
         insideBoxElements.push("analyticsViewsbox");
-
-
-
-
         insideBoxElements.forEach(changeInsideBoxItemChange, event.target.value);
 
         var insideBoxCommandsElements = [];
@@ -3484,9 +2927,7 @@
     }
 
     function saveUIThemeSetting(element, color) {
-
         iosocket.emit('saveUIThemeSetting', element, color);
-
     }
 
     function changeToggleButtons(event) {
@@ -3544,7 +2985,6 @@
 
     }
 
-    //
     function changeToggleButtonsText(event) {
 
         var toggleButtonElements = [];
@@ -3603,7 +3043,6 @@
     }
 
     function changeDropdowns(event) {
-
 
         //commands dropdowns
         var moduleDropdownElements = [];
@@ -3682,11 +3121,8 @@
     }
 
     function changeBotBackgroundItemChange(value, index, array) {
-
         document.body.style.backgroundColor = value;
-
     }
-
 
     function changeOutsideBoxItemChange(value, index, array) {
         document.getElementById(value).style.background = this;
@@ -3796,7 +3232,6 @@
         $("#tableCF").find("tr:not(:first)").remove();
     }
 
-
     function setUIToRefreshingData() {
         // refreshingMixerData();
         //set UI to Refresh in progress here
@@ -3856,8 +3291,6 @@
 
     }
 
-    //
-
     function mixerChatMessageAccountTypeSelected(id) {
 
     }
@@ -3886,7 +3319,6 @@
         element.checked = false;
 
     }
-
 
     function scrollToEnd(elementName) {
         var objDiv = document.getElementById(elementName);
@@ -3953,8 +3385,6 @@
 
         $('#incomingChatMessages').append(li);
     }
-
-
 
     function buildChartUsingJson() {
         var jsonfile = {

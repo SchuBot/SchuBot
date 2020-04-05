@@ -1,94 +1,9 @@
 {
     "currency": [
         {
-            "id": "1",
-            "enabled": "Y",
-            "currencyname": "Points",
-            "commandname": "!Points",
-            "info": "ranks based on hours or points",
-            "info2": "missing some other currency functions on other bots",
-            "ranksbasedon": "points",
-            "onlinepayintervalminutes": 1,
-            "offlinepayintervalminutes": 1,
-            "activeuserbonuspoints": 2,
-            "viewerpointsbonus": 1,
-            "regularbonuspoints": 1,
-            "moderatorbonuspoints": 3,
-            "subscriberbonuspoints": 4,
-            "onfollowbonuspoints": 5,
-            "onsubscribebonuspoints": 6,
-            "donationbonuspoints": 7,
-            "multiplybydonationamount": "N",
-            "ranks": [
-                {
-                    "name": "test9",
-                    "requirement": "50"
-                },
-                {
-                    "name": "test8",
-                    "requirement": "50"
-                }
-            ]
-        },
-        {
-            "id": "2",
-            "enabled": "N",
-            "currencyname": "Points",
-            "commandname": "!Points2",
-            "info": "ranks based on hours or points",
-            "ranksbasedon": "points",
-            "onlinepayintervalminutes": 1,
-            "offlinepayintervalminutes": 5,
-            "activeuserbonuspoints": 2,
-            "viewerpointsbonus": 5,
-            "regularbonuspoints": 1,
-            "moderatorbonuspoints": 3,
-            "subscriberbonuspoints": 4,
-            "onfollowbonuspoints": 5,
-            "onsubscribebonuspoints": 6,
-            "donationbonuspoints": 7,
-            "multiplybydonationamount": "N",
-            "ranks": [
-                {
-                    "name": "Test2 Rank",
-                    "requirement": 50
-                },
-                {
-                    "name": "Test2 Rank 2",
-                    "requirement": 100
-                }
-            ]
-        },
-        {
-            "id": "5",
-            "enabled": "Y",
-            "currencyname": "Points",
-            "commandname": "!Points",
-            "info": "ranks based on hours or points",
-            "info2": "missing some other currency functions on other bots",
-            "ranksbasedon": "points",
-            "onlinepayintervalminutes": 1,
-            "offlinepayintervalminutes": 1,
-            "activeuserbonuspoints": 2,
-            "viewerpointsbonus": 1,
-            "regularbonuspoints": 1,
-            "moderatorbonuspoints": 3,
-            "subscriberbonuspoints": 4,
-            "onfollowbonuspoints": 5,
-            "onsubscribebonuspoints": 6,
-            "donationbonuspoints": 7,
-            "multiplybydonationamount": "N",
-            "ranks": [
-                {
-                    "name": "test9",
-                    "requirement": "50"
-                }
-            ]
-        },
-        {
-            "id": "6",
+            "id": "test472824555",
             "enabled": true,
-            "currencyName": "test6",
+            "currencyName": "CurrencyName",
             "currencyPerMin": "5",
             "currencyRatio": "6",
             "currencyBasedOn": "default",
@@ -97,12 +12,155 @@
             "option2": ""
         },
         {
-            "id": "uyttuy",
+            "id": "test6",
             "enabled": true,
-            "currencyName": "iiuyuiy",
+            "currencyName": "ewrst",
             "currencyPerMin": "5",
             "currencyRatio": "5",
             "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "test65",
+            "enabled": true,
+            "currencyName": "ewrst",
+            "currencyPerMin": "5",
+            "currencyRatio": "5",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "45345",
+            "enabled": true,
+            "currencyName": "swagasf",
+            "currencyPerMin": "5",
+            "currencyRatio": "6",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "wewef",
+            "enabled": true,
+            "currencyName": "werwer",
+            "currencyPerMin": "4",
+            "currencyRatio": "5",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "werw",
+            "enabled": true,
+            "currencyName": "wrtwrt",
+            "currencyPerMin": "wrtwrt",
+            "currencyRatio": "wter",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "rter",
+            "enabled": "Y",
+            "currencyName": "erter",
+            "currencyPerMin": "5",
+            "currencyRatio": "6",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "rgetg",
+            "enabled": "Y",
+            "currencyName": "ertgerg",
+            "currencyPerMin": "5",
+            "currencyRatio": "6",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "wfasg",
+            "enabled": "N",
+            "currencyName": "artgtasgarg",
+            "currencyPerMin": "4",
+            "currencyRatio": "7",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "n0292202097",
+            "enabled": "Y",
+            "currencyName": "test",
+            "currencyPerMin": "8",
+            "currencyRatio": "9",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "n0292202086",
+            "enabled": "Y",
+            "currencyName": "ouhhul",
+            "currencyPerMin": "9",
+            "currencyRatio": "89",
+            "currencyBasedOn": "default",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "n0292202094",
+            "enabled": "Y",
+            "currencyName": "tituy",
+            "currencyPerMin": "5",
+            "currencyRatio": "7",
+            "currencyBasedOn": "currBasedHours",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "n643202076",
+            "enabled": "Y",
+            "currencyName": "test1345",
+            "currencyPerMin": "5",
+            "currencyRatio": "7",
+            "currencyBasedOn": "currBasedHours",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "n643202085",
+            "enabled": "Y",
+            "currencyName": "test5768",
+            "currencyPerMin": "5",
+            "currencyRatio": "7",
+            "currencyBasedOn": "Hours",
+            "currencyParent": "default",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "n643202051",
+            "enabled": "Y",
+            "currencyName": "test3543563",
+            "currencyPerMin": "7",
+            "currencyRatio": "9",
+            "currencyBasedOn": "Points",
             "currencyParent": "default",
             "option1": "",
             "option2": ""

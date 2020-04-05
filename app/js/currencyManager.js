@@ -299,7 +299,8 @@ class currencyManager {
 
         };
 
-        function CreateAmendCurrency(data) {
+        self.CreateAmendCurrency = function(Newcurrency, data, action) {
+
             // //this updates the rank at index for currency at first index (0 based)
             // //Newcurrency.push('/currency[0]/ranks[0]', { name: "test9", requirement: "50" }, true);
 
@@ -346,46 +347,54 @@ class currencyManager {
 
             // Newcurrency.push('/currency[]', newcurrencyobj);
 
-            // let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == "5")
-            // Newcurrency.push(`/currency[${currencyIndexNum}]/ranks[]`, { name: "test9", requirement: "50" }, true);
-            // //     //find index for rank at currency
-            // //let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
 
             // //
 
-
+            //checks if currency id exists
             let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == data.id); });
 
-            if (currencyObject > 0) {
-                //update object
+            if (action.toLowerCase() == 'add') {
+                //add object
+
+                Newcurrency.push('/currency[]', data);
 
             } else {
 
-                var newcurrencyobj = {
-                    "id": "1",
-                    "enabled": "Y",
-                    "currencyname": "Points",
-                    "commandname": "!Points",
-                    "info": "ranks based on hours or points",
-                    "info2": "missing some other currency functions on other bots",
-                    "ranksbasedon": "points",
-                    "onlinepayintervalminutes": 1,
-                    "offlinepayintervalminutes": 1,
-                    "activeuserbonuspoints": 2,
-                    "viewerpointsbonus": 1,
-                    "regularbonuspoints": 1,
-                    "moderatorbonuspoints": 3,
-                    "subscriberbonuspoints": 4,
-                    "onfollowbonuspoints": 5,
-                    "onsubscribebonuspoints": 6,
-                    "donationbonuspoints": 7,
-                    "multiplybydonationamount": "N",
-                    "ranks": []
-                };
-                //create object
+                // var newcurrencyobj = {
+                //     "id": "1",
+                //     "enabled": "Y",
+                //     "currencyname": "Points",
+                //     "commandname": "!Points",
+                //     "info": "ranks based on hours or points",
+                //     "info2": "missing some other currency functions on other bots",
+                //     "ranksbasedon": "points",
+                //     "onlinepayintervalminutes": 1,
+                //     "offlinepayintervalminutes": 1,
+                //     "activeuserbonuspoints": 2,
+                //     "viewerpointsbonus": 1,
+                //     "regularbonuspoints": 1,
+                //     "moderatorbonuspoints": 3,
+                //     "subscriberbonuspoints": 4,
+                //     "onfollowbonuspoints": 5,
+                //     "onsubscribebonuspoints": 6,
+                //     "donationbonuspoints": 7,
+                //     "multiplybydonationamount": "N",
+                //     "ranks": []
+                // };
+
+                //push new currency object
                 // Newcurrency[].push(newcurrencyobj);
 
-                Newcurrency.push('/currency[]', data);
+                // //finds currency index for currency by id
+                // let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == "5")
+
+                // //find index for rank at currency by rank name 
+                // let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
+
+                // //adds new rank for currnecy index (if no rank found)
+                // Newcurrency.push(`/currency[${currencyIndexNum}]/ranks[]`, { name: "test9", requirement: "50" }, true);
+
+
             }
 
 
