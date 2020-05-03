@@ -116,6 +116,11 @@ function fileOps(io) {
         io.emit('timerlist', data);
     }
 
+
+    this.sendCurrencyToUI = function(data) {
+        io.emit('currencylist', data);
+    }
+
     async function myReaddir(fs, folder) {
         try {
             const file = await fs1.readdir(folder);

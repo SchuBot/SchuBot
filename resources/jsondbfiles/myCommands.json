@@ -1,14 +1,14 @@
 {
     "commands": [
         {
-            "enabled": "N",
+            "enabled": "Y",
             "id": "!sample",
             "permission": "+m",
             "user": "",
             "audio": "",
             "video": "",
             "image": "",
-            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] \n$target uptime is $uptime hiohdf $channelInfo$caster[$caster has $sparks sparks and is a level $level] \n$caster has been on for $uptime hiohdfgsi iyu eswfsr $readapi(http://mixer.api.scorpstuff.com/multistream2.php?caster=$caster&partners=$msg) hello",
+            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] \n$target uptime is $uptime hiohdf $channelInfo$user[$user has $sparks sparks and is a level $level] \n$caster has been on for $uptime hiohdfgsi iyu eswfsr $readapi(http://mixer.api.scorpstuff.com/multistream2.php?caster=$caster&partners=$msg) hello",
             "cooldown": ""
         },
         {
@@ -93,7 +93,7 @@
             "audio": "",
             "video": "",
             "image": "",
-            "text": "go follow $target at $targetMixerUrl",
+            "text": "go follow $user at $userMixerUrl",
             "cooldown": ""
         },
         {
@@ -140,12 +140,12 @@
         {
             "enabled": "Y",
             "id": "!test2",
-            "permission": "+v",
+            "permission": "+m",
             "user": "",
             "audio": "",
             "video": "",
             "image": "",
-            "text": "go follow $target at $targetMixerUrl $channelInfo$target[he was last seen playing $game] ",
+            "text": "testowefohdf",
             "cooldown": ""
         },
         {

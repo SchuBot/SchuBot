@@ -343,11 +343,7 @@
 
         socket.on('addSaveCurrency', function(currObject) {
 
-
             try {
-
-
-
 
                 log.info('Saving UI Currency');
 
@@ -370,6 +366,47 @@
 
 
 
+        });
+
+
+        socket.on('addSaveCurrencyRank', function(currObject) {
+
+            try {
+
+                log.info('Saving UI Currency Rank');
+
+                //for now this is just checking that the currency exists
+                var commandExists = checkCurrencyUIExists(Newcurrency, currObject);
+
+                if (commandExists.length == 0) {
+                    //if no currency then popup a message saying save currency first
+                    // and if no don't add else add
+
+                    //processAddUICurrencyRank(Newcurrency, currObject, 'Add');
+                    //io.emit('addSaveSingleCurrency', currObject);
+                } else {
+                    processAddUICurrencyRank(Newcurrency, currObject, 'Edit');
+                    io.emit('addSaveSingleCurrencyRank', currObject);
+                }
+
+                // io.emit('addSaveCommandResult', cmdObject);
+            } catch (error) {
+                log.error('error saving command' + error.message);
+            }
+
+
+
+        });
+
+
+
+
+
+        socket.on('reselectRank', function(currencyId, currencyName) {
+
+            let ranks = processReselectRanks(Newcurrency, currencyId, currencyName);
+
+            io.emit('currencyRanksSelect', ranks, currencyId)
         });
 
         socket.on('checkForOutstandingNotes', function() {
@@ -418,6 +455,59 @@
             } catch (error) {
                 log.error('error deleting command' + error.message);
             }
+
+        });
+
+
+        socket.on('deleteCurrency', function(currencyObject) {
+            try {
+
+                log.info('Deleting UI Currency');
+
+                var currencyExists = checkCurrencyUIExists(Newcurrency, currencyObject);
+
+                if (currencyExists.length > 0) {
+
+                    var currencyID = currencyObject.id;
+
+                    deleteCurrencyFromList(Newcurrency, currencyID);
+
+                    io.emit("RemoveCurrencyFromTable", currencyObject.id);
+
+                }
+
+                // io.emit('addSaveCommandResult', cmdObject);
+            } catch (error) {
+                log.error('error deleting command' + error.message);
+            }
+
+        });
+
+
+        socket.on('deleteCurrencyRank', function(currObject) {
+
+            try {
+
+                log.info('Deleting UI Currency');
+
+                //tr = $('<tr id="ID' + currencyId + "RNK" + data.name + '" class /> ');
+
+                var currencyExists = checkCurrencyUIExists(Newcurrency, currObject);
+
+                if (currencyExists.length > 0) {
+
+                    deleteCurrencyRankFromList(Newcurrency, currObject);
+
+                    io.emit("RemoveCurrencyRankFromTable", currObject.id, currObject.currencyRankName.replace(/ /g, ''));
+
+                }
+
+            } catch (error) {
+                log.error('error deleting rank' + error.message);
+            }
+
+
+
 
         });
 
@@ -731,6 +821,7 @@
         SendKeywordsToBot(myTriggers);
         SendNotesToBot(myNotes);
         SendTimersToBot(myTimers);
+        SendCurrencyToBot(Newcurrency);
     }
 
     function loadBotCurrencyAndTimers() {
@@ -809,6 +900,35 @@
             }
         }
     }
+
+    function deleteCurrencyFromList(Newcurrency, currencyID) {
+
+        for (var i = 0, len = Newcurrency.data.currency.length; i < len; i++) {
+            //array = alertsinqueue and index = i
+            var iii = Newcurrency.data.currency[i].id;
+
+            if (iii == currencyID) {
+                Newcurrency.delete(("/currency[" + i + "]"));
+                break;
+            }
+        }
+    }
+
+
+
+
+    function deleteCurrencyRankFromList(Newcurrency, currObject) {
+
+        let currencyIndex = Newcurrency.data.currency.findIndex(obj => obj.id == currObject.id);
+
+        if (currencyIndex >= 0) {
+
+            let rankIndex = Newcurrency.data.currency[currencyIndex].ranks.findIndex(obj => obj.name == currObject.currencyRankName)
+
+            Newcurrency.delete(("/currency[" + currencyIndex + "]/ranks[" + rankIndex + "]"));
+        }
+    }
+
 
     function deleteTimerFromList(myTimers, cmdObject) {
 
@@ -1184,6 +1304,15 @@
 
     }
 
+    function SendCurrencyToBot(Newcurrency) {
+
+        var fsOps = new fileOps(io);
+        fsOps.sendCurrencyToUI(Newcurrency.data.currency);
+
+        //  io.emit('loadCommandsToList', userCommands);
+
+    }
+
     function AddMonitorAction(myModeratorMonitor, data, type) {
 
         var modMon = new modMonitor(io);
@@ -1404,6 +1533,8 @@
                             case ('update'):
                                 console.info('constellation update: ' + JSON.stringify(data));
                                 io.emit('update', data);
+
+
                                 break;
                             case ('followed'):
                                 console.log('A user has followed ' + JSON.stringify(data, null, 2));
@@ -1480,7 +1611,7 @@
                                 io.emit('resubscribed', data);
                                 break;
                             default: //dont trigger anything.
-                                console.log(data.info);
+                                console.log('unknown event' + data.info);
                                 break;
                         }
                     });
@@ -2415,12 +2546,24 @@
         //add currency to the file
         //Newcurrency.push("/currency[]", currency, true);
 
-
-
         cm.CreateAmendCurrency(Newcurrency, currency, action);
 
         //add a rank
         //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);
+    }
+
+    function processAddUICurrencyRank(Newcurrency, currency, action) {
+
+        currency.option1 = "";
+        currency.option2 = "";
+        cm.CreateAmendCurrencyRank(Newcurrency, currency, action);
+
+    }
+
+    function processReselectRanks(Newcurrency, currencyId, currencyName) {
+
+        let ranks = cm.ReselectRank(Newcurrency, currencyId, currencyName);
+        return ranks;
     }
 
     function processAddUINote(myNotes, fullcommand) {
@@ -2435,35 +2578,7 @@
     }
 
     function processAddUIMedia(mediaObject) {
-
-
-        /* 
-   // this is for commands so media cna only be added by owner for now
-        var PermsForCommand = transformUIPermsToCommandPerms(fullcommand.permission);
-        var cmdEnabled = transformUIEnableToCommandEnabled(fullcommand.enabled);
- 
-        var commandUser = "";
-        if (fullcommand.user != undefined) {
-            commandUser = fullcommand.user;
-            fullcommand.user = SpecificUser;
-        }
-
-        var SpecificUser = "";
-        if (PermsForCommand == "+u") {
-            SpecificUser = commandUser;
-        }
-
-        fullcommand.user = SpecificUser;
-        fullcommand.permission = PermsForCommand
-        fullcommand.enabled = cmdEnabled;
-     */
-
-        //push media to the file
         myMedia.push("/media[]", mediaObject, true);
-
-        //add media to commands panel
-
-
     }
 
     function processAddUIAlert(alertObject) {

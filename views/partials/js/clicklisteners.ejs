@@ -1,4 +1,11 @@
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+<!--<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> -->
+
+<script src="http://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
 <script src="https://kit.fontawesome.com/e110218193.js" crossorigin="anonymous"></script>
 
@@ -20,7 +27,8 @@
 
         });
 
-        $("#tableF tr").live("click", function() {
+
+        $("#tableF").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
             var $this = $(this);
@@ -38,6 +46,7 @@
 
         });
 
+
         $("#tableCF tr").click(function() {
             $(this).addClass('selected').siblings().removeClass('selected');
             var value = $(this).find('tbody td:first').html();
@@ -48,7 +57,8 @@
 
         });
 
-        $("#tableCF tr").live("click", function() {
+
+        $("#tableCF").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
             var $this = $(this);
@@ -66,13 +76,17 @@
 
         });
 
+
+
+
+
         $("#tableChatUsers tr").click(function() {
             $(this).addClass('selected').siblings().removeClass('selected');
             var value = $(this).find('tbody td:first').html();
 
         });
 
-        $("#tableChatUsers tr").live("click", function() {
+        $("#tableChatUsers").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
             var $this = $(this);
@@ -91,7 +105,7 @@
 
         });
 
-        $("#tableRecentFollowers tr").live("click", function() {
+        $("#tableRecentFollowers").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
         });
@@ -102,7 +116,7 @@
 
         });
 
-        $("#tableFAL tr").live("click", function() {
+        $("#tableFAL").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
             var $this = $(this);
@@ -150,7 +164,7 @@
             //alert(value);
         });
 
-        $("#tableHAL tr").live("click", function() {
+        $("#tableHAL").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
             var $this = $(this);
@@ -198,7 +212,7 @@
             //alert(value);
         });
 
-        $("#tableTIM tr").live("click", function() {
+        $("#tableTIM").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
             var $this = $(this);
@@ -235,7 +249,7 @@
             //alert(value);
         });
 
-        $("#tableKW tr").live("click", function() {
+        $("#tableKW").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
 
@@ -271,7 +285,7 @@
             //alert(value);
         });
 
-        $("#tableNotes tr").live("click", function() {
+        $("#tableNotes").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
 
@@ -315,18 +329,15 @@
 
         });
 
-        $("#tableCO tr").live("click", function() {
+        $("#tableCO").on("click", "tr", function() {
             $(this).addClass('selected').siblings().removeClass('selected');
 
             var $this = $(this);
-
             var doThis = $this.closest('tr').attr('id');
 
             if (doThis != undefined) {
                 var id = $this.closest('tr').attr('id').substr(3, $this.closest('tr').attr('id').length - 3);
-
                 var getPerms = getPermFromCommand($(this).children('td').eq(3).text());
-
                 var Enabled = $(this).children('td').eq(0).text();
                 var Name = $(this).children('td').eq(1).text();
                 var text = $(this).children('td').eq(2).text();
@@ -335,7 +346,6 @@
                 var Audio = $(this).children('td').eq(5).text();
                 var Video = $(this).children('td').eq(6).text();
                 var Image = $(this).children('td').eq(7).text();
-
 
                 Audio = commonfunctions.setFileDefaults(Audio);
                 Video = commonfunctions.setFileDefaults(Video);
@@ -360,10 +370,121 @@
                 commonfunctions.SetSelectElement("videoSelect", commandRowJson.cvideo);
                 commonfunctions.SetSelectElement("imageSelect", commandRowJson.cimage);
                 commonfunctions.SetSelectElement("commandText", commandRowJson.ctext);
+            }
+        });
+
+        $("#tableCR tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+        });
+
+        $("#tableCR").on("click", "tr", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(2, $this.closest('tr').attr('id').length - 2);
+                console.log('id for currency' + id);
+                var getCPM = getBasedOnFromCurrency($(this).children('td').eq(3).text());
+                var getBasedOn = getBasedOnFromCurrency($(this).children('td').eq(3).text());
+
+
+                var Enabled = $(this).children('td').eq(0).text();
+                var CurrencyName = $(this).children('td').eq(2).text();
+                var BasedOn = getBasedOn;
+                var CPM = $(this).children('td').eq(4).text();;
+                //var Parent = $(this).children('td').eq(4).text();
+                //va o r Ratio = $(this).children('td').eq(5).text();
+
+                BasedOn = commonfunctions.setFileDefaults(BasedOn);
+
+                var currencyRowJson = {
+                    cenabled: Enabled,
+                    ccurrid: id,
+                    ccurrname: CurrencyName,
+                    cBasedOn: BasedOn,
+                    cCPM: CPM,
+                    cParent: "",
+                    cRatio: "" //,
+                };
+
+                //commonfunctions.setDropDownValue("currencyBasedOnSelect", currencyRowJson.cBasedOn);
+                commonfunctions.SetCheckboxElement("chkBoxCurrInputEnabled", currencyRowJson.cenabled);
+                commonfunctions.SetSelectElement("inputCurrencyId", currencyRowJson.ccurrid);
+                commonfunctions.SetSelectElement("inputCurrencyName", currencyRowJson.ccurrname);
+                commonfunctions.SetSelectElement("currencyBasedOnSelect", currencyRowJson.cBasedOn);
+                commonfunctions.SetSelectElement("currencyPerMin", currencyRowJson.cCPM);
+                //commonfunctions.SetSelectElement("currencyParentSelect", currencyRowJson.Parent);
+                commonfunctions.SetSelectElement("currencyRatio", currencyRowJson.cRatio);
+
+                //empty rank table
+                $("#tableRank").find("tr:not(:first)").remove();
+
+                //select ranks for selected currency
+                iosocket.emit('reselectRank', currencyRowJson.ccurrid, currencyRowJson.ccurrname);
+
 
             }
 
+        });
+
+        $("#tableRank tr").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            var value = $(this).find('tbody td:first').html();
+        });
+
+        //TODO (Incomplete)
+
+        $("#tableRank").on("click", "tr", function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+
+            var $this = $(this);
+
+            var doThis = $this.closest('tr').attr('id');
+
+            if (doThis != undefined) {
+                var id = $this.closest('tr').attr('id').substr(2, $this.closest('tr').attr('id').length - 2);
+                console.log('id for currency' + id);
+
+
+                var CurrencyRankName = $(this).children('td').eq(0).text();
+                var CurrencyRankAmount = $(this).children('td').eq(1).text();
+
+                var currencyRankRowJson = {
+                    ccurrRankName: CurrencyRankName,
+                    ccurrRankAmount: CurrencyRankAmount
+                };
+
+                //commonfunctions.setDropDownValue("currencyBasedOnSelect", currencyRowJson.cBasedOn);
+                //commonfunctions.SetSelectElement("inputCurrencyId", currencyRankRowJson.ccurrid);
+                commonfunctions.SetSelectElement("inputRankName", currencyRankRowJson.ccurrRankName);
+                commonfunctions.SetSelectElement("inputRankAmount", currencyRankRowJson.ccurrRankAmount);
+
+            }
 
         });
+
+
+        $("#incomingChatMessages li").click(function() {
+            $(this).addClass('selected').siblings().removeClass('selected');
+            //alert("test click chat message1")
+            //var value = $(this).find('tbody td:first').html();
+        });
+
+
+        $("#incomingChatMessages").on("click", "li", function() {
+            $(this).addClass('liSelected').siblings().removeClass('liSelected');
+            //alert("test click chat message2")
+            var $this = $(this);
+
+            //do something with the message (maybe delete , timeout , ban)
+
+
+        });
+
+
     });
 </script>

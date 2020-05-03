@@ -7,11 +7,12 @@
 
     <!--  
         //<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"> -->
-
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/chat.css">
     <link rel="stylesheet" href="../css/toggle.css">
+
 
 </head>
 
@@ -400,8 +401,20 @@
                 </div> -->
 
                 <div class="moduleTheme" id="divWrapperChat" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:460px; left: 0px; top: 100px;">
+                    <div>
+                        <p id="chatwindowText">Chat Window</p>
 
-                    <p id="chatwindowText">Chat Window</p>
+
+                        <label class="switch">
+                            <input id="ChatWhispersSwitchChkBox" type="checkbox" checked>
+                            <span class="slider round"></span>
+                            <p class="slider-text" style="
+                            float: right;
+                            padding-right: 50px;
+                            margin-top: 5px;
+                        ">Whisper</p>
+                        </label>
+                    </div>
 
                     <div class="btn-group-vertical-rightcommandslist" role="group">
                         <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperChat','divWrapperChat')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
@@ -417,6 +430,8 @@
 
                         <div class="insideBox" id="chatbox">
                             <ul style="padding-inline-start: 5px;" id="incomingChatMessages"></ul>
+
+
                         </div>
                         <div>
                             <div style='width: 350px;'>
@@ -433,6 +448,16 @@
                         </div>
 
                     </div>
+                </div>
+
+
+
+
+                <div id="dialog" hidden="true" role="dialog" class="ui-dialog ui-corner-all ui-widget ui-widget-content ui-front ui-draggable ui-resizable">
+                    <!-- src="https://media2.giphy.com/media/dBCWyNMrcJf07pP2kb/giphy.gif?cid=ecf05e47a1e7a9301f84b6b14cdd4a45e2c51eb8062708f7&rid=giphy.gif" -->
+                    <img id="dialogImg" height="250" width="250" src="" />
+                    <p id="dialogText"></p>
+
                 </div>
 
                 <div class="moduleTheme" id="divWrapperFollowers" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:460px; left: 400px; top: 100px;">
@@ -1523,7 +1548,7 @@
                                     <th width="10%">Parent</th>
                                     <th width="10%">Ratio</th>
                                 </thead>
-                                <tbody style="width:300px;" id="tableCOBody">
+                                <tbody style="width:300px;" id="tableCRBody">
 
                                 </tbody>
 
@@ -1568,8 +1593,8 @@
                                             <div id="currencyBasedOnDD" class="cmdSpansCombo">Based On:- </div>
                                             <select id="currencyBasedOnSelect" class="dropdownTheme">
                                             <option value="default">Select an Option</option>
-                                            <option value="currBasedHours">Hours</option>
-                                            <option value="currBasedPoints">Points</option>
+                                            <option value="Hours">Hours</option>
+                                            <option value="Points">Points</option>
                                             </select>
                                         </div>
 
@@ -1604,8 +1629,8 @@
 
                                         <div id="currencySubmit">
                                             <div class="btn-group-vertical-right" role="group">
-                                                <button class="toggleButton" id="submitCurrencyButton" type="button" onclick="addSaveCurrency()">Save <i class='far fa-save' style='font-size:20px;color:white;'></i></button>
-                                                <button class="toggleButton" id="deleteCurrencyButton" type="button" onclick="deleteCommand()">Del <i class='far fa-trash-alt' style='font-size:20px;color:darkred;'></i></button>
+                                                <button class="toggleButton" id="submitCurrencyButton" type="button" onclick="addSaveCurrency()">Save <i class='far fa-save' style='font-size:20px;color:green;'></i></button>
+                                                <button class="toggleButton" id="deleteCurrencyButton" type="button" onclick="deleteCurrency()">Del <i class='far fa-trash-alt' style='font-size:20px;color:darkred;'></i></button>
                                             </div>
                                         </div>
 
@@ -1633,64 +1658,24 @@
 
                                         <div id="rankSubmit">
                                             <div class="btn-group-vertical-right" role="group">
-                                                <button class="toggleButton" id="submitRankButton" type="button" onclick="addSaveCurrencyRank()">Add to List <i class='far fa-save' style='font-size:20px;color:white;'></i></button>
+                                                <button class="toggleButton" id="submitRankButton" type="button" onclick="addSaveCurrencyRank()">Add Rank <i class='far fa-save' style='font-size:15px;color:green;'></i></button>
+                                                <button class="toggleButton" id="deleteRankButton" type="button" onclick="deleteCurrencyRank()">Del Rank <i class='far fa-trash-alt' style='font-size:15px;color:darkred;'></i></button>
                                             </div>
                                         </div>
 
 
                                         <!-- -->
                                         <div style="overflow-x:auto;float:left; height:140px; width:330px;">
-                                            <table id="tableCR">
+                                            <table id="tableRank">
                                                 <thead>
-                                                    <th width="10%">Act</th>
-                                                    <th width="10%">ID</th>
-                                                    <th width="32%">Rank Name</th>
+                                                    <!-- <th width="10%">Act</th> -->
+                                                    <th width="66%">Rank Name</th>
                                                     <th width="32%">Amount</th>
-
-
                                                 </thead>
 
 
-                                                <tbody style="width:280px;" id="tableCRBody">
-                                                    <tr>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                    </tr>
+                                                <tbody style="width:280px;" id="tableRanksBody">
 
-                                                    <tr>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                    </tr>
-
-                                                    <tr>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                        <td>test</td>
-                                                    </tr>
 
                                                 </tbody>
 
@@ -1705,6 +1690,47 @@
                     </div>
 
                 </div>
+
+
+                <div class="moduleTheme" id="divWrapperWhisper" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:460px; left: 0px; top: 100px;">
+
+                    <p id="whisperwindowText">Whisper Window</p>
+
+                    <div class="btn-group-vertical-rightcommandslist" role="group">
+                        <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperWhisper','divWrapperWhisper')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
+
+                        <br>
+
+                        <button type="button" id="movWhisperBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperWhisper','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                                    <i class='fas fa-arrows-alt' style='font-size:24px;'></i></button>
+                    </div>
+
+
+                    <div id="wrapperWhisper">
+
+                        <div class="insideBox" id="whisperbox">
+                            <ul style="padding-inline-start: 5px;" id="incomingWhisperMessages"></ul>
+
+
+
+                        </div>
+                        <!--                         <div>
+                            <div style='width: 350px;'>
+                                                           <p style="line-height:44px;height:44px;padding-left:10px;text-align:center;float:left;width:150px;clear:right;">Send Message As:</p>
+                                <select style="float:left;" id="selMixerSendChatMessageVars" class="dropdownTheme">
+     
+                                <option value="default" >Bot</option>
+                                <option value="mixerSendStreamer" >Streamer</option>
+                                    </select> 
+                            </div>
+                                                         <div style="float: none; clear: both;"></div>
+                            <p id="sendMessageTxtBox" class="moduleText">Send Message (Hitting enter/return key sends the message):</p>
+                            <textarea id="outgoingChatMessage" rows="4" cols="55" placeholder="Enter command text here" required></textarea> 
+                        </div> -->
+
+                    </div>
+                </div>
+
 
             </div>
         </div>

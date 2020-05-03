@@ -300,6 +300,17 @@
             removeCommandFromTable(message);
         });
 
+        iosocket.on('RemoveCurrencyFromTable', function(message) {
+            removeCurrencyFromTable(message);
+        });
+
+        iosocket.on('RemoveCurrencyRankFromTable', function(currencyId, currencyRankName) {
+
+            //tr = $('<tr id="ID' + data.id + "RNK" + data.currencyRankName + '" class /> ');
+            let rankID = "ID" + currencyId + "RNK" + currencyRankName;
+            removeRankFromTable(rankID);
+        });
+
         iosocket.on('outstandingNotes', function(message) {
 
             //this is to warn the streamer they have outstanding items to do.
@@ -313,6 +324,8 @@
             //this is a constellation update
             console.log('update in chat io');
             console.log('update is: ' + console.log(JSON.stringify(message)));
+
+            alert(JSON.stringify(message));
 
         });
 
@@ -427,6 +440,10 @@
             addTimersToTable(data);
         });
 
+        iosocket.on('currencylist', function(data) {
+            addCurrencyToTable(data);
+        });
+
         iosocket.on('addSaveSingleTimer', function(data) {
             addorAmendTimerToTable(data);
         });
@@ -438,6 +455,12 @@
         iosocket.on('addSaveSingleCurrency', function(data) {
             addorAmendCurrencyToTable(data);
         });
+
+
+        iosocket.on('currencyRanksSelect', function(data, currencyId) {
+            addCurrencyRanksToTable(data, currencyId);
+        });
+
 
         iosocket.on('addSaveSingleCommand', function(data) {
             addorAmendCommandToTable(data);
@@ -511,7 +534,18 @@
                     }
 
                 } else {
-                    alert('Message is empty, quit the paperwork!');
+
+
+                    //TODO build a dbObject for UI config settings for -->
+                    //                   -->  dialogEmptyTextMessage , dialogNotesOutstandingMessage etc..
+                    var dialogText = "What are you on?, I want some.";
+                    showDialogWithImage("dialog", "dialogText", dialogText, "Message is empty");
+                    /* $("#dialog").dialog({
+                        title: "Quit the Paperwork",
+                        modal: true,
+                        resizable: false
+                    }).show(); */
+
                 }
 
             }
@@ -970,6 +1004,54 @@
 
         }
 
+        addorAmendCurrencyRankToTable = function(data) {
+
+            var tr;
+
+            var currencyRankRow = document.getElementById("tableRank").rows.namedItem("ID" + data.id + "RNK" + data.currencyRankName);
+
+            if (currencyRankRow != null) {
+
+                var currencyRankRowIndex = currencyRankRow.rowIndex;
+
+                var RnkRow = document.getElementById("tableRank").rows[currencyRankRowIndex].cells;
+
+                RnkRow[1].innerHTML = data.currencyRankName;
+                RnkRow[2].innerHTML = data.currencyRankAmount;
+
+
+            } else {
+                console.log('Currency data for table is:' + data.id)
+
+                tr = $('<tr id="ID' + data.id + "RNK" + data.currencyRankName + '" class /> ');
+                // tr = $('<tr class /> ');
+                //tr.append("<td>" + data.id + "</td>"); 
+                tr.append("<td>" + data.currencyRankName + "</td>");
+                tr.append("<td>" + data.currencyRankAmount + "</td>");
+
+
+                $('#tableRank').append(tr);
+            }
+
+        }
+
+        addCurrencyRanksToTable = function(data, currencyId) {
+
+            var tr;
+            if (data != null) {
+                for (var i = 0; i < data.length; i++) {
+
+                    //these are people you follow
+                    tr = $('<tr id="ID' + currencyId + "RNK" + data[i].name.replace(/ /g, '') + '" class /> ');
+                    tr.append("<td>" + data[i].name + "</td>");
+                    tr.append("<td>" + data[i].amount + "</td>");
+                    $('#tableRank').append(tr);
+                }
+            }
+
+
+        }
+
         addorAmendCommandToTable = function(data) {
 
             var tr;
@@ -1156,6 +1238,46 @@
                     tr.append("<td>" + "N/A" + "</td>");
                     tr.append("<td>" + "N/A" + "</td>");
                     $('#tableTIM').append(tr);
+
+                }
+            }
+        }
+
+        addCurrencyToTable = function(data) {
+
+            if (data != null) {
+
+                var tr;
+                for (var i = 0; i < data.length; i++) {
+                    //     tr = $('<tr id="CR' + data.id + '" class /> ');
+                    // // tr = $('<tr class /> ');
+                    // tr.append("<td>" + data.enabled + "</td>");
+                    // tr.append("<td>" + data.id + "</td>");
+                    // tr.append("<td>" + data.currencyName + "</td>");
+                    // tr.append("<td>" + data.currencyBasedOn + "</td>");
+                    // tr.append("<td>" + data.currencyPerMin + "</td>");
+                    // tr.append("<td>" + data.currencyParent + "</td>");
+                    // tr.append("<td>" + data.currencyRatio + "</td>");
+
+
+
+                    var rowID = data[i].id;
+                    //var result = isFollowing(id);
+                    console.log('timers data for table is:' + data[i])
+
+                    var hidden = "display:none;";
+
+                    tr = $('<tr id="CR' + rowID + '" class /> ');
+                    // tr = $('<tr class /> ');
+                    tr.append("<td>" + data[i].enabled + "</td>");
+                    tr.append("<td>" + data[i].id + "</td>");
+                    tr.append("<td>" + data[i].currencyName + "</td>");
+                    tr.append("<td>" + data[i].currencyBasedOn + "</td>");
+                    tr.append("<td>" + data[i].currencyPerMin + "</td>");
+                    tr.append("<td>" + data[i].currencyParent + "</td>");
+                    tr.append("<td>" + data[i].currencyRatio + "</td>");
+
+                    $('#tableCR').append(tr);
 
                 }
             }
@@ -1443,6 +1565,18 @@
             $("#CO" + commandID).remove();
         }
 
+        removeCurrencyFromTable = function(commandID) {
+            //check these and whats in them
+            console.log("Currency ID to remove is: " + commandID);
+            $("#CR" + commandID).remove();
+        }
+
+        removeRankFromTable = function(rankID) {
+            //check these and whats in them
+            console.log("Currency Rank ID to remove is: " + rankID);
+            $("#" + rankID).remove();
+        }
+
         commandsPanelSelectPerms = function(data) {
             if (data === "User") {
                 document.getElementById("commandUser").readOnly = false;
@@ -1585,7 +1719,7 @@
         }
 
         //check the following to see if I am following my follower
-        function checkIfFollowing(data) {
+        checkIfFollowing = function(data) {
 
             var found = isFollowing(data);
 
@@ -1625,16 +1759,28 @@
 
         isFollowingMyFollower = function(userID) {
             //check if I am following my follower
+
+            //TODO (call api to check if I follow -->
+            //    --> as big streamers will have loads of followers and not all will be loaded)
+
             var FollowingRow = $("#FLW" + userID);
 
-            if (FollowingRow !== null) {
+            if (Object.keys(FollowingRow).length > 2) {
 
-                //I am following
-                return "Following";
+                return "Unfollow";
+                // Your code here if x has some properties  
             } else {
-                //I am not following
-                return "Not Following";
+                return "Follow";
             }
+
+            /* if (FollowingRow !== null) {
+
+            //I am following
+            return "Following";
+            } else {
+            //I am not following
+            return "Not Following";
+            } */
 
         }
 
@@ -1702,6 +1848,8 @@
             }
 
         }
+
+
 
         //#region 
         $("#chtUsrChkBox").change(function() {
@@ -1778,6 +1926,16 @@
             chkBoxToglModuleVisible('divWrapperTimerPanel');
         });
 
+        $("#ChatWhispersSwitchChkBox").change(function() {
+            if (document.getElementById("ChatWhispersSwitchChkBox").checked) {
+                UnHideUIClassElement("whisperMessageRow");
+            } else {
+                HideUIClassElement("whisperMessageRow");
+            }
+        });
+
+
+
         $("#switch1").change(function() {
 
             if (document.getElementById('switch1').checked) {
@@ -1823,9 +1981,10 @@
 
             if (cmdObject != undefined) {
                 iosocket.emit('addSaveCommand', cmdObject);
+                setAddSaveDeleteCommandDefaults();
             }
 
-            setAddSaveDeleteCommandDefaults();
+
 
 
         }
@@ -1834,13 +1993,46 @@
 
             var currObject = getCurrencyVariablesFromUI();
 
-            convertEnabledBoolToYORN(currObject)
-
             if (currObject != undefined) {
-                iosocket.emit('addSaveCurrency', currObject);
+                convertEnabledBoolToYORN(currObject)
+
+                if (currObject != undefined) {
+                    iosocket.emit('addSaveCurrency', currObject);
+                }
+
+                setAddSaveDeleteCurrencyDefaults();
+                $("#tableRank").find("tr:not(:first)").remove();
+
             }
 
-            setAddSaveDeleteCurrencyDefaults();
+
+
+        }
+
+        addSaveCurrencyRank = function() {
+
+            //inputRankName
+            //inputRankAmount
+            var currRankObject = getCurrencyRankVariablesFromUI();
+
+            if (currRankObject != undefined) {
+                iosocket.emit('addSaveCurrencyRank', currRankObject);
+                setAddSaveDeleteCurrencyRankDefaults();
+            }
+
+
+
+        }
+
+
+        deleteCurrencyRank = function() {
+
+            var currRankObject = getCurrencyRankVariablesFromUI();
+
+            if (currRankObject != undefined) {
+                iosocket.emit('deleteCurrencyRank', currRankObject);
+                setAddSaveDeleteCurrencyRankDefaults();
+            }
 
         }
 
@@ -1918,20 +2110,43 @@
 
             if (cmdObject != undefined) {
                 iosocket.emit('deleteCommand', cmdObject);
+                setAddSaveDeleteCommandDefaults();
             }
 
-            setAddSaveDeleteCommandDefaults();
+
 
         }
+
+        deleteCurrency = function() {
+
+            var cmdObject = getCurrencyVariablesFromUI();
+            if (confirm(' will no longer gain more currency')) {
+                if (cmdObject != undefined) {
+                    iosocket.emit('deleteCurrency', cmdObject);
+                    setAddSaveDeleteCurrencyDefaults();
+                    $("#tableRank").find("tr:not(:first)").remove();
+                } else {
+                    alert('Currency not deleted!');
+                }
+
+            } else {
+
+                alert('Currency was not deleted');
+
+            }
+        }
+
+
 
         addSaveTimer = function() {
             var timObject = getTimerVariablesFromUI();
 
             if (timObject != undefined) {
                 iosocket.emit('addSaveTimer', timObject);
+                setSaveDeleteTimerDefaults();
             }
 
-            setSaveDeleteTimerDefaults();
+
         }
 
         addSaveTrigger = function() {
@@ -1939,9 +2154,9 @@
 
             if (triObject != undefined) {
                 iosocket.emit('addSaveTrigger', triObject);
+                setSaveDeleteTriggerDefaults();
             }
 
-            setSaveDeleteTriggerDefaults();
         }
 
         addSaveNote = function() {
@@ -1949,11 +2164,11 @@
 
             if (notObject != undefined) {
                 iosocket.emit('addSaveNote', notObject);
+                setSaveNoteDefaults();
+                processOutstandingNotes();
             }
 
-            setSaveNoteDefaults();
 
-            processOutstandingNotes();
         }
 
         deleteNote = function() {
@@ -1961,8 +2176,9 @@
 
             if (notObject != undefined) {
                 iosocket.emit('deleteNote', notObject);
+                setDeleteNoteDefaults();
             }
-            setDeleteNoteDefaults();
+
         }
 
         newNote = function() {
@@ -1989,8 +2205,9 @@
 
             if (triObject != undefined) {
                 iosocket.emit('deleteTrigger', triObject);
+                setSaveDeleteTriggerDefaults();
             }
-            setSaveDeleteTriggerDefaults();
+
         }
 
         deleteTimer = function() {
@@ -1998,9 +2215,8 @@
 
             if (timObject != undefined) {
                 iosocket.emit('deleteTimer', timObject);
+                setSaveDeleteTimerDefaults();
             }
-
-            setSaveDeleteTimerDefaults();
         }
 
         //need to work on this
@@ -2014,16 +2230,18 @@
             var cmdObject = getAlertVariablesFromUI();
             if (cmdObject != undefined) {
                 iosocket.emit('deleteAlert', cmdObject);
+                setAddSaveDeleteAlertDefaults();
             }
-            setAddSaveDeleteAlertDefaults();
+
         }
 
         addSaveMedia = function() {
             var mediaObject = getMediaVariablesFromUI();
             if (mediaObject != undefined) {
                 iosocket.emit('addSaveMedia', mediaObject);
+                setAddSaveDeleteMediaDefaults();
             }
-            setAddSaveDeleteMediaDefaults();
+
         }
 
         deleteMedia = function() {
@@ -2133,7 +2351,6 @@
             }
 
             return dayStr;
-
         }
 
         function getDayName(i) {
@@ -2246,7 +2463,11 @@
                 var newID = getFullDateTimeStringForID(datetimeNow);
                 //inputCurrencyId
                 SetSelectElement("inputCurrencyId", newID.toString());
-                document.getElementById("newCurrencyButton,").disabled = true
+
+            } else {
+
+                alert('Save Exising currency prior to creating a new currency');
+
             }
 
         }
@@ -2320,6 +2541,14 @@
 
             document.getElementById('currencyBasedOnSelect').value = "default";
             document.getElementById('currencyParentSelect').value = "default";
+
+        }
+
+        //resets values
+        function setAddSaveDeleteCurrencyRankDefaults() {
+
+            SetSelectElement("inputRankName", "");
+            SetSelectElement("inputRankAmount", "");
 
         }
 
@@ -2417,24 +2646,61 @@
 
             //document.getElementById('currencyBasedOnSelect').value;
             var currBasedOn = document.getElementById('currencyBasedOnSelect').selectedOptions[0].innerText;
+            var currBasedOnValue = document.getElementById('currencyBasedOnSelect').selectedOptions[0].value;
 
 
 
             //currency can't be its own parent
             var currParent = document.getElementById('currencyParentSelect').value;
 
-            var currObject = new Object();
+            if (currName.length < 1 || currBasedOnValue == 'default') {
+                alert('Currency Name and Based On are required');
 
-            //creates the command object
-            currObject["id"] = currId;
-            currObject["enabled"] = currEnabled;
-            currObject["currencyName"] = currName
-            currObject["currencyPerMin"] = currPerMin;
-            currObject["currencyRatio"] = currRatio; //only required if parent exists
-            currObject["currencyBasedOn"] = currBasedOn;
-            currObject["currencyParent"] = currParent;
+            } else {
+                var currObject = new Object();
 
-            return currObject;
+                //creates the command object
+                currObject["id"] = currId;
+                currObject["enabled"] = currEnabled;
+                currObject["currencyName"] = currName
+                currObject["currencyPerMin"] = currPerMin;
+                currObject["currencyRatio"] = currRatio; //only required if parent exists
+                currObject["currencyBasedOn"] = currBasedOn;
+                currObject["currencyParent"] = currParent;
+
+                return currObject;
+            }
+
+
+        }
+
+
+        function getCurrencyRankVariablesFromUI() {
+
+            var currId = document.getElementById('inputCurrencyId').value;
+            var currRankName = document.getElementById('inputRankName').value;
+            var currRankAmount = document.getElementById('inputRankAmount').value;
+
+            if (currId.length < 1) {
+                alert('Select or create a currency prior to adding a rank');
+
+            } else {
+                if (currRankName.length < 1 || currRankAmount.length < 1) {
+                    alert('Rank name or amount cannot be empty');
+                    return undefined;
+
+                } else {
+                    var currRankObject = new Object();
+
+                    //creates the command object
+                    currRankObject["id"] = currId;
+                    currRankObject["currencyRankName"] = currRankName;
+                    currRankObject["currencyRankAmount"] = currRankAmount;
+
+                    return currRankObject;
+
+                }
+            }
 
         }
 
@@ -2705,6 +2971,19 @@
         }
 
     }
+
+    function getBasedOnFromCurrency(currencyBasedOn) {
+
+        console.log('BasedOnValue = ' + currencyBasedOn)
+        switch (currencyBasedOn) {
+            case "Points":
+                return "Points";
+            default:
+                return "Hours";
+        }
+
+    }
+
 
     function pushDivToBack(value, index, array) {
 
@@ -3325,6 +3604,25 @@
         objDiv.scrollTop = objDiv.scrollHeight;
     }
 
+    function HideUIClassElement(className) {
+
+        var ClassElements = document.getElementsByClassName(className);
+        for (var i = 0; i < ClassElements.length; i++) {
+            var element = ClassElements[i].style.display = "none";
+        }
+
+    }
+
+    function UnHideUIClassElement(className) {
+
+
+        var ClassElements = document.getElementsByClassName(className);
+        for (var i = 0; i < ClassElements.length; i++) {
+            ClassElements[i].removeAttribute("style");
+        }
+
+    }
+
     function setDeviceWidthLayout() {
         console.log('device width = ' + devicewidth.toString());
         document.getElementById("container").style.width = Math.round((devicewidth / 100 * 85) + 11) + 'px';
@@ -3371,21 +3669,73 @@
         var avatarURL = avatarURL;
 
         li = $('<li/> ');
-        li.append('<img class="mixerChat" height="25" width="25" src="' + avatarURL + '" alt="avatar" id="itemImg" style="border-radius: 50%;">');
+        //li.append('<img class="mixerChat" height="25" width="25" src="' + avatarURL + '" alt="avatar" id="itemImg" style="border-radius: 50%;">');
 
         if (isWhisper) {
-            li.append('<div style="float:left; font-style: italic;font-weight:lighter;font_family:arial;"><p style="' + styleColour + '">' + UserName + ' - ' + primaryRole + ' <span style="color:midnightblue;padding-left:5px;">' + messageDate + '</span></p> <p style="color:blue;">Whisper: ' + message + '</p></div>');
+            //auto hosts aren't aligning properly
+            // li.append('<div style="float:left; font-style: italic;font-weight:lighter;font_family:arial;"><p style="' + styleColour + '">' + UserName + ' - ' + primaryRole + ' <span style="color:midnightblue;padding-left:5px;">' + messageDate + '</span></p> <p style="color:blue;">Whisper: ' + message + '</p></div>');
+            // li.append('<div style="float: none; clear: both;"></div>');
+
+            //li.append('<div style="float:left; font-style: italic;font-weight:lighter;font_family:arial;"><span style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span> <span style="color:midnightblue;padding-left:5px;">' + messageDate + '</span> <span style="color:blue;">Whisper: ' + message + '</span></div>');
+
+            // li.append('<div tabindex="-1"> <img class="mixerChat" height="25" width="25" src="' + avatarURL + '" alt="avatar" id="itemImg" style="border-radius: 50%; "> <div style=" clear: both; margin-bottom:10px;margin-left:40px; font-style: italic;font-weight:lighter;font_family:arial;">  <span style="margin-left:5px;' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:blue; margin-bottom:10px; margin-left: 5px;">' + message + '</span> </div> </div>');
+
+
+            li.append('<div id="whisperMessageRow" class="whisperMessageRow" tabindex="-1" style="position:relative; clear:both;"> <img class="mixerChat" src="' + avatarURL + '" width="25" height="25" aria-hidden="true" style="border-radius: 50%;"><div id="messageRowText" class style="margin-left: 30px; margin-top:8px; font-style: italic;font-weight:lighter;font_family:arial;" ><span class style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:blue; margin-bottom:10px; margin-left: 5px;">' + message + '</span></div></div>');
+
 
         } else {
-            li.append('<p style="margin-left:25px;' + styleColour + '">' + UserName + ' - ' + primaryRole + ' <span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span></p>  <p style="color:black; margin-bottom:10px; margin-left: 25px;">' + message + '</p>');
+
+            li.append('<div id="messageRow" class="messageRow" tabindex="-1" style="position:relative; clear:both;"> <img class="mixerChat" src="' + avatarURL + '" width="25" height="25" aria-hidden="true" style="border-radius: 50%;"><div id="messageRowText" class style="margin-left: 30px; margin-top:8px;" ><span class style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:black; margin-bottom:10px; margin-left: 5px;">' + message + '</span></div></div>');
+
+            //li.append('<p style="margin-left:25px;' + styleColour + '">' + UserName + ' - ' + primaryRole + ' <span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span></p>  <p style="color:black; margin-bottom:10px; margin-left: 25px;">' + message + '</p>');
+
+            //good one
+            // li.append('<div class="messageRow" tabindex="-1" style="position:relative; clear:both;"> <img class="mixerChat" height="25" width="25" src="' + avatarURL + '" alt="avatar" id="itemImg" style="border-radius: 50%; "> <div style="float: left; clear: both; margin-bottom:10px; margin-left:25px;">  <span style="margin-left:5px;' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:black; margin-bottom:10px; margin-left: 5px;">' + message + '</span> </div> </div>');
 
         }
-        li.append('<div style="float: none; clear: both;"></div>');
+        //li.append('<div style="float: none; clear: both;"></div>');
         $('#incomingChatMessages').append(li);
 
-        $('#incomingChatMessages').append(li);
+        // $('#incomingChatMessages').append(li);
     }
 
+    function showDialogWithImage(parentElementId, elementId, text, dialogTitle) {
+
+        emptyElementById(elementId);
+        addImageToDialogFromWeb("dialogImg");
+        appendTextToElementById(elementId, text);
+
+
+        $("#" + parentElementId).dialog({
+            title: dialogTitle,
+            modal: true,
+            resizable: false
+        }).show();
+    }
+
+    function emptyElementById(elementId) {
+
+        document.getElementById(elementId).innerHTML = '';
+    }
+
+    function appendTextToElementById(elementId, text) {
+        document.getElementById(elementId).innerHTML += text;
+    }
+
+    function addImageToDialogFromWeb(imageElement) {
+
+        var srcUrl = "https://media2.giphy.com/media/dBCWyNMrcJf07pP2kb/giphy.gif?cid=ecf05e47a1e7a9301f84b6b14cdd4a45e2c51eb8062708f7&rid=giphy.gif";
+        $("#" + imageElement).attr("src", srcUrl);
+
+        /*        // src="https://media2.giphy.com/media/dBCWyNMrcJf07pP2kb/giphy.gif?cid=ecf05e47a1e7a9301f84b6b14cdd4a45e2c51eb8062708f7&rid=giphy.gif"
+
+                var imageHtml = '<img id="dialogImg" src="' + srcUrl + '" width="250" height="250" aria-hidden="true" style="border-radius: 50%;">';
+                $('#' + parentElement).append(imageHtml); */
+
+    }
+
+    //analytics TODO
     function buildChartUsingJson() {
         var jsonfile = {
             "jsonarray": [{

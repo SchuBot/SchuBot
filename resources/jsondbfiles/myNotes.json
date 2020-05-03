@@ -22,13 +22,6 @@
             "priority": "High"
         },
         {
-            "id": "n11210201881",
-            "todo": "N",
-            "note": "Recent Followers Function - Add Item to tableRecentFollowers",
-            "private": "N",
-            "priority": "false"
-        },
-        {
             "id": "n41510201847",
             "todo": "Y",
             "note": "Lootation Game",
@@ -45,9 +38,9 @@
         {
             "id": "n41510201895",
             "todo": "Y",
-            "note": "Currency Panel functionality",
+            "note": "add Parent functionality to currency window",
             "private": "N",
-            "priority": "false"
+            "priority": "N"
         },
         {
             "id": "n51610201842",
@@ -80,9 +73,9 @@
         {
             "id": "n934201963",
             "todo": "Y",
-            "note": "add priority category dropdown to notes panel",
-            "private": "N",
-            "priority": "true"
+            "note": "fix notes window",
+            "private": "Y",
+            "priority": "N"
         },
         {
             "id": "n1105201933",
@@ -92,7 +85,9 @@
         {
             "id": "n1105201964",
             "todo": "Y",
-            "note": "add event listener to chat li to enable message deletions and timeouts (in the future)"
+            "note": "add functionality to message selection",
+            "priority": "N",
+            "private": "N"
         },
         {
             "id": "n0209201984",
@@ -119,9 +114,39 @@
             "private": "N"
         },
         {
-            "id": "n0310201998",
+            "id": "n2344202016301",
             "todo": "Y",
-            "note": "auto hosts whispers not aligning on chat window - remove div"
+            "note": "custom kitty logo change to user defined.",
+            "priority": "H",
+            "private": "Y"
+        },
+        {
+            "id": "n23442020163956",
+            "todo": "Y",
+            "note": "UI Theme Preset Options (5 presets)",
+            "priority": "N",
+            "private": "Y"
+        },
+        {
+            "id": "n23442020175820",
+            "todo": "Y",
+            "note": "Fix html parsing by using the text versio n of the message",
+            "priority": "",
+            "private": "Y"
+        },
+        {
+            "id": "n25462020124210",
+            "todo": "Y",
+            "note": "adding currency button should be disabled when rank is selected or saves the existing one",
+            "priority": "H",
+            "private": "Y"
+        },
+        {
+            "id": "n2562020145235",
+            "todo": "Y",
+            "note": "add rank does not update UI",
+            "priority": "Y",
+            "private": "N"
         }
     ]
 }

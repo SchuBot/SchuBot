@@ -4,6 +4,7 @@ let events = require('events');
 //let botConfig = require('./config.js');
 //module
 //NEED TO CHANGE THIS TO THE NEW MIXER-NODE VERSION
+//change all of this to a class
 let obj = function() {
     const Carina = require('carina').Carina;
     const ws = require('ws');
@@ -34,8 +35,25 @@ let obj = function() {
     });
     ca.subscribe(`channel:${channelId}:update`, data => {
         console.log(`update event in contellation ` + data);
+        //log(`constellation update event ` + data);
         //console.log(data);
-        self.emit('event', { type: 'update', info: data });
+
+        if (data.hasOwnProperty('type')) {
+            //game has been changed
+            self.emit('event', { type: 'game update', info: data });
+        } else if (data.hasOwnProperty('channel')) {
+            self.emit('event', { type: 'update', info: data });
+        } else if (data.hasOwnProperty('name')) {
+            self.emit('event', { type: 'titleChanged', info: data });
+        } else if (data.hasOwnProperty('preferences')) {
+            self.emit('event', { type: 'preferencesChanged', info: data });
+        } else {
+
+            self.emit('event', { type: 'unknown', info: data });
+        }
+
+
+
     });
     ca.subscribe(`interactive:${channelId}:connect`, data => {
         console.log(`interactive connect event in contellation ` + data);

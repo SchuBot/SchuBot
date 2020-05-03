@@ -6,6 +6,13 @@ function setFileDefaults(value) {
     }
 }
 
+function setDropDownValue(element, value) {
+
+    document.getElementById(element).selectedOptions[0].innerText = value;
+
+}
+
+
 function clearFileDefaults(value) {
     if (value.startsWith("default")) {
         return "";
@@ -48,5 +55,6 @@ module.exports = {
     clearFileDefaults,
     SetCheckboxElement,
     SetSelectElement,
-    UnCheckElement
+    UnCheckElement,
+    setDropDownValue
 }

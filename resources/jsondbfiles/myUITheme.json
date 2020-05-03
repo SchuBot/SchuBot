@@ -2,14 +2,14 @@
     "uitheme": [
         {
             "info": "this is to hold the theme",
-            "outside": "#c0c0c0",
-            "inside": "#808080",
+            "outside": "#808080",
+            "inside": "#c0c0c0",
             "searchbg": "#cccccc",
-            "bgcolor": "#000000",
+            "bgcolor": "#370037",
             "panelheadertextcolor": "#000000",
             "buttontextcolor": "#000000",
             "buttoncolor": "#808080",
-            "combocolour": "#808080",
+            "combocolour": "#6d6d6d",
             "combotextcolor": "#000000"
         }
     ]
