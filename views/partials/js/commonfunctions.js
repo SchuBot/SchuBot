@@ -8,7 +8,19 @@ function setFileDefaults(value) {
 
 function setDropDownValue(element, value) {
 
+    var el = document.getElementById(element);
+
     document.getElementById(element).selectedOptions[0].innerText = value;
+
+
+}
+
+function setDropDownValueParent(element, value) {
+
+    var el = document.getElementById(element);
+
+    document.getElementById(element).selectedOptions[1].innerText = value;
+
 
 }
 
@@ -46,6 +58,8 @@ function UnCheckElement(id) {
 
 }
 
+
+
 // function getUsers() {
 //     // Code here
 // }
@@ -56,5 +70,7 @@ module.exports = {
     SetCheckboxElement,
     SetSelectElement,
     UnCheckElement,
-    setDropDownValue
+    setDropDownValue,
+    setDropDownValueParent
+
 }

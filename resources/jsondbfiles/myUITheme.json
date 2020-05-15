@@ -5,11 +5,11 @@
             "outside": "#808080",
             "inside": "#c0c0c0",
             "searchbg": "#cccccc",
-            "bgcolor": "#370037",
+            "bgcolor": "#000000",
             "panelheadertextcolor": "#000000",
             "buttontextcolor": "#000000",
             "buttoncolor": "#808080",
-            "combocolour": "#6d6d6d",
+            "combocolour": "#c0c0c0",
             "combotextcolor": "#000000"
         }
     ]

@@ -1,55 +1,42 @@
 {
     "currency": [
         {
-            "id": "n23442020155854",
+            "id": "n956202016591",
             "enabled": "Y",
-            "currencyName": "points",
-            "currencyPerMin": "5",
-            "currencyRatio": "",
-            "currencyBasedOn": "Points",
-            "currencyParent": "default",
+            "currencyName": "Bronze",
+            "currencyPerMin": "7",
+            "currencyRatio": "4",
+            "currencyBasedOn": "Hours",
+            "currencyParentId": "n956202016591",
+            "currencyParentName": "Bronze",
             "option1": "",
             "option2": "",
             "ranks": [
                 {
-                    "name": "Rank Three",
-                    "amount": "100000"
+                    "name": "Test Rank",
+                    "amount": "6"
+                }
+            ]
+        },
+        {
+            "id": "n956202017217",
+            "enabled": "Y",
+            "currencyName": "Silver",
+            "currencyPerMin": "56",
+            "currencyRatio": "5",
+            "currencyBasedOn": "Hours",
+            "currencyParentId": "n956202017217",
+            "currencyParentName": "Silver",
+            "option1": "",
+            "option2": "",
+            "ranks": [
+                {
+                    "name": "Test Rank",
+                    "amount": "6"
                 },
                 {
-                    "name": "Rank Four",
-                    "amount": "56"
-                },
-                {
-                    "name": "Rank Twods",
-                    "amount": "10000"
-                },
-                {
-                    "name": "Rank Foursdf",
-                    "amount": "56"
-                },
-                {
-                    "name": "Rank Foursdf",
-                    "amount": "56"
-                },
-                {
-                    "name": "Rank Twods",
-                    "amount": "10000"
-                },
-                {
-                    "name": "Rank Four",
-                    "amount": "56"
-                },
-                {
-                    "name": "Rank Three",
-                    "amount": "100000"
-                },
-                {
-                    "name": "Rank Twods",
-                    "amount": "10000"
-                },
-                {
-                    "name": "Rank Foursd",
-                    "amount": "56"
+                    "name": "Test Rank 2",
+                    "amount": "7"
                 }
             ]
         }

@@ -32,6 +32,7 @@ class currencyManager {
                     }
                     if (offlineinterval > 0) {
 
+
                         //not used at the moment but will be used in future
                         // setTimeout(function() { OfflinePayOut(offlineinterval, element, currencyUsers); }, 1000 * offlineinterval);
                     }
@@ -100,29 +101,6 @@ class currencyManager {
                     var pointsToAdd = viewerpoints;
                     var newPoints = currentPoints + pointsToAdd;
 
-
-
-                    // console.log(element.username + ' points is: ' + newPoints.toString());
-                    // console.log(element.username + ' hours is: ' + newhours.toString());
-
-                    /*             
-
-
-            "id": "50898908098-1",
-            "iddescription": "the above is a combination of the user id and currency id",
-            "userid": "1",
-            "currencyid": "1",
-            "currencyiddescription": "the currency id is to add points to the correct currency",
-            "username": "Schuster",
-            "hours": 859.8166666667763,
-            "points": 50367,
-            "currentrank": "Rank 1",
-            "nextrank": "Rank 2",
-            "type": "Regular"
-
-
-                                        } */
-
                     // cmd.cenabled
                     currencyUsers.data.currencyUsers[count].hours = newhours;
                     currencyUsers.data.currencyUsers[count].points = newPoints;
@@ -136,14 +114,7 @@ class currencyManager {
 
                 });
             }
-            /*             myReaddir(fs, folder)
-                            .then(function(data) {
-                                console.log(data);
-                                // need to ensure that the files don't duplicate
-                                io.emit('sendSoundFilesToDropDown', data);
-                                // return new fileOps.prototype.emit('sendFiles', data, type);
-                            })
-                            .catch((err) => console.log(err)); */
+
         };
 
         self.addOfflinePointsToUsers = function(currencyUsers) {
@@ -301,262 +272,78 @@ class currencyManager {
 
         self.CreateAmendCurrency = function(Newcurrency, data, action) {
 
-            // //this updates the rank at index for currency at first index (0 based)
-            // //Newcurrency.push('/currency[0]/ranks[0]', { name: "test9", requirement: "50" }, true);
-
-            // //this adds a new rank for currency at first index (0 based)
-            // //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);
-            // //db.push("/test1","super test")
-
-            // //get currency by id
-            // let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == '1'); });
-
-            // //find index for currency
-            // let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == "2")
-            //     //find index for rank at currency
-            // let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
-            //     //push rank to currency
-            // currencyObject[0].ranks.findIndex({ name: "tets56", requirement: "504" });
-
-
-            //
-
-            // var newcurrencyobj = {
-            //     "id": "5",
-            //     "enabled": "Y",
-            //     "currencyname": "Points",
-            //     "commandname": "!Points",
-            //     "info": "ranks based on hours or points",
-            //     "info2": "missing some other currency functions on other bots",
-            //     "ranksbasedon": "points",
-            //     "onlinepayintervalminutes": 1,
-            //     "offlinepayintervalminutes": 1,
-            //     "activeuserbonuspoints": 2,
-            //     "viewerpointsbonus": 1,
-            //     "regularbonuspoints": 1,
-            //     "moderatorbonuspoints": 3,
-            //     "subscriberbonuspoints": 4,
-            //     "onfollowbonuspoints": 5,
-            //     "onsubscribebonuspoints": 6,
-            //     "donationbonuspoints": 7,
-            //     "multiplybydonationamount": "N",
-            //     "ranks": []
-            // };
-            // //create object
-            // // Newcurrency[].push(newcurrencyobj);
-
-            // Newcurrency.push('/currency[]', newcurrencyobj);
-
-
-            // //
-
-            //checks if currency id exists
             let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == data.id); });
 
-            if (action.toLowerCase() == 'add') {
+            if (action == 'Add') {
                 //add object
 
                 Newcurrency.push('/currency[]', data);
 
             } else {
 
-                // var newcurrencyobj = {
-                //     "id": "1",
-                //     "enabled": "Y",
-                //     "currencyname": "Points",
-                //     "commandname": "!Points",
-                //     "info": "ranks based on hours or points",
-                //     "info2": "missing some other currency functions on other bots",
-                //     "ranksbasedon": "points",
-                //     "onlinepayintervalminutes": 1,
-                //     "offlinepayintervalminutes": 1,
-                //     "activeuserbonuspoints": 2,
-                //     "viewerpointsbonus": 1,
-                //     "regularbonuspoints": 1,
-                //     "moderatorbonuspoints": 3,
-                //     "subscriberbonuspoints": 4,
-                //     "onfollowbonuspoints": 5,
-                //     "onsubscribebonuspoints": 6,
-                //     "donationbonuspoints": 7,
-                //     "multiplybydonationamount": "N",
-                //     "ranks": []
-                // };
+                let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == data.id)
 
-                //push new currency object
-                // Newcurrency[].push(newcurrencyobj);
+                Newcurrency.data.currency[currencyIndexNum].currencyName = data.currencyName;
+                Newcurrency.data.currency[currencyIndexNum].currencyPerMin = data.currencyPerMin;
+                Newcurrency.data.currency[currencyIndexNum].currencyRatio = data.currencyRatio;
+                Newcurrency.data.currency[currencyIndexNum].currencyBasedOn = data.currencyBasedOn;
+                Newcurrency.data.currency[currencyIndexNum].currencyParentId = data.currencyParentId;
+                Newcurrency.data.currency[currencyIndexNum].currencyParentName = data.currencyParentName;
+                Newcurrency.data.currency[currencyIndexNum].enabled = data.enabled;
 
-                // //finds currency index for currency by id
-                // let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == "5")
-
-                // //find index for rank at currency by rank name 
-                // let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
-
-                // //adds new rank for currnecy index (if no rank found)
-                // Newcurrency.push(`/currency[${currencyIndexNum}]/ranks[]`, { name: "test9", requirement: "50" }, true);
-
+                Newcurrency.save();
 
             }
 
+
+
+        };
+
+        self.CreateAmendParentCurrency = function(parentCurrency, data) {
+
+            let parentCurrencyObject = parentCurrency.data.parentCurrency.filter(function(item) { return (item.id == data.id); });
+            if (parentCurrencyObject.length == 0) {
+                parentCurrency.push('/parentCurrency[]', { currencyId: data.id, currencyName: data.currencyName });
+            }
 
 
         };
 
         self.CreateAmendCurrencyRank = function(Newcurrency, data, action) {
 
-            // //this updates the rank at index for currency at first index (0 based)
-            // //Newcurrency.push('/currency[0]/ranks[0]', { name: "test9", requirement: "50" }, true);
-
-            // //this adds a new rank for currency at first index (0 based)
-            // //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);
-            // //db.push("/test1","super test")
-
-            // //get currency by id
-            // let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == '1'); });
-
-            // //find index for currency
-            // let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == "2")
-            //     //find index for rank at currency
-            // let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
-            //     //push rank to currency
-            // currencyObject[0].ranks.findIndex({ name: "tets56", requirement: "504" });
-
-
-            //
-
-            // var newcurrencyobj = {
-            //     "id": "5",
-            //     "enabled": "Y",
-            //     "currencyname": "Points",
-            //     "commandname": "!Points",
-            //     "info": "ranks based on hours or points",
-            //     "info2": "missing some other currency functions on other bots",
-            //     "ranksbasedon": "points",
-            //     "onlinepayintervalminutes": 1,
-            //     "offlinepayintervalminutes": 1,
-            //     "activeuserbonuspoints": 2,
-            //     "viewerpointsbonus": 1,
-            //     "regularbonuspoints": 1,
-            //     "moderatorbonuspoints": 3,
-            //     "subscriberbonuspoints": 4,
-            //     "onfollowbonuspoints": 5,
-            //     "onsubscribebonuspoints": 6,
-            //     "donationbonuspoints": 7,
-            //     "multiplybydonationamount": "N",
-            //     "ranks": []
-            // };
-            // //create object
-            // // Newcurrency[].push(newcurrencyobj);
-
-            // Newcurrency.push('/currency[]', newcurrencyobj);
-
-
-            // //
-
-            //checks if currency id exists
             let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == data.id); });
 
             if (action.toLowerCase() == 'add') {
                 //add object
                 Newcurrency.push('/currency[]', data);
+
+
             } else {
 
-                // var newcurrencyobj = {
-                //     "id": "1",
-                //     "enabled": "Y",
-                //     "currencyname": "Points",
-                //     "commandname": "!Points",
-                //     "info": "ranks based on hours or points",
-                //     "info2": "missing some other currency functions on other bots",
-                //     "ranksbasedon": "points",
-                //     "onlinepayintervalminutes": 1,
-                //     "offlinepayintervalminutes": 1,
-                //     "activeuserbonuspoints": 2,
-                //     "viewerpointsbonus": 1,
-                //     "regularbonuspoints": 1,
-                //     "moderatorbonuspoints": 3,
-                //     "subscriberbonuspoints": 4,
-                //     "onfollowbonuspoints": 5,
-                //     "onsubscribebonuspoints": 6,
-                //     "donationbonuspoints": 7,
-                //     "multiplybydonationamount": "N",
-                //     "ranks": []
-                // };
-
-                //push new currency object
-                // Newcurrency[].push(newcurrencyobj);
-
-                // //finds currency index for currency by id
                 let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == data.id)
 
+                if (!Newcurrency.data.currency[currencyIndexNum].hasOwnProperty('ranks')) {
+                    //if no ranks tag in file it includes it when adding the rank 
+                    Newcurrency.push(`/currency[${currencyIndexNum}]/ranks[]`, { name: data.currencyRankName, amount: data.currencyRankAmount }, true);
+                } else {
+                    let rankIndex = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == data.currencyRankName)
 
-                // //find index for rank at currency by rank name 
-                // let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
-
-                // //adds new rank for currency index (if no rank found)
-                Newcurrency.push(`/currency[${currencyIndexNum}]/ranks[]`, { name: data.currencyRankName, amount: data.currencyRankAmount }, true);
-
+                    if (rankIndex >= 0) {
+                        // adds rank for currency at rank index
+                        Newcurrency.push(`/currency[${currencyIndexNum}]/ranks[${rankIndex}]`, { name: data.currencyRankName, amount: data.currencyRankAmount }, true);
+                    } else {
+                        // //adds new rank for currency index (if no rank found)
+                        Newcurrency.push(`/currency[${currencyIndexNum}]/ranks[]`, { name: data.currencyRankName, amount: data.currencyRankAmount }, true);
+                    }
+                }
 
             }
-
-
 
         };
 
         self.ReselectRank = function(Newcurrency, currencyId, currencyName) {
 
-            // //this updates the rank at index for currency at first index (0 based)
-            // //Newcurrency.push('/currency[0]/ranks[0]', { name: "test9", requirement: "50" }, true);
-
-            // //this adds a new rank for currency at first index (0 based)
-            // //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);
-            // //db.push("/test1","super test")
-
-            // //get currency by id
-            // let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == '1'); });
-
-            // //find index for currency
-            // let currencyIndexNum = Newcurrency.data.currency.findIndex(obj => obj.id == "2")
-            //     //find index for rank at currency
-            // let rankIndexNum = Newcurrency.data.currency[currencyIndexNum].ranks.findIndex(obj => obj.name == "test8")
-            //     //push rank to currency
-            // currencyObject[0].ranks.findIndex({ name: "tets56", requirement: "504" });
-
-
-            //
-
-            // var newcurrencyobj = {
-            //     "id": "5",
-            //     "enabled": "Y",
-            //     "currencyname": "Points",
-            //     "commandname": "!Points",
-            //     "info": "ranks based on hours or points",
-            //     "info2": "missing some other currency functions on other bots",
-            //     "ranksbasedon": "points",
-            //     "onlinepayintervalminutes": 1,
-            //     "offlinepayintervalminutes": 1,
-            //     "activeuserbonuspoints": 2,
-            //     "viewerpointsbonus": 1,
-            //     "regularbonuspoints": 1,
-            //     "moderatorbonuspoints": 3,
-            //     "subscriberbonuspoints": 4,
-            //     "onfollowbonuspoints": 5,
-            //     "onsubscribebonuspoints": 6,
-            //     "donationbonuspoints": 7,
-            //     "multiplybydonationamount": "N",
-            //     "ranks": []
-            // };
-            // //create object
-            // // Newcurrency[].push(newcurrencyobj);
-
-            // Newcurrency.push('/currency[]', newcurrencyobj);
-
-
-            // //
-
-            //checks if currency id exists
-
             let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.id == currencyId); });
-
 
             if (currencyObject.length > 0) {
 
@@ -586,6 +373,23 @@ class currencyManager {
             }
 
         };
+
+
+        self.GetParentCurrencies = function(parentCurrency) {
+
+
+            let data = parentCurrency.data.parentCurrency;
+
+
+            if (data.length > 0) {
+
+                return parentCurrency.data.parentCurrency;
+            } else {
+                return undefined;
+            }
+
+        };
+
 
     }
 }

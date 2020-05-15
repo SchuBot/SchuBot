@@ -396,8 +396,9 @@
                 var CurrencyName = $(this).children('td').eq(2).text();
                 var BasedOn = getBasedOn;
                 var CPM = $(this).children('td').eq(4).text();;
-                //var Parent = $(this).children('td').eq(4).text();
-                //va o r Ratio = $(this).children('td').eq(5).text();
+                var Parent = $(this).children('td').eq(5).text();
+                var Ratio = $(this).children('td').eq(7).text();
+
 
                 BasedOn = commonfunctions.setFileDefaults(BasedOn);
 
@@ -407,8 +408,8 @@
                     ccurrname: CurrencyName,
                     cBasedOn: BasedOn,
                     cCPM: CPM,
-                    cParent: "",
-                    cRatio: "" //,
+                    cParent: Parent,
+                    cRatio: Ratio //,
                 };
 
                 //commonfunctions.setDropDownValue("currencyBasedOnSelect", currencyRowJson.cBasedOn);
@@ -418,6 +419,9 @@
                 commonfunctions.SetSelectElement("currencyBasedOnSelect", currencyRowJson.cBasedOn);
                 commonfunctions.SetSelectElement("currencyPerMin", currencyRowJson.cCPM);
                 //commonfunctions.SetSelectElement("currencyParentSelect", currencyRowJson.Parent);
+
+                commonfunctions.SetSelectElement("currencyParentSelect", currencyRowJson.cParent);
+
                 commonfunctions.SetSelectElement("currencyRatio", currencyRowJson.cRatio);
 
                 //empty rank table
@@ -466,6 +470,19 @@
             }
 
         });
+
+
+        /*         $("#currencyParentSelect").on("click", null, function() {
+                    //alert("Loading Objects");
+                    iosocket.emit('getParentCurrencies');
+
+                });
+
+                $("#currencyParentSelect").click(function() {
+                    //$(this).addClass('selected').siblings().removeClass('selected');
+                    //alert("Objects Loaded")
+                    //var value = $(this).find('tbody td:first').html();
+                }); */
 
 
         $("#incomingChatMessages li").click(function() {

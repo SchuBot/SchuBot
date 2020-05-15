@@ -611,6 +611,24 @@
             "rolewho": "Owner",
             "action": "PurgedOrTimeout",
             "user": 7985356
+        },
+        {
+            "id": "2074216:18:12 GMT+0100 (GMT Summer Time)",
+            "date": "Sat May 09 2020 - 16:18:12 GMT+0100 (GMT Summer Time)",
+            "moderatorid": 862913,
+            "moderatorname": "Schuster",
+            "rolewho": "Owner",
+            "action": "PurgedOrTimeout",
+            "user": 20742
+        },
+        {
+            "id": "2074217:16:31 GMT+0100 (GMT Summer Time)",
+            "date": "Sat May 09 2020 - 17:16:31 GMT+0100 (GMT Summer Time)",
+            "moderatorid": 862913,
+            "moderatorname": "Schuster",
+            "rolewho": "Owner",
+            "action": "PurgedOrTimeout",
+            "user": 20742
         }
     ]
 }

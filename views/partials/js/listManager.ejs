@@ -534,4 +534,40 @@
         }
 
     }
+
+
+
+    function addParentCurrencyToDropDown(data) {
+
+
+
+        var x = document.getElementById("currencyParentSelect");
+
+
+
+        //builds the option element
+        //var item = data.currencyId;
+        var option = document.createElement("option");
+        option.text = data.currencyName;
+        option.value = data.currencyId
+
+        //loops through all existing options to check if there are any new ones 
+        //and sets exists to true if item exists so to prevent dupes
+        var exists = false;
+        for (ii = 0; ii < x.length; ii++) {
+
+            if (x.options[ii].text == option.text) {
+                exists = true;
+            }
+
+        }
+
+        //if items doesn't exist add to list
+        if (!exists) {
+            x.add(option);
+        }
+
+
+
+    }
 </script>

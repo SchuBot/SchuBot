@@ -311,6 +311,16 @@
             removeRankFromTable(rankID);
         });
 
+
+        iosocket.on('receiveParentCurrency', function(data) {
+
+            addOptionsToParentCurrencyDropdown(data);
+
+
+
+        });
+
+
         iosocket.on('outstandingNotes', function(message) {
 
             //this is to warn the streamer they have outstanding items to do.
@@ -346,8 +356,8 @@
         });
 
         iosocket.on('NoAlertsSetup', function(message) {
-            log.info('You have no Alerts setup', 'You have no Alerts setup')
-                //alert("You have no alerts setup on the bot");
+            console.log('You have no Alerts setup', 'You have no Alerts setup');
+            //alert("You have no alerts setup on the bot");
 
         });
 
@@ -455,6 +465,12 @@
         iosocket.on('addSaveSingleCurrency', function(data) {
             addorAmendCurrencyToTable(data);
         });
+
+
+        iosocket.on('addSaveSingleCurrencyRank', function(data) {
+            addorAmendCurrencyRankToTable(data);
+        });
+
 
 
         iosocket.on('currencyRanksSelect', function(data, currencyId) {
@@ -975,6 +991,33 @@
 
                 var x = document.getElementById("tableCR").rows[currencyRowIndex].cells;
 
+                x[0].innerHTML = data.enabled;
+                x[1].innerHTML = data.id;
+                x[2].innerHTML = data.currencyName;
+                x[3].innerHTML = data.currencyBasedOn;
+
+                if (data.currencyPerMin != '') {
+                    x[4].innerHTML = data.currencyPerMin;
+                }
+
+                if (data.currencyParentId != '') {
+
+                    x[5].innerHTML = data.currencyParentId;
+                } else {
+                    x[5].innerHTML = "Select an Option";
+                }
+
+                if (data.currencyParentName != '') {
+                    x[6].innerHTML = data.currencyParentName;
+                } else {
+                    x[6].innerHTML = "";
+                }
+
+                if (data.currencyRatio != '') {
+                    x[7].innerHTML = data.currencyRatio;
+                }
+
+
             } else {
                 console.log('Currency data for table is:' + data.id)
 
@@ -985,7 +1028,8 @@
                 tr.append("<td>" + data.currencyName + "</td>");
                 tr.append("<td>" + data.currencyBasedOn + "</td>");
                 tr.append("<td>" + data.currencyPerMin + "</td>");
-                tr.append("<td>" + data.currencyParent + "</td>");
+                tr.append("<td>" + data.currencyParentId + "</td>");
+                tr.append("<td>" + data.currencyParentName + "</td>");
                 tr.append("<td>" + data.currencyRatio + "</td>");
 
                 //     "id": "test65",
@@ -1016,8 +1060,8 @@
 
                 var RnkRow = document.getElementById("tableRank").rows[currencyRankRowIndex].cells;
 
-                RnkRow[1].innerHTML = data.currencyRankName;
-                RnkRow[2].innerHTML = data.currencyRankAmount;
+                RnkRow[0].innerHTML = data.currencyRankName;
+                RnkRow[1].innerHTML = data.currencyRankAmount;
 
 
             } else {
@@ -1274,7 +1318,8 @@
                     tr.append("<td>" + data[i].currencyName + "</td>");
                     tr.append("<td>" + data[i].currencyBasedOn + "</td>");
                     tr.append("<td>" + data[i].currencyPerMin + "</td>");
-                    tr.append("<td>" + data[i].currencyParent + "</td>");
+                    tr.append("<td>" + data[i].currencyParentId + "</td>");
+                    tr.append("<td>" + data[i].currencyParentName + "</td>");
                     tr.append("<td>" + data[i].currencyRatio + "</td>");
 
                     $('#tableCR').append(tr);
@@ -1995,18 +2040,10 @@
 
             if (currObject != undefined) {
                 convertEnabledBoolToYORN(currObject)
-
-                if (currObject != undefined) {
-                    iosocket.emit('addSaveCurrency', currObject);
-                }
-
+                iosocket.emit('addSaveCurrency', currObject);
                 setAddSaveDeleteCurrencyDefaults();
                 $("#tableRank").find("tr:not(:first)").remove();
-
             }
-
-
-
         }
 
         addSaveCurrencyRank = function() {
@@ -2651,7 +2688,16 @@
 
 
             //currency can't be its own parent
-            var currParent = document.getElementById('currencyParentSelect').value;
+            var currParent = document.getElementById('currencyParentSelect').selectedOptions[0].innerText;
+            var currParentValue = document.getElementById('currencyParentSelect').selectedOptions[0].value;
+
+
+
+            if (currParentValue == 'default') {
+
+                currParent = "";
+            }
+
 
             if (currName.length < 1 || currBasedOnValue == 'default') {
                 alert('Currency Name and Based On are required');
@@ -2666,7 +2712,8 @@
                 currObject["currencyPerMin"] = currPerMin;
                 currObject["currencyRatio"] = currRatio; //only required if parent exists
                 currObject["currencyBasedOn"] = currBasedOn;
-                currObject["currencyParent"] = currParent;
+                currObject["currencyParentId"] = currParentValue;
+                currObject["currencyParentName"] = currParent;
 
                 return currObject;
             }
@@ -3542,6 +3589,32 @@
         }, this);
     }
 
+    function addOptionsToParentCurrencyDropdown(data) {
+        console.log('add parent currency to UI: ' + JSON.stringify(data));
+        data.forEach(function(element) {
+
+            addSingleParentCurrencyToParencyCurrencyDropdown(element);
+
+        }, this);
+
+
+    }
+
+
+    function addSingleParentCurrencyToParencyCurrencyDropdown(data) {
+
+
+        var parentCurrencyId = data.currencyId;
+        var parentCurrencyName = data.currencyName;
+
+        //alert("Adding Parent Item to dorpdown" + data);
+
+        addParentCurrencyToDropDown(data);
+
+
+
+    }
+
     function addSingleCommandToCommandListModule(data) {
 
         var commandEnabled = data.enabled;
@@ -3681,12 +3754,12 @@
             // li.append('<div tabindex="-1"> <img class="mixerChat" height="25" width="25" src="' + avatarURL + '" alt="avatar" id="itemImg" style="border-radius: 50%; "> <div style=" clear: both; margin-bottom:10px;margin-left:40px; font-style: italic;font-weight:lighter;font_family:arial;">  <span style="margin-left:5px;' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:blue; margin-bottom:10px; margin-left: 5px;">' + message + '</span> </div> </div>');
 
 
-            li.append('<div id="whisperMessageRow" class="whisperMessageRow" tabindex="-1" style="position:relative; clear:both;"> <img class="mixerChat" src="' + avatarURL + '" width="25" height="25" aria-hidden="true" style="border-radius: 50%;"><div id="messageRowText" class style="margin-left: 30px; margin-top:8px; font-style: italic;font-weight:lighter;font_family:arial;" ><span class style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:blue; margin-bottom:10px; margin-left: 5px;">' + message + '</span></div></div>');
+            li.append('<div id="whisperMessageRow" class="whisperMessageRow" tabindex="-1" style="position:relative; clear:both;"> <img class="mixerChat" src="' + avatarURL + '" width="25" height="25" aria-hidden="true" style="border-radius: 50%;"><div id="messageRowText" class style="margin-left: 30px; margin-top:8px; font-style: italic;font-weight:lighter;font_family:arial;" ><span class style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:blue; margin-bottom:10px; margin-left: 5px;">' + escapeHTML(message) + '</span></div></div>');
 
 
         } else {
 
-            li.append('<div id="messageRow" class="messageRow" tabindex="-1" style="position:relative; clear:both;"> <img class="mixerChat" src="' + avatarURL + '" width="25" height="25" aria-hidden="true" style="border-radius: 50%;"><div id="messageRowText" class style="margin-left: 30px; margin-top:8px;" ><span class style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:black; margin-bottom:10px; margin-left: 5px;">' + message + '</span></div></div>');
+            li.append('<div id="messageRow" class="messageRow" tabindex="-1" style="position:relative; clear:both;"> <img class="mixerChat" src="' + avatarURL + '" width="25" height="25" aria-hidden="true" style="border-radius: 50%;"><div id="messageRowText" class style="margin-left: 30px; margin-top:8px;" ><span class style="' + styleColour + '">' + UserName + ' - ' + primaryRole + '</span>' + '<span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span> <span style="color:black; margin-bottom:10px; margin-left: 5px;">' + escapeHTML(message) + '</span></div></div>');
 
             //li.append('<p style="margin-left:25px;' + styleColour + '">' + UserName + ' - ' + primaryRole + ' <span style="color:midnightblue;font-style: italic;font-weight: lighter;padding-left:5px;">' + messageDate + '</span></p>  <p style="color:black; margin-bottom:10px; margin-left: 25px;">' + message + '</p>');
 
@@ -3717,6 +3790,11 @@
     function emptyElementById(elementId) {
 
         document.getElementById(elementId).innerHTML = '';
+    }
+
+
+    function escapeHTML(message) {
+        return message.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
     function appendTextToElementById(elementId, text) {

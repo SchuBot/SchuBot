@@ -1,0 +1,28 @@
+{
+    "parentCurrency": [
+        {
+            "currencyId": "n350202014913",
+            "currencyName": "point2"
+        },
+        {
+            "currencyId": "n7542020203913",
+            "currencyName": "points3"
+        },
+        {
+            "currencyId": "n8552020183450",
+            "currencyName": "testOne"
+        },
+        {
+            "currencyId": "n8552020191449",
+            "currencyName": "fasdf"
+        },
+        {
+            "currencyId": "n956202016591",
+            "currencyName": "Bronze"
+        },
+        {
+            "currencyId": "n956202017217",
+            "currencyName": "Silver"
+        }
+    ]
+}

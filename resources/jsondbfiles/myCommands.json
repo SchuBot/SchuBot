@@ -93,7 +93,7 @@
             "audio": "",
             "video": "",
             "image": "",
-            "text": "go follow $user at $userMixerUrl",
+            "text": "go follow $target at $targetMixerUrl",
             "cooldown": ""
         },
         {

@@ -36,13 +36,6 @@
             "priority": "High"
         },
         {
-            "id": "n41510201895",
-            "todo": "Y",
-            "note": "add Parent functionality to currency window",
-            "private": "N",
-            "priority": "N"
-        },
-        {
             "id": "n51610201842",
             "todo": "Y",
             "note": "Help Manual and Video",
@@ -95,11 +88,6 @@
             "note": "when user unfollows , viewer list isn't updating. "
         },
         {
-            "id": "n1219201959",
-            "todo": "Y",
-            "note": "predefined commands to reset to defaults"
-        },
-        {
             "id": "n1219201960",
             "todo": "Y",
             "note": "combine alerts panel (follow/host/subs) into one",
@@ -128,13 +116,6 @@
             "private": "Y"
         },
         {
-            "id": "n23442020175820",
-            "todo": "Y",
-            "note": "Fix html parsing by using the text versio n of the message",
-            "priority": "",
-            "private": "Y"
-        },
-        {
             "id": "n25462020124210",
             "todo": "Y",
             "note": "adding currency button should be disabled when rank is selected or saves the existing one",
@@ -142,9 +123,23 @@
             "private": "Y"
         },
         {
-            "id": "n2562020145235",
+            "id": "n9562020184044",
             "todo": "Y",
-            "note": "add rank does not update UI",
+            "note": "when selecting a currency, the parent Name is not set on the Parent Dropdown ",
+            "priority": "",
+            "private": "Y"
+        },
+        {
+            "id": "n956202018490",
+            "todo": "Y",
+            "note": "currency per min should be disabled when Hours based On is selected",
+            "priority": "false",
+            "private": "N"
+        },
+        {
+            "id": "n10502020141313",
+            "todo": "Y",
+            "note": "deleting a currency should remove the parent currency",
             "priority": "Y",
             "private": "N"
         }

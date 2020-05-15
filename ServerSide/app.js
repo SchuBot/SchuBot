@@ -87,6 +87,7 @@
     let myUITheme = new JsonDB("./resources/jsondbfiles/myUITheme", true, true);
     let authDB = new JsonDB("./resources/jsondbfiles/auth", true, true);
     let Newcurrency = new JsonDB("./resources/jsondbfiles/Newcurrency", true, true);
+    let parentCurrency = new JsonDB("./resources/jsondbfiles/parentCurrency", true, true)
 
     //https://github.com/Belphemur/node-json-db this is info on jsondb
 
@@ -102,6 +103,7 @@
     myMedia.reload();
     myTriggers.reload();
     Newcurrency.reload();
+    parentCurrency.reload();
     currency.reload();
     currencyUsers.reload();
     currencyUserTypes.reload();
@@ -223,7 +225,6 @@
         */
 
         socket.on('disconnect', function() {
-
 
             //console.info(`Client gone [id=${socket.id}]`);
             log.info(`Client disconnected [id=${socket.id}]`);
@@ -350,12 +351,18 @@
                 var commandExists = checkCurrencyUIExists(Newcurrency, currObject);
 
                 if (commandExists.length == 0) {
-                    //check if there are any ranks in the table
-                    //if no ranks then popup a message and if no don't add else add
+
+                    //processAddUICurrency actually adds the db entry
                     processAddUICurrency(Newcurrency, currObject, 'Add');
                     io.emit('addSaveSingleCurrency', currObject);
+
+                    //add parent entry
+                    processAddParentCurrencyDBEntry(parentCurrency, currObject);
+
+                    sendParentCurrenciesToUI(parentCurrency);
+
                 } else {
-                    processEditUICurrency(Newcurrency, currObject, 'Edit');
+                    processAddUICurrency(Newcurrency, currObject, 'Edit');
                     io.emit('addSaveSingleCurrency', currObject);
                 }
 
@@ -381,9 +388,6 @@
                 if (commandExists.length == 0) {
                     //if no currency then popup a message saying save currency first
                     // and if no don't add else add
-
-                    //processAddUICurrencyRank(Newcurrency, currObject, 'Add');
-                    //io.emit('addSaveSingleCurrency', currObject);
                 } else {
                     processAddUICurrencyRank(Newcurrency, currObject, 'Edit');
                     io.emit('addSaveSingleCurrencyRank', currObject);
@@ -408,6 +412,16 @@
 
             io.emit('currencyRanksSelect', ranks, currencyId)
         });
+
+
+        /*         socket.on('getParentCurrencies', function() {
+
+                    let parentCurrencies = processGetParentCurrencies(parentCurrency);
+                    io.emit('receiveCurrency', parentCurrencies);
+                    counter = counter + 1;
+                    log.info("selection clicked" + counter);
+
+                }); */
 
         socket.on('checkForOutstandingNotes', function() {
             try {
@@ -822,11 +836,13 @@
         SendNotesToBot(myNotes);
         SendTimersToBot(myTimers);
         SendCurrencyToBot(Newcurrency);
+
     }
 
     function loadBotCurrencyAndTimers() {
         addAlltimersSchedule(myTimers);
         StartCurrency();
+        sendParentCurrenciesToUI(parentCurrency);
     }
 
     //this initialises all the mixer data for the bot
@@ -2548,6 +2564,17 @@
 
         cm.CreateAmendCurrency(Newcurrency, currency, action);
 
+
+        //add a rank
+        //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);
+    }
+
+    function processAddParentCurrencyDBEntry(parentCurrency, currency) {
+
+
+        cm.CreateAmendParentCurrency(parentCurrency, currency);
+
+
         //add a rank
         //Newcurrency.push('/currency[0]/ranks[]', { name: "test9", requirement: "50" }, true);
     }
@@ -2558,6 +2585,13 @@
         currency.option2 = "";
         cm.CreateAmendCurrencyRank(Newcurrency, currency, action);
 
+
+
+    }
+
+    function sendParentCurrenciesToUI(parentCurrency) {
+        let parentCurrencyRows = cm.GetParentCurrencies(parentCurrency);
+        io.emit('receiveParentCurrency', parentCurrencyRows);
     }
 
     function processReselectRanks(Newcurrency, currencyId, currencyName) {
@@ -2565,6 +2599,12 @@
         let ranks = cm.ReselectRank(Newcurrency, currencyId, currencyName);
         return ranks;
     }
+
+    /*     function processGetParentCurrencies(parentCurrency) {
+
+            let parentCurrencies = cm.GetParentCurrencies(parentCurrency);
+            return parentCurrencies;
+        } */
 
     function processAddUINote(myNotes, fullcommand) {
         //push command to the file
@@ -4457,6 +4497,5 @@
     exports.checkBotTokenAndConnect = checkBotTokenAndConnect;
     exports.checkStreamerTokenAndConnect = checkStreamerTokenAndConnect
     exports.ConnectOnLogin = ConnectOnLogin;
-
 
 }());
