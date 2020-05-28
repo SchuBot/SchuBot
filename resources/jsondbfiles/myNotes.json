@@ -114,34 +114,6 @@
             "note": "UI Theme Preset Options (5 presets)",
             "priority": "N",
             "private": "Y"
-        },
-        {
-            "id": "n25462020124210",
-            "todo": "Y",
-            "note": "adding currency button should be disabled when rank is selected or saves the existing one",
-            "priority": "H",
-            "private": "Y"
-        },
-        {
-            "id": "n9562020184044",
-            "todo": "Y",
-            "note": "when selecting a currency, the parent Name is not set on the Parent Dropdown ",
-            "priority": "",
-            "private": "Y"
-        },
-        {
-            "id": "n956202018490",
-            "todo": "Y",
-            "note": "currency per min should be disabled when Hours based On is selected",
-            "priority": "false",
-            "private": "N"
-        },
-        {
-            "id": "n10502020141313",
-            "todo": "Y",
-            "note": "deleting a currency should remove the parent currency",
-            "priority": "Y",
-            "private": "N"
         }
     ]
 }

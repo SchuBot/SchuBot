@@ -3,7 +3,7 @@ let events = require('events');
 let log = require('electron-log');
 var fs1 = require('mz/fs');
 
-function fileOps(io) {
+function fileOps(io, log) {
 
     this.getFilesInSoundFolder = function(fs, folder) {
         myReaddir(fs, folder)
@@ -12,7 +12,7 @@ function fileOps(io) {
                 io.emit('sendSoundFilesToDropDown', data);
                 // return new fileOps.prototype.emit('sendFiles', data, type);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => log.error(err));
     };
 
     this.getFilesInVideoFolder = function(fs, folder) {
@@ -22,7 +22,7 @@ function fileOps(io) {
                 io.emit('sendVideoFilesToDropDown', data);
                 // return new fileOps.prototype.emit('sendFiles', data, type);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => log.error(err));
     };
 
     this.getFilesInImageFolder = function(fs, folder) {
@@ -31,7 +31,7 @@ function fileOps(io) {
                 io.emit('sendImageFilesToDropDown', data);
                 // return new fileOps.prototype.emit('sendFiles', data, type);
             })
-            .catch((err) => console.log(err));
+            .catch((err) => log.error(err));
     };
 
     this.getAllMedia = function(fs, AudioFolder, VideoFolder, ImageFolder) {
@@ -46,7 +46,7 @@ function fileOps(io) {
 
                     // return new fileOps.prototype.emit('sendFiles', data, type);
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => log.error(err));
         }, 1000);
 
 
@@ -59,7 +59,7 @@ function fileOps(io) {
 
                     // return new fileOps.prototype.emit('sendFiles', data, type);
                 })
-                .catch((err) => console.log(err));
+                .catch((err) => log.error(err));
         }, 2000);
 
         /*         myReaddir(fs, VideoFolder).then(function(data) {
@@ -74,7 +74,7 @@ function fileOps(io) {
                 log.info(ImageFolder);
                 io.emit('sendImageFilesToDropDown', data);
                 // return new fileOps.prototype.emit('sendFiles', data, type);
-            }).catch((err) => console.log(err));
+            }).catch((err) => log.error(err));
         }, 3000);
 
         /*       myReaddir(fs, ImageFolder).then(function(data) {

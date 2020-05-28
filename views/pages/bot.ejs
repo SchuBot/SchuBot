@@ -1592,7 +1592,7 @@
 
                                         <div>
                                             <div id="currencyBasedOnDD" class="cmdSpansCombo">Based On:- </div>
-                                            <select id="currencyBasedOnSelect" class="dropdownTheme">
+                                            <select id="currencyBasedOnSelect" class="dropdownTheme" onchange="currencyBasedOnSelected(id);">
                                             <option value="default">Select an Option</option>
                                             <option value="Hours">Hours</option>
                                             <option value="Points">Points</option>
@@ -1610,7 +1610,7 @@
 
                                         <div>
                                             <div id="currencyParentDD" class="cmdSpansCombo">Parent:- </div>
-                                            <select id="currencyParentSelect" class="dropdownTheme">
+                                            <select id="currencyParentSelect" class="dropdownTheme" onchange="currencyParentSelected(id);">
                                             <option value="default">Select an Option</option>   
                                             </select>
                                         </div>
@@ -1621,7 +1621,7 @@
                                         <div>
                                             <div class="cmdSpans" id="currRatioLabel">Ratio:- </div>
                                             <div>
-                                                <input id="currencyRatio"></input>
+                                                <input id="currencyRatio" readonly></input>
                                             </div>
                                         </div>
 

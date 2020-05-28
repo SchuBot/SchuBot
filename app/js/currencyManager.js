@@ -1,9 +1,11 @@
 let events = require('events');
 
+//current chat users
+let chatUsers = [];
 //database actions
 class currencyManager {
 
-    constructor() {
+    constructor(io, log) {
 
         let self = this;
 
@@ -39,6 +41,15 @@ class currencyManager {
                 }
             });
         };
+
+        self.addChatUserToCurrency = function(userId, userName) {
+            chatUsers.push({ userId: userId });
+        }
+
+
+        self.removeChatUserFromCurrency = function(userId, userName) {
+            chatUsers.pop({ userId: userId });
+        }
 
 
 
@@ -149,7 +160,7 @@ class currencyManager {
             //is streamer not online
             if (1 == 2) {
                 self.addOfflinePointsToUsers(currency, currencyUsers);
-                console.log("Offline Payout Triggered");
+                //console.log("Offline Payout Triggered");
                 setTimeout(function() { OfflinePayOut(offlineinterval, currency, currencyUsers); }, 60000 * offlineinterval);
 
             }
@@ -375,6 +386,81 @@ class currencyManager {
         };
 
 
+        self.deleteCurrencyFromList = function(Newcurrency, currencyID) {
+
+            for (var i = 0, len = Newcurrency.data.currency.length; i < len; i++) {
+                //array = alertsinqueue and index = i
+                var iii = Newcurrency.data.currency[i].id;
+
+                if (iii == currencyID) {
+                    Newcurrency.delete(("/currency[" + i + "]"));
+                    break;
+                }
+            }
+        }
+
+        self.DeleteParentCurrencyFromCurrency = function(Newcurrency, currencyId, parentCurrency) {
+
+
+
+            //get currency being deleted
+
+
+            let currencyObject = Newcurrency.data.currency.filter(function(item) { return (item.currencyParentId == currencyId && item.id != currencyId); });
+
+
+            if (currencyObject.length > 0) {
+                let count = 0;
+
+                Newcurrency.data.currency.forEach(element => {
+                    if (element.currencyParentId == currencyId) {
+                        Newcurrency.data.currency[count].currencyParentId = "default";
+                        Newcurrency.data.currency[count].currencyParentName = "";
+                        Newcurrency.data.currency[count].currencyRatio = "";
+                        //element.currencyUsers[count].points = element.currencyUsers[count].points + pointsToAdd;
+                        Newcurrency.save();
+
+                        //send update to UI
+                        io.emit('addSaveSingleCurrency2', Newcurrency.data.currency[count]);
+                    }
+                    count = count + 1;
+                });
+
+
+            }
+
+            /*             let parentCurrencyObject = parentCurrency.data.parentCurrency.filter(function(item) { return (item.currencyId == currencyId); });
+
+
+                        if (parentCurrencyObject.length > 0) {
+
+                            let ii = parentCurrency.data.parentCurrency.findIndex(obj => obj.currencyId == currencyId)
+
+                            parentCurrency.delete(("/parentCurrency[" + ii + "]"));
+
+                        } */
+
+        };
+
+        self.DeleteParentCurrency = function(currencyId, parentCurrency) {
+
+            let parentCurrencyObject = parentCurrency.data.parentCurrency.filter(function(item) { return (item.currencyId == currencyId); });
+
+
+            if (parentCurrencyObject.length > 0) {
+
+                let ii = parentCurrency.data.parentCurrency.findIndex(obj => obj.currencyId == currencyId)
+
+                parentCurrency.delete(("/parentCurrency[" + ii + "]"));
+
+            }
+
+            return parentCurrency;
+
+        }
+
+
+
         self.GetParentCurrencies = function(parentCurrency) {
 
 
@@ -389,6 +475,12 @@ class currencyManager {
             }
 
         };
+
+        self.addChatUserForCurrency = function(userId, userName) {
+
+            chatUsers.push({ userId: userId, userName: userName });
+
+        }
 
 
     }

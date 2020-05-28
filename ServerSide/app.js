@@ -10,8 +10,8 @@
     'use strict';
     const dateNow = Date.now();
 
-    const beamchat = require('../app/js/mixerchatNew.js');
-    const beamchatbot = require('../app/js/beamchatbot.js');
+    const MixerStreamerChat = require('../app/js/MixerStreamerChat.js');
+    const MixerBotChat = require('../app/js/MixerBotChat.js');
     const mixerdata = require('../app/js/mixerdata.js');
     const constellation = require('../app/js/constellation.js');
     const commandHandler = require('../app/js/commandHandler.js');
@@ -62,7 +62,7 @@
     log.transports.file.maxSize = 5 * 1024 * 1024;
     // = 582310
     let streamerChannel = null;
-    var bc;
+    let bc;
     var bcBot;
     var mixerData;
     var co;
@@ -146,7 +146,7 @@
 
     appex.use(morgan('dev'));
 
-    console.log(__dirname);
+    //console.log(__dirname);
 
     var pathdir = __dirname.replace("ServerSide", "");
 
@@ -221,8 +221,8 @@
         log.info(`Client connected [id=${socket.id}]`);
 
         /*   console.log('connected ' + connections + ' times');
-           console.log('connected with', `${socket.name} IP: ${socket.handshake.address}`)
-        */
+         *  console.log('connected with', `${socket.name} IP: ${socket.handshake.address}`)
+         */
 
         socket.on('disconnect', function() {
 
@@ -291,7 +291,7 @@
 
         socket.on('error', function(message) {
             try {
-                console.log('error in server websocket ' + message);
+                log.info('error in server websocket ' + message);
                 // socket.join; //not sure why this is here
             } catch (error) {
                 log.error('catch: error in server websocket' + error.message);
@@ -311,7 +311,7 @@
 
         socket.on('startTimers', function(message) {
             try {
-                console.log('Starting timers');
+                log.info('Starting timers');
                 //addAlltimers(myTimers);
                 addAlltimersSchedule(myTimers);
             } catch (error) {
@@ -484,7 +484,13 @@
 
                     var currencyID = currencyObject.id;
 
-                    deleteCurrencyFromList(Newcurrency, currencyID);
+                    cm.DeleteParentCurrencyFromCurrency(Newcurrency, currencyID, parentCurrency);
+
+                    cm.DeleteParentCurrency(currencyID, parentCurrency);
+
+                    cm.deleteCurrencyFromList(Newcurrency, currencyID);
+
+
 
                     io.emit("RemoveCurrencyFromTable", currencyObject.id);
 
@@ -492,7 +498,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                log.error('error deleting command' + error.message);
+                log.error('error deleting cuurency' + error.message);
             }
 
         });
@@ -588,7 +594,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error deleting trigger - ' + error.message);
+                log.error('error deleting trigger - ' + error.message);
             }
 
         });
@@ -596,7 +602,7 @@
         socket.on('deleteNote', function(cmdObject) {
             try {
 
-                console.log('Deleting UI Note');
+
 
                 var commandExists = checkNoteUIExists(myNotes, cmdObject);
 
@@ -610,15 +616,13 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error deleting note - ' + error.message);
+                log.error('error deleting note - ' + error.message);
             }
 
         });
 
         socket.on('completeNote', function(cmdObject) {
             try {
-
-                console.log('Completing UI Note');
 
                 var commandExists = checkNoteUIExists(myNotes, cmdObject);
 
@@ -631,7 +635,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error deleting note - ' + error.message);
+                log.error('error completing note - ' + error.message);
             }
 
         });
@@ -642,26 +646,22 @@
                 var commandExists = checkTimerUIExists(myTimers, cmdObject);
 
                 if (commandExists.length == 0) {
-                    console.log('Adding UI timer');
                     processAddUITimer(cmdObject);
                     io.emit('addSaveSingleTimer', cmdObject);
                 } else {
-                    console.log('Saving UI timer');
                     processEditUITimer(cmdObject);
                     io.emit('addSaveSingleTimer', cmdObject);
                 }
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error saving timer - ' + error.message);
+                log.error('error saving timer - ' + error.message);
             }
 
         });
 
         socket.on('deleteTimer', function(cmdObject) {
             try {
-
-                console.log('Deleting UI timer');
 
                 var commandExists = checkTimerUIExists(myTimers, cmdObject);
 
@@ -674,7 +674,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error deleting timer');
+                log.error('error deleting timer');
             }
 
         });
@@ -682,7 +682,6 @@
         socket.on('addEditAlert', function(objAlert) {
             try {
 
-                console.log('Saving UI Alert');
 
                 var alertExists = checkAlertUIExists(myHostAlerts, myFollowAlerts, objAlert);
 
@@ -696,14 +695,14 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error saving alert - ' + error.message);
+                log.error('error saving alert - ' + error.message);
             }
         });
 
         socket.on('deleteAlert', function(cmdObject) {
             try {
 
-                console.log('Deleting Alert Command');
+
 
                 var alertExists = checkAlertUIExists(myHostAlerts, myFollowAlerts, cmdObject);
 
@@ -717,7 +716,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error deleting alert ' + error.message);
+                log.error('error deleting alert ' + error.message);
             }
 
         });
@@ -725,7 +724,6 @@
         socket.on('addSaveMedia', function(cmdMedia) {
             try {
 
-                console.log('Saving UI Media');
 
                 var mediaExists = checkMediaUIExists(myMedia, cmdMedia);
 
@@ -737,7 +735,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error saving media');
+                log.error('error saving media' + error.message);
             }
 
         });
@@ -750,7 +748,7 @@
 
             try {
 
-                console.log('Deleting Media');
+
 
                 var mediaExists = checkMediaUIExists(myMedia, cmdMedia);
 
@@ -764,7 +762,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error deleting media ' + error.message);
+                log.error('error deleting media ' + error.message);
             }
 
         });
@@ -773,23 +771,21 @@
 
         socket.on('TimeoutMixerUser', function(data) {
             try {
-                console.log('timing out user');
+
 
                 if (bc != null) {
                     bc.timeout(data);
                 }
 
-
-                // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error timing out user ' + error.message);
+                log.error('error timing out user ' + error.message);
             }
 
         });
 
         socket.on('BanMixerUser', function(data) {
             try {
-                console.log('ban user');
+
 
                 if (bc != null) {
                     bc.ban(data.userid, authDB.data.streamer.channelId);
@@ -798,7 +794,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                console.log('error timing out user ' + error.message);
+                log.error('error banning user ' + error.message);
             }
 
         });
@@ -848,12 +844,15 @@
     //this initialises all the mixer data for the bot
     function initBeamData(authDB) {
 
+        //get followage
+        //https://mixer.com/api/v1/channels/channelId/follow?where=id:eq:UserId&limit=1&page=0&noCount=1
+
         //if (bc != null && bc != undefined) {
 
         // if there is no streamer id then this means fresh install
         if (authDB.data.streamer.userId > 0) {
 
-            mixerData = new mixerdata(authDB.data.streamer.accessToken);
+            mixerData = new mixerdata(authDB.data.streamer.accessToken, log);
 
             mixerData.getStreamerFollows(authDB.data.streamer.userId);
 
@@ -863,12 +862,12 @@
 
             mixerData.on('FollowingCount', function(data) {
                 // console.info(data);
-                console.log('mixer data following count emit');
+                log.info('mixer data following count emit ' + data.length());
                 io.emit('followingCount', data);
             });
 
             mixerData.on('FollowerCount', function(data) {
-                console.log('bc follower count emit');
+                log.info('bc follower count emit' + data.length());
                 io.emit('followerCount', data);
             });
 
@@ -876,7 +875,7 @@
 
             mixerData.on('ChatUserCount', function(data) {
 
-                console.log('bc chat user count');
+                log.info('Chat user count - ' + data.length());
                 io.emit('chatusercount', data);
             });
         }
@@ -898,7 +897,7 @@
                     console.error('Error:', err);
                     return;
                 }
-                console.log(JSON.parse(body));
+                *console.log(JSON.parse(body));
             })
         }; */
 
@@ -916,21 +915,6 @@
             }
         }
     }
-
-    function deleteCurrencyFromList(Newcurrency, currencyID) {
-
-        for (var i = 0, len = Newcurrency.data.currency.length; i < len; i++) {
-            //array = alertsinqueue and index = i
-            var iii = Newcurrency.data.currency[i].id;
-
-            if (iii == currencyID) {
-                Newcurrency.delete(("/currency[" + i + "]"));
-                break;
-            }
-        }
-    }
-
-
 
 
     function deleteCurrencyRankFromList(Newcurrency, currObject) {
@@ -1144,8 +1128,9 @@
     //
 
     function StartCurrency() {
-        cm = new currencyManager(io);
+        cm = new currencyManager(io, log);
         cm.createTimers(currency, currencyUsers);
+        cm.addChatUserForCurrency(12345, "Schuster");
 
     }
 
@@ -1162,9 +1147,9 @@
 
         log.info('Connecting to Mixer and Constellation');
 
-        if (!isConnected) {
+        //if either streamer or bot is not connected then reconnect
+        if (!chatConnected || !chatConnectedBot) {
 
-            log.info('Auth File Loading');
             authDB.reload();
             log.info('Auth File Loaded');
 
@@ -1173,7 +1158,7 @@
 
 
             /*       if (bc != null) {
-                      console.log('getting client');
+                      *console.log('getting client');
                       bc.getclient();
                   } */
 
@@ -1191,7 +1176,7 @@
 
         } else {
             //io.emit('authenticated', 'false');
-            console.log('IO reconnected');
+            log.info('IO reconnected');
             //initBeamData();
         }
     }
@@ -1369,9 +1354,10 @@
 
             //do something with the response
             log.info('Checking Token');
-            log.info('Response Token :-' + JSON.stringify(res));
+            //log.info('Response Token :-' + JSON.stringify(res));
 
 
+            //maybe check status code to retry if server is busy or not responding
             const validToken = res.body.active;
 
             if (validToken) {
@@ -1385,7 +1371,7 @@
                 }
 
 
-                console.log(chatConnected);
+                log.info("streamer connected status - " + chatConnected);
                 if (bc != null) {
                     log.info('beam object found no need to reconnect to chat');
                 }
@@ -1393,41 +1379,26 @@
 
                 if (bc == undefined || bc == null) {
 
-                    log.info('beam object not found creating new instance');
+                    log.info('Streamer Connecting to Chat....');
 
                     authDB.reload();
                     //streamer object
-                    bc = new beamchat(Token, chatConnected, authDB);
+                    bc = new MixerStreamerChat(Token, chatConnected, authDB);
 
 
-                    co = new constellation();
-                    ch = new commandHandler(res.body.username, authDB.data.streamer.channelId);
+                    co = new constellation(authDB.data.streamer.channelId);
+                    ch = new commandHandler(res.body.username, authDB.data.streamer.channelId, log);
 
 
                     io.emit('streamerAuthenticated');
-                    //console.log('Authenticated To Beam');
-                    //io.emit('authenticated');
 
-                    //io.emit('loginaccounts', streamerName, botName);
-
-                    /*                     bc.on('FollowerCount', function(data) {
-                                            console.log('bc follower count emit');
-                                            io.emit('followerCount', data);
-                                        });
-
-                                        bc.on('FollowingCount', function(data) {
-                                            // console.info(data);
-                                            console.log('bc following count emit');
-                                            io.emit('followingCount', data);
-                                        });
-                     */
                     bc.on('TriggerFollow', function(data) {
                         try {
 
-                            console.log('Trigger Follow line 339 Chatbot beam js');
+
                             FollowEvent(data, alertsoundFolder, alertimageFolder, alertvideoFolder, myFollowAlerts);
                         } catch (error) {
-                            console.log('error in mixer chat follow');
+                            log.error('error in mixer chat follow ' + error.message);
                         }
 
                     });
@@ -1435,13 +1406,12 @@
 
                     /*                     bc.on('ChatUserCount', function(data) {
 
-                                            console.log('bc chat user count');
+                                            *console.log('bc chat user count');
                                             io.emit('chatusercount', data);
                                         }); */
 
                     bc.on('error', function(data) {
-                        console.log('bc error');
-                        console.log('bc error' + data.message);
+                        log.error('streamer chat connection error - ' + data.message);
                     });
 
                     bc.on('ChatMessage', function(data) {
@@ -1460,6 +1430,9 @@
 
                         io.emit('streamerLoggedIn', data);
 
+                        chatConnected = true;
+
+                        log.info("Streamer User Connected to chat")
 
                     });
 
@@ -1547,13 +1520,13 @@
                         //if(bl.isNew()){}
                         switch (data.type) {
                             case ('update'):
-                                console.info('constellation update: ' + JSON.stringify(data));
+                                log.info('constellation update: ' + JSON.stringify(data));
                                 io.emit('update', data);
 
 
                                 break;
                             case ('followed'):
-                                console.log('A user has followed ' + JSON.stringify(data, null, 2));
+                                log.info('A user has followed ' + JSON.stringify(data, null, 2));
                                 if (data.info.following == true) {
                                     // if (bl.check(data.info.user.username) == false) {
 
@@ -1566,7 +1539,7 @@
 
                                     try {
 
-                                        console.log('Constellation Follow Alert');
+                                        log.info('Constellation Follow Alert');
                                         //const soundFolder = './views/media/sounds/';
                                         //const gfxFolder = './views/media/graphics/';
                                         //const imageFolder = './views/media/images/';
@@ -1587,7 +1560,7 @@
 
 
                                     } catch (error) {
-                                        console.log('error in mixer chat follow');
+                                        log.error('follow alert error in app.js ' + error.message);
                                     }
 
 
@@ -1603,7 +1576,7 @@
                                 break;
                             case ('hosted'):
                                 if (data.info.hoster != null) { //user is hosting you
-                                    console.log(data.info.hoster.token);
+                                    log.info("person hoted" + data.info.hoster.token);
                                 }
                                 if (data.info.hostee != null) { //user is being hosted
 
@@ -1613,21 +1586,21 @@
                                 HostEvent(data, alertsoundFolder, alertimageFolder, alertvideoFolder, myHostAlerts);
 
                                 bcBot.say(`User ${data.info.hoster.token} hosted  the Channel! `);
-                                console.log(data.info.hoster.viewersCurrent);
+                                log.info('viewersCurrent: ' + data.info.hoster.viewersCurrent);
                                 io.emit('hosted', data);
 
                                 //    }
                                 break;
                             case ('subscribed'):
-                                console.log(data.info);
+                                log.info("User Subscribed -" + data.info);
                                 io.emit('subscribed', data);
                                 break;
                             case ('resubscribed'):
-                                console.log(data.info);
+                                log.info("User Resubscribed - " + data.info);
                                 io.emit('resubscribed', data);
                                 break;
                             default: //dont trigger anything.
-                                console.log('unknown event' + data.info);
+                                log.info('unknown event triggered in constellation - ' + data.info);
                                 break;
                         }
                     });
@@ -1645,7 +1618,7 @@
                 }
             } else {
 
-                log.info('refresh Token Required access token expired')
+                log.info('refresh Token Required access token expired');
 
                 refreshToken(authDB, "streamer");
 
@@ -1678,9 +1651,11 @@
 
             //do something with the response
             log.info('Checking Token');
-            log.info('Response Token :-' + JSON.stringify(res));
+            //log.info('Response Token :-' + JSON.stringify(res));
 
 
+
+            //maybe check status code to retry if server is busy or not responding
             const validToken = res.body.active;
 
             if (validToken) {
@@ -1698,69 +1673,71 @@
                     streamerChannel = authDB.data.streamer.channelId;
 
                     if (streamerChannel != undefined || streamerChannel != null || streamerChannel != "") {
-                        console.log('mixer bot object is null');
-                        bcBot = new beamchatbot(Token, chatConnected, streamerChannel, authDB);
+                        log.info('Bot User Connecting to chat');
 
+                        bcBot = new MixerBotChat(Token, chatConnected, streamerChannel, authDB);
 
-                        console.log('Authenticated To Beam');
                         bcBot.on('error', function(data) {
-                            console.log('bc Bot error');
-                            console.log('bc Bot error' + data.message);
+                            log.error('Bot Chat Connection Error -' + data.message);
                         });
 
                         //when a user is modded/banned etc
                         bcBot.on('UserUpdate', function(data) {
 
-                            console.info('A user update has happened: ' + JSON.stringify(data))
+                            log.info('A user update has happened: ' + JSON.stringify(data))
+
+                            //remove User from list
+                            if (data.hasOwnProperty('roles')) {
+                                if (data.roles[0] == 'Banned') {
+                                    //banned username
+                                    //'Send in banned'
+                                }
+                            }
+
+
 
                         });
 
                         bcBot.on('UserTimeout', function(data) {
 
                             //not sent by mixer chat api atm
-                            console.info('A user has been timed out: ' + JSON.stringify(data))
+                            log.info('A user has been timed out: ' + JSON.stringify(data))
 
                         });
 
 
                         //when a user clears the chat
                         bcBot.on('ClearMessages', function(data) {
-                            console.info('A user has cleared chat: ' + JSON.stringify(data))
+                            log.info('A user has cleared chat: ' + JSON.stringify(data))
                                 //data.clearer
                             io.emit('MixerMessagesCleared', data);
 
                         });
 
-                        bcBot.on('PurgeOrTimeoutMessage', function(data) {
+                        bcBot.on('MixerTimeout', function(data) {
 
-                            console.info('A user has purged/timedout someone: ' + JSON.stringify(data))
-                            AddMonitorAction(myModeratorMonitor, data, "PurgeOrTimeout");
+                            log.info('A user has purged/timedout someone: ' + JSON.stringify(data))
+                            AddMonitorAction(myModeratorMonitor, data, "timeout");
 
                         });
 
-                        bcBot.on('DeleteMessage', function(data) {
+                        bcBot.on('MixerDelete', function(data) {
 
                             //add row to db
                             data.moderator.user_roles[0]; //role of person deleting
                             data.moderator.user_id; //id of person deleting
                             data.moderator.user_name; //name of person deleting
 
-                            console.info('Message Deleted: ' + JSON.stringify(data))
+                            log.info('Message Deleted: ' + JSON.stringify(data))
                             AddMonitorAction(myModeratorMonitor, data, "delete");
 
                         });
 
 
-
-                        //mixer does not provide information of who banned the user at the moment
-                        bcBot.on('UserBanned', function(data) {
-
-                            console.info('A user has been banned: ' + JSON.stringify(data))
-
+                        bcBot.on('MixerBan', function(data) {
+                            //console.info('A user has been banned: ' + JSON.stringify(data))
                             AddMonitorAction(myModeratorMonitor, data, "ban");
                             //data.clearer
-
-
                         });
 
                         bcBot.on('UserJoin', function(data) {
@@ -1769,7 +1746,7 @@
 
                             //   io.emit('message', UserName + ' [' + data.roles[0] + ']' + ' - has Joined The Channel !!!!!!!!');
                             //io.emit('followed', data);
-                            console.log('User: ' + data.username + ' has joined the channel');
+                            log.info('UserJoin: ' + data.username + ' has joined the chat');
 
                             if (data.roles[0] !== undefined) {
 
@@ -1784,14 +1761,14 @@
                         bcBot.on('UserLeave', function(data) {
 
                             ///console.log(colors.red(`UserPart`));
-                            console.log('User: ' + data.username + ' has left the channel');
+                            log.info('User: ' + data.username + ' has left the channel');
 
                             let UserName = data.username;
 
                             //  io.emit('message', UserName + ' [' + data.roles[0] + ']' + ' - has Left The Channel :( :( :(');
                             //io.emit('followed', data);
 
-                            console.log(JSON.stringify(data));
+                            log.info("User Part data" + JSON.stringify(data));
 
                             if (data.roles[0] !== undefined) {
                                 io.emit('UserPart', UserName + ' - ' + data.roles[0] + ' - ' + data.id);
@@ -1819,6 +1796,8 @@
 
                             io.emit('botLoggedIn', data);
 
+                            chatConnectedBot = true;
+                            log.info("Bot User Connected to chat")
 
                         });
 
@@ -1935,8 +1914,6 @@
                     });
                     response.on('end', function() {
 
-
-
                         var invalid_grant = new RegExp("invalid_grant");
 
 
@@ -1948,17 +1925,17 @@
                         if (error != null) {
                             log.info('invalid grant');
                             if (type === 'streamer') {
-                                //does not work atm 01/10/2019
+                                //does not work atm 01/10/2019 ??
                                 io.emit('reauthstreamer', true);
                             } else {
-                                //does not work atm 01/10/2019
+                                //does not work atm 01/10/2019 ??
                                 io.emit('reauthbot', true);
                             }
 
                             //return false
                         } else {
                             var json = JSON.parse(result.toString());
-                            console.log("access token recieved: " + json.access_token);
+                            log.info("access token recieved: " + json.access_token);
 
                             //now set expiry date
                             //set token expiry in milliseconds 
@@ -1993,13 +1970,13 @@
                         if (response && response.ok) {
                             // Success - Received Token.
                             // Store it in localStorage maybe?
-                            console.log(response.body.access_token);
+                            log.info("Access Token Recieved for " + type + " - " + response.body.access_token);
                         }
 
 
                     });
                     response.on('error', function(err) {
-                        console.log("MIXER OAUTH REQUEST ERROR: " + err.message);
+                        log.error("MIXER OAUTH REQUEST ERROR: " + err.message);
                     });
                 });
 
@@ -2050,7 +2027,7 @@
 
     function CreateBeamBotObjects(BBBTokenBot, message, channelToken, chatConnected, streamerName, botName, streamerChannel, globalFollowers, authDBData) {
 
-        console.log('is Connected ?' + isConnected);
+        log.info('is bot Connected ?' + isConnected);
 
 
         if (BBBTokenBot != null) {
@@ -2226,6 +2203,8 @@
 
                 }
             }
+        } else {
+            log.info('Duplicate Message - not sent Message ID: ' + data.id);
         }
     }
 
@@ -2255,7 +2234,7 @@
         if (sendType.toLowerCase() == "streamer") {
             if (bc == null || bc == undefined) {
 
-                console.log('Beam disconnected Could not send message please connect to beam: - ' + message);
+                log.error('Streamer disconnected from chat Could not send message please connect to beam: - ' + message);
 
                 //we don't want to emit unauthenticated more than once.
                 unauthenticatedCounter = unauthenticatedCounter + 1;
@@ -2274,7 +2253,7 @@
         } else if (sendType.toLowerCase() == "bot") {
             if (bcBot == null || bcBot == undefined) {
 
-                console.log('Beam disconnected Could not send message please Authenticate: - ' + message);
+                log.error('Bot disconnected from chat Could not send message please Authenticate: - ' + message);
 
                 //we don't want to emit unauthenticated more than once.
                 unauthenticatedCounter = unauthenticatedCounter + 1;
@@ -2317,7 +2296,7 @@
             }
 
         } catch (error) {
-            console.log("trigger error" + error.message);
+            log.error("sending trigger to mixer error" + error.message);
         } finally {
 
         }
@@ -2370,7 +2349,7 @@
             if (commandInDB.length > 0) {
                 // is command in db ?
 
-                console.log('command found: permission is: ' + commandInDB[0].permission);
+                log.info('command found: permission is: ' + commandInDB[0].permission);
 
                 //is user allowed to use command ?
                 var userAllowed = isUserPermitted(commandInDB[0].permission, commandInDB[0].user, username, user_roles, bc); // get command's permission and return true is user is allowed otherwise false
@@ -2591,7 +2570,11 @@
 
     function sendParentCurrenciesToUI(parentCurrency) {
         let parentCurrencyRows = cm.GetParentCurrencies(parentCurrency);
-        io.emit('receiveParentCurrency', parentCurrencyRows);
+
+        if (parentCurrencyRows != undefined) {
+            io.emit('receiveParentCurrency', parentCurrencyRows);
+        }
+
     }
 
     function processReselectRanks(Newcurrency, currencyId, currencyName) {
@@ -2599,12 +2582,6 @@
         let ranks = cm.ReselectRank(Newcurrency, currencyId, currencyName);
         return ranks;
     }
-
-    /*     function processGetParentCurrencies(parentCurrency) {
-
-            let parentCurrencies = cm.GetParentCurrencies(parentCurrency);
-            return parentCurrencies;
-        } */
 
     function processAddUINote(myNotes, fullcommand) {
         //push command to the file
@@ -3206,6 +3183,7 @@
     }
 
     // this is for party queue not used atm but need to implement properly
+    // write this by inserting array using jsonDB push
     function AddUserToJoinGame(message) {
 
         fs.readFile('./views/chatusers/users.json', 'utf-8', function(err, data) {
@@ -3223,11 +3201,11 @@
                 lastName: "Test"
             });
 
-            console.log(arrayOfObjects);
+            log.info(arrayOfObjects);
 
             fs.writeFile('./views/chatusers/users.json', JSON.stringify(arrayOfObjects), 'utf-8', function(err) {
                 if (err) throw err
-                console.log('AddUserToJoinGame in chatbotbeam2.js Done!')
+                log.info('AddUserToJoinGame in chatbotbeam2.js Done!')
             });
         });
 
@@ -3338,7 +3316,7 @@
         };
 
         try {
-            console.log('follow event triggered');
+            log.info('follow event triggered');
 
             //valid alert
             if (playType > 0) {
@@ -3346,7 +3324,7 @@
             }
 
             /*        app.get('/overlay', function(req, res) {
-                       console.log('got response from overlay')
+                       *console.log('got response from overlay')
                        res.render('overlays/overlay.ejs');
                    }); */
 
@@ -3355,7 +3333,7 @@
 
 
         } catch (error) {
-            console.log('error in follow message in chatbotbeam2.js' + error);
+            log.error('error in follow message in chatbotbeam2.js' + error);
         }
 
     }
@@ -3448,7 +3426,7 @@
             };
 
             try {
-                console.log('host event triggered');
+                log.info('host event triggered');
 
                 //valid alert
                 if (playType > 0) {
@@ -3456,7 +3434,7 @@
                 }
 
                 /*        app.get('/overlay', function(req, res) {
-                           console.log('got response from overlay')
+                           *console.log('got response from overlay')
                            res.render('overlays/overlay.ejs');
                        }); */
 
@@ -3465,7 +3443,7 @@
 
 
             } catch (error) {
-                console.log('error in follow message in chatbotbeam2.js' + error);
+                log.error('error in follow message in chatbotbeam2.js' + error);
             }
         } else {
             //
@@ -3524,14 +3502,14 @@
 
 
         try {
-            console.log('command event triggered');
+            log.info('command event triggered');
 
             //valid command (something to play)
             if (playType > 0) {
                 addAlertToDB(dbAlerts, alertMsg);
             }
             /*        app.get('/overlay', function(req, res) {
-                       console.log('got response from overlay')
+                       *console.log('got response from overlay')
                        res.render('overlays/overlay.ejs');
                    }); */
 
@@ -3540,10 +3518,10 @@
 
 
         } catch (error) {
-            console.log('error in follow message in chatbotbeam2.js' + error);
+            log.error('error in follow message in app.js' + error);
         }
 
-    }
+    };
 
     //need to work on this one (for both alerts and commands 
     // for alerts it just deletes the first alert with the persons name which is not necessarily the correct alert 
@@ -3581,7 +3559,7 @@
     //save UI Theme setting
     function saveUIThemeSetting(myUITheme, element, color) {
 
-        console.log('Saving Theme');
+        log.info('Saving Theme');
 
         var iii = myUITheme.data.uitheme[0];
 
@@ -3797,15 +3775,12 @@
         return type;
     }
 
-
-
-
     function addAlertToDB(dbAlerts, alertMSG) {
 
         //adds item to queue
         var alertsInQueue = Object.keys(dbAlerts.getData("/alerts")).length;
 
-        console.log("Alerts in queue: " + alertsInQueue);
+        log.info("Alerts in queue: " + alertsInQueue);
 
         //add to queue
         dbAlerts.push("/alerts[]", alertMSG, true);
@@ -3839,24 +3814,6 @@
 
     };
 
-    // function addAlltimers(myTimers) {
-
-    //     timers.length = 0;
-
-    //     myTimers.reload();
-
-    //     var message = "";
-    //     var duration = 1000;
-
-    //     for (var timerCnt = 0, len = myTimers.data.timers.length; timerCnt < len; timerCnt++) {
-
-    //         message = myTimers.data.timers[timerCnt].text;
-    //         duration = myTimers.data.timers[timerCnt].interval;
-    //         addToArray(message, duration);
-
-    //     };
-
-    // };
 
     function addAlltimersSchedule(myTimers) {
         myTimers.reload();
@@ -3895,7 +3852,7 @@
 
     function addToArray(message, duration) {
         /*     timers.push(setTimeout(function run() {
-                console.log("adding timer" + message);
+                *console.log("adding timer" + message);
                 SendMessageToBeam(message);
                 setTimeout(run, duration);
             }, duration)); */
@@ -3911,17 +3868,6 @@
         );
     }
 
-    // function stopAlltimers() {
-
-    //     for (var i = 0; i < timers.length; i++) {
-    //         clearInterval(timers[i]);
-
-    //     }
-    //     timers.length = 0;
-
-    //     //  timers = null;
-
-    // };
 
     function stopAllTimersSchedule() {
         Scheduler.halt()
@@ -3949,10 +3895,6 @@
         var yearstr = dateIn.getFullYear();
         var hoursValue = dateIn.getHours() + ':' + dateIn.getMinutes() + ':' + dateIn.getSeconds();
 
-
-        console.log(dayWeek);
-        console.log(dayNo);
-        console.log(monthName);
         return dayweek + ' ' + dayNo + ' ' + monthName + ' ' + yearstr + ' ' + hoursValue;
 
     }
@@ -4058,14 +4000,14 @@
         /*         commandVariables.forEach(function(a) {
 
                     if (typeof(a) == 'string' && a.indexOf('$gfx') > -1) {
-                        console.log(a);
+                        *console.log(a);
                         commandVariables[a.indexOf('$gfx')].pop();;
                     }
 
                 }) */
 
         commandVariables.slice().forEach(function iterator(value, index, collection) {
-            console.log("Visiting:", value);
+            //console.log("Visiting:", value);
             if (typeof(value) == 'string' && value.indexOf('$gfx') > -1) {
                 // Delete current value.
                 commandVariables.splice(index, 1);
@@ -4086,7 +4028,7 @@
 
         commandVariables.forEach(
             function iterator(value, index, collection) {
-                console.log("Visiting:", value);
+                //console.log("Visiting:", value);
                 if (typeof(value) == 'string' && value.indexOf('$sfx') > -1) {
                     // Delete current value.
                     // --
@@ -4101,7 +4043,7 @@
 
         commandVariables.forEach(
             function iterator(value, index, collection) {
-                console.log("Visiting:", value);
+                //console.log("Visiting:", value);
                 if (typeof(value) == 'string' && value.indexOf('$img') > -1) {
                     // Delete current value.
                     // --
@@ -4116,7 +4058,7 @@
 
         commandVariables.forEach(
             function iterator(value, index, collection) {
-                console.log("Visiting:", value);
+                //console.log("Visiting:", value);
                 if (typeof(value) == 'string' && value.indexOf('$gfx') > -1) {
                     // Delete current value.
                     // --
@@ -4174,7 +4116,7 @@
     function SaveAuth(type, token, refresh_token, username, authTokenExpiry) {
         //type = streamer or bot
         userInfo(type, token, refresh_token, null, username, authTokenExpiry)
-    }
+    };
 
     function userInfo(type, accessToken, refreshToken, authedForClips = false, username, authTokenExpiry) {
 
@@ -4268,7 +4210,7 @@
 
         }
 
-    }
+    };
 
     //need a permission (i.e. who is allowed to add note and a note type (i.e. private,public))
     /*     function BuildNoteold(data) {
@@ -4330,7 +4272,7 @@
 
     //this is called when a note is added in chat
     function BuildNote(data) {
-        console.log('test');
+
         //var data = document.getElementById('test').value;
 
 
@@ -4358,7 +4300,6 @@
 
         cName = 'n' + dayWeek + dayNo + monthName + yearstr + hoursValue;
 
-        console.log(commandVariables[0]);
         if (commandVariables[0].substr(0, 1) == "!") {
             //valid commandadd name
             commandVariables.shift();
@@ -4367,21 +4308,18 @@
         if (commandVariables[0].substr(0, 2) == "+p") {
             //valid command name
             cPerms = commandVariables[0].substr(1, 2);
-            console.log('perms is ' + cPerms);
             commandVariables.shift();
         }
 
         if (commandVariables[0].substr(0, 2) == "+h") {
             //valid command name
             cPriority = commandVariables[0].substr(1, 2);
-            console.log('priority is ' + cPriority);
             commandVariables.shift();
         }
 
         if (commandVariables[0].substr(0, 2) == "+l") {
             //valid command name
             cPriority = commandVariables[0].substr(1, 2);
-            console.log('priority is ' + cPriority);
             commandVariables.shift();
         }
 
@@ -4420,7 +4358,7 @@
             cPriority = "N";
         }
 
-        console.log(commandText);
+        log.info("Build Note - " + commandText);
 
         var commandObjectJson = {
             cid: cName,
@@ -4495,7 +4433,7 @@
     exports.SetStreamerAuth = SetStreamerAuth;
     exports.SaveAuth = SaveAuth;
     exports.checkBotTokenAndConnect = checkBotTokenAndConnect;
-    exports.checkStreamerTokenAndConnect = checkStreamerTokenAndConnect
+    exports.checkStreamerTokenAndConnect = checkStreamerTokenAndConnect;
     exports.ConnectOnLogin = ConnectOnLogin;
 
 }());

@@ -13,23 +13,19 @@ function modMonitor(io) {
                 switch (data.action) {
                     case "delete":
                         //emit sends data to browser
-                        io.emit('MixerDeleteMessage', data);
+                        io.emit('MixerModAction', data);
                         break;
-                    case "PurgedOrTimeout":
+                    case "timeout":
                         //emit sends data to browser
-                        io.emit('MixerPurgeOrTimeoutMessage', data);
+                        io.emit('MixerModAction', data);
                         break;
-
-                    case "Ban":
+                    case "ban":
                         //emit sends data to browser
-                        io.emit('MixerPurgeMessageBan', data);
+                        io.emit('MixerModAction', data);
                         break;
-
                     default:
                         break;
                 }
-
-
                 // return new fileOps.prototype.emit('sendFiles', data, type);
             })
             .catch((err) => console.log(err));
@@ -48,17 +44,16 @@ function modMonitor(io) {
                 case "delete":
                     file = await addDelete(myModeratorMonitor, dataIn, actionDateFull);
                     break;
-                case "PurgeOrTimeout":
-                    file = await addPurgeTimeout(myModeratorMonitor, dataIn, actionDateFull);
+                case "timeout":
+                    file = await addModAction(myModeratorMonitor, dataIn, actionDateFull);
                     break;
                 case "ban":
-                    file = await addBan(myModeratorMonitor, dataIn, actionDateFull);
+                    file = await addModAction(myModeratorMonitor, dataIn, actionDateFull);
                     break;
                 default:
+                    file = await addModAction(myModeratorMonitor, dataIn, actionDateFull);
                     break;
             }
-
-
 
             return file;
 
@@ -68,7 +63,7 @@ function modMonitor(io) {
     async function addDelete(myModeratorMonitor, fullcommand, actionDateFull) {
 
         var actionObject = new Object();
-        actionObject.id = fullcommand.id;
+        actionObject.id = fullcommand.id + new Date().toTimeString();;
         actionObject.date = actionDateFull;
         actionObject.moderatorid = fullcommand.moderator.user_id;
         actionObject.moderatorname = fullcommand.moderator.user_name;
@@ -81,11 +76,7 @@ function modMonitor(io) {
         return actionObject;
     };
 
-
-    async function addPurgeTimeout(myModeratorMonitor, fullcommand, actionDateFull) {
-
-
-
+    async function addModAction(myModeratorMonitor, fullcommand, actionDateFull) {
 
         var actionObject = new Object();
         actionObject.id = fullcommand.user_id + new Date().toTimeString();
@@ -93,29 +84,8 @@ function modMonitor(io) {
         actionObject.moderatorid = fullcommand.moderator.user_id;
         actionObject.moderatorname = fullcommand.moderator.user_name;
         actionObject.rolewho = fullcommand.moderator.user_roles[0];
-        actionObject.action = "PurgedOrTimeout";
+        actionObject.action = fullcommand.cause.type;
         actionObject.user = fullcommand.user_id;
-
-
-        //push command to the file
-        myModeratorMonitor.push("/modaction[]", actionObject, true);
-        return actionObject;
-    };
-
-
-    async function addBan(myModeratorMonitor, fullcommand, actionDateFull) {
-
-
-        var actionObject = new Object();
-
-        actionObject.id = fullcommand.user_id + '';
-        actionObject.date = actionDateFull;
-        actionObject.moderatorid = ""; //mixer doesn't provide who banned info
-        actionObject.moderatorname = ""; //mixer doesn't provide who banned info
-        actionObject.rolewho = ""; //mixer doesn't provide who banned info
-        actionObject.action = "Ban";
-        actionObject.user = fullcommand.user_id;
-
 
         //push command to the file
         myModeratorMonitor.push("/modaction[]", actionObject, true);

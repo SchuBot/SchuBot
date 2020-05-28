@@ -6,7 +6,7 @@ var request = require('request');
 
 
 //module
-let commandHandler = function(channelToken, streamID) {
+let commandHandler = function(channelToken, streamID, log) {
 
     //let userInfo;
     let self = this;
@@ -18,7 +18,7 @@ let commandHandler = function(channelToken, streamID) {
     self.say = function(userName, commandJSONData, roles, commandTriggered, fullcommand, mixerStreamId) {
 
         //var userName = userNameStr;
-        console.log(commandJSONData[0].text.split(' '));
+        //console.log(commandJSONData[0].text.split(' '));
 
         var commandData = commandJSONData[0];
         var commandToChat = "";
@@ -26,11 +26,11 @@ let commandHandler = function(channelToken, streamID) {
 
         processArray(commandData, channelToken, commandTriggered, userName, target, mixerStreamId).then(function(response) {
             commandToChat = response.join(' ');
-            console.log("Success!", response);
+            log.info("Command Processed! - " + response);
             //emit event and send message to mixer
             return self.emit('CommandData', commandToChat);
         }, function(error) {
-            console.error("Failed!", error);
+            log.error("Failed!" + error);
             return self.emit('CommandData', error);
         });
 
@@ -102,7 +102,7 @@ async function getSubstitutionVariable(userName, variableCommand, array, index, 
                 if (userMixerUrl != "") {
                     text = userMixerUrl;
                 } else {
-                    text = "target not set"
+                    text = "user not set"
                 }
 
             }
@@ -296,9 +296,7 @@ async function getUptime(channelID) {
         try {
             const response = await fetch(url);
             const json = await response.json();
-            console.log(
-                JSON.stringify(json)
-            );
+            //console.log(JSON.stringify(json));
             // console.log('broadcast info is: (below)');
 
             if (json.startedAt == undefined) {
@@ -315,7 +313,7 @@ async function getUptime(channelID) {
 
             // return d = new ChannelUptime(json);
         } catch (error) {
-            console.log(error);
+            log.info('getUptime error ' + error);
             return d = error;
         }
     };
@@ -340,7 +338,7 @@ async function getChannel(channelToken) {
                         ); */
             return d = new ChannelObject(json);
         } catch (error) {
-            console.log(error);
+            log.error('getChannel error - ' + error);
             return d = error;
         }
     };
@@ -368,7 +366,7 @@ async function callApi(apiURL) {
 
             // return d = new ChannelUptime(json);
         } catch (error) {
-            console.log(error);
+            log.error('callApi error ' + error);
             return d = error;
         }
     };
@@ -633,7 +631,7 @@ async function processArray(commandData, channelName, commandTriggered, userName
                             }
 
                         }
-                        console.log('Hey');
+
                     }
                     var apiURL = commandTextRoundBrackets.join().replace(",", "");
                     let resultReadApi = await callApi(apiURL.replace(",", ""));

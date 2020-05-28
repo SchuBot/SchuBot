@@ -17,11 +17,12 @@ var chatUsers = [];
 
 
 //module
-let mixerdata = function(authToken) {
+let mixerdata = function(authToken, log) {
 
     if (authToken) {
 
-        console.log('accessing beam chat js ' + authToken);
+        //+ authToken
+        log.info('Streamer Token obtained for mixer data.');
 
         const colors = require('colors');
         const mixerClient = new Mixer.Client(new Mixer.DefaultRequestRunner());
@@ -233,7 +234,7 @@ let mixerdata = function(authToken) {
             var db = new JsonDB("myDataBase", true, true);
 
             if (type == "follower") {
-                console.log("follower " + username + " on: " + createdDate)
+                log.info("follower " + username + " on: " + createdDate)
                 addfollowerToDB(username, createdDate, updatedDate);
             }
 
@@ -257,7 +258,7 @@ let mixerdata = function(authToken) {
 
             var numDBFollowing = Object.keys(db.getData("/following")).length;
 
-            console.log("Following: " + numDBFollowers);
+            log.info("Following: " + numDBFollowers);
 
         }
 
@@ -276,7 +277,7 @@ let mixerdata = function(authToken) {
 
             var numDBFollowers = Object.keys(db.getData("/followers")).length;
 
-            console.log("Number Of Followers: " + numDBFollowers);
+            log.info("Number Of Followers: " + numDBFollowers);
 
             var data = db.getData("/followers");
 
@@ -288,6 +289,7 @@ let mixerdata = function(authToken) {
 
             //In case you have a exterior change to the databse file and want to reload it 
             //use this method 
+            //Check this 22/05/2020
             db.reload();
         }
 

@@ -227,7 +227,6 @@
         });
 
         iosocket.on('streamerLoggedIn', function(streamer) {
-            //alert('streamer logged in');
             setStreamerAccountLoggedIn(streamer);
         });
 
@@ -254,23 +253,12 @@
 
         });
 
-        iosocket.on('MixerPurgeOrTimeoutMessage', function(message) {
+        iosocket.on('MixerModAction', function(message) {
 
-            addModeratorsActionToModMonitorList(message, 'PurgeOrTimeout');
+            addModeratorsActionToModMonitorList(message);
             //test
         });
 
-        iosocket.on('MixerDeleteMessage', function(message) {
-
-            addModeratorsActionToModMonitorList(message, 'delete');
-
-        });
-
-        iosocket.on('MixerPurgeMessageBan', function(message) {
-
-            addModeratorsActionToModMonitorList(message, 'ban');
-
-        });
 
         iosocket.on('UserPart', function(message) {
 
@@ -463,6 +451,9 @@
         });
 
         iosocket.on('addSaveSingleCurrency', function(data) {
+            addorAmendCurrencyToTable(data);
+        });
+        iosocket.on('addSaveSingleCurrency2', function(data) {
             addorAmendCurrencyToTable(data);
         });
 
@@ -685,47 +676,18 @@
 
         }
 
-        addModeratorsActionToModMonitorList = function(data, type) {
+        addModeratorsActionToModMonitorList = function(data) {
 
-            switch (type) {
 
-                case "delete":
-                    var tr;
-                    tr = $('<tr id="MMO' + data.id + '" class /> ');
-                    tr.append("<td>" + data.date + "</td>");
-                    tr.append("<td>" + data.rolewho + "</td>");
-                    tr.append("<td>" + data.moderatorname + "</td>");
-                    tr.append("<td>" + 'Deleted Message' + "</td>");
-                    tr.append("<td>" + data.user + "</td>");
-                    tr.append("<td>" + data.id + "</td>");
-                    $('#tableMMO').append(tr);
+            tr = $('<tr id="MMO' + data.id + '" class /> ');
+            tr.append("<td>" + data.date + "</td>");
+            tr.append("<td>" + data.rolewho + "</td>");
+            tr.append("<td>" + data.moderatorname + "</td>");
+            tr.append("<td>" + data.action + "</td>");
+            tr.append("<td>" + data.user + "</td>");
+            tr.append("<td>" + data.id + "</td>");
+            $('#tableMMO').append(tr);
 
-                    break;
-                case "ban":
-                    tr = $('<tr id="MMO' + data.id + '" class /> ');
-                    tr.append("<td>" + data.date + "</td>");
-                    tr.append("<td>" + data.rolewho + "</td>");
-                    tr.append("<td>" + data.moderatorname + "</td>");
-                    tr.append("<td>" + 'Banned' + "</td>");
-                    tr.append("<td>" + data.user + "</td>");
-                    tr.append("<td>" + data.id + "</td>");
-                    $('#tableMMO').append(tr);
-
-                    break;
-                case "PurgeOrTimeout":
-                    tr = $('<tr id="MMO' + data.id + '" class /> ');
-                    tr.append("<td>" + data.date + "</td>");
-                    tr.append("<td>" + data.rolewho + "</td>");
-                    tr.append("<td>" + data.moderatorname + "</td>");
-                    tr.append("<td>" + 'Purged/Timed Out' + "</td>");
-                    tr.append("<td>" + data.user + "</td>");
-                    tr.append("<td>" + data.id + "</td>");
-                    $('#tableMMO').append(tr);
-
-                    break;
-                default:
-                    break;
-            }
             //scroll table to end
             scrollToEnd('modmonListbox');
 
@@ -924,14 +886,14 @@
 
             if (timerRow != null) {
 
-                var timerRowIndex = timerRow.rowIndex;
+                //var timerRowIndex = timerRow.rowIndex;
+                //var x = document.getElementById("tableTIM").rows[timerRowIndex].cells;
 
-                var x = document.getElementById("tableTIM").rows[timerRowIndex].cells;
-                x[1].innerHTML = data.enabled;
-                x[2].innerHTML = data.text;
-                x[3].innerHTML = data.interval;
-                x[4].innerHTML = data.option1;
-                x[5].innerHTML = data.option2;
+                timerRow.cells[1].innerHTML = data.enabled;
+                timerRow.cells[2].innerHTML = data.text;
+                timerRow.cells[3].innerHTML = data.interval;
+                timerRow.cells[4].innerHTML = data.option1;
+                timerRow.cells[5].innerHTML = data.option2;
 
             } else {
                 console.log('Timers data for table is:' + data.id)
@@ -958,12 +920,12 @@
 
             if (triggerRow != null) {
 
-                var triggerRowIndex = triggerRow.rowIndex;
+                //var triggerRowIndex = triggerRow.rowIndex;
 
-                var x = document.getElementById("tableKW").rows[triggerRowIndex].cells;
+                //var x = document.getElementById("tableKW").rows[triggerRowIndex].cells;
 
-                x[1].innerHTML = data.text;
-                x[2].innerHTML = data.enabled;
+                triggerRow.cells[1].innerHTML = data.text;
+                triggerRow.cells[2].innerHTML = data.enabled;
 
             } else {
                 console.log('Trigger data for table is:' + data.id)
@@ -987,34 +949,40 @@
 
             if (currencyRow != null) {
 
-                var currencyRowIndex = currencyRow.rowIndex;
+                //var currencyRowIndex = currencyRow.rowIndex;
 
-                var x = document.getElementById("tableCR").rows[currencyRowIndex].cells;
+                //var x = document.getElementById("tableCR").rows[currencyRowIndex].cells;
 
-                x[0].innerHTML = data.enabled;
-                x[1].innerHTML = data.id;
-                x[2].innerHTML = data.currencyName;
-                x[3].innerHTML = data.currencyBasedOn;
+                console.log('Currency data for table update is: ' + JSON.stringify(data))
+
+                currencyRow.cells[0].innerHTML = data.enabled;
+                currencyRow.cells[1].innerHTML = data.id;
+                currencyRow.cells[2].innerHTML = data.currencyName;
+                currencyRow.cells[3].innerHTML = data.currencyBasedOn;
 
                 if (data.currencyPerMin != '') {
-                    x[4].innerHTML = data.currencyPerMin;
+                    currencyRow.cells[4].innerHTML = data.currencyPerMin;
+                } else {
+                    currencyRow.cells[4].innerHTML = "";
                 }
 
                 if (data.currencyParentId != '') {
 
-                    x[5].innerHTML = data.currencyParentId;
+                    currencyRow.cells[5].innerHTML = data.currencyParentId;
                 } else {
-                    x[5].innerHTML = "Select an Option";
+                    currencyRow.cells[5].innerHTML = "Select an Option";
                 }
 
                 if (data.currencyParentName != '') {
-                    x[6].innerHTML = data.currencyParentName;
+                    currencyRow.cells[6].innerHTML = data.currencyParentName;
                 } else {
-                    x[6].innerHTML = "";
+                    currencyRow.cells[6].innerHTML = "";
                 }
 
                 if (data.currencyRatio != '') {
-                    x[7].innerHTML = data.currencyRatio;
+                    currencyRow.cells[7].innerHTML = data.currencyRatio;
+                } else {
+                    currencyRow.cells[7].innerHTML = "";
                 }
 
 
@@ -1056,12 +1024,12 @@
 
             if (currencyRankRow != null) {
 
-                var currencyRankRowIndex = currencyRankRow.rowIndex;
+                //var currencyRankRowIndex = currencyRankRow.rowIndex;
 
-                var RnkRow = document.getElementById("tableRank").rows[currencyRankRowIndex].cells;
+                //var RnkRow = document.getElementById("tableRank").rows[currencyRankRowIndex].cells;
 
-                RnkRow[0].innerHTML = data.currencyRankName;
-                RnkRow[1].innerHTML = data.currencyRankAmount;
+                currencyRankRow.cells[0].innerHTML = data.currencyRankName;
+                currencyRankRow.cells[1].innerHTML = data.currencyRankAmount;
 
 
             } else {
@@ -1105,17 +1073,17 @@
 
             if (triggerRow != null) {
 
-                var triggerRowIndex = triggerRow.rowIndex;
+                //var triggerRowIndex = triggerRow.rowIndex;
 
-                var x = document.getElementById("tableCO").rows[triggerRowIndex].cells;
+                //var x = document.getElementById("tableCO").rows[triggerRowIndex].cells;
 
-                x[0].innerHTML = data.enabled;
-                x[2].innerHTML = data.text;
-                x[3].innerHTML = transformUIPermsToCommandPerms(data.permission);
-                x[4].innerHTML = data.user;
-                x[5].innerHTML = data.audio;
-                x[6].innerHTML = data.video;
-                x[7].innerHTML = data.image;
+                triggerRow.cells[0].innerHTML = data.enabled;
+                triggerRow.cells[2].innerHTML = data.text;
+                triggerRow.cells[3].innerHTML = transformUIPermsToCommandPerms(data.permission);
+                triggerRow.cells[4].innerHTML = data.user;
+                triggerRow.cells[5].innerHTML = data.audio;
+                triggerRow.cells[6].innerHTML = data.video;
+                triggerRow.cells[7].innerHTML = data.image;
                 // x[9].innerHTML = data.cooldown; not used
 
             } else {
@@ -1147,16 +1115,16 @@
 
             if (noteRow != null) {
 
-                var noteRowIndex = noteRow.rowIndex;
+                //var noteRowIndex = noteRow.rowIndex;
 
-                var x = document.getElementById("tableFAL").rows[noteRowIndex].cells;
+                //var x = document.getElementById("tableFAL").rows[noteRowIndex].cells;
 
-                x[0].innerHTML = data.enabled;
-                x[1].innerHTML = data.id;
-                x[2].innerHTML = data.audio;
-                x[3].innerHTML = data.video;
-                x[4].innerHTML = data.image;
-                x[5].innerHTML = data.text;
+                noteRow.cells[0].innerHTML = data.enabled;
+                noteRow.cells[1].innerHTML = data.id;
+                noteRow.cells[2].innerHTML = data.audio;
+                noteRow.cells[3].innerHTML = data.video;
+                noteRow.cells[4].innerHTML = data.image;
+                noteRow.cells[5].innerHTML = data.text;
                 // x[6].innerHTML = data.audio;
 
             } else {
@@ -1187,16 +1155,16 @@
 
             if (noteRow != null) {
 
-                var noteRowIndex = noteRow.rowIndex;
+                //var noteRowIndex = noteRow.rowIndex;
 
-                var x = document.getElementById("tableHAL").rows[noteRowIndex].cells;
+                //var x = document.getElementById("tableHAL").rows[noteRowIndex].cells;
 
-                x[0].innerHTML = data.enabled;
-                x[1].innerHTML = data.id;
-                x[2].innerHTML = data.audio;
-                x[3].innerHTML = data.video;
-                x[4].innerHTML = data.image;
-                x[5].innerHTML = data.text;
+                noteRow.cells[0].innerHTML = data.enabled;
+                noteRow.cells[1].innerHTML = data.id;
+                noteRow.cells[2].innerHTML = data.audio;
+                noteRow.cells[3].innerHTML = data.video;
+                noteRow.cells[4].innerHTML = data.image;
+                noteRow.cells[5].innerHTML = data.text;
                 // x[6].innerHTML = data.audio;
 
             } else {
@@ -1231,16 +1199,16 @@
 
                 var x = document.getElementById("tableNotes").rows[noteRowIndex].cells;
 
-                x[0].innerHTML = data.id;
-                x[1].innerHTML = data.todo;
-                x[2].innerHTML = data.note;
+                noteRow.cells[0].innerHTML = data.id;
+                noteRow.cells[1].innerHTML = data.todo;
+                noteRow.cells[2].innerHTML = data.note;
 
                 if (data.hasOwnProperty("priority")) {
-                    x[3].innerHTML = data.priority;
+                    noteRow.cells[3].innerHTML = data.priority;
                 }
 
                 if (data.hasOwnProperty("private")) {
-                    x[4].innerHTML = data.private;
+                    noteRow.cells[4].innerHTML = data.private;
                 }
 
             } else {
@@ -1763,6 +1731,34 @@
             }
         }
 
+        currencyBasedOnSelected = function(data) {
+            data = document.getElementById(data).selectedOptions[0].innerText;
+            if (data === "Hours") {
+
+                document.getElementById("currencyPerMin").readOnly = true;
+                document.getElementById("currencyPerMin").value = "";
+
+            } else {
+
+                document.getElementById("currencyPerMin").readOnly = false;
+
+            }
+        }
+
+        currencyParentSelected = function(data) {
+            data = document.getElementById(data).selectedOptions[0].innerText;
+            if (data === "Select an Option") {
+
+                document.getElementById("currencyRatio").readOnly = true;
+                document.getElementById("currencyRatio").value = "";
+
+            } else {
+
+                document.getElementById("currencyRatio").readOnly = false;
+
+            }
+        }
+
         //check the following to see if I am following my follower
         checkIfFollowing = function(data) {
 
@@ -2039,10 +2035,15 @@
             var currObject = getCurrencyVariablesFromUI();
 
             if (currObject != undefined) {
+
+
                 convertEnabledBoolToYORN(currObject)
                 iosocket.emit('addSaveCurrency', currObject);
                 setAddSaveDeleteCurrencyDefaults();
                 $("#tableRank").find("tr:not(:first)").remove();
+
+
+
             }
         }
 
@@ -2672,6 +2673,8 @@
 
         function getCurrencyVariablesFromUI() {
 
+            let saveCurrency = true;
+
             var currEnabled = document.getElementById('chkBoxCurrInputEnabled').checked;
             var currName = document.getElementById('inputCurrencyName').value;
             var currId = document.getElementById('inputCurrencyId').value;
@@ -2688,21 +2691,33 @@
 
 
             //currency can't be its own parent
-            var currParent = document.getElementById('currencyParentSelect').selectedOptions[0].innerText;
+            var currParentName = document.getElementById('currencyParentSelect').selectedOptions[0].innerText;
             var currParentValue = document.getElementById('currencyParentSelect').selectedOptions[0].value;
 
-
-
-            if (currParentValue == 'default') {
-
-                currParent = "";
-            }
-
-
             if (currName.length < 1 || currBasedOnValue == 'default') {
+                saveCurrency = false;
                 alert('Currency Name and Based On are required');
 
-            } else {
+            } else if (currParentValue == currId) {
+                saveCurrency = false;
+                alert("Parent currency selected is invalid");
+            } else if (currParentValue == 'default') {
+                currParentName = "";
+                //remove ratio
+                if (currRatio.length > 0) {
+                    SetSelectElement("currencyRatio", "");
+                }
+
+            } else if (currParentValue != 'default') {
+                if (currRatio.length < 1) {
+                    saveCurrency = false;
+                    alert("Please select exchange ratio for this currency")
+                } else {
+                    saveCurrency = true;
+                }
+            }
+
+            if (saveCurrency) {
                 var currObject = new Object();
 
                 //creates the command object
@@ -2713,11 +2728,11 @@
                 currObject["currencyRatio"] = currRatio; //only required if parent exists
                 currObject["currencyBasedOn"] = currBasedOn;
                 currObject["currencyParentId"] = currParentValue;
-                currObject["currencyParentName"] = currParent;
-
-                return currObject;
+                currObject["currencyParentName"] = currParentName;
             }
 
+
+            return currObject;
 
         }
 

@@ -31,6 +31,7 @@ autoUpdater.logger.transports.file.level = 'info';
 log.transports.file.level = 'info';
 log.transports.file.format = '{h}:{i}:{s}:{ms} {text}'
 log.transports.file.maxSize = 5 * 1024 * 1024
+
 log.info('App starting...');
 
 
@@ -189,7 +190,7 @@ ipcMain.on('autoUpdate', () => {
         }
 
         if (err) {
-            log(err.message);
+            log.error(err.message);
         }
     });
 
@@ -209,7 +210,7 @@ ipcMain.on('autoUpdate', () => {
 
 
 ipcMain.on('loadbot', (event, arg) => {
-    console.log(arg) // prints "ping"
+    //console.log(arg) // prints "ping"
     loadbot();
 })
 
@@ -230,12 +231,12 @@ ipcMain.on('saveauth', (event, arg) => {
 }); */
 
 ipcMain.addListener("fulfilled", function(event, arg) {
-    console.log(event);
+    log.info("fulfilled listener event" + event);
 });
 
 
 ipcMain.on("fulfilled", function(event, arg) {
-    console.log(event);
+    log.info("fulfilled event" + event);
 });
 
 /* ipcMain.on("btnclickstreamer", function(event, arg) {
@@ -464,6 +465,7 @@ let info = {
 let windowAuth;
 
 function loadbot() {
+    log.info('Bot loading.....');
     authWindow.close();
     mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
 }
