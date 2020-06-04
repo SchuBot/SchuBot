@@ -114,6 +114,13 @@
             "note": "UI Theme Preset Options (5 presets)",
             "priority": "N",
             "private": "Y"
+        },
+        {
+            "id": "n161202017056",
+            "todo": "Y",
+            "note": "add online following to streamer to host one of the online followers via the bot.",
+            "priority": "N",
+            "private": "Y"
         }
     ]
 }

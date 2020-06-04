@@ -6,7 +6,7 @@
     //
     //
 
-
+    //https://mixer.com/api/v2/emotes/global?legacy=true  emotes location
     'use strict';
     const dateNow = Date.now();
 
@@ -20,11 +20,17 @@
     const modMonitor = require('../app/js/modMonitor');
     const currencyManager = require('../app/js/currencyManager');
 
+
+
     const Mixer = require('@mixer/client-node');
 
     const request = require("request");
 
     const colors = require('colors');
+
+    //const loki = require('lokijs');
+    //const install_postgres = require('../ServerSide/install_postgress.js');
+
 
     //var app = express();
     var port = process.env.PORT || 8081;
@@ -69,6 +75,80 @@
     var ch;
     let botName = null
     let cm;
+
+    ////////THIS IS THE STUFF FOR THE NEW DB
+    //     /* 
+    //         // mongo db stuffs
+    //         let mongo = require('mongodb');
+    //         var MongoClient = require('mongodb').MongoClient;
+    //         var url = "mongodb://localhost:27017/mydb";
+
+    //         MongoClient.connect(url, function(err, db) {
+    //             if (err) {
+    //                 log.error(err);
+    //             }
+
+    //             var dbo = db.db("mydb");
+    //             dbo.createCollection("customers", function(err, res) {
+    //                 if (err) {
+    //                     log.error(err);
+    //                 }
+    //                 console.log("Collection created!");
+    //                 db.close();
+    //             });
+    //         }); */
+
+
+    //     /*     MongoClient.connect(url, function(err, db) {
+    //             if (err) throw err;
+    //             var dbo = db.db("mydb");
+    //             var myobj = { name: "Company Inc", address: "Highway 37" };
+    //             dbo.collection("customers").insertOne(myobj, function(err, res) {
+    //                 if (err) throw err;
+    //                 console.log("1 document inserted");
+    //                 db.close();
+    //             });
+    //         }); */
+
+    //http://techfort.github.io/LokiJS/ 
+    // loki stuffs for stuff that we can keep in memory like: following , recent followers, recent chat messages , temp currency
+    let in_mem_db = new loki('example.db');
+    var tmp_users = in_mem_db.addCollection('users');
+    var tmp_currency = in_mem_db.addCollection('users');
+    tmp_users.insert({
+        userId: 50,
+        userName: 'Username'
+    });
+
+    // hours is a unit of time in minutess
+    tmp_currency.insert({
+        currencyId: 1,
+        userId: 50,
+        username: 'Username',
+        hours: 1,
+        points: 0
+    });
+
+
+    // alternatively, insert array of documents
+    users.insert([{ name: 'Thor', age: 35 }, { name: 'Loki', age: 30 }]);
+
+
+    // /*     var pgInstall = new install_postgres();
+    //     pgInstall.runCommand(log); */
+
+    //     // var results = users.find({ age: {'$gte': 35} });
+
+    //     // var odin = users.findOne({ name:'Odin' });
+
+    //     // var results2 = users.where(function(obj) {
+    //     //     return (obj.age >= 35);
+    //     // });
+
+    //     // var results3 = users.chain().find({ age: {'$gte': 35} }).simplesort('name').data();
+
+
+
 
 
     let dbAlerts = new JsonDB("./resources/jsondbfiles/myAlerts", true, true);
@@ -178,6 +258,8 @@
            saveUninitialized: true,
            resave: true
        })); */
+
+
 
 
     //app.use(passport.initialize());
