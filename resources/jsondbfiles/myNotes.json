@@ -2,59 +2,59 @@
     "notes": [
         {
             "id": "n01810201870",
-            "todo": "Y",
+            "todo": "N",
             "note": "get the duel game from scorp transferred to here\n",
-            "private": false,
-            "priority": "High"
+            "private": "N",
+            "priority": "false"
         },
         {
             "id": "n01810201867",
-            "todo": "Y",
+            "todo": "N",
             "note": "can we add a \"quotes\" feature?",
-            "private": false,
-            "priority": "High"
+            "private": "N",
+            "priority": "N"
         },
         {
             "id": "n11210201866",
-            "todo": "Y",
+            "todo": "N",
             "note": "Finish Games - High Effort (Spin , Number , etc..)",
-            "private": false,
-            "priority": "High"
+            "private": "N",
+            "priority": "N"
         },
         {
             "id": "n41510201847",
-            "todo": "Y",
+            "todo": "N",
             "note": "Lootation Game",
-            "private": false,
-            "priority": "High"
+            "private": "N",
+            "priority": "false"
         },
         {
             "id": "n41510201874",
-            "todo": "Y",
+            "todo": "N",
             "note": "Streamer Notification Beeps Function",
-            "private": false,
-            "priority": "High"
+            "private": "N",
+            "priority": "false"
         },
         {
             "id": "n51610201842",
-            "todo": "Y",
+            "todo": "N",
             "note": "Help Manual and Video",
-            "private": false,
-            "priority": "High"
+            "private": "N",
+            "priority": "false"
         },
         {
             "id": "n51610201829",
-            "todo": "Y",
+            "todo": "N",
             "note": "Viewer Groups for things",
-            "private": false,
-            "priority": "High"
+            "private": "N",
+            "priority": "false"
         },
         {
             "id": "n12610201875",
-            "todo": "Y",
+            "todo": "N",
             "note": "Remote Moderator function to view chat , add commands etc..",
-            "private": false,
-            "priority": "High"
+            "private": "N",
+            "priority": "false"
         },
         {
             "id": "n12610201847",

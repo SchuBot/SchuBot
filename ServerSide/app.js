@@ -28,7 +28,7 @@
 
     const colors = require('colors');
 
-    //const loki = require('lokijs');
+    const loki = require('lokijs');
     //const install_postgres = require('../ServerSide/install_postgress.js');
 
 
@@ -131,7 +131,7 @@
 
 
     // alternatively, insert array of documents
-    users.insert([{ name: 'Thor', age: 35 }, { name: 'Loki', age: 30 }]);
+    tmp_users.insert([{ name: 'Thor', age: 35 }, { name: 'Loki', age: 30 }]);
 
 
     // /*     var pgInstall = new install_postgres();
