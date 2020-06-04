@@ -370,6 +370,8 @@
 
         iosocket.on('followerCount', function(data) {
 
+            //alert('followers recieved');
+
             addFollowersToList(data);
 
             for (var i = 0; i < data.length; i++) {

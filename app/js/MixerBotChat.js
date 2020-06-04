@@ -298,7 +298,7 @@ function connectToBeamBot(clientBot, authTokenBot, createChatSocketBot, self, us
 
                     if (numToGetAllFollowers == 0) {
                         //  console.log('numFollowers: ' + res.headers["x-total-count"]);
-                        self.emit('FollowerCount', followers.followers);
+                        self.emit('F-ollowerCount', followers.followers);
                         return;
                     }
                     numToGetAllFollowers = numToGetAllFollowers - 1;

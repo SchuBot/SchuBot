@@ -1,0 +1,92 @@
+{
+    "media": [
+        {
+            "enabled": "Y",
+            "id": "!mediaSound1",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 5000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!mediaImage1",
+            "type": "Image",
+            "audio": "",
+            "audiodur": "",
+            "video": "",
+            "videodur": "",
+            "image": "alert.gif",
+            "imagedur": 5000
+        },
+        {
+            "enabled": "Y",
+            "id": "!mediaSound2",
+            "type": "Audio",
+            "audio": "sound1.mp3",
+            "audiodur": 5000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!mediaVideo1",
+            "type": "Video",
+            "audio": "",
+            "audiodur": "",
+            "video": "custom.txt",
+            "videodur": 10000,
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!mediaSound3",
+            "type": "Audio",
+            "audio": "firehorn.mp3",
+            "audiodur": 10000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!mediaImage4",
+            "type": "Image",
+            "audio": "",
+            "audiodur": "",
+            "video": "",
+            "videodur": "",
+            "image": "alert2.gif",
+            "imagedur": 50000
+        },
+        {
+            "enabled": "Y",
+            "id": "!mediaVideo3",
+            "type": "Video",
+            "audio": "",
+            "audiodur": "",
+            "video": "custom.txt",
+            "videodur": 50000,
+            "image": "",
+            "imagedur": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "!mediaSound5",
+            "type": "Audio",
+            "audio": "sound1.mp3",
+            "audiodur": 50000,
+            "video": "",
+            "videodur": "",
+            "image": "",
+            "imagedur": ""
+        }
+    ]
+}

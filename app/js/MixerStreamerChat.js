@@ -229,201 +229,224 @@ class MixerStreamerChat extends EventEmitter {
                     log.info('error in beamchat.js self.clienthtml' + error);
                 }
             };
+
+
             self.addDBRow = function(rowType, username, createdDate, updatedDate) {
                 addToDB(rowType, username, createdDate, updatedDate);
             };
             self.getclient = function() {
                 self.emit('beam client', client);
             };
-            self.getfollowers = async function(channelID) {
-                let allDone = false;
-                let page = 0;
-                var requestSize = 40;
-                followers = [];
-                followers = {
-                    followers: []
-                };
-                while (!allDone) {
-                    await client.request('GET', `channels/${channelID}/follow`, {
-                        qs: {
-                            page,
-                            limit: requestSize,
-                            /* order: 'token:desc',*/
-                            fields: 'avatarUrl,followed,id,username,channel',
-                        },
-                    }).then(res => {
-                        if (res.body.length >= 1) {
-                            addfollowerItem(res);
-                        }
-                        if (res.body.length <= 0) {
-                            allDone = true;
-                            self.emit('FollowerCount', followers.followers);
-                        }
-                        page = page + 1;
-                    });
-                }
-            };
-            //sends chat users to browser
-            self.getChatUsers = async function(channelID) {
-                let allDone = false;
-                let page = 0;
-                var requestSize = 40;
-                chatUsers = [];
-                // subage https://mixer.com/api/v1/users/862913/subscriptions?where=resourceId:eq:850263
-                while (!allDone) {
-                    await client.request('GET', `/chats/${channelID}/users`, {
-                        qs: {
-                            page,
-                            limit: 100,
-                            /*order: 'userName:asc', */
-                            fields: 'userId,userName,userRoles',
-                        },
-                    }).then(res => {
-                        if (res.body.length >= 1) {
-                            addChatUserItem(res);
-                        }
-                        if (res.body.length <= 0) {
-                            allDone = true;
-                            chatUsers = removeDuplicates(chatUsers);
-                            self.emit('ChatUserCount', chatUsers);
-                        }
-                        page = page + 1;
-                    });
-                }
-            };
-            const removeDuplicates = (values) => {
-                let concatArray = values.map(eachValue => {
-                    return Object.values(eachValue).join('');
-                });
-                let filterValues = values.filter((value, index) => {
-                    return concatArray.indexOf(concatArray[index]) === index;
-                });
-                return filterValues;
-            };
-            // Gets users channel is following /users/{user}/follows
-            //sends streamer follows to browser
-            self.getStreamerFollows = async function(userID) {
-                let allDone = false;
-                let page = 0;
-                var requestSize = 40;
-                myArray = [];
-                following = [];
-                following = {
-                    following: []
-                };
-                while (!allDone) {
-                    await client.request('GET', `/users/${userID}/follows`, {
-                        qs: {
-                            page,
-                            limit: 100,
-                            /* order: 'token:desc',*/
-                            fields: 'id,token,userId',
-                        },
-                    }).then(res => {
-                        if (res.body.length >= 1) {
-                            addFollowingItem(res);
-                        }
-                        if (res.body.length <= 0) {
-                            allDone = true;
-                            self.emit('FollowingCount', following.following);
-                        }
-                        page = page + 1;
-                    });
-                }
-            };
-            self.doesFollowerExist = function(userName) {
-                var doesUsernameExist = checkIfFollowerExists(userName);
-                return doesUsernameExist;
-            };
 
-            function addfollowerItem(res) {
-                res.body.forEach(function(element) {
-                    var friendlyDate = new Date(element.followed.createdAt).toLocaleDateString('en-GB', {
-                        day: 'numeric',
-                        month: 'short',
-                        year: 'numeric'
-                    }).replace(/ /g, '-');
-                    followers.followers.push({
-                        "id": element.id,
-                        "username": element.username,
-                        "followedDt": element.followed.createdAt,
-                        "followedDtFriendly": friendlyDate
-                    });
-                }, this);
-            }
 
-            function addChatUserItem(res) {
-                res.body.forEach(function(element) {
-                    //log.info(element.username);
-                    var item = element.userName + ' - ' + element.userRoles[0] + ' - ' + element.userId;
-                    chatUsers.push(item);
-                }, this);
-            }
+            // self.getfollowers = async function(channelID) {
+            //     let allDone = false;
+            //     let page = 0;
+            //     var requestSize = 40;
+            //     followers = [];
+            //     followers = {
+            //         followers: []
+            //     };
+            //     while (!allDone) {
+            //         await client.request('GET', `channels/${channelID}/follow`, {
+            //             qs: {
+            //                 page,
+            //                 limit: requestSize,
+            //                 /* order: 'token:desc',*/
+            //                 fields: 'avatarUrl,followed,id,username,channel',
+            //             },
+            //         }).then(res => {
+            //             if (res.body.length >= 1) {
+            //                 addfollowerItem(res);
+            //             }
+            //             if (res.body.length <= 0) {
+            //                 allDone = true;
+            //                 self.emit('followerCount', followers.followers);
+            //             }
+            //             page = page + 1;
+            //         });
+            //     }
+            // };
+            // //sends chat users to browser
+            // self.getChatUsers = async function(channelID) {
+            //     let allDone = false;
+            //     let page = 0;
+            //     var requestSize = 40;
+            //     chatUsers = [];
+            //     // subage https://mixer.com/api/v1/users/862913/subscriptions?where=resourceId:eq:850263
+            //     while (!allDone) {
+            //         await client.request('GET', `/chats/${channelID}/users`, {
+            //             qs: {
+            //                 page,
+            //                 limit: 100,
+            //                 /*order: 'userName:asc', */
+            //                 fields: 'userId,userName,userRoles',
+            //             },
+            //         }).then(res => {
+            //             if (res.body.length >= 1) {
+            //                 addChatUserItem(res);
+            //             }
+            //             if (res.body.length <= 0) {
+            //                 allDone = true;
+            //                 chatUsers = removeDuplicates(chatUsers);
+            //                 self.emit('ChatUserCount', chatUsers);
+            //             }
+            //             page = page + 1;
+            //         });
+            //     }
+            // };
+            // const removeDuplicates = (values) => {
+            //     let concatArray = values.map(eachValue => {
+            //         return Object.values(eachValue).join('');
+            //     });
+            //     let filterValues = values.filter((value, index) => {
+            //         return concatArray.indexOf(concatArray[index]) === index;
+            //     });
+            //     return filterValues;
+            // };
+            // // Gets users channel is following /users/{user}/follows
+            // //sends streamer follows to browser
+            // self.getStreamerFollows = async function(userID) {
+            //     let allDone = false;
+            //     let page = 0;
+            //     var requestSize = 40;
+            //     myArray = [];
+            //     following = [];
+            //     following = {
+            //         following: []
+            //     };
+            //     while (!allDone) {
+            //         await client.request('GET', `/users/${userID}/follows`, {
+            //             qs: {
+            //                 page,
+            //                 limit: 100,
+            //                 /* order: 'token:desc',*/
+            //                 fields: 'id,token,userId',
+            //             },
+            //         }).then(res => {
+            //             if (res.body.length >= 1) {
+            //                 addFollowingItem(res);
+            //             }
+            //             if (res.body.length <= 0) {
+            //                 allDone = true;
+            //                 self.emit('followingCount', following.following);
+            //             }
+            //             page = page + 1;
+            //         });
+            //     }
+            // };
+            // self.doesFollowerExist = function(userName) {
+            //     var doesUsernameExist = checkIfFollowerExists(userName);
+            //     return doesUsernameExist;
+            // };
 
-            function addFollowingItem(res) {
-                res.body.forEach(function(element) {
-                    //unfortunately we can't find out from your following list when you actually followed them :( 
-                    following.following.push({
-                        "id": element.id,
-                        "token": element.token,
-                        "userId": element.userId,
-                    });
-                    // streamerFollows.push(following);
-                }, this);
-            }
+            // function addfollowerItem(res) {
+            //     res.body.forEach(function(element) {
+            //         var friendlyDate = new Date(element.followed.createdAt).toLocaleDateString('en-GB', {
+            //             day: 'numeric',
+            //             month: 'short',
+            //             year: 'numeric'
+            //         }).replace(/ /g, '-');
+            //         followers.followers.push({
+            //             "id": element.id,
+            //             "username": element.username,
+            //             "followedDt": element.followed.createdAt,
+            //             "followedDtFriendly": friendlyDate
+            //         });
+            //     }, this);
+            // }
 
-            function addToDB(rowType, username, createdDate, updatedDate) {
-                var db = new JsonDB("myDataBase", true, true);
-                if (type == "follower") {
-                    log.info("follower " + username + " on: " + createdDate);
-                    addfollowerToDB(username, createdDate, updatedDate);
-                }
-                if (type == "following") {
-                    addfollowerToDB(username, createdDate, updatedDate);
-                }
-            }
+            // function addChatUserItem(res) {
+            //     res.body.forEach(function(element) {
+            //         //log.info(element.username);
+            //         var item = element.userName + ' - ' + element.userRoles[0] + ' - ' + element.userId;
+            //         chatUsers.push(item);
+            //     }, this);
+            // }
 
-            function addfollowingToDB(followingUsername, createdDate, updatedDate) {
-                var username = "" + followingUsername + "";
-                db.push("/following", {
-                    username: {
-                        "id": "userId",
-                        "createdAt": "2017-07-07 00:00:00",
-                        "updatedAt": "2017-07-07 00:00:00",
-                        "followers": 6,
-                    }
-                }, false);
-                var numDBFollowing = Object.keys(db.getData("/following")).length;
-                log.info("Following: " + numDBFollowers);
-            }
+            // function addFollowingItem(res) {
+            //     res.body.forEach(function(element) {
+            //         //unfortunately we can't find out from your following list when you actually followed them :( 
+            //         following.following.push({
+            //             "id": element.id,
+            //             "token": element.token,
+            //             "userId": element.userId,
+            //         });
+            //         // streamerFollows.push(following);
+            //     }, this);
+            // }
 
-            function addfollowerToDB(followUsername, createdDate, updatedDate) {
-                var username = "" + followUsername + "";
-                db.push("/followers/", {
-                    username: {
-                        "id": "userId",
-                        "createdAt": "2017-07-07 00:00:00",
-                        "updatedAt": "2017-07-07 00:00:00",
-                        "updatedAt": 5,
-                    }
-                }, false);
-                var numDBFollowers = Object.keys(db.getData("/followers")).length;
-                log.info("Number Of Followers: " + numDBFollowers);
-                var data = db.getData("/followers");
-                //Deleting data 
-                // db.delete("/followers/username");
-                //Save the data (useful if you disable the saveOnPush) 
-                // db.save();
-                //In case you have a exterior change to the databse file and want to reload it 
-                //use this method 
-                db.reload();
-            }
+            // function addToDB(rowType, username, createdDate, updatedDate) {
+            //     var db = new JsonDB("myDataBase", true, true);
+            //     if (type == "follower") {
+            //         log.info("follower " + username + " on: " + createdDate);
+            //         addfollowerToDB(username, createdDate, updatedDate);
+            //     }
+            //     if (type == "following") {
+            //         addfollowerToDB(username, createdDate, updatedDate);
+            //     }
+            // }
 
-            function checkIfFollowerExists(userName) {
-                var followerExists = followers.followers.filter(function(item) { return (item.username == userName); });
-                //if exists it returns the command if not the length of var = 0
-                return followerExists;
-            }
+            // function addfollowingToDB(followingUsername, createdDate, updatedDate) {
+            //     var username = "" + followingUsername + "";
+            //     db.push("/following", {
+            //         username: {
+            //             "id": "userId",
+            //             "createdAt": "2017-07-07 00:00:00",
+            //             "updatedAt": "2017-07-07 00:00:00",
+            //             "followers": 6,
+            //         }
+            //     }, false);
+            //     var numDBFollowing = Object.keys(db.getData("/following")).length;
+            //     log.info("Following: " + numDBFollowers);
+            // }
+
+            // function addfollowerToDB(followUsername, createdDate, updatedDate) {
+            //     var username = "" + followUsername + "";
+            //     db.push("/followers/", {
+            //         username: {
+            //             "id": "userId",
+            //             "createdAt": "2017-07-07 00:00:00",
+            //             "updatedAt": "2017-07-07 00:00:00",
+            //             "updatedAt": 5,
+            //         }
+            //     }, false);
+            //     var numDBFollowers = Object.keys(db.getData("/followers")).length;
+            //     log.info("Number Of Followers: " + numDBFollowers);
+            //     var data = db.getData("/followers");
+            //     //Deleting data 
+            //     // db.delete("/followers/username");
+            //     //Save the data (useful if you disable the saveOnPush) 
+            //     // db.save();
+            //     //In case you have a exterior change to the databse file and want to reload it 
+            //     //use this method 
+            //     db.reload();
+            // }
+
+            // function checkIfFollowerExists(userName) {
+            //     var followerExists = followers.followers.filter(function(item) { return (item.username == userName); });
+            //     //if exists it returns the command if not the length of var = 0
+            //     return followerExists;
+            // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
 
@@ -557,7 +580,7 @@ function connectToBeam(client, authToken, createChatSocket, self, useAuth, chatC
 
                     if (numToGetAllFollowers == 0) {
                         //  log.info('numFollowers: ' + res.headers["x-total-count"]);
-                        self.emit('FollowerCount', followers.followers);
+                        self.emit('F-ollowerCount', followers.followers);
                         return;
                     }
                     numToGetAllFollowers = numToGetAllFollowers - 1;

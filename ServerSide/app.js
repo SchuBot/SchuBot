@@ -934,32 +934,21 @@
         // if there is no streamer id then this means fresh install
         if (authDB.data.streamer.userId > 0) {
 
-            mixerData = new mixerdata(authDB.data.streamer.accessToken, log);
+            mixerData = new mixerdata(authDB.data.streamer.accessToken, log, io);
 
-            mixerData.getStreamerFollows(authDB.data.streamer.userId);
+            try {
+                mixerData.getStreamerFollows(authDB.data.streamer.userId);
 
-            mixerData.getfollowers(authDB.data.streamer.channelId);
+                mixerData.getfollowers(authDB.data.streamer.channelId);
 
-            mixerData.getChatUsers(authDB.data.streamer.channelId);
-
-            mixerData.on('FollowingCount', function(data) {
-                // console.info(data);
-                log.info('mixer data following count emit ' + data.length());
-                io.emit('followingCount', data);
-            });
-
-            mixerData.on('FollowerCount', function(data) {
-                log.info('bc follower count emit' + data.length());
-                io.emit('followerCount', data);
-            });
+                mixerData.getChatUsers(authDB.data.streamer.channelId);
+            } catch (error) {
+                log.info(error.message);
+            }
 
 
 
-            mixerData.on('ChatUserCount', function(data) {
 
-                log.info('Chat user count - ' + data.length());
-                io.emit('chatusercount', data);
-            });
         }
 
     }

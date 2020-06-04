@@ -1,0 +1,11 @@
+{
+    "triggers": [
+        {
+            "enabled": "Y",
+            "id": "gt",
+            "text": "my GT is SchusterUK",
+            "option1": "",
+            "option2": ""
+        }
+    ]
+}

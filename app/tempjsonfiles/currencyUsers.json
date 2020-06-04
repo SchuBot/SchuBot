@@ -1,0 +1,30 @@
+{
+    "currencyUsers": [
+        {
+            "id": "50898908098-1",
+            "iddescription": "the above is a combination of the user id and currency id",
+            "userid": "1",
+            "currencyid": "1",
+            "currencyiddescription": "the currency id is to add points to the correct currency",
+            "username": "Schuster",
+            "hours": 218.1000000000657,
+            "points": 26185086,
+            "currentrank": "Rank 1",
+            "nextrank": "Rank 2",
+            "type": "Regular"
+        },
+        {
+            "id": "50898908098-2",
+            "iddescription": "the above is a combination of the user id and currency id",
+            "userid": "1",
+            "currencyid": "2",
+            "currencyiddescription": "the currency id is to add points to the correct currency",
+            "username": "Schuster",
+            "hours": 218.1000000000657,
+            "points": 13086,
+            "currentrank": "Rank 1",
+            "nextrank": "Rank 2",
+            "type": "Regular"
+        }
+    ]
+}
