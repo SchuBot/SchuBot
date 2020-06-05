@@ -20,9 +20,14 @@ module.exports = function(grunt) {
                 appDirectory: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/dist/SchuBot-win32-x64',
                 outputDirectory: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/dist/installer64',
                 loadingGif: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/gui/images/schubot.gif',
-                certificateFile: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/schubot_signing_key.pfx',
-                certificatePassword: 'schugyver23',
-                setupIcon: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/gui/images/cocoabot.ico'
+                iconUrl: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/gui/images/cocoabot.ico',
+                setupIcon: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/gui/images/cocoabot.ico',
+                ///certificateFile: 'C:/Users/Schuster/Documents/Visual Studio 2015/Projects/MixerBotV2/schubot_signing_key.pfx',
+                //certificatePassword: 'schugyver23',
+                exe: "Schubot.exe",
+                title: " Schubot v1.10.0",
+                setupExe: "SchubotV1Setup.exe",
+                noMsi: true
             }
         }
     });
