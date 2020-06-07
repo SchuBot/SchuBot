@@ -1,3 +1,28 @@
 {
-    "currency": []
+    "currency": [
+        {
+            "id": "n6662020111951",
+            "enabled": "Y",
+            "currencyName": "Gold",
+            "currencyPerMin": "3",
+            "currencyRatio": "",
+            "currencyBasedOn": "Points",
+            "currencyParentId": "default",
+            "currencyParentName": "",
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "id": "n6662020202551",
+            "enabled": "Y",
+            "currencyName": "Silver",
+            "currencyPerMin": "",
+            "currencyRatio": "",
+            "currencyBasedOn": "Hours",
+            "currencyParentId": "default",
+            "currencyParentName": "",
+            "option1": "",
+            "option2": ""
+        }
+    ]
 }

@@ -1,7 +1,7 @@
 let events = require('events');
 
-//current chat users
-let chatUsers = [];
+//this is obtained from the current users in chat
+let currencyUsersList = [];
 //database actions
 class currencyManager {
 
@@ -9,7 +9,7 @@ class currencyManager {
 
         let self = this;
 
-        self.createTimers = function(currency, currencyUsers) {
+        self.createTimers = function(currency, currencyUserDBList) {
             // var currencyTimers = [];
             currency.reload();
             currency.data.currency.forEach(element => {
@@ -20,8 +20,14 @@ class currencyManager {
                     /* "ranksbasedon": "points",
                     "onlinepayintervalminutes": 5,
                     "offlinepayintervalminutes": 5, */
-                    const onlineinterval = element.onlinepayintervalminutes;
-                    const offlineinterval = element.offlinepayintervalminutes;
+                    //const onlineinterval = element.onlinepayintervalminutes;
+                    //const offlineinterval = element.offlinepayintervalminutes;
+
+                    //currencyPerMinOnline
+                    //currencyPerMinOffline
+                    var onlineinterval = 1
+                    var offlineinterval = 0
+
                     if (onlineinterval > 0) {
                         /*                         var currencyObject = {
     
@@ -30,7 +36,10 @@ class currencyManager {
                                                     type: "Online"
     
                                                 }; */
-                        setTimeout(function() { OnlinePayOut(onlineinterval, element, currencyUsers); }, 1000 * onlineinterval);
+                        console.log('currency triggered');
+                        //online interval is the timer period (not used for now)
+                        //element is the currency being processed
+                        setTimeout(function() { OnlinePayOut(onlineinterval, element, currencyUsersList, currencyUserDBList); }, 1000 * onlineinterval);
                     }
                     if (offlineinterval > 0) {
 
@@ -42,19 +51,20 @@ class currencyManager {
             });
         };
 
+
+        //Currency is global on/off
+        //this method is called everytime a user enters the chat
         self.addChatUserToCurrency = function(userId, userName) {
-            chatUsers.push({ userId: userId });
+            currencyUsersList.push({ userId: userId, userName: userName });
         }
 
-
+        //this method is called everytime a user exits the chat
         self.removeChatUserFromCurrency = function(userId, userName) {
-            chatUsers.pop({ userId: userId });
+            //find user and remove it
         }
-
-
 
         //, currencyUserTypes
-        self.addOnlinePointsToUsers = function(currency, currencyUsers) {
+        self.addOnlinePointsToUsers = function(currency, currencyUsers, currencyUserDBList) {
 
 
 
@@ -88,40 +98,24 @@ class currencyManager {
             Moderator - Moderator of the channel
             Subscriber - Channel Subscriber (Not to be confused with Youtube Subscriber which is equivalent to Mixer Follow)
             */
-            currencyUsers.reload();
+
             if (currency.enabled === "Y") {
                 //get point variables, make this better by getting the user type
-                var viewerpoints = currency.viewerpointsbonus;
-                var minutesToAdd = currency.onlinepayintervalminutes;
+                //var viewerpoints = currency.viewerpointsbonus;
+                //var minutesToAdd = currency.onlinepayintervalminutes;
 
-                var count = 0;
-                currencyUsers.data.currencyUsers.forEach(element => {
+                //var count = 0;
+                currencyUsersList.forEach(currencyUser => {
 
+                    var minutesToAdd = 1;
 
+                    var CPM = parseFloat(0);
+                    if (currency.currencyPerMin != "") {
+                        CPM = parseFloat(currency.currencyPerMin);
+                    }
+                    var pointsToAdd = CPM;
 
-                    // console.log("updating points and hours (minutes)");
-                    var currentPoints = element.points;
-                    var currentHours = element.hours;
-
-
-
-                    var minutesToAdd = currency.onlinepayintervalminutes;
-                    var newhours = currentHours + (minutesToAdd / 60);
-
-
-                    var pointsToAdd = viewerpoints;
-                    var newPoints = currentPoints + pointsToAdd;
-
-                    // cmd.cenabled
-                    currencyUsers.data.currencyUsers[count].hours = newhours;
-                    currencyUsers.data.currencyUsers[count].points = newPoints;
-                    currencyUsers.save();
-                    // db.delete(("/commands[" + i + "]"));    
-
-
-                    count = count + 1;
-
-                    self.addPointsToUserByCurrency("1", currencyUsers, "1", 1000);
+                    self.addPointsToUserByCurrency(currency.id, currencyUsers, currencyUser.userId, pointsToAdd, minutesToAdd, currencyUserDBList, currencyUser.userName);
 
                 });
             }
@@ -141,14 +135,14 @@ class currencyManager {
         };
 
 
-        function OnlinePayOut(onlineinterval, currency, currencyUsers) {
+        function OnlinePayOut(onlineinterval, currency, currencyUsers, currencyUserDBList) {
             //self.emit('addOnlineCurrencyPoints', currency);
 
             //is streamer Online (TODO)
             if (1 == 1) {
-                self.addOnlinePointsToUsers(currency, currencyUsers);
+                self.addOnlinePointsToUsers(currency, currencyUsers, currencyUserDBList);
                 //console.log("Online Payout Triggered");
-                setTimeout(function() { OnlinePayOut(onlineinterval, currency, currencyUsers); }, 60000 * onlineinterval);
+                setTimeout(function() { OnlinePayOut(onlineinterval, currency, currencyUsers, currencyUserDBList); }, 60000 * onlineinterval);
 
             }
 
@@ -257,29 +251,31 @@ class currencyManager {
         };
 
 
-        self.addPointsToUserByCurrency = function(currencyID, currencyUsers, UserId, pointsToAdd) {
+        self.addPointsToUserByCurrency = function(currencyID, currencyUsers, UserId, pointsToAdd, minutesToAdd, currencyUserDBList, userName) {
 
             var count = 0;
 
-            currencyUsers.reload();
+            currencyUserDBList.reload();
 
-            var userCurrency = currencyUsers.data.currencyUsers.filter(function(item) {
-                return (item.userid == UserId && item.currencyid === currencyID);
-            });
+            let userCurrencyIndex = currencyUserDBList.data.currencyUsers.findIndex(obj => obj.userid == UserId && obj.currencyid == currencyID)
 
-            if (userCurrency.length > 0) {
-                currencyUsers.data.currencyUsers.forEach(element => {
-                    if (element.currencyid == currencyID && element.userid == UserId) {
-                        currencyUsers.data.currencyUsers[count].points = currencyUsers.data.currencyUsers[count].points + pointsToAdd;
-                        //element.currencyUsers[count].points = element.currencyUsers[count].points + pointsToAdd;
-                        currencyUsers.save();
-                    }
-                    count = count + 1;
-                });
+            if (userCurrencyIndex >= 0) {
 
+                var currentPoints = currencyUserDBList.data.currencyUsers[userCurrencyIndex].points;
+                var currentMinutes = currencyUserDBList.data.currencyUsers[userCurrencyIndex].hours;
+                var minutesToAddInHours = (minutesToAdd / 60);
+                currencyUserDBList.data.currencyUsers[userCurrencyIndex].userName = userName;
+                currencyUserDBList.data.currencyUsers[userCurrencyIndex].points = currentPoints + pointsToAdd;
+                currencyUserDBList.data.currencyUsers[userCurrencyIndex].hours = (currentMinutes + (minutesToAdd / 60));
+                currencyUserDBList.save();
+
+            } else {
+                var currencyuserObject = { currencyid: currencyID, userid: UserId, userName: userName, points: parseFloat(pointsToAdd), hours: (minutesToAdd / 60) }
+                currencyUserDBList.push('/currencyUsers[]', currencyuserObject);
             }
 
         };
+
 
         self.CreateAmendCurrency = function(Newcurrency, data, action) {
 
@@ -478,7 +474,18 @@ class currencyManager {
 
         self.addChatUserForCurrency = function(userId, userName) {
 
-            chatUsers.push({ userId: userId, userName: userName });
+            currencyUsersList.push({ userId: userId, userName: userName });
+
+        }
+
+        self.removeChatUserForCurrency = function(userId) {
+
+            currencyUsersList = currencyUsersList.filter(function(element) {
+                return element.userId !== userId;
+            });
+
+
+            //currencyUsersList.push({ userId: userId, userName: userName });
 
         }
 

@@ -85,14 +85,17 @@ class MixerBotChat extends EventEmitter {
                     log.error('Chat Error...' + error.message);
                     if (!chatConnectedBot) {
                         log.info(' Reconnecting to chat...');
-                        connectToBeamBot(clientBot, authTokenReconnect, createChatSocketBot, self, true, chatConnectedBot, authDB.data.streamer.channelId, authDB.data.bot.username);
+                        if (authTokenReconnect != undefined) {
+                            connectToBeamBot(clientBot, authTokenReconnect, createChatSocketBot, self, true, chatConnectedBot, authDB.data.streamer.channelId, authDB.data.bot.username);
+
+                        }
                     }
                 });
                 socketBot.on('PollStart', data => {
-                    self.emit('PollStart', data);
+                    //self.emit('PollStart', data);
                 });
                 socketBot.on('PollEnd', data => {
-                    self.emit('PollEnd', data);
+                    //self.emit('PollEnd', data);
                 });
                 // Purge Message
                 // Provides a moderator object if messages purged due to a ban.

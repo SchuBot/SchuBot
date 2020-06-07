@@ -90,16 +90,16 @@ class MixerStreamerChat extends EventEmitter {
                 socket = new Mixer.Socket(ws, endpoints).boot();
                 log.info('accessing beam chat socket js');
                 socket.on('UserJoin', data => {
-                    self.emit('UserJoin', data);
+                    //self.emit('UserJoin', data);
                 });
                 socket.on('UserLeave', data => {
-                    self.emit('UserLeave', data);
+                    //self.emit('UserLeave', data);
                 });
                 socket.on('ChatMessage', data => {
                     // messagessent = messagessent + 1;
                     //log.info('Message Sent from Beam ' + messagessent + ' times');
                     try {
-                        self.emit('ChatMessage', data);
+                        //self.emit('ChatMessage', data);
                     } catch (error) {
                         log.info('error sending to beam' + error);
                     }
@@ -115,10 +115,10 @@ class MixerStreamerChat extends EventEmitter {
                     // self.emit('error', error);
                 });
                 socket.on('PollStart', data => {
-                    // self.emit('PollStart', data);
+                    self.emit('PollStart', data);
                 });
                 socket.on('PollEnd', data => {
-                    //  self.emit('PollEnd', data);
+                    self.emit('PollEnd', data);
                 });
                 // Purge Message
                 // Provides a moderator object if messages purged due to a ban.
@@ -133,17 +133,17 @@ class MixerStreamerChat extends EventEmitter {
                                         } */
                 });
                 socket.on('DeleteMessage', data => {
-                    self.emit('DeleteMessage', data);
+                    //self.emit('DeleteMessage', data);
                 });
                 socket.on('ClearMessages', data => {
-                    self.emit('ClearMessages', data);
+                    //self.emit('ClearMessages', data);
                 });
                 socket.on('UserUpdate', data => {
-                    self.emit('UserUpdate', data);
+                    //self.emit('UserUpdate', data);
                 });
                 //don't think this one is ever fired
                 socket.on('UserTimeout', data => {
-                    self.emit('UserTimeout', data);
+                    //self.emit('UserTimeout', data);
                 });
                 return socket.auth(channelId, userId, authkey)
                     .then(() => {

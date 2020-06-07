@@ -167,7 +167,10 @@
     let myUITheme = new JsonDB("./resources/jsondbfiles/myUITheme", true, true);
     let authDB = new JsonDB("./resources/jsondbfiles/auth", true, true);
     let Newcurrency = new JsonDB("./resources/jsondbfiles/Newcurrency", true, true);
-    let parentCurrency = new JsonDB("./resources/jsondbfiles/parentCurrency", true, true)
+    let parentCurrency = new JsonDB("./resources/jsondbfiles/parentCurrency", true, true);
+
+    let NewcurrencyUsers = new JsonDB("./resources/jsondbfiles/NewcurrencyUsers", true, true);
+
 
     //https://github.com/Belphemur/node-json-db this is info on jsondb
 
@@ -183,6 +186,7 @@
     myMedia.reload();
     myTriggers.reload();
     Newcurrency.reload();
+    NewcurrencyUsers.reload();
     parentCurrency.reload();
     currency.reload();
     currencyUsers.reload();
@@ -197,7 +201,8 @@
     initializeData();
 
 
-
+    cm = new currencyManager(io, log);
+    cm.createTimers(Newcurrency, NewcurrencyUsers);
 
 
     let chatConnectedBot = false;
@@ -882,14 +887,42 @@
         });
 
 
+        socket.on('addUserToCurrencyManagerList', function(userID, userName) {
+            try {
+
+                cm.addChatUserForCurrency(userID, userName);
+
+                // io.emit('addSaveCommandResult', cmdObject);
+            } catch (error) {
+                log.error('error adding currency user to list ' + error.message);
+            }
+
+        });
+
+        socket.on('removeUserFromCurrencyManagerList', function(userID) {
+            try {
+
+                cm.removeChatUserForCurrency(userID);
+
+                // io.emit('addSaveCommandResult', cmdObject);
+            } catch (error) {
+                log.error('error removing currency user from list ' + error.message);
+            }
+
+        });
+
+
+
+
 
 
 
         if (!startupBotDataSent) {
             loadBotData()
             loadBotCurrencyAndTimers()
-            initBeamData(authDB);
+                //initBeamData(authDB);
             ConnectToBeamAndConsellation();
+            initBeamData(authDB);
             startupBotDataSent = true;
         }
 
@@ -1198,10 +1231,10 @@
     }
     //
 
-    function StartCurrency() {
-        cm = new currencyManager(io, log);
-        cm.createTimers(currency, currencyUsers);
-        cm.addChatUserForCurrency(12345, "Schuster");
+    function StartCurrency(cm) {
+        //cm2 = new currencyManager(io, log);
+        //cm2.createTimers(Newcurrency, NewcurrencyUsers);
+        //cm.addChatUserForCurrency(12345, "Schuster");
 
     }
 
@@ -1457,7 +1490,7 @@
                     bc = new MixerStreamerChat(Token, chatConnected, authDB);
 
 
-                    co = new constellation(authDB.data.streamer.channelId);
+                    co = new constellation(authDB.data.streamer.channelId, log);
                     ch = new commandHandler(res.body.username, authDB.data.streamer.channelId, log);
 
 
@@ -1499,11 +1532,15 @@
 
                     bc.on('streamerLoggedIn', function(data) {
 
-                        io.emit('streamerLoggedIn', data);
+                        var item = data + ' - Owner - ' + authDB.data.streamer.userId;
+
+                        io.emit('streamerLoggedIn', data, item);
 
                         chatConnected = true;
 
                         log.info("Streamer User Connected to chat")
+
+
 
                     });
 
@@ -1647,7 +1684,8 @@
                                 break;
                             case ('hosted'):
                                 if (data.info.hoster != null) { //user is hosting you
-                                    log.info("person hoted" + data.info.hoster.token);
+                                    log.info("person hosted" + data.info.hoster.token);
+                                    log.info("hosted data" + data);
                                 }
                                 if (data.info.hostee != null) { //user is being hosted
 
@@ -1865,7 +1903,9 @@
 
                         bcBot.on('botLoggedIn', function(data) {
 
-                            io.emit('botLoggedIn', data);
+                            var item = data + ' - Bot - ' + authDB.data.bot.userId;
+
+                            io.emit('botLoggedIn', data, item);
 
                             chatConnectedBot = true;
                             log.info("Bot User Connected to chat")
@@ -2161,122 +2201,122 @@
         //check if there is already a message 
         //with that id in the queue if so don't send it
         //obviously the first message is ignored as the queue is empty
-        if (MessageQueue.length > 0) {
+        /*         if (MessageQueue.length > 0) {
 
-            var whereIs = MessageQueue.indexOf(data.id, 0);
-            //if message is already in queue then don't send to window
-            if (whereIs !== -1) {
-                //log.info('Duplicate Message do not send');
-                sendMessageBool = false;
-            }
-        }
+                    var whereIs = MessageQueue.indexOf(data.id, 0);
+                    //if message is already in queue then don't send to window
+                    if (whereIs !== -1) {
+                        //log.info('Duplicate Message do not send');
+                        sendMessageBool = false;
+                    }
+                } */
 
         //not a duplicate message so push id to the array
-        if (sendMessageBool) {
-            //distinct message (i.e first message of a duplicate(s) or a unique message)
-            MessageQueue.push(data.id);
-        }
-
+        /*         if (sendMessageBool) {
+                    //distinct message (i.e first message of a duplicate(s) or a unique message)
+                    MessageQueue.push(data.id);
+                }
+         */
 
         //Queue Size (just stores ids for now but could store the entire array in json file somewhere)
-        if (MessageQueue.length > 10) {
+        /*         if (MessageQueue.length > 10) {
 
-            // keep the last 5 messages to allow checking for duplicate messages
-            while (MessageQueue.length > 5) {
-                MessageQueue.pop();
-            }
-        }
+                    // keep the last 5 messages to allow checking for duplicate messages
+                    while (MessageQueue.length > 5) {
+                        MessageQueue.pop();
+                    }
+                } */
 
 
         //send message or send first message of a duplicate
 
-        messageBeingSentID = data.id;
+        //messageBeingSentID = data.id;
 
 
-        log.info('Is Duplicate' + sendMessageBool + ' message id is: ' + data.id + ' - with data ' + t);
+        // log.info('Is Duplicate' + sendMessageBool + ' message id is: ' + data.id + ' - with data ' + t);
 
-        if (currentmessageBeingSent != messageBeingSentID) {
+        // if (currentmessageBeingSent != messageBeingSentID) {
 
-            currentmessageBeingSent = messageBeingSentID;
+        //     currentmessageBeingSent = messageBeingSentID;
 
-            log.info('previous msg id = ' + currentmessageBeingSent + ' current message id = ' + data.id)
+        //     log.info('previous msg id = ' + currentmessageBeingSent + ' current message id = ' + data.id)
 
-            if (sendMessageBool) {
-
-
-                if (data.user_level == undefined) {
-                    log.info(`${data.user_name}` + ' has no Level Defined')
-                } else {
-                    //  console.info(`${data.user_name}` + ' is level ' + `${data.user_level}` + 'and is a ' + `${data.user_roles[0]}`)
-                }
-
-                /*             let UserName = data.user_name;
-
-                            let t = '';
-
-                            for (var key in data.message.message) {
-
-                                t += data.message.message[key].text;
-                            } */
-
-                //send message to client window
-                // io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t );
+        //if (sendMessageBool) {
 
 
-                //send message to client window better version
-                let avatarUrl = data.user_avatar;
-                if (avatarUrl == null) {
-                    avatarUrl = "https://mixer.com/_latest/assets/images/main/avatars/default.png";
-                }
-
-                io.emit('message', avatarUrl, data.user_roles[0], data.user_name, t, isWhisper);
-
-                /// TODO add these in db and fetch when triggered
-                var splitTxt = '';
-                for (var key in data.message.message) { splitTxt += data.message.message[key].text; };
-                var text = splitTxt.split(' ');
-
-                if (text[0].substr(0, 1) == "!") {
-
-                    //send to commandHandler to determine what to send to mixer
-                    processChatCommand(userCommands, text[0], data.user_roles, UserName, ch, t, bc);
-
-
-                } else {
-
-                    //processes triggers
-                    var outputArray = [];
-
-
-                    //reload triggers in case they have been changed
-                    myTriggers.reload();
-                    // triggers to output
-                    myTriggers.data.triggers.forEach(element => {
-
-                        var isTriggerWord = t.includes(element.id, 0);
-
-                        if (isTriggerWord) {
-                            //also check that the chat message isn't exactly as per the trigger output
-                            if (t != element.text) {
-                                outputArray.push(element.text);
-                            }
-
-                        }
-
-                    });
-
-                    //now send each message to mixer (add first , last , all options in configuration)
-                    outputArray.forEach(element => {
-                        var triggerResult = sendTriggerToMixer(bcBot, element, false);
-                    });
-
-
-
-                }
-            }
+        if (data.user_level == undefined) {
+            log.info(`${data.user_name}` + ' has no Level Defined')
         } else {
-            log.info('Duplicate Message - not sent Message ID: ' + data.id);
+            //  console.info(`${data.user_name}` + ' is level ' + `${data.user_level}` + 'and is a ' + `${data.user_roles[0]}`)
         }
+
+        /*             let UserName = data.user_name;
+
+                    let t = '';
+
+                    for (var key in data.message.message) {
+
+                        t += data.message.message[key].text;
+                    } */
+
+        //send message to client window
+        // io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t );
+
+
+        //send message to client window better version
+        let avatarUrl = data.user_avatar;
+        if (avatarUrl == null) {
+            avatarUrl = "https://mixer.com/_latest/assets/images/main/avatars/default.png";
+        }
+
+        io.emit('message', avatarUrl, data.user_roles[0], data.user_name, t, isWhisper);
+
+        /// TODO add these in db and fetch when triggered
+        var splitTxt = '';
+        for (var key in data.message.message) { splitTxt += data.message.message[key].text; };
+        var text = splitTxt.split(' ');
+
+        if (text[0].substr(0, 1) == "!") {
+
+            //send to commandHandler to determine what to send to mixer
+            processChatCommand(userCommands, text[0], data.user_roles, UserName, ch, t, bc);
+
+
+        } else {
+
+            //processes triggers
+            var outputArray = [];
+
+
+            //reload triggers in case they have been changed
+            myTriggers.reload();
+            // triggers to output
+            myTriggers.data.triggers.forEach(element => {
+
+                var isTriggerWord = t.includes(element.id, 0);
+
+                if (isTriggerWord) {
+                    //also check that the chat message isn't exactly as per the trigger output
+                    if (t != element.text) {
+                        outputArray.push(element.text);
+                    }
+
+                }
+
+            });
+
+            //now send each message to mixer (add first , last , all options in configuration)
+            outputArray.forEach(element => {
+                var triggerResult = sendTriggerToMixer(bcBot, element, false);
+            });
+
+
+
+        }
+        //}
+        // } else {
+        //     log.info('Duplicate Message - not sent Message ID: ' + data.id);
+        // }
     }
 
     //change this to be either bot or streamer (this sends timers also)

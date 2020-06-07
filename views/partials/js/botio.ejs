@@ -220,14 +220,17 @@
 
         });
 
-        iosocket.on('botLoggedIn', function(bot) {
+        iosocket.on('botLoggedIn', function(bot, botData) {
 
             //alert('bot logged in');
             setBotAccountLoggedIn(bot);
+            addSingleChatUserToList(botData);
         });
 
-        iosocket.on('streamerLoggedIn', function(streamer) {
+        iosocket.on('streamerLoggedIn', function(streamer, streamerData) {
             setStreamerAccountLoggedIn(streamer);
+            addSingleChatUserToList(streamerData);
+
         });
 
         iosocket.on('loginaccounts', function(streamer, bot) {
@@ -398,19 +401,27 @@
 
         });
 
-        iosocket.on('chatusercount', function(data) {
+        iosocket.on('ChatUserCount', function(data) {
 
             //add all users to JSON first
             data.forEach(function(element) {
 
+                console.log("adding user to chat" + element);
+
                 chatUsrs.push(element);
+                var chtuser = element.split(" - ", 3);
+
+                //this might need to be put into a array  
+                //if the function gets slow due to large number of users
+                iosocket.emit('addUserToCurrencyManagerList', chtuser[2], chtuser[0])
+
             }, this);
 
             //add users to table
             addChatUsersToList(data);
 
             //log temporarily to see whats in there
-            console.log('Chat Usrs array ' + JSON.stringify(chatUsrs));
+            //console.log('Chat Usrs array ' + JSON.stringify(chatUsrs));
 
             //manage counter
             var chatCountStr = chatUsrs.length.toString();
@@ -746,7 +757,7 @@
                 var ChatUrsFollowerResult = checkIfFollower(res[2]);
 
                 //checks if user is already in chat table
-                var addToTable = isInChat(res[2]);
+                var addToTable = doesUserExistInChat(res[2]);
 
                 if (!addToTable) {
                     tr = $('<tr id="CU' + res[2] + '" style="' + colorStyle + '" class /> ');
@@ -763,20 +774,28 @@
         //get this from user
         getColorFromUserType = function(type) {
 
+            console.log(type);
+
             switch (type) {
                 case "User":
                     type = "blue";
+                    break;
+                case "Bot":
+                    type = "black";
                     break;
                 case "Mod":
                     type = "green";
                     break;
                 case "ChannelEditor":
-                    type = "green";
+                    type = "Orange";
                     break;
                 case "Owner":
-                    type = "gray";
+                    console.log("Owner logged In");
+                    type = "white";
+                    break;
                 case "Pro":
                     type = "purple";
+                    break;
                 default:
                     type = "blue";
                     break;
@@ -830,7 +849,7 @@
             var tr;
             for (var i = 0; i < data.length; i++) {
 
-                console.log('Keywords data for table is:' + data[i])
+                //console.log('Keywords data for table is:' + data[i])
 
                 var hidden = "display:none;";
 
@@ -1239,7 +1258,7 @@
                 for (var i = 0; i < data.length; i++) {
                     var rowID = data[i].id.replace("!", "x");
                     //var result = isFollowing(id);
-                    console.log('timers data for table is:' + data[i])
+                    //console.log('timers data for table is:' + data[i])
 
                     var hidden = "display:none;";
 
@@ -1263,21 +1282,10 @@
 
                 var tr;
                 for (var i = 0; i < data.length; i++) {
-                    //     tr = $('<tr id="CR' + data.id + '" class /> ');
-                    // // tr = $('<tr class /> ');
-                    // tr.append("<td>" + data.enabled + "</td>");
-                    // tr.append("<td>" + data.id + "</td>");
-                    // tr.append("<td>" + data.currencyName + "</td>");
-                    // tr.append("<td>" + data.currencyBasedOn + "</td>");
-                    // tr.append("<td>" + data.currencyPerMin + "</td>");
-                    // tr.append("<td>" + data.currencyParent + "</td>");
-                    // tr.append("<td>" + data.currencyRatio + "</td>");
-
-
 
                     var rowID = data[i].id;
                     //var result = isFollowing(id);
-                    console.log('timers data for table is:' + data[i])
+                    //console.log('timers data for table is:' + data[i])
 
                     var hidden = "display:none;";
 
@@ -1365,56 +1373,92 @@
 
         addSingleChatUserToList = function(data) {
 
-            //console.log("chat io - addSingleChatUserToList() " + data);
+            console.log("chat data - " + data);
             var newUser = [];
             var res = data.split(" - ", 3);
 
-            console.log('User Array is' + JSON.stringify(data));
+            //console.log('User Array is' + JSON.stringify(data));
 
             //check these and whats in them
             newUser.push(res);
 
             //alert('addSingleChatUserToList ' + res[0]);
 
-            if (!doesUserExistInChat(newUser, chatUsrs)) {
-                chatUsrs.push(newUser);
+            if (!doesUserExistInChat(newUser[0][2])) {
+                if (res[1] != "Banned") {
+                    chatUsrs.push(newUser);
+                    //console.log('New Chat Usrs array is now ' + JSON.stringify(chatUsrs));
 
-                console.log('New Chat Usrs array is now ' + JSON.stringify(chatUsrs));
+                    // am I following chat user ?
+                    var ChatUsrFollowing = checkIfFollowing(res[2]);
+                    // is chat user following me ?
+                    var ChatUsrFollowerResult = checkIfFollower(res[2]);
 
-                // am I following chat user ?
-                var ChatUsrFollowing = checkIfFollowing(res[2]);
-                // is chat user following me ?
-                var ChatUsrFollowerResult = checkIfFollower(res[2]);
+                    //delete any entries of that user
+                    //isInChatDelete(res[2]);
 
-                //delete any entries of that user
-                //isInChatDelete(res[2]);
+                    var hidden = "display:none;";
 
-                var hidden = "display:none;";
+                    var colorToUse = getColorFromUserType(res[1]);
+                    var colorStyle = "color:" + colorToUse + ";"
 
-                var colorToUse = getColorFromUserType(res[1]);
-                var colorStyle = "color:" + colorToUse + ";"
-                var tr;
-                //tr = $('<tr id="CU' + res[2] + '" class /> ');
-                tr = $('<tr id="CU' + res[2] + '" style="' + colorStyle + '" class /> ');
-                tr.append("<td>" + res[0] + "</td>");
-                tr.append("<td>" + ChatUsrFollowerResult + "</td>");
-                // tr.append("<td>" + ChatUsrFollowerResult + "</td>");
-                tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
-                $('#tableChatUsers').append(tr);
+                    var tr;
+                    //tr = $('<tr id="CU' + res[2] + '" class /> ');
+                    tr = $('<tr id="CU' + res[2] + '" style="' + colorStyle + '" class /> ');
+                    tr.append("<td>" + res[0] + "</td>");
+                    tr.append("<td>" + ChatUsrFollowerResult + "</td>");
+                    // tr.append("<td>" + ChatUsrFollowerResult + "</td>");
+                    tr.append("<td style=\"" + hidden + "\">" + res[2] + "</td>");
+                    $('#tableChatUsers').append(tr);
 
-                var chatCountStrNew = chatUsrs.length.toString();
-                $("#chatCountUsrs").empty();
-                $('#chatCountUsrs').append($('<p>&nbsp;</p>').text(' (' + chatCountStrNew + ')'));
+                    addUserToCurrencyManagerList(res[2], res[0]);
 
+                    var chatCountStrNew = chatUsrs.length.toString();
+                    $("#chatCountUsrs").empty();
+                    $('#chatCountUsrs').append($('<p>&nbsp;</p>').text(' (' + chatCountStrNew + ')'));
+
+                }
             }
 
         }
 
-        function doesUserExistInChat(obj, list) {
-            var x;
-            for (x in list) {
-                console.log(list.hasOwnProperty(x));
-                console.log(list[x].toString());
+        function addUserToCurrencyManagerList(userID, userName) {
+            iosocket.emit('addUserToCurrencyManagerList', userID, userName);
+        }
+
+        function removeUserToCurrencyManagerList(userID) {
+            iosocket.emit('removeUserFromCurrencyManagerList', userID);
+        }
+
+
+        function doesUserExistInChat(chatUserID) {
+
+            var usersID = "CU" + chatUserID
+
+
+            //is the user in the list
+            var doesExist = document.getElementById(usersID);
+
+            if (doesExist != null) {
+                return true;
+            } else {
+                return false;
+            }
+
+
+
+
+
+
+            /* var x;
+
+            if (chatList.length < 1) {
+                return false;
+            }
+
+            for (x in chatList) {
+                console.log(chatList.hasOwnProperty(x));
+                console.log(chatList[x].toString());
                 console.log(obj[0][0] + ',' + obj[0][1] + ',' + obj[0][2]);
 
                 console.log('Object to find:- ' + obj[0][0]);
@@ -1423,10 +1467,10 @@
 
                 var userName = "";
 
-                if (Array.isArray(list)) {
+                if (Array.isArray(chatList)) {
                     userName = obj[0][0];
                 } else {
-                    userName = list[x].split('-')[0];
+                    userName = chatList[x].split('-')[0];
                 }
 
                 console.log('userName from Object :- ' + obj[0][0]);
@@ -1436,12 +1480,12 @@
                 //if (list.hasOwnProperty(x) && list[x].toString() === obj[0][0] + ',' + obj[0][1] + ',' + obj[0][2]) {
 
                 //match by username for now
-                if (list.hasOwnProperty(x) && userName === obj[0][0]) {
+                if (chatList.hasOwnProperty(x) && userName === obj[0][0]) {
                     return true;
                 }
             }
 
-            return false;
+            return false; */
         }
 
         amendChatUserRowToFollower = function(id) {
@@ -1528,6 +1572,8 @@
             var chatCountStrNew = chatUsrs.length.toString();
             $("#chatCountUsrs").empty();
             $('#chatCountUsrs').append($('<p>&nbsp;</p>').text(' (' + chatCountStrNew + ')'));
+
+            removeUserToCurrencyManagerList(res[2]);
 
         }
 
@@ -1852,32 +1898,36 @@
 
         }
 
-        isInChatDelete = function(userID) {
-            //check if chat user is following
-            console.log('user to delete is: ' + userID);
 
-            var FollowerRow = document.getElementById("tableChatUsers").rows.namedItem("CU" + userID);
-            console.log('user to delete is: ' + userID);
 
-            if (FollowerRow !== null) {
-                $("#CU" + FollowerRow[2]).remove();
-            } else {
+        // isInChatDelete = function(userID) {
+        //     //check if chat user is following
+        //     console.log('user to delete is: ' + userID);
 
-            }
+        //     var FollowerRow = document.getElementById("CU" + userID);
+        //     console.log('user to delete is: ' + userID);
 
-        }
+        //     if (FollowerRow !== null) {
+        //         $("#CU" + FollowerRow[2]).remove();
+        //     } else {
 
-        isInChat = function(userID) {
+        //     }
 
-            var FollowerRow = document.getElementById("tableChatUsers").rows.namedItem("CU" + userID);
+        // }
 
-            if (FollowerRow !== null) {
-                return true;
-            } else {
-                return false;
-            }
+        // // refactor all the chat add and remove methods
+        // isInChat = function(userID) {
 
-        }
+        //     //var FollowerRow = document.getElementById("tableChatUsers").rows.namedItem("CU" + userID);
+        //     var FollowerRow = document.getElementById("CU" + userID);
+
+        //     if (FollowerRow !== null) {
+        //         return true;
+        //     } else {
+        //         return false;
+        //     }
+
+        // }
 
         //this deals with themodules switches
         chkBoxToglModuleVisible = function(div) {
@@ -3598,7 +3648,7 @@
 
     function addCommandsToListModule(data) {
 
-        console.log('add commands to UI: ' + JSON.stringify(data));
+        //console.log('add commands to UI: ' + JSON.stringify(data));
         data.data.commands.forEach(function(element) {
 
             addSingleCommandToCommandListModule(element);
@@ -3607,7 +3657,7 @@
     }
 
     function addOptionsToParentCurrencyDropdown(data) {
-        console.log('add parent currency to UI: ' + JSON.stringify(data));
+        //console.log('add parent currency to UI: ' + JSON.stringify(data));
         data.forEach(function(element) {
 
             addSingleParentCurrencyToParencyCurrencyDropdown(element);

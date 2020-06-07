@@ -75,7 +75,6 @@ class mixerdata extends EventEmitter {
             self.getChatUsers = async function(channelID) {
                 let allDone = false;
                 let page = 0;
-                var requestSize = 40;
                 chatUsers = [];
                 // subage https://mixer.com/api/v1/users/862913/subscriptions?where=resourceId:eq:850263
                 while (!allDone) {
@@ -92,7 +91,7 @@ class mixerdata extends EventEmitter {
                         }
                         if (res.body.length <= 0) {
                             allDone = true;
-                            chatUsers = removeDuplicates(chatUsers);
+                            //chatUsers = removeDuplicates(chatUsers);
                             log.info('sending chat user count to UI');
                             io.emit('ChatUserCount', chatUsers);
 
@@ -107,7 +106,7 @@ class mixerdata extends EventEmitter {
             self.getStreamerFollows = async function(userID) {
                 let allDone2 = false;
                 let page = 0;
-                var requestSize = 40;
+
                 following = [];
                 following = {
                     following: []
@@ -166,9 +165,13 @@ class mixerdata extends EventEmitter {
 
             function addChatUserItem(res) {
                 res.body.forEach(function(element) {
-                    //console.log(element.username);
-                    var item = element.username + ' - ' + element.userRoles[0] + ' - ' + element.userId;
-                    chatUsers.push(item);
+
+                    if (element.userRoles[0] != 'Banned') {
+                        //console.log(element.username);
+                        var item = element.username + ' - ' + element.userRoles[0] + ' - ' + element.userId;
+                        chatUsers.push(item);
+                    }
+
                 }, this);
             }
 
