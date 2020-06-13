@@ -1,3 +1,32 @@
 {
-    "currencyUsers": []
+    "currencyUsers": [
+        {
+            "currencyid": "n6662020111951",
+            "userid": "862913",
+            "userName": "Schuster",
+            "points": 105,
+            "hours": 0.5833333333333335
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "862913",
+            "userName": "Schuster",
+            "points": 0,
+            "hours": 0.5833333333333335
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "52684962",
+            "userName": "HersheyBot",
+            "points": 66,
+            "hours": 0.36666666666666664
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "52684962",
+            "userName": "HersheyBot",
+            "points": 0,
+            "hours": 0.36666666666666664
+        }
+    ]
 }

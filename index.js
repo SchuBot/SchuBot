@@ -385,7 +385,10 @@ function createWindow() {
         autoHideMenuBar: false,
         useContentSize: false,
         resizable: true,
-        show: false
+        show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
 
     });
 

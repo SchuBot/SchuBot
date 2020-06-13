@@ -315,7 +315,8 @@ ipcMain.on('mixer-login', (event, arg) => {
         show: false,
         webPreferences: {
             sandbox: true,
-            partition: type
+            partition: type,
+            nodeIntegration: true
         }
     });
     var mixerUrl = 'https://mixer.com/oauth/authorize?';
@@ -426,7 +427,8 @@ ipcMain.on('login', (event, arg) => {
         show: false,
         webPreferences: {
             sandbox: true,
-            partition: type
+            partition: type,
+            nodeIntegration: true
         }
     });
     var mixerUrl = 'https://mixer.com/oauth/authorize?';
@@ -450,7 +452,10 @@ function createWindow() {
         autoHideMenuBar: false,
         useContentSize: false,
         resizable: true,
-        show: false
+        show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
 
     });
 
