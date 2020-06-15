@@ -140,8 +140,8 @@
 
 
 
-            document.getElementById("casterAccount").innerHTML = '';
-            document.getElementById("casterAccount").innerHTML += "Streamer: Please Re-Auth";
+            document.getElementById("CasterAccountAuthInfo").innerHTML = '';
+            document.getElementById("CasterAccountAuthInfo").innerHTML += "Streamer: Please Re-Auth";
 
 
         });
@@ -233,10 +233,10 @@
 
         });
 
-        iosocket.on('loginaccounts', function(streamer, bot) {
-            //alert('accounts logged in - Issue here lot into it');
-            setAccountsOnUi(streamer, bot);
-        });
+        /*         iosocket.on('loginaccounts', function(streamer, bot) {
+                    //alert('accounts logged in - Issue here lot into it');
+                    setAccountsOnUi(streamer, bot);
+                }); */
 
         iosocket.on('followed', function(message) {
 
@@ -669,6 +669,7 @@
             // bringToBack.push("divWrapperTimerPanel");
             bringToBack.push("divWrapperFollowAlertsList");
             bringToBack.push("divWrapperNarrowChatUsers");
+            bringToBack.push("divWrapperAuthentication")
             bringToBack.push("divWrapperNarrowRecentFollowers");
             bringToBack.push("divWrapperKeywordsList");
             //bringToBack.push("divWrapperNote");
@@ -1944,7 +1945,8 @@
 
 
 
-        //#region 
+        //#region
+
         $("#chtUsrChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperNarrowChatUsers');
         });
@@ -1979,6 +1981,10 @@
 
         $("#analyticsViewsChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperAnalyticsViews');
+        });
+
+        $("#authChkBox").change(function() {
+            chkBoxToglModuleVisible('divWrapperAuthentication');
         });
 
         $("#alertfilesChkBox").change(function() {
@@ -3125,6 +3131,7 @@
         HideUIElementAndUncheckSwitch("divWrapperMedia", "mediafilesChkBox")
         HideUIElementAndUncheckSwitch("divWrapperCommandsList", "commandsListChkBox")
         HideUIElementAndUncheckSwitch("divWrapperAnalyticsViews", "analyticsViewsChkBox")
+            /*HideUIElementAndUncheckSwitch("divWrapperAutentication", "authChkBox") */
 
     }
 
@@ -3283,6 +3290,8 @@
         //this is the analytis module div wrapper
         themeElementsMain.push("divWrapperAnalyticsViews");
 
+        themeElementsMain.push("divWrapperAuthentication");
+
 
         themeElementsMain.forEach(changeOutsideBoxItemChange, event.target.value);
 
@@ -3315,6 +3324,7 @@
         insideBoxCommandsElements.push("modmonListbox");
         insideBoxCommandsElements.push("hostAlertsListbox");
         insideBoxCommandsElements.push("followAlertsListbox");
+        insideBoxCommandsElements.push("authenticationbox");
 
 
         insideBoxCommandsElements.forEach(changeInsideBoxItemChange, event.target.value);
@@ -3552,7 +3562,7 @@
 
         var el = document.getElementById(value);
         el.style.color = this;
-        el.style.backgroundImage = "url('../css/comboboxarrow.png')";
+        //el.style.backgroundImage = "url('../css/comboboxarrow.png')";
     }
 
     function changeDropdownsBackgroundItemChange(value, index, array) {

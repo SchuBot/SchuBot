@@ -19,7 +19,7 @@
             "audio": "",
             "video": "",
             "image": "",
-            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] \n$target uptime is $uptime hiohdf $channelInfo$caster[$caster has $sparks sparks and is a level $level] \n$caster has been on for $uptime hiohdfgsi iyu eswfsr $readapi(http://mixer.api.scorpstuff.com/multistream2.php?caster=$caster&partners=$msg) hello",
+            "text": "$channelInfo$target[$target has $sparks sparks and is a level $level] \n$target uptime is $uptime hiohdf $channelInfo$caster[$caster has $sparks sparks and is a level $level] \n$caster has been on for $uptime hiohdfgsi iyu hello",
             "cooldown": ""
         },
         {

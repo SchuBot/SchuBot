@@ -444,7 +444,7 @@ input#medVidOtherValue {
     width: 180px;
     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
     color: orange;
-    background-image: url('../css/comboboxarrow.png'), -webkit-linear-gradient( #616161, #616161 40%, #616161);
+    /*background-image: url('../css/comboboxarrow.png'), -webkit-linear-gradient( #616161, #616161 40%, #616161);*/
     background-color: #616161;
 }
 
@@ -772,6 +772,7 @@ button.square-buttonGroupVertical {
 #wrapperTimerPanel,
 #wrapperRecentFollowers,
 #wrapperAnalyticsViews,
+#wrapperAuthentication,
 #wrapperKeywords,
 #wrapperNote,
 #wrapperCommandsList {
@@ -1013,6 +1014,16 @@ div.menutextright,
     /*height: 40px;*/
 }
 
+#StreamerAvatar {
+    border-radius: 150px;
+    margin-bottom: 4px;
+}
+
+#BotAvatar {
+    border-radius: 150px;
+    margin-bottom: 4px;
+}
+
 
 /* this does the buttons with text underneath */
 
@@ -1245,7 +1256,7 @@ div.menutext {
 #divWrapperTimerPanel,
 #divWrapperFollowAlertsList,
 #divWrapperNarrowChatUsers,
-#divWrapperAnalyticsViews,
+#divWrapperAuthentication,
 #divWrapperNarrowRecentFollowers,
 #divWrapperKeywordsList,
 #divWrapperNotesList,

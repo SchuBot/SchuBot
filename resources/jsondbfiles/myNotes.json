@@ -1,3 +1,140 @@
 {
-    "notes": []
+    "notes": [
+        {
+            "id": "n01810201870",
+            "todo": "Y",
+            "note": "get the duel game from scorp transferred to here\n",
+            "private": "N",
+            "priority": "N"
+        },
+        {
+            "id": "n01810201867",
+            "todo": "Y",
+            "note": "can we add a \"quotes\" feature?",
+            "private": "N",
+            "priority": "N"
+        },
+        {
+            "id": "n11210201866",
+            "todo": "Y",
+            "note": "Finish Games - High Effort (Spin , Number , etc..)",
+            "private": "N",
+            "priority": "N"
+        },
+        {
+            "id": "n41510201847",
+            "todo": "Y",
+            "note": "Lootation Game",
+            "private": "N",
+            "priority": "N"
+        },
+        {
+            "id": "n41510201874",
+            "todo": "Y",
+            "note": "Streamer Notification Beeps Function",
+            "private": "N",
+            "priority": "N"
+        },
+        {
+            "id": "n51610201842",
+            "todo": "Y",
+            "note": "Help Manual and Video",
+            "private": "N",
+            "priority": "N"
+        },
+        {
+            "id": "n51610201829",
+            "todo": "Y",
+            "note": "Viewer Groups for things",
+            "private": "N",
+            "priority": "N"
+        },
+        {
+            "id": "n12610201875",
+            "todo": "Y",
+            "note": "Remote Moderator function to view chat , add commands etc..",
+            "private": "N",
+            "priority": "N"
+        },
+        {
+            "id": "n12610201847",
+            "todo": "Y",
+            "note": "Sort Table by header A-Z , Date",
+            "private": false,
+            "priority": "High"
+        },
+        {
+            "id": "n934201963",
+            "todo": "Y",
+            "note": "fix notes window",
+            "private": "Y",
+            "priority": "N"
+        },
+        {
+            "id": "n1105201933",
+            "todo": "Y",
+            "note": "memes feature - add meme similar to quotes and notes but just memes with a link to a gif maybe"
+        },
+        {
+            "id": "n1105201964",
+            "todo": "Y",
+            "note": "add functionality to message selection",
+            "priority": "N",
+            "private": "N"
+        },
+        {
+            "id": "n0209201984",
+            "todo": "Y",
+            "note": "when user unfollows , viewer list isn't updating. "
+        },
+        {
+            "id": "n1219201960",
+            "todo": "Y",
+            "note": "combine alerts panel (follow/host/subs) into one",
+            "priority": "N",
+            "private": "N"
+        },
+        {
+            "id": "n42492019126",
+            "todo": "Y",
+            "note": "test follow alerts",
+            "priority": "N",
+            "private": "N"
+        },
+        {
+            "id": "n2344202016301",
+            "todo": "Y",
+            "note": "custom kitty logo change to user defined.",
+            "priority": "H",
+            "private": "Y"
+        },
+        {
+            "id": "n23442020163956",
+            "todo": "Y",
+            "note": "UI Theme Preset Options (5 presets)",
+            "priority": "N",
+            "private": "Y"
+        },
+        {
+            "id": "n161202017056",
+            "todo": "Y",
+            "note": "add online following to streamer to host one of the online followers via the bot. Show list of following and allow host, check streamer offline first then enable host.",
+            "priority": "Y",
+            "private": "N"
+        },
+        {
+            "id": "n14602020225817",
+            "todo": "Y",
+            "note": "when switching monitors update width of container to allow maximum workspace.",
+            "priority": "Low",
+            "private": "N"
+        },
+        {
+            "id": "n14602020231315",
+            "todo": "Y",
+            "note": "Debug !sample2 seems to be an issue with $target variable or the logic for variable substitution.",
+            "priority": "",
+            "private": "Y"
+        }
+    ]
 }

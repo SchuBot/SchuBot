@@ -30,15 +30,20 @@
         </div>
 
         <div>
+            <button id="AutoUpdate" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Check For Bot Updates</button>
+
+        </div>
+
+        <div>
             <label id="mixrConnectionLabel" for="mixrConnection">Connecting to Mixer:</label>
             <!-- value="70"-->
             <progress id="mixrConnection" max="100"></progress>
 
             <div class="btn-group">
                 <!-- /auth/beam "../botlogin.html" -->
-                <button id="BotLogin" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Bot Sign in with Mixer</button>
+                <!--   <button id="BotLogin" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Bot Sign in with Mixer</button>
                 <button id="StreamerLogin" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Streamer Login</button>
-                <button id="AutoUpdate" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Update Bot</button>
+                <button id="AutoUpdate" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Update Bot</button> -->
             </div>
 
         </div>
@@ -79,6 +84,25 @@
 
         </div>
 
+        <div id="authSwitches">
+            <span class="switchModuleText">Authentication</span>
+            <button id="authSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperauthswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperauthswitch">
+
+                <div>
+                    <label class="switch">
+                        <input id="authChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Authentication</p>
+                      </label>
+                </div>
+
+
+
+            </div>
+
+        </div>
 
         <div>
             <span class="switchModuleText">UI Theme</span>
@@ -631,7 +655,7 @@
                                 <div id="commandtextbox" style="width:320px;float:left;">
                                     <div>
                                         <span><div id="cmdTextLabel" class="cmdSpans">Text </div></span>
-                                        <textarea id="commandText" rows="5" cols="34" placeholder="Enter command text here" required></textarea>
+                                        <textarea id="commandText" rows="5" cols="50" placeholder="Enter command text here" required style="resize:none"></textarea>
                                     </div>
                                     <div style='float: left;width: 200px;'>
                                         <div id="cmdVarsLabel" class="cmdSpansCombo" style="width:36px;">Vars</div>
@@ -762,6 +786,48 @@
                         <button class="toggleButton" id="chatUsrTimeout5m" onclick="TimeOutMixerUser()" type="button" class="btn">Timeout 5M</button>
                     </div>
                 </div>
+
+
+                <div id="divWrapperAuthentication" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 600px; top: 100px;">
+                    <div id="menubarnarrowauthentication" style="height:76px;">
+                        <div class="btn-group-vertical-right" role="group">
+                            <button class="toggleButton" id="avActionBtn2" style="height:20px;width:20px;visibility:hidden;display:none; " type="button" class="btn">-</button>
+                            <button class="toggleButton" id="avBtn2" onclick="minimiseChatUsersBox('wrapperAuthentication','divWrapperAuthentication')" type="button" class="btn"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
+                        </div>
+
+                        <div style="width:50%;height:30px;">
+                            <div class="modulemenubartext" id="menutextav"> Mixer Authentication</div>
+                        </div>
+
+                        <div class="btn-group-vertical-right" role="group">
+                            <button type="button" id="movAnalyticsViewsModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperAuthentication','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                <i class='fas fa-arrows-alt' style='font-size:20px;color:white;'></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="wrapperAuthentication">
+
+                        <div class="insideBox" id="authenticationbox" style="overflow-x:auto;float:left;">
+
+                            <div>
+                                <div id="StreamerAuth" style="width:45%;float:left;clear:left; margin-left: 1%; margin-right: 8%;">
+                                    <img id="StreamerAvatar" src="https://uploads.mixer.com/avatar/pybbry8d-862913.jpg" width="150px" height="150px">
+                                    <button id="StreamerLogin" style="background-color: darkslateblue;" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Streamer Sign In </button>
+                                    <p id="CasterAccountAuthInfo" style="margin-top:5px;"></p>
+                                </div>
+
+
+
+                                <div id="BotAuth" style="width:45%;float:left; clear:right;">
+                                    <img id="BotAvatar" src="https://uploads.mixer.com/avatar/dp7pg032-32814769.jpg" width="150px" height="150px">
+                                    <button id="BotLogin" style="background-color: darkslateblue;" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Bot Account Sign In</button>
+                                    <p id="BotAccountAuthInfo" style="margin-top:5px;"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <div id="divWrapperAnalyticsViews" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:380px; left: 600px; top: 100px;">
                     <div id="menubarnarrowanalyticsviews">

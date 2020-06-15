@@ -57,32 +57,32 @@
 
 
 
-    setAccountsOnUi = function(streamer, bot) {
-        document.getElementById("casterAccount").innerHTML = '';
-        document.getElementById("casterAccount").innerHTML += streamer;
-        document.getElementById("botAccount").innerHTML = '';
-        document.getElementById("botAccount").innerHTML += bot;
-    }
+    /*     setAccountsOnUi = function(streamer, bot) {
+            document.getElementById("casterAccount").innerHTML = '';
+            document.getElementById("casterAccount").innerHTML += streamer;
+            document.getElementById("botAccount").innerHTML = '';
+            document.getElementById("botAccount").innerHTML += bot;
+        } */
 
     setBotAccountLoggedIn = function(bot) {
-        document.getElementById("botAccount").innerHTML = '';
-        document.getElementById("botAccount").innerHTML += 'Authed Bot - ' + bot;
+        document.getElementById("BotAccountAuthInfo").innerHTML = '';
+        document.getElementById("BotAccountAuthInfo").innerHTML += 'BOT AUTHENTICATED: ' + bot;
     }
 
     setStreamerAccountLoggedIn = function(streamer) {
-        document.getElementById("casterAccount").innerHTML = '';
-        document.getElementById("casterAccount").innerHTML += 'Authed Caster - ' + streamer;
+        document.getElementById("CasterAccountAuthInfo").innerHTML = '';
+        document.getElementById("CasterAccountAuthInfo").innerHTML += 'STREAMER AUTHENTICATED: ' + streamer;
     }
 
 
     setBotAccountUnAuthed = function(bot) {
-        document.getElementById("botAccount").innerHTML = '';
-        document.getElementById("botAccount").innerHTML += 'Authed Bot - Please Re-Auth';
+        document.getElementById("BotAccountAuthInfo").innerHTML = '';
+        document.getElementById("BotAccountAuthInfo").innerHTML += 'BOT AUTHENTICATION:  Please Re-Auth';
     }
 
     setStreamerUnAuthed = function(streamer) {
-        document.getElementById("casterAccount").innerHTML = '';
-        document.getElementById("casterAccount").innerHTML += 'Authed Caster - Please Re-Auth';
+        document.getElementById("CasterAccountAuthInfo").innerHTML = '';
+        document.getElementById("CasterAccountAuthInfo").innerHTML += 'STREAMER AUTHENTICATION: Please Re-Auth';
     }
 
     hideMixerProgressBar = function() {
