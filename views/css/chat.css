@@ -1088,8 +1088,11 @@ div.menutextright,
 }
 
 #movChatBoxModule {
-    margin-top: 4px;
-    margin-bottom: 5px;
+    float: right;
+    clear: left;
+    /* position: relative; */
+    margin-right: -27px;
+    margin-top: 5px;
 }
 
 #movWhisperBoxModule {

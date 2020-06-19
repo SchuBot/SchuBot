@@ -1,7 +1,7 @@
 {
     "name": "schubot",
     "title": "SchuBot",
-    "version": "1.20.1",
+    "version": "2.0.0",
     "repository": "https://github.com/SchuBot/SchuBot",
     "description": "SchuBot",
     "main": "index.js",

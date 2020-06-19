@@ -135,6 +135,27 @@
             "note": "Debug !sample2 seems to be an issue with $target variable or the logic for variable substitution.",
             "priority": "",
             "private": "Y"
+        },
+        {
+            "id": "n19652020163421",
+            "todo": "Y",
+            "note": "Add more text UI theme options of Module header text and list tables.",
+            "priority": "Y",
+            "private": "N"
+        },
+        {
+            "id": "n19652020165938",
+            "todo": "Y",
+            "note": "Viewer list - Checkbox to show hide Type column.",
+            "priority": "N",
+            "private": "Y"
+        },
+        {
+            "id": "n19652020165959",
+            "todo": "Y",
+            "note": "Add More options to the viewer list e.g. Timeout 15 minutes , timeout amount?",
+            "priority": "Low",
+            "private": "N"
         }
     ]
 }
