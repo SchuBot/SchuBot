@@ -1,30 +1,242 @@
 {
     "currencyUsers": [
         {
-            "id": "50898908098-1",
-            "iddescription": "the above is a combination of the user id and currency id",
-            "userid": "1",
-            "currencyid": "1",
-            "currencyiddescription": "the currency id is to add points to the correct currency",
-            "username": "Schuster",
-            "hours": 130.86666666666295,
-            "points": 15711852,
-            "currentrank": "Rank 1",
-            "nextrank": "Rank 2",
-            "type": "Regular"
+            "currencyid": "n6662020111951",
+            "userid": "862913",
+            "userName": "Schuster",
+            "points": 1443,
+            "hours": 8.016666666666644
         },
         {
-            "id": "50898908098-2",
-            "iddescription": "the above is a combination of the user id and currency id",
-            "userid": "1",
-            "currencyid": "2",
-            "currencyiddescription": "the currency id is to add points to the correct currency",
-            "username": "Schuster",
-            "hours": 130.86666666666295,
-            "points": 7852,
-            "currentrank": "Rank 1",
-            "nextrank": "Rank 2",
-            "type": "Regular"
+            "currencyid": "n6662020202551",
+            "userid": "862913",
+            "userName": "Schuster",
+            "points": 0,
+            "hours": 8.016666666666644
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "52684962",
+            "userName": "HersheyBot",
+            "points": 1380,
+            "hours": 7.666666666666645
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "52684962",
+            "userName": "HersheyBot",
+            "points": 0,
+            "hours": 7.666666666666645
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "34131475",
+            "userName": "NozZertal007",
+            "points": 3,
+            "hours": 0.016666666666666666
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "34131475",
+            "userName": "NozZertal007",
+            "points": 0,
+            "hours": 0.016666666666666666
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "32055628",
+            "userName": "GoBlueHomer",
+            "points": 189,
+            "hours": 1.0500000000000012
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "9827293",
+            "userName": "MalignMidget",
+            "points": 15,
+            "hours": 0.08333333333333333
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "8978779",
+            "userName": "CircuitPIMP",
+            "points": 189,
+            "hours": 1.0500000000000012
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "3761056",
+            "userName": "LedFedHed",
+            "points": 189,
+            "hours": 1.0500000000000012
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "15330581",
+            "userName": "ThatGoat84",
+            "points": 15,
+            "hours": 0.08333333333333333
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "706095",
+            "userName": "Toad84",
+            "points": 15,
+            "hours": 0.08333333333333333
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "858407",
+            "userName": "ObsidianZ3R0",
+            "points": 39,
+            "hours": 0.21666666666666665
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "3790593",
+            "userName": "NightmareJoker2",
+            "points": 189,
+            "hours": 1.0500000000000012
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "4291",
+            "userName": "madkiwi",
+            "points": 15,
+            "hours": 0.08333333333333333
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "32055628",
+            "userName": "GoBlueHomer",
+            "points": 0,
+            "hours": 1.0500000000000012
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "9827293",
+            "userName": "MalignMidget",
+            "points": 0,
+            "hours": 0.08333333333333333
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "8978779",
+            "userName": "CircuitPIMP",
+            "points": 0,
+            "hours": 1.0500000000000012
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "3761056",
+            "userName": "LedFedHed",
+            "points": 0,
+            "hours": 1.0500000000000012
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "15330581",
+            "userName": "ThatGoat84",
+            "points": 0,
+            "hours": 0.08333333333333333
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "706095",
+            "userName": "Toad84",
+            "points": 0,
+            "hours": 0.08333333333333333
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "858407",
+            "userName": "ObsidianZ3R0",
+            "points": 0,
+            "hours": 0.21666666666666665
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "3790593",
+            "userName": "NightmareJoker2",
+            "points": 0,
+            "hours": 1.0500000000000012
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "4291",
+            "userName": "madkiwi",
+            "points": 0,
+            "hours": 0.08333333333333333
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "316101",
+            "userName": "19FIREFOX84",
+            "points": 3,
+            "hours": 0.016666666666666666
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "316101",
+            "userName": "19FIREFOX84",
+            "points": 0,
+            "hours": 0.016666666666666666
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "19518104",
+            "userName": "Sa5quaTch",
+            "points": 3,
+            "hours": 0.016666666666666666
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "19518104",
+            "userName": "Sa5quaTch",
+            "points": 0,
+            "hours": 0.016666666666666666
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "427233",
+            "userName": "ED_Seeker_STO",
+            "points": 63,
+            "hours": 0.35
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "427233",
+            "userName": "ED_Seeker_STO",
+            "points": 0,
+            "hours": 0.35
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "103562643",
+            "userName": "Lurxx",
+            "points": 54,
+            "hours": 0.3
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "103562643",
+            "userName": "Lurxx",
+            "points": 0,
+            "hours": 0.3
+        },
+        {
+            "currencyid": "n6662020111951",
+            "userid": "5969425",
+            "userName": "LTDanTaylor",
+            "points": 291,
+            "hours": 1.6166666666666658
+        },
+        {
+            "currencyid": "n6662020202551",
+            "userid": "5969425",
+            "userName": "LTDanTaylor",
+            "points": 0,
+            "hours": 1.6166666666666658
         }
     ]
 }

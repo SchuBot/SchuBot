@@ -1,22 +1,3 @@
 {
-    "followalerts": [
-        {
-            "enabled": "Y",
-            "id": "test",
-            "audio": "!mediaSound1",
-            "video": "!mediaVideo1",
-            "image": "!mediaImage1",
-            "text": "test",
-            "type": "altAlertFollow"
-        },
-        {
-            "enabled": "Y",
-            "id": "followAlert1",
-            "audio": "!mediaSound1",
-            "video": "!mediaVideo1",
-            "image": "!mediaImage1",
-            "text": "test",
-            "type": "altAlertFollow"
-        }
-    ]
+    "followalerts": []
 }
