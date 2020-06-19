@@ -21,3 +21,4 @@ Notes  – Allows you to create reminders and/or to be used as a to-do list
 Moderation Monitor – Allows you to see what mods have been up to.
 Timers – Messages sent to chat on specific intervals
 Currency and Rank - This is close to finished and will be released in V2.1.0 (Due July 2020)
+and More features to come.
