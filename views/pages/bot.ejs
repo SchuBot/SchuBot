@@ -436,30 +436,33 @@
 
                 <div class="moduleTheme" id="divWrapperChat" onmousedown="mydragg.startMoving(this,'container',event);" onmouseup="mydragg.stopMoving('container');" style="width:400px;height:460px; left: 0px; top: 100px;">
                     <div>
-                        <p id="chatwindowText">Chat Window</p>
+                        <div>
 
 
-                        <label class="switch">
-                            <input id="ChatWhispersSwitchChkBox" type="checkbox" checked>
-                            <span class="slider round"></span>
-                            <p class="slider-text" style="
-                            float: right;
-                            padding-right: 50px;
-                            margin-top: 5px;
-                        ">Whisper</p>
-                        </label>
-                        <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperChat','divWrapperChat')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
-                        <button type="button" id="movChatBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperChat','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                            <i class='fas fa-arrows-alt' style='font-size:24px;'></i></button>
+                            <div style="width: 99%;float: right;">
+                                <p id="chatwindowText" style="color: rgb(0, 0, 0);">Chat Window</p>
+
+
+                                <label class="switch">
+                                                <input id="ChatWhispersSwitchChkBox" type="checkbox" checked="">
+                                                <span class="slider round"></span>
+                                                <p class="slider-text" style="
+                                                float: right;
+                                                padding-right: 50px;
+                                                margin-top: 5px;
+                                            ">Whisper</p>
+                                            </label>
+                                <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperChat','divWrapperChat')" type="button" style="background: rgb(69, 68, 70); color: rgb(0, 128, 0);"><i class="fas fa-arrows-alt-v" style="font-size:20px;color:white;" aria-hidden="true"></i></button>
+
+                            </div>
+                            <div style="width: 99%;float: right;margin-top: -5px;margin-right: 28px;">
+                                <button type="button" id="movChatBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperChat','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                                        <i class="fas fa-arrows-alt" style="font-size:24px;" aria-hidden="true"></i></button>
+                            </div>
+
+                        </div>
+
                     </div>
-
-                    <div class="btn-group-vertical-rightcommandslist" role="group">
-
-                        <br>
-
-
-                    </div>
-
 
                     <div id="wrapperChat">
 
@@ -1427,37 +1430,37 @@
 
                     <div id="mediamenubarnarrow">
                         <div>
-                            <p id="mediaPanelHeaderText">Media Panel</p>
+                            <p id="mediaPanelHeaderText" style="color: rgb(0, 0, 0);">Media Panel</p>
 
-                            <div class="btn-group-vertical-right" role="group">
-                                <!-- <button type="button" class="button">Button</button> -->
-                                <button class="toggleButton" id="flBtnWideMedia" onclick="minimiseCommandBoxFunction('wrapperMedia','divWrapperMedia')" type="button"><i class='fas fa-arrows-alt-v' style='font-size:20px;color:white;'></i></button>
-                                <br>
-                                <button type="button" id="movMediaPanel" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperMedia','container',event);" onmouseup="mydragg2.stopMoving('container');">
-                                    <i class='fas fa-arrows-alt' style='font-size:20px;color:white;'></i>
+
+                            <!-- <button type="button" class="button">Button</button> -->
+                            <button class="toggleButton" id="flBtnWideMedia" onclick="minimiseCommandBoxFunction('wrapperMedia','divWrapperMedia')" type="button" style="background: rgb(69, 68, 70); color: rgb(0, 128, 0);"><i class="fas fa-arrows-alt-v" style="font-size:20px;color:white;" aria-hidden="true"></i></button>
+
+                            <button type="button" id="movMediaPanel" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperMedia','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                    <i class="fas fa-arrows-alt" style="font-size:20px;color:white;" aria-hidden="true"></i>
                                     </button>
-                            </div>
 
-                            <div style="margin-right: 100px; color: white;" class="btn-group-vertical-right" role="group">
-                                <div id="bringToFrontSwitch1">
-                                    <label class="switch">
-                                            <input id="medPanelChkBoxTop" type="checkbox" checked>
+
+
+                            <label class="switch">
+                                            <input id="medPanelChkBoxTop" type="checkbox" checked="">
                                             <span class="slider round"></span>
                                             <p style="padding-left:42px;" class="slider-text">Top</p>
                                           </label>
-                                </div>
 
-                                <div id="bringToFrontSwitch2">
-                                    <label class="switch">
-                                                <input id="medPanelChkBoxBottom" type="checkbox" checked>
+
+
+                            <label class="switch">
+                                                <input id="medPanelChkBoxBottom" type="checkbox" checked="">
                                                 <span class="slider round"></span>
                                                 <p style="padding-left:42px;" class="slider-text">Bottom</p>
                                               </label>
-                                </div>
-                            </div>
+
                         </div>
 
+
                     </div>
+
 
                     <div id="wrapperMedia">
 

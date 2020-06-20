@@ -313,6 +313,7 @@ ipcMain.on('mixer-login', (event, arg) => {
     let redirectUri = type === "streamer" ? streamerRedirect : botRedirect;
 
     // nodeIntegration: false
+    //need to look into the webPreferences to ensure sandbox is the right thing to do here
     authWindow = new BrowserWindow({
         parent: mainWindow,
         modal: true,
@@ -386,6 +387,7 @@ function createWindow() {
         useContentSize: false,
         resizable: true,
         show: false,
+        //maxWidth: 1440,
         webPreferences: {
             nodeIntegration: true
         }
@@ -415,6 +417,7 @@ function createWindow() {
     mainWindow.on('move', function() {
         // Do move event action
         log.info('window moved');
+
     });
 
 };

@@ -4,12 +4,12 @@ var JsonDB = require('node-json-db');
 const Mixer = require('@mixer/client-node');
 let EventEmitter = require('events').EventEmitter;
 
-var followers = [];
+//var followers = [];
 var followers = {
     followers: []
 };
 
-var following = [];
+//var following = [];
 var following = {
     following: []
 };
