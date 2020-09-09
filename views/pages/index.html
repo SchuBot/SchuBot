@@ -24,6 +24,8 @@
 </head>
 
 <body>
+
+
     <div class="container">
         <h1 class="well">Bot Login</h1>
         <div class="col-lg-12 well">
@@ -115,10 +117,23 @@
          */
 
         // this is the streamer login
+        /*         const btnclickStreamer = document.getElementById('StreamerLogin');
+                btnclickStreamer.addEventListener('click', function() {
+
+                    ipcRenderer.send('mixer-login', 'streamer');
+
+                }); */
+
+
+
+
         const btnclickStreamer = document.getElementById('StreamerLogin');
+
         btnclickStreamer.addEventListener('click', function() {
 
-            ipcRenderer.send('mixer-login', 'streamer');
+
+
+            // ipcRenderer.send('twitch-login', 'streamer');
 
         });
 

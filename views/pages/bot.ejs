@@ -20,6 +20,10 @@
 
 </div>
 
+<div id="access_token"></div>
+<div id="user_data"></div>
+
+
 
 <body class="nav-md">
 
@@ -815,15 +819,18 @@
 
                             <div>
                                 <div id="StreamerAuth" style="width:45%;float:left;clear:left; margin-left: 1%; margin-right: 8%;">
-                                    <img id="StreamerAvatar" src="https://uploads.mixer.com/avatar/pybbry8d-862913.jpg" width="150px" height="150px">
+                                    <img id="StreamerAvatar" src="https://static-cdn.jtvnw.net/jtv_user_pictures/64f4dbcc-6c77-49ab-9f45-5489433536c3-profile_image-70x70.png" width="150px" height="150px">
                                     <button id="StreamerLogin" style="background-color: darkslateblue;" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Streamer Sign In </button>
+
+                                    <a href="twitchlogin.html" target="_blank" id="authorize">Authorize</a>
+
                                     <p id="CasterAccountAuthInfo" style="margin-top:5px;"></p>
                                 </div>
 
 
 
                                 <div id="BotAuth" style="width:45%;float:left; clear:right;">
-                                    <img id="BotAvatar" src="https://uploads.mixer.com/avatar/dp7pg032-32814769.jpg" width="150px" height="150px">
+                                    <img id="BotAvatar" src="https://static-cdn.jtvnw.net/jtv_user_pictures/64f4dbcc-6c77-49ab-9f45-5489433536c3-profile_image-70x70.png" width="150px" height="150px">
                                     <button id="BotLogin" style="background-color: darkslateblue;" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Bot Account Sign In</button>
                                     <p id="BotAccountAuthInfo" style="margin-top:5px;"></p>
                                 </div>
@@ -1851,13 +1858,21 @@
                                  */
 
                                 // this is the streamer login
+                                /*                                 const btnclickStreamer = document.getElementById('xSxtreamerLogin');
+                                                                btnclickStreamer.addEventListener('click', function() {
+
+                                                                    ipcRenderer.send('mixer-login', 'streamer');
+
+                                                                }); */
+
                                 const btnclickStreamer = document.getElementById('StreamerLogin');
                                 btnclickStreamer.addEventListener('click', function() {
 
-                                    ipcRenderer.send('mixer-login', 'streamer');
+                                    ipcRenderer.send('twitch-login', 'streamer');
 
                                 });
 
+                                //change to twitch
                                 const btnclickBot = document.getElementById('BotLogin');
                                 btnclickBot.addEventListener('click', function() {
 

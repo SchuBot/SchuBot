@@ -193,6 +193,19 @@
 
         });
 
+        iosocket.on('twitchChatConnected', function() {
+
+            /*             //alert("Please Re-Auth");
+                        $('#mixrConnection').attr('value', 100);
+                        document.getElementById("mixrConnection").style.visibility = 'hidden';
+                        document.getElementById("mixrConnectionLabel").style.visibility = 'hidden'; */
+            hideUIProgressBar();
+            setStreamerUnAuthed();
+            turnOffMixerIcons();
+
+
+        });
+
         iosocket.on('botAuthenticated', function(data) {
 
             //alert("Please Re-Auth");
@@ -340,7 +353,6 @@
 
         iosocket.on('message', function(avatarURL, primaryRole, UserName, message, isWhisper) {
 
-            //alert('Message Recieved');
             buildChatMessage(avatarURL, primaryRole, UserName, message, isWhisper);
             scrollToEnd("chatbox");
 

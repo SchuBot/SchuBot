@@ -142,7 +142,121 @@ module.exports = function(app) {
     //  }));
 
 
-    //streamer auth route
+    //streamer twitch auth route
+    app.get('/auth/twitch/callback', function(req, res) {
+
+
+        electron.ipcMain.emit('savetwitchauth', null);
+
+        /*         if (req.url != undefined) {
+
+
+                    //streamer login
+                    var options = {
+                        client_id: 't7kyrxjq326tij087ax7o8a6y686d8',
+                        response_type: 'code',
+                        grant_type: 'authorization_code',
+                        scopes: ["user_read"], // Scopes limit access for OAuth tokens.
+                        redirectUri: "http://localhost:8081/auth/twitch/callback"
+
+                    };
+
+                    var access_token = /access_token=([^&]*)/.exec(req.url)
+
+                    var raw_code = /code=([^&]*)/.exec(req.url) || null,
+                        code = (raw_code && raw_code.length > 1) ? raw_code[1] : null,
+                        error = /\?error=(.+)$/.exec(req.url);
+
+                    // If there is a code in the callback, proceed to get token from twitch
+                    if (code) {
+                        console.log("code recieved: " + code);
+
+                        var postData = querystring.stringify({
+                            "grant_type": options.grant_type,
+                            "redirect_uri": options.redirectUri,
+                            "client_id": options.client_id,
+                            "code": code
+                        });
+
+
+                        ///id.twitch.tv/oauth2/tokenv
+                        var post = {
+                            host: "id.twitch.tv",
+                            path: "/oauth2/token",
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                                'Content-Length': postData.length,
+                                "Accept": "application/json"
+                            }
+                        };
+
+                        var req = https.request(post, function(response) {
+                            var result = '';
+                            response.on('data', function(data) {
+                                result = result + data;
+                            });
+                            response.on('end', function() {
+                                var json = JSON.parse(result.toString());
+                                console.log("access token recieved: " + json.access_token);
+
+                                //now set expiry date
+                                //set token expiry in milliseconds 
+                                // (remove 10 seconds just because)
+                                var expiryInSeconds = json.expires_in - 10;
+                                var expiryInMilliSeconds = expiryInSeconds * 1000;
+
+                                //get milliseconds from 1970 till now and add milliseconds
+                                var milliseconds = Date.now() + expiryInMilliSeconds;
+
+                                //
+                                var accessTokenExpiry = new Date(milliseconds);
+
+                                var type = "streamer";
+                                json["access_token_expiry_date"] = accessTokenExpiry;
+
+                                
+
+
+
+                                //userInfo("streamer", json.access_token, json.refresh_token, null, authDB)
+
+                                //   mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
+
+
+
+                                if (response && response.ok) {
+                                    // Success - Received Token.
+                                    // Store it in localStorage maybe?
+                                    console.log(response.body.access_token);
+                                }
+                            });
+                            response.on('error', function(err) {
+                                console.log("MIXER OAUTH REQUEST ERROR: " + err.message);
+                            });
+                        });
+
+                        req.write(postData);
+                        req.end();
+
+                    } else
+                    if (error) {
+                        alert("Oops! Something went wrong and we couldn't log you in using Mixer. Please try again.");
+                    }
+                } */
+
+        // Successful authentication, redirect home.
+        // res.redirect('/streamerlogin');
+
+
+        //electron.ipcMain.emit('closeauthwindow', null);
+
+
+        //   res.redirect('/dragobject.html');
+    });
+
+
+
     app.get('/auth/mixer2', function(req, res) {
 
         if (req.url != undefined) {

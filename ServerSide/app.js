@@ -11,6 +11,9 @@
     const dateNow = Date.now();
 
     const MixerStreamerChat = require('../app/js/MixerStreamerChat.js');
+
+    const TwitchChatClient = require('../app/js/TwitchChatClient.js');
+
     const MixerBotChat = require('../app/js/MixerBotChat.js');
     const mixerdata = require('../app/js/mixerdata.js');
     const constellation = require('../app/js/constellation.js');
@@ -25,6 +28,8 @@
     const Mixer = require('@mixer/client-node');
 
     const request = require("request");
+
+    const fetch = require("node-fetch");
 
     const colors = require('colors');
 
@@ -75,6 +80,7 @@
     var ch;
     let botName = null
     let cm;
+    let twitchChat;
 
     ////////THIS IS THE STUFF FOR THE NEW DB
     //     /* 
@@ -109,6 +115,12 @@
     //                 db.close();
     //             });
     //         }); */
+
+
+    /* webhook subscriptions
+
+    
+
 
     //http://techfort.github.io/LokiJS/ 
     // loki stuffs for stuff that we can keep in memory like: following , recent followers, recent chat messages , temp currency
@@ -296,6 +308,7 @@
 
 
 
+
     io.on('connection', function(socket) {
 
 
@@ -328,7 +341,9 @@
 
         socket.on('message', function(message, sendType) {
             try {
-                SendMessageToBeam(message, bc, bcBot, sendType);
+                //SendMessageToTwitch(message, bc, bcBot, sendType);
+                //hardcoded to streamer for now till I get a bot account
+                SendMessageToTwitch(message, twitchChat, bcBot, 'Streamer')
             } catch (error) {
                 log.info('error in main line 148 message event ' + error.message);
 
@@ -585,7 +600,7 @@
 
                 // io.emit('addSaveCommandResult', cmdObject);
             } catch (error) {
-                log.error('error deleting cuurency' + error.message);
+                log.error('error deleting currency' + error.message);
             }
 
         });
@@ -921,8 +936,12 @@
             loadBotData()
             loadBotCurrencyAndTimers()
                 //initBeamData(authDB);
-            ConnectToBeamAndConsellation();
-            initBeamData(authDB);
+                //ConnectToBeamAndConsellation();
+
+            ConnectToTwitch();
+
+            //gets mixer data
+            initTwitchData(authDB);
             startupBotDataSent = true;
         }
 
@@ -981,6 +1000,33 @@
 
 
 
+
+        }
+
+    }
+
+
+    function initTwitchData(authDB) {
+
+        //get followage
+        //https://mixer.com/api/v1/channels/channelId/follow?where=id:eq:UserId&limit=1&page=0&noCount=1
+
+        //if (bc != null && bc != undefined) {
+
+        // if there is no streamer id then this means fresh install
+        if (authDB.data.streamer.userId > 0) {
+
+            /*             mixerData = new mixerdata(authDB.data.streamer.accessToken, log, io);
+
+                        try {
+                            mixerData.getStreamerFollows(authDB.data.streamer.userId);
+
+                            mixerData.getfollowers(authDB.data.streamer.channelId);
+
+                            mixerData.getChatUsers(authDB.data.streamer.channelId);
+                        } catch (error) {
+                            log.info(error.message);
+                        } */
 
         }
 
@@ -1247,9 +1293,39 @@
 
     }
 
-    function ConnectToBeamAndConsellation() {
+    /*     function ConnectToBeamAndConsellation() {
 
-        log.info('Connecting to Mixer and Constellation');
+            log.info('Connecting to Mixer and Constellation');
+
+            //if either streamer or bot is not connected then reconnect
+            if (!chatConnected || !chatConnectedBot) {
+
+                authDB.reload();
+                log.info('Auth File Loaded');
+
+                CreateBeamObjects(authDB.data.streamer.accessToken, null, authDB.data.streamer.username, chatConnected, authDB.data.streamer.username, authDB.data.bot.username, globalFollowers, authDB);
+                //console.log('streamer connected to socket ' + connections + ' times');
+
+
+
+
+
+                CreateBeamBotObjects(authDB.data.bot.accessToken, null, authDB.data.bot.username, chatConnectedBot, authDB.data.streamer.username, authDB.data.bot.username, authDB.data.streamer.channelId, authDB);
+
+
+              
+
+            } else {
+                //io.emit('authenticated', 'false');
+                log.info('IO reconnected');
+                //initBeamData();
+            }
+        }
+     */
+
+    function ConnectToTwitch() {
+
+        log.info('Connecting to Twitch');
 
         //if either streamer or bot is not connected then reconnect
         if (!chatConnected || !chatConnectedBot) {
@@ -1257,7 +1333,12 @@
             authDB.reload();
             log.info('Auth File Loaded');
 
-            CreateBeamObjects(authDB.data.streamer.accessToken, null, authDB.data.streamer.username, chatConnected, authDB.data.streamer.username, authDB.data.bot.username, globalFollowers, authDB);
+            //uncomment when token is saved to authDB
+            //CreateTwitchObjects(authDB.data.streamer.accessToken, null, authDB.data.streamer.username, chatConnected, authDB.data.streamer.username, authDB.data.bot.username, globalFollowers, authDB);
+
+            CreateTwitchObjects("SampleToken", null, authDB.data.streamer.username, chatConnected, authDB.data.streamer.username, authDB.data.bot.username, globalFollowers, authDB);
+
+
             //console.log('streamer connected to socket ' + connections + ' times');
 
 
@@ -1267,7 +1348,8 @@
                   } */
 
 
-            CreateBeamBotObjects(authDB.data.bot.accessToken, null, authDB.data.bot.username, chatConnectedBot, authDB.data.streamer.username, authDB.data.bot.username, authDB.data.streamer.channelId, authDB);
+            //uncomment when bot account is done
+            //CreateBeamBotObjects(authDB.data.bot.accessToken, null, authDB.data.bot.username, chatConnectedBot, authDB.data.streamer.username, authDB.data.bot.username, authDB.data.streamer.channelId, authDB);
 
 
             /*             //this will not load unless beam is connected, need to fix this
@@ -1439,10 +1521,124 @@
             checkBotTokenAndConnect(authData, authData.access_token, authData);
         }
 
+    }
+
+
+    function ConnectToTwitchOnLogin(IsStreamer, authData) {
+        // let streamerToken = undefined;
+        // let botToken = undefined;
+        // authDB.reload();
+
+        if (IsStreamer) {
+            //streamerToken = authDB.data.streamer.accessToken;
+            checkStreamerTokenAndConnect(authData, authData.access_token, authData);
+        } else {
+            // botToken = authDB.data.bot.accessToken;
+            checkBotTokenAndConnect(authData, authData.access_token, authData);
+        }
+
+    }
+
+    function SaveAuthToken(IsStreamer, Data) {
+        // let streamerToken = undefined;
+        // let botToken = undefined;
+        // authDB.reload();
+        console.log(Data);
+
+
+        fetch(
+                'https://api.twitch.tv/helix/users', {
+                    "headers": {
+                        "Client-ID": "t7kyrxjq326tij087ax7o8a6y686d8",
+                        "Authorization": "Bearer " + Data.access_token
+                    }
+                }
+            )
+            .then(resp => resp.json())
+            .then(resp => {
+
+                log.info('Twitch User Logged in ' + resp.data[0])
+
+                if (IsStreamer) {
+                    SaveTwitchAuth('Streamer', Data.accessToken, null, login, null, resp.data[0]);
+                }
+
+
+                //document.getElementById('user_data').innerHTML = '<p>Your Public Twitch Profile from Helix:</p>';
+                //var table = document.createElement('table');
+                //document.getElementById('user_data').append(table);
+                //for (var key in resp.data[0]) {
+                //    var tr = document.createElement('tr');
+                //    table.append(tr);
+                //    var td = document.createElement('td');
+                //    td.textContent = key;
+                //    tr.append(td);
+                //    var td = document.createElement('td');
+                //    td.textContent = resp.data[0][key];
+                //    tr.append(td); 
+                //}
+            })
+            .catch(err => {
+                console.log(err);
+                document.getElementById('user_data').textContent = 'Something went wrong';
+            });
+
 
 
     }
 
+
+    //authDB, isStreamer , isConnected, authDB, _log, io
+
+    //pass Token to here
+    function checkTwitchStreamerTokenAndConnect(authData, Token, authDBData) {
+
+        authDB.reload();
+        twitchChat = new TwitchChatClient(Token, true, chatConnected, authDB, log, io);
+
+
+        twitchChat.on('CONNECTED', function(data) {
+            try {
+
+                log.info('ConnectedToChat');
+
+
+            } catch (error) {
+                log.error('error in mixer chat follow ' + error.message);
+            }
+
+        });
+
+
+
+
+        twitchChat.on('PRIVMSG', function(data) {
+            try {
+
+                sendMessageToChatWindowTwitch(data, false)
+
+            } catch (error) {
+                log.error('error in twitch chat ' + error.message);
+            }
+
+        });
+
+
+
+        twitchChat.on('*', function(data) {
+            try {
+
+                log.info('Got Message From Chat', data);
+
+            } catch (error) {
+                log.error('error in mixer chat follow ' + error.message);
+            }
+
+        });
+
+
+
+    }
 
     function checkStreamerTokenAndConnect(authData, Token, authDBData) {
 
@@ -1518,17 +1714,17 @@
                         log.error('streamer chat connection error - ' + data.message);
                     });
 
-                    bc.on('ChatMessage', function(data) {
+                    /*                     bc.on('ChatMessage', function(data) {
 
-                        if (data.message.meta.whisper) {
-                            sendMessageToChatWindow(data, true);
-                        } else {
-                            sendMessageToChatWindow(data, false);
-                        }
+                                            if (data.message.meta.whisper) {
+                                                sendMessageToChatWindow(data, true);
+                                            } else {
+                                                sendMessageToChatWindow(data, false);
+                                            }
 
 
 
-                    });
+                                        }); */
 
                     bc.on('streamerLoggedIn', function(data) {
 
@@ -1729,7 +1925,7 @@
 
                 log.info('refresh Token Required access token expired');
 
-                refreshToken(authDB, "streamer");
+                refreshTwitchToken(authDB, "streamer");
 
 
             }
@@ -1744,6 +1940,308 @@
         });
 
 
+    }
+
+
+    function checkStreamerTwitchTokenAndConnect(authData, Token, authDBData) {
+
+        let type = "streamer";
+
+
+
+        //do something with the response
+        log.info('Checking Token');
+        //log.info('Response Token :-' + JSON.stringify(res));
+
+
+
+
+        //maybe check status code to retry if server is busy or not responding
+        const validToken = res.body.active;
+
+        if (validToken) {
+
+            //no authData don't save auth as token is valid but bot is only reconnecting not re-authing
+            if (authData != null) {
+                log.info('Saving Streamer Auth');
+                SaveAuth(type, Token, authData.refresh_token, res.body.username, authData.access_token_expiry_date);
+
+
+            }
+
+
+            log.info("streamer connected status - " + chatConnected);
+            if (bc != null) {
+                log.info('beam object found no need to reconnect to chat');
+            }
+
+
+            if (bc == undefined || bc == null) {
+
+                log.info('Streamer Connecting to Chat....');
+
+                authDB.reload();
+                //streamer object
+                bc = new MixerStreamerChat(Token, chatConnected, authDB);
+
+
+                co = new constellation(authDB.data.streamer.channelId, log);
+                ch = new commandHandler(res.body.username, authDB.data.streamer.channelId, log);
+
+
+                io.emit('streamerAuthenticated');
+
+                bc.on('TriggerFollow', function(data) {
+                    try {
+
+
+                        FollowEvent(data, alertsoundFolder, alertimageFolder, alertvideoFolder, myFollowAlerts);
+                    } catch (error) {
+                        log.error('error in mixer chat follow ' + error.message);
+                    }
+
+                });
+
+
+                /*                     bc.on('ChatUserCount', function(data) {
+
+                                        *console.log('bc chat user count');
+                                        io.emit('chatusercount', data);
+                                    }); */
+
+                bc.on('error', function(data) {
+                    log.error('streamer chat connection error - ' + data.message);
+                });
+
+                /*                 bc.on('ChatMessage', function(data) {
+
+                                    if (data.message.meta.whisper) {
+                                        sendMessageToChatWindow(data, true);
+                                    } else {
+                                        sendMessageToChatWindow(data, false);
+                                    }
+
+
+
+                                }); */
+
+                bc.on('streamerLoggedIn', function(data) {
+
+                    var item = data + ' - Owner - ' + authDB.data.streamer.userId;
+
+                    io.emit('streamerLoggedIn', data, item);
+
+                    chatConnected = true;
+
+                    log.info("Streamer User Connected to chat")
+
+
+
+                });
+
+                /*         bc.on('ChatMessage', function(data) {
+
+
+                            User - A regular user. All Users have this.
+                               Pro - A user who has an active Mixer Pro subscription will have this role.
+                               Mod - A user will have this role if they are a moderator in the channel involved in this request.
+                               GlobalMod - A user will have this role if they are a global moderator on Mixer.
+                               Staff - A User will have this role if they are Mixer Staff.
+                               Founder - A User will have this role if they are a Mixer Founder.
+                               Owner - A user will have this role if they are the owner of the channel involved in this request. 
+
+                            // console.info(colors.red(`ChatMessage`));
+                            // console.info(colors.red(JSON.stringify(data)));
+
+                            if (data.user_level == undefined) {
+                                //console.info(`${data.user_name}` + ' has no Level Defined')
+                            } else {
+                                //  console.info(`${data.user_name}` + ' is level ' + `${data.user_level}` + 'and is a ' + `${data.user_roles[0]}`)
+                            }
+
+                            let UserName = data.user_name;
+
+                            let t = '';
+
+                            for (key in data.message.message) {
+
+                                t += data.message.message[key].text;
+                            }
+
+                            //send message to client window
+                            //io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t);
+
+
+                            /// TODO add these in db and fetch when triggered
+                            var splitTxt = '';
+                            for (key in data.message.message) { splitTxt += data.message.message[key].text; };
+                            var text = splitTxt.split(' ');
+
+                            if (text[0].substr(0, 1) == "!") {
+
+                                //send to commandHandler to determine what to send to mixer
+                                processChatCommand(userCommands, text[0], data.user_roles, UserName, ch, channelToken, t);
+
+
+                            } else {
+
+                                //processes triggers
+                                var outputArray = [];
+
+
+                                //reload triggers in case they have been changed
+                                myTriggers.reload();
+                                // triggers to output
+                                myTriggers.data.triggers.forEach(element => {
+
+                                    var isTriggerWord = t.includes(element.id, 0);
+
+                                    if (isTriggerWord) {
+                                        //also check that the chat message isn't exactly as per the trigger output
+                                        if (t != element.output) {
+                                            outputArray.push(element.output);
+                                        }
+
+                                    }
+
+                                });
+
+                                //now send each message to mixer (add first , last , all options in configuration)
+                                outputArray.forEach(element => {
+                                    var triggerResult = sendTriggerToMixer(bcBot, element);
+                                });
+
+
+
+                            }
+
+                        });
+                 */
+
+                co.on('event', function(data) {
+                    // console.log(colors.green(data.type));
+                    //if(bl.isNew()){}
+                    switch (data.type) {
+                        case ('update'):
+                            log.info('constellation update: ' + JSON.stringify(data));
+                            io.emit('update', data);
+
+
+                            break;
+                        case ('followed'):
+                            log.info('A user has followed ' + JSON.stringify(data, null, 2));
+                            if (data.info.following == true) {
+                                // if (bl.check(data.info.user.username) == false) {
+
+                                //    bc.say(`User ${data.info.user.username} Followed the Channel! `)
+                                //io.emit('followed', data);
+
+
+
+                                io.emit('followed', data);
+
+                                try {
+
+                                    log.info('Constellation Follow Alert');
+                                    //const soundFolder = './views/media/sounds/';
+                                    //const gfxFolder = './views/media/graphics/';
+                                    //const imageFolder = './views/media/images/';
+                                    // images = list of images 
+                                    // sounds = list of sounds
+                                    // followGfx = list of gfx
+
+                                    //  io.emit('followed', data);
+                                    //this adds the follow to an alert queue
+                                    //, images, sounds, followGfx
+
+                                    if (myFollowAlerts.data.followalerts.length > 0) {
+                                        FollowEvent(data, alertsoundFolder, alertimageFolder, alertvideoFolder, myFollowAlerts);
+                                    } else {
+                                        log.info('You have no follow alerts setup', 'You have no follow alerts setup');
+                                    }
+
+
+
+                                } catch (error) {
+                                    log.error('follow alert error in app.js ' + error.message);
+                                }
+
+
+                                //  }
+                            } else {
+
+
+                                sendTriggerToMixer(bcBot, `User ${data.info.user.username} UnFollowed the Channel!`, true);
+                                // bcBot.say(`User ${data.info.user.username} UnFollowed the Channel!`)
+                                io.emit('unfollowed', data);
+
+                            }
+                            break;
+                        case ('hosted'):
+                            if (data.info.hoster != null) { //user is hosting you
+                                log.info("person hosted" + data.info.hoster.token);
+                                log.info("hosted data" + data);
+                            }
+                            if (data.info.hostee != null) { //user is being hosted
+
+                            }
+                            //console.log(data.info); //hoster/hostee for possibles.
+                            //  if (bl.check(data.info.hoster.token) == false) {
+                            HostEvent(data, alertsoundFolder, alertimageFolder, alertvideoFolder, myHostAlerts);
+
+                            bcBot.say(`User ${data.info.hoster.token} hosted  the Channel! `);
+                            log.info('viewersCurrent: ' + data.info.hoster.viewersCurrent);
+                            io.emit('hosted', data);
+
+                            //    }
+                            break;
+                        case ('subscribed'):
+                            log.info("User Subscribed -" + data.info);
+                            io.emit('subscribed', data);
+                            break;
+                        case ('resubscribed'):
+                            log.info("User Resubscribed - " + data.info);
+                            io.emit('resubscribed', data);
+                            break;
+                        default: //dont trigger anything.
+                            log.info('unknown event triggered in constellation - ' + data.info);
+                            break;
+                    }
+                });
+
+                ch.on('CommandData', function(data) {
+
+                    // io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t);
+                    if (chatConnectedBot) {
+                        bcBot.say(data);
+                    } else {
+                        bc.say(data);
+                    }
+
+                });
+            }
+        } else {
+
+            log.info('refresh Token Required access token expired');
+
+            refreshTwitchToken(authDB, "streamer");
+
+
+        }
+
+
+        // return true;
+
+
+
+    }
+
+    function validateTwitchToken(token) {
+        var isValid = True;
+
+
+
+        return isValid;
     }
 
     function checkBotTokenAndConnect(authData, Token, authDBData) {
@@ -1890,16 +2388,16 @@
                         });
 
 
-                        bcBot.on('ChatMessage', function(data) {
+                        /*                         bcBot.on('ChatMessage', function(data) {
 
-                            if (data.message.meta.whisper) {
-                                sendMessageToChatWindow(data, true);
-                            } else {
-                                sendMessageToChatWindow(data, false);
-                            }
+                                                    if (data.message.meta.whisper) {
+                                                        sendMessageToChatWindow(data, true);
+                                                    } else {
+                                                        sendMessageToChatWindow(data, false);
+                                                    }
 
 
-                        });
+                                                }); */
 
                         bcBot.on('botLoggedIn', function(data) {
 
@@ -1942,7 +2440,41 @@
 
     //TODO needs finishing
     //use refresh token and if this fails then ask user to re-auth
-    function refreshToken(authData, type) {
+    // function refreshToken(authData, type) {
+
+
+    //     if (authData != null) {
+
+    //         let streamertokenExpiryDate = authData.data.streamer.accessTokenExpiry;
+    //         let bottokenExpiryDate = authData.data.bot.accessTokenExpiry;
+    //         let tokenExpiryDate = type === "streamer" ? streamertokenExpiryDate : bottokenExpiryDate;
+
+    //         //check expiry date
+    //         if (new Date(tokenExpiryDate).getTime() < Date.now()) {
+    //             //auth using refresh token TODO
+    //             log.info('Token Expired need to obtain another with Refresh Token');
+    //             performRefreshMixerWithRefreshToken(authData, type);
+
+    //         } else {
+    //             /*                 //ask user to re-auth as token is expired
+    //                             if (type == "streamer") {
+    //                                 io.emit('reauthstreamer', 'true');
+    //                                 log.info('Re-auth Streamer Needed');
+    //                             } else {
+    //                                 io.emit('reauthbot', 'true');
+    //                                 log.info('Re-auth bot Needed');
+    //                             } */
+    //         }
+    //     } else {
+    //         log.info('Could Not Authenticate with Refresh Token as no auth data is available - please re-auth');
+    //     }
+
+    // }
+
+
+    //TODO needs finishing
+    //use refresh token and if this fails then ask user to re-auth
+    function refreshTwitchToken(authData, type) {
 
 
         if (authData != null) {
@@ -1958,21 +2490,13 @@
                 performRefreshMixerWithRefreshToken(authData, type);
 
             } else {
-                /*                 //ask user to re-auth as token is expired
-                                if (type == "streamer") {
-                                    io.emit('reauthstreamer', 'true');
-                                    log.info('Re-auth Streamer Needed');
-                                } else {
-                                    io.emit('reauthbot', 'true');
-                                    log.info('Re-auth bot Needed');
-                                } */
+
             }
         } else {
             log.info('Could Not Authenticate with Refresh Token as no auth data is available - please re-auth');
         }
 
     }
-
 
     function performRefreshMixerWithRefreshToken(authDB, type) {
 
@@ -2102,10 +2626,7 @@
 
     }
 
-    function CreateBeamObjects(BBBToken, message, channelToken, chatConnected, streamerName, botName, globalFollowers, authDBData) {
-
-
-
+    function CreateTwitchObjects(BBBToken, message, channelToken, chatConnected, streamerName, botName, globalFollowers, authDBData) {
 
 
         if (BBBToken !== null) {
@@ -2114,7 +2635,7 @@
                 //check token with introspect upon start of bot
                 log.info('Checking Streamer Token');
 
-                checkStreamerTokenAndConnect(null, BBBToken, authDBData);
+                checkTwitchStreamerTokenAndConnect(null, BBBToken, authDBData);
 
             } else {
                 //io.emit('unauthenticated', 'false');
@@ -2136,37 +2657,70 @@
 
     }
 
-    function CreateBeamBotObjects(BBBTokenBot, message, channelToken, chatConnected, streamerName, botName, streamerChannel, globalFollowers, authDBData) {
 
-        log.info('is bot Connected ?' + isConnected);
+    // function CreateBeamObjects(BBBToken, message, channelToken, chatConnected, streamerName, botName, globalFollowers, authDBData) {
 
+    //     if (BBBToken !== null) {
 
-        if (BBBTokenBot != null) {
+    //         if (BBBToken !== "") {
+    //             //check token with introspect upon start of bot
+    //             log.info('Checking Streamer Token');
 
-            if (BBBTokenBot !== "") {
-                log.info('Checking Bot Token');
-                checkBotTokenAndConnect(null, BBBTokenBot, authDBData);
-            } else {
-                io.emit('reauthbot', 'false');
-                log.error('No Token found for Bot account please authenticate');
-            }
+    //             checkStreamerTokenAndConnect(null, BBBToken, authDBData);
 
-        } else {
-            io.emit('reauthbot', 'false');
-            log.error('No Token found for Bot account please authenticate');
+    //         } else {
+    //             //io.emit('unauthenticated', 'false');
+    //             io.emit('reauthstreamer', 'false');
+    //             log.info('ERROR - No Token found for Streamer account please authenticate');
+    //         }
 
 
-        }
 
-    }
+    //     } else {
+    //         //io.emit('unauthenticated', 'false');
+    //         io.emit('reauthstreamer', 'false');
+    //         log.info('ERROR - No Token found for Streamer account please authenticate');
+
+
+
+
+    //     }
+
+    // }
+
+    // function CreateBeamBotObjects(BBBTokenBot, message, channelToken, chatConnected, streamerName, botName, streamerChannel, globalFollowers, authDBData) {
+
+    //     log.info('is bot Connected ?' + isConnected);
+
+
+    //     if (BBBTokenBot != null) {
+
+    //         if (BBBTokenBot !== "") {
+    //             log.info('Checking Bot Token');
+    //             checkBotTokenAndConnect(null, BBBTokenBot, authDBData);
+    //         } else {
+    //             io.emit('reauthbot', 'false');
+    //             log.error('No Token found for Bot account please authenticate');
+    //         }
+
+    //     } else {
+    //         io.emit('reauthbot', 'false');
+    //         log.error('No Token found for Bot account please authenticate');
+
+
+    //     }
+
+    // }
 
     var MessageQueue = [];
     var currentmessageBeingSent = 0;
     var messageBeingSentID = 0;
 
-    function sendMessageToChatWindow(data, isWhisper) {
 
-        log.info('Sending Message to Chat window');
+
+    function sendMessageToChatWindowTwitch(data, isWhisper) {
+
+        log.info('Sending Message to Chat window - tags', data.tags);
 
         let sendMessageBool = true;
 
@@ -2182,8 +2736,17 @@
         // console.info(colors.red(JSON.stringify(data)));
 
         //log.info('Message is: ' + JSON.stringify(data));
-        let UserName = data.user_name;
-        let channelIdMessageIsFor = data.channelId;
+        let UserName = data.username;
+        let channelIdMessageIsFor = data.channel;
+
+        //twitch chat variables
+        let DisplayName = data.tags.displayName
+        let isSubscriber = data.tags.subscriber;
+        let isMod = data.tags.mod;
+        let badges = data.tags.badges;
+        let twitchChatColour = data.tags.color;
+        let userID = data.tags.userId;
+        let isSelf = data.tags.isSelf;
 
         //this is to check if message is for caster's channel (turn into a method/fucntion)
         let streamerChannel = authDB.data.streamer.channelId;
@@ -2193,10 +2756,15 @@
 
         let t = '';
 
+
+        //TODO parse message from twitch
         for (var key in data.message.message) {
 
             t += data.message.message[key].text;
         }
+
+        //remove when twitch message has been processed properly
+        t = data.message;
 
         //check if there is already a message 
         //with that id in the queue if so don't send it
@@ -2245,7 +2813,7 @@
 
 
         if (data.user_level == undefined) {
-            log.info(`${data.user_name}` + ' has no Level Defined')
+            log.info(`${data.username}` + ' has no Level Defined')
         } else {
             //  console.info(`${data.user_name}` + ' is level ' + `${data.user_level}` + 'and is a ' + `${data.user_roles[0]}`)
         }
@@ -2264,19 +2832,23 @@
 
 
         //send message to client window better version
+        // TODO get avatar from twitch profile (check API)
         let avatarUrl = data.user_avatar;
         if (avatarUrl == null) {
             avatarUrl = "https://mixer.com/_latest/assets/images/main/avatars/default.png";
         }
 
-        io.emit('message', avatarUrl, data.user_roles[0], data.user_name, t, isWhisper);
+        io.emit('message', avatarUrl, 'Chat User', UserName, t, isWhisper);
 
         /// TODO add these in db and fetch when triggered
-        var splitTxt = '';
-        for (var key in data.message.message) { splitTxt += data.message.message[key].text; };
-        var text = splitTxt.split(' ');
+        // var splitTxt = '';
+        // for (var key in data.message.message) {
+        //     splitTxt += data.message.message[key].text;
+        // };
+        // var text = splitTxt.split(' ');
 
-        if (text[0].substr(0, 1) == "!") {
+
+        if (t.substr(0, 1) == "!") {
 
             //send to commandHandler to determine what to send to mixer
             processChatCommand(userCommands, text[0], data.user_roles, UserName, ch, t, bc);
@@ -2319,19 +2891,43 @@
         // }
     }
 
+    function confirmedChatMessageFromChatWindow() {
+
+    }
+
     //change this to be either bot or streamer (this sends timers also)
-    function SendMessageToBeam(message, bc, bcBot, sendType) {
+    // function SendMessageToBeam(message, bc, bcBot, sendType) {
+
+    //     log.info('sending message as ' + sendType)
+    //     switch (sendType.toLowerCase()) {
+    //         case "bot":
+    //             sendMixerMessage(message, sendType, null, bcBot);
+    //             break;
+    //         case "streamer":
+    //             sendMixerMessage(message, sendType, bc, null);
+    //             break;
+    //         case "timer":
+    //             sendMixerMessage(message, sendType, null, bcBot);
+    //             break;
+    //         default:
+    //             break;
+    //     }
+
+
+    // }
+
+    function SendMessageToTwitch(message, bc, bcBot, sendType) {
 
         log.info('sending message as ' + sendType)
         switch (sendType.toLowerCase()) {
             case "bot":
-                sendMixerMessage(message, sendType, null, bcBot);
+                sendTwitchMessage(message, sendType, null, bcBot);
                 break;
             case "streamer":
-                sendMixerMessage(message, sendType, bc, null);
+                sendTwitchMessage(message, sendType, bc, null);
                 break;
             case "timer":
-                sendMixerMessage(message, sendType, null, bcBot);
+                sendTwitchMessage(message, sendType, null, bcBot);
                 break;
             default:
                 break;
@@ -2340,10 +2936,67 @@
 
     }
 
-    function sendMixerMessage(message, sendType, bc, bcBot) {
+    // function sendMixerMessage(message, sendType, bc, bcBot) {
+
+    //     if (sendType.toLowerCase() == "streamer") {
+    //         if (bc == null || bc == undefined) {
+
+    //             log.error('Streamer disconnected from chat Could not send message please connect to beam: - ' + message);
+
+    //             //we don't want to emit unauthenticated more than once.
+    //             unauthenticatedCounter = unauthenticatedCounter + 1;
+    //             if (unauthenticatedCounter < 2) {
+    //                 io.emit('unauthenticated', 'false');
+    //             }
+
+
+    //         } else {
+
+    //             unauthenticatedCounter = 0;
+    //             bc.say(message);
+
+    //         }
+
+    //     } else if (sendType.toLowerCase() == "bot") {
+    //         if (bcBot == null || bcBot == undefined) {
+
+    //             log.error('Bot disconnected from chat Could not send message please Authenticate: - ' + message);
+
+    //             //we don't want to emit unauthenticated more than once.
+    //             unauthenticatedCounter = unauthenticatedCounter + 1;
+    //             if (unauthenticatedCounter < 2) {
+    //                 io.emit('unauthenticated', 'false');
+    //             }
+
+
+    //         } else {
+    //             log.info('Sending Messing as Bot');
+    //             unauthenticatedCounter = 0;
+    //             bcBot.say(message);
+    //         }
+    //     } else {
+    //         // we may want to do something with timers so thats why its in here
+    //         if (bcBot == null || bcBot == undefined) {
+
+    //             log.info('Send Timer as Bot: - ' + message) //we don't want to emit unauthenticated more than once.
+    //             unauthenticatedCounter = unauthenticatedCounter + 1;
+    //             if (unauthenticatedCounter < 2) {
+    //                 io.emit('unauthenticated', 'false');
+    //             }
+    //         } else {
+    //             unauthenticatedCounter = 0;
+    //             bcBot.say(message);
+    //         }
+    //     }
+
+    // }
+
+
+
+    function sendTwitchMessage(message, sendType, twitchClient, twitchBotClient) {
 
         if (sendType.toLowerCase() == "streamer") {
-            if (bc == null || bc == undefined) {
+            if (twitchClient == null || twitchClient == undefined) {
 
                 log.error('Streamer disconnected from chat Could not send message please connect to beam: - ' + message);
 
@@ -2357,7 +3010,7 @@
             } else {
 
                 unauthenticatedCounter = 0;
-                bc.say(message);
+                twitchChat.say(message);
 
             }
 
@@ -2380,7 +3033,7 @@
             }
         } else {
             // we may want to do something with timers so thats why its in here
-            if (bcBot == null || bcBot == undefined) {
+            if (twitchBotClient == null || twitchBotClient == undefined) {
 
                 log.info('Send Timer as Bot: - ' + message) //we don't want to emit unauthenticated more than once.
                 unauthenticatedCounter = unauthenticatedCounter + 1;
@@ -2389,7 +3042,7 @@
                 }
             } else {
                 unauthenticatedCounter = 0;
-                bcBot.say(message);
+                twitchBotClient.say(message);
             }
         }
 
@@ -3919,7 +4572,7 @@
 
         setInterval(function() {
 
-            SendMessageToBeam(message, bc, bcBot, "streamer");
+            SendMessageToTwitch(message, bc, bcBot, "streamer");
 
         }, duration);
 
@@ -3950,7 +4603,7 @@
                 duration2 = duration2 + intervalCooldown;
 
                 //the boolean at the end false = repeat , true = once
-                Scheduler.add(function(activeTimers) { SendMessageToBeam(textForTimer, bc, bcBot, "timer") }, null, duration2 / 10, true);
+                Scheduler.add(function(activeTimers) { SendMessageToTwitch(textForTimer, bc, bcBot, "timer") }, null, duration2 / 10, true);
 
                 //interval between timers 
                 //(first timer doesn't have an interval because interval increments after add is called)
@@ -4228,6 +4881,68 @@
         //type = streamer or bot
         userInfo(type, token, refresh_token, null, username, authTokenExpiry)
     };
+
+
+    function SaveTwitchAuth(type, token, refresh_token, username, authTokenExpiry, user_data) {
+        //type = streamer or bot
+        twitchUserInfo(type, token, refresh_token, null, authTokenExpiry, user_data)
+    };
+
+
+
+    function twitchUserInfo(type, accessToken, refreshToken, authedForClips = false, authTokenExpiry, userData) {
+
+
+
+        let otherType = type.toLowerCase() === "bot" ? "streamer" : "bot";
+
+        ////get other username logged in and other username
+        //let otherLoggedIn = service.accounts[otherType].isLoggedIn;
+        // let otherUsername = service.accounts[otherType].username;
+
+        let otherLoggedIn = false;
+        let otherUsername = type;
+
+        if (otherLoggedIn && otherUsername === userData.login) {
+            //  utilityService.showErrorModal('You cannot sign into the same account for both Streamer and Bot. The bot account should be a seperate account. If you dont have a seperate account, simply dont use the Bot account feature, it is not required.');
+        } else {
+
+
+            // if streamer account then check if the userId = 0 (i.e. new install) then get streamer data
+            // also if userId != 0 and userId != data.userId then different streamer so get streamer data (future function)
+            let isNewOrDiffStreamer = false;
+            if (type == "streamer") {
+                //
+                if (authDB.data.streamer.userId == 0) {
+
+                    isNewOrDiffStreamer = true;
+
+                }
+            }
+
+
+
+            // Push all to db.
+            authDB.push('./' + type + '/username', userData.login);
+            authDB.push('./' + type + '/userId', userData.id);
+            authDB.push('./' + type + '/channelId', userData.login);
+            authDB.push('./' + type + '/avatar', userData.profile_image_url);
+            authDB.push('./' + type + '/accessToken', accessToken);
+            authDB.push('./' + type + '/refreshToken', null);
+            authDB.push('./' + type + '/authedForClips', authedForClips === true);
+            authDB.push('./' + type + '/accessTokenExpiry', null);
+
+
+            if (isNewOrDiffStreamer) {
+                initTwitchData(authDB);
+            }
+            authDB.reload();
+
+        }
+
+    };
+
+
 
     function userInfo(type, accessToken, refreshToken, authedForClips = false, username, authTokenExpiry) {
 
@@ -4546,5 +5261,6 @@
     exports.checkBotTokenAndConnect = checkBotTokenAndConnect;
     exports.checkStreamerTokenAndConnect = checkStreamerTokenAndConnect;
     exports.ConnectOnLogin = ConnectOnLogin;
+    exports.SaveAuthToken = SaveAuthToken;
 
 }());
