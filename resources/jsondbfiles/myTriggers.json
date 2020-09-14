@@ -1,3 +1,11 @@
 {
-    "triggers": []
+    "triggers": [
+        {
+            "enabled": "Y",
+            "id": "low",
+            "text": "high",
+            "option1": "",
+            "option2": ""
+        }
+    ]
 }

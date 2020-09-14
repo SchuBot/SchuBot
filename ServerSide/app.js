@@ -343,6 +343,7 @@
             try {
                 //SendMessageToTwitch(message, bc, bcBot, sendType);
                 //hardcoded to streamer for now till I get a bot account
+                //from UI
                 SendMessageToTwitch(message, twitchChat, bcBot, 'Streamer')
             } catch (error) {
                 log.info('error in main line 148 message event ' + error.message);
@@ -1373,7 +1374,7 @@
     function LoadSoundFiles(folder) {
 
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io ,log);
 
         fsOps.getFilesInSoundFolder(fs, folder);
 
@@ -1384,7 +1385,7 @@
     //might want to send file type to just have one function on client side to load relevant element
     function LoadVideoFiles(folder) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
 
         fsOps.getFilesInVideoFolder(fs, folder);
 
@@ -1392,7 +1393,7 @@
 
     function LoadImageFiles(folder) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
 
         fsOps.getFilesInImageFolder(fs, folder);
 
@@ -1400,14 +1401,14 @@
 
     function LoadMediaFiles(AudioFolder, VideoFolder, ImageFolder) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
 
         fsOps.getAllMedia(fs, AudioFolder, VideoFolder, ImageFolder);
     }
 
     function SendCommandListToBot(userCommands) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
         fsOps.sendCommandsToUI(userCommands);
 
         //  io.emit('loadCommandsToList', userCommands);
@@ -1431,7 +1432,7 @@
         var imageMedia = myMedia.data.media.filter(function(item) { return (item.type == 'Image'); });
         var videoMedia = myMedia.data.media.filter(function(item) { return (item.type == 'Video'); });
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
         fsOps.sendMediaToUi(audioMedia, imageMedia, videoMedia);
 
         //  io.emit('loadCommandsToList', userCommands);
@@ -1448,7 +1449,7 @@
 
     function SendHostAlertsToBot(myHostAlerts) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
         fsOps.sendHostAlertsToUI(myHostAlerts.data.hostalerts);
 
         //  io.emit('loadCommandsToList', userCommands);
@@ -1457,7 +1458,7 @@
 
     function SendFollowAlertsToBot(myFollowAlerts) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
         fsOps.sendFollowAlertsToUI(myFollowAlerts.data.followalerts);
 
         //  io.emit('loadCommandsToList', userCommands);
@@ -1466,7 +1467,7 @@
 
     function SendKeywordsToBot(myTriggers) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
         fsOps.sendKeywordsToUI(myTriggers.data.triggers);
 
         //  io.emit('loadCommandsToList', userCommands);
@@ -1475,7 +1476,7 @@
 
     function SendNotesToBot(myNotes) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
         fsOps.sendNotesToUI(myNotes.data.notes);
 
         //  io.emit('loadCommandsToList', userCommands);
@@ -1484,7 +1485,7 @@
 
     function SendTimersToBot(myTimers) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
         fsOps.sendTimersToUI(myTimers.data.timers);
 
         //  io.emit('loadCommandsToList', userCommands);
@@ -1493,7 +1494,7 @@
 
     function SendCurrencyToBot(Newcurrency) {
 
-        var fsOps = new fileOps(io);
+        var fsOps = new fileOps(io,log);
         fsOps.sendCurrencyToUI(Newcurrency.data.currency);
 
         //  io.emit('loadCommandsToList', userCommands);
@@ -1595,6 +1596,7 @@
 
         authDB.reload();
         twitchChat = new TwitchChatClient(Token, true, chatConnected, authDB, log, io);
+        ch = new commandHandler(authDB.data.streamer.username, authDB.data.streamer.channelId, log);
 
 
         twitchChat.on('CONNECTED', function(data) {
@@ -1615,6 +1617,11 @@
         twitchChat.on('PRIVMSG', function(data) {
             try {
 
+
+
+
+
+                //message from twitch chat
                 sendMessageToChatWindowTwitch(data, false)
 
             } catch (error) {
@@ -1632,6 +1639,21 @@
 
             } catch (error) {
                 log.error('error in mixer chat follow ' + error.message);
+            }
+
+        });
+
+        ch.on('CommandData', function(data) {
+
+            // io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t);
+            if (chatConnectedBot) {
+                //send message to twitch as bot 
+                let twitchChatBot = undefined;
+                sendTwitchMessage(data , 'streamer' , twitchChatBot , undefined)
+            } else {
+                //send message to twitch chat as streamer
+
+                sendTwitchMessage(data , 'streamer' , twitchChat , undefined)
             }
 
         });
@@ -2209,16 +2231,7 @@
                     }
                 });
 
-                ch.on('CommandData', function(data) {
 
-                    // io.emit('message', UserName + ' [' + data.user_roles[0] + '] - ' + t);
-                    if (chatConnectedBot) {
-                        bcBot.say(data);
-                    } else {
-                        bc.say(data);
-                    }
-
-                });
             }
         } else {
 
@@ -2812,7 +2825,7 @@
         //if (sendMessageBool) {
 
 
-        if (data.user_level == undefined) {
+        if (data.tags.badges == undefined) {
             log.info(`${data.username}` + ' has no Level Defined')
         } else {
             //  console.info(`${data.user_name}` + ' is level ' + `${data.user_level}` + 'and is a ' + `${data.user_roles[0]}`)
@@ -2845,13 +2858,13 @@
         // for (var key in data.message.message) {
         //     splitTxt += data.message.message[key].text;
         // };
-        // var text = splitTxt.split(' ');
+        var text = t.split(' ');
 
 
         if (t.substr(0, 1) == "!") {
 
             //send to commandHandler to determine what to send to mixer
-            processChatCommand(userCommands, text[0], data.user_roles, UserName, ch, t, bc);
+            processChatCommand(userCommands, text[0], data.tags.badges, UserName, ch, t, bc);
 
 
         } else {
@@ -2879,7 +2892,7 @@
 
             //now send each message to mixer (add first , last , all options in configuration)
             outputArray.forEach(element => {
-                var triggerResult = sendTriggerToMixer(bcBot, element, false);
+                var triggerResult = sendTriggerToTwitch(twitchChatBot, element, false);
             });
 
 
@@ -2925,6 +2938,7 @@
                 break;
             case "streamer":
                 sendTwitchMessage(message, sendType, bc, null);
+                ProcessMessageSentFromBotUI(message , 'broadcaster' , 'schusteruk');
                 break;
             case "timer":
                 sendTwitchMessage(message, sendType, null, bcBot);
@@ -2993,6 +3007,7 @@
 
 
 
+    // this should process the message as per twitch chat trigger
     function sendTwitchMessage(message, sendType, twitchClient, twitchBotClient) {
 
         if (sendType.toLowerCase() == "streamer") {
@@ -3010,7 +3025,10 @@
             } else {
 
                 unauthenticatedCounter = 0;
-                twitchChat.say(message);
+                
+
+                //send message to twitch from Bot UI (kinda useless comment but here anyway :))
+                twitchClient.say(message);
 
             }
 
@@ -3033,7 +3051,9 @@
             }
         } else {
             // we may want to do something with timers so thats why its in here
-            if (twitchBotClient == null || twitchBotClient == undefined) {
+            //use bot account but using broadcaster for now
+            //if (twitchBotClient == null || twitchBotClient == undefined) {
+            if (twitchChat == null || twitchChat == undefined) {
 
                 log.info('Send Timer as Bot: - ' + message) //we don't want to emit unauthenticated more than once.
                 unauthenticatedCounter = unauthenticatedCounter + 1;
@@ -3042,7 +3062,7 @@
                 }
             } else {
                 unauthenticatedCounter = 0;
-                twitchBotClient.say(message);
+                twitchChat.say(message);
             }
         }
 
@@ -3070,9 +3090,78 @@
 
     }
 
+
+        //change this to be either bot or streamer
+        function sendTriggerToTwitch(twitchChatBot, message, isWhisper) {
+
+
+            try {
+                if (!isWhisper) {
+                    var returnResult = twitchChat.say(message);
+                } else {
+                    //TODO add twitch whisper
+                    //var returnResult = bc.whisper(authDB.data.streamer.username, message);
+                }
+    
+            } catch (error) {
+                log.error("sending trigger to mixer error " + error.message);
+            } finally {
+    
+            }
+    
+            return returnResult;
+    
+    
+        }
+    
+
     function checkFollowerName(bc, userName) {
         var userExist = bc.doesFollowerExist(userName);
         return userExist;
+    }
+
+    function ProcessMessageSentFromBotUI(message , type , user)
+    {
+        var text = message.split(' ');
+
+
+            if (message.substr(0, 1) == "!") {
+
+            //send to commandHandler to determine what to send to mixer
+            processChatCommand(userCommands, text[0], type, user, ch, message, twitchChat);
+
+
+            } else {
+
+            //processes triggers
+            var outputArray = [];
+
+
+            //reload triggers in case they have been changed
+            myTriggers.reload();
+            // triggers to output
+            myTriggers.data.triggers.forEach(element => {
+
+                var isTriggerWord = message.includes(element.id, 0);
+
+                if (isTriggerWord) {
+                    //also check that the chat message isn't exactly as per the trigger output
+                    if (message != element.text) {
+                        outputArray.push(element.text);
+                    }
+
+                }
+
+            });
+
+            //now send each message to mixer (add first , last , all options in configuration)
+            outputArray.forEach(element => {
+                var triggerResult = sendTriggerToTwitch(twitchChat, element, false);
+            });
+
+
+
+        }
     }
 
     //processes command an emits message to mixer
@@ -3840,7 +3929,7 @@
         return mediaId;
     }
 
-    function isUserPermitted(permissionType, specificUser, userThatRunCommand, user_roles, bc) {
+    function isUserPermitted(permissionType, specificUser, userThatRunCommand, badges, bc) {
 
         //bool has permission?
         var isAllowed = false;
@@ -3855,13 +3944,15 @@
             }
         } else {
 
+//replace(/\//g, '')
+            let user_roles = badges.replace(/\/[0-9]/g, '').split(','); 
 
             for (var i = 0, len = user_roles.length; i < len; i++) {
 
 
                 var userRole = user_roles[i];
 
-                if (userRole == 'Owner') {
+                if (userRole == 'broadcaster') {
                     isAllowed = true;
                     return isAllowed;
                 }

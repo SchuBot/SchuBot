@@ -1,3 +1,12 @@
 {
-    "parentCurrency": []
+    "parentCurrency": [
+        {
+            "currencyId": "n9932020105311",
+            "currencyName": "Low"
+        },
+        {
+            "currencyId": "n9932020105347",
+            "currencyName": "Medium"
+        }
+    ]
 }

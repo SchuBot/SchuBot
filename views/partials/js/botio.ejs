@@ -556,7 +556,6 @@
                 if ($('#outgoingChatMessage').val().length > 0) {
                     if ($('#outgoingChatMessage').val().length < 360) {
 
-
                         // var AccountType = document.getElementById('selMixerSendChatMessageVars').value;
                         var AccountType = document.getElementById('selMixerSendChatMessageVars').selectedOptions[0].innerText;
                         iosocket.send($('#outgoingChatMessage').val(), AccountType);

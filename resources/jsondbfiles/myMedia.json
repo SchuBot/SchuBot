@@ -1,3 +1,15 @@
 {
-    "media": []
+    "media": [
+        {
+            "enabled": "Y",
+            "id": "!alert",
+            "type": "Image",
+            "audio": "",
+            "audiodur": "",
+            "video": "",
+            "videodur": "",
+            "image": "alert.gif",
+            "imagedur": 5000
+        }
+    ]
 }

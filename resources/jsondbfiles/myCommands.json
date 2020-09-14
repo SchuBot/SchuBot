@@ -134,8 +134,9 @@
             "user": "",
             "audio": "",
             "video": "",
-            "image": "",
-            "text": "test"
+            "image": "!alert",
+            "text": "test",
+            "cooldown": ""
         },
         {
             "enabled": "Y",

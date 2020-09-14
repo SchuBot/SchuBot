@@ -204,11 +204,21 @@ class TwitchChatClient extends EventEmitter {
             const rawMessage = messageEvent.data.toString();
             try {
                 this._handleKeepAlive();
-                this._log.info(rawMessage);
+                if (rawMessage.startsWith('PONG') || rawMessage.startsWith('PING')){
+
+                }else{
+                    this._log.info(rawMessage);
+                }
+
                 const messages = this.base(rawMessage, this.username);
                 messages.forEach(message => {
                     const event = message.command || '';
-                    this._log.debug('> %s %s', event, JSON.stringify(Object.assign(Object.assign({}, message), { _raw: undefined })));
+                    if (rawMessage.startsWith('PONG') || rawMessage.startsWith('PING')){
+
+                    }else{
+                        this._log.debug('> %s %s', event, JSON.stringify(Object.assign(Object.assign({}, message), { _raw: undefined })));
+                    }
+                    
                     // Handle authentication failure.
                     if (this.isAuthenticationFailedMessage(message)) {
                         this.emit('AUTHENTICATION_FAILED', Object.assign(Object.assign({}, message), { event: 'AUTHENTICATION_FAILED' }));
@@ -238,6 +248,7 @@ class TwitchChatClient extends EventEmitter {
                         if (message.command === 'PRIVMSG') {
                             //this.send('PRIVMSG', Object.assign(Object.assign({}, message), { event: 'PRIVMSG' }));
                             //this._ws.send('PRIVMSG #schusteruk :This is a sample message')
+                            'this is from twitch chat'
                             this.emit('PRIVMSG', message);
                         }
 

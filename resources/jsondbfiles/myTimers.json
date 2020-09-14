@@ -1,3 +1,20 @@
 {
-    "timers": []
+    "timers": [
+        {
+            "enabled": "Y",
+            "id": "testtimer",
+            "text": "timer text",
+            "interval": 60000,
+            "option1": "",
+            "option2": ""
+        },
+        {
+            "enabled": "Y",
+            "id": "testtimer2",
+            "text": "timer text2",
+            "interval": 30000,
+            "option1": "",
+            "option2": ""
+        }
+    ]
 }

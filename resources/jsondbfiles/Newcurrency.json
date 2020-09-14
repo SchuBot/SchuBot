@@ -1,3 +1,54 @@
 {
-    "currency": []
+    "currency": [
+        {
+            "id": "n9932020105311",
+            "enabled": "Y",
+            "currencyName": "Low",
+            "currencyPerMin": "50",
+            "currencyRatio": "2",
+            "currencyBasedOn": "Points",
+            "currencyParentId": "n9932020105347",
+            "currencyParentName": "Medium",
+            "option1": "",
+            "option2": "",
+            "ranks": [
+                {
+                    "name": "Low 1",
+                    "amount": "50"
+                },
+                {
+                    "name": "Low 2",
+                    "amount": "100"
+                },
+                {
+                    "name": "L3",
+                    "amount": "500"
+                },
+                {
+                    "name": "L4",
+                    "amount": "1000"
+                },
+                {
+                    "name": "L5",
+                    "amount": "5000"
+                },
+                {
+                    "name": "L6",
+                    "amount": "100000"
+                }
+            ]
+        },
+        {
+            "id": "n9932020105347",
+            "enabled": "Y",
+            "currencyName": "Medium",
+            "currencyPerMin": "100",
+            "currencyRatio": "",
+            "currencyBasedOn": "Points",
+            "currencyParentId": "default",
+            "currencyParentName": "",
+            "option1": "",
+            "option2": ""
+        }
+    ]
 }
