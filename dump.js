@@ -31,7 +31,7 @@ const { app, BrowserWindow } = electron;
 const electron = require('electron');
 // const electronOauth2 = require('electron-oauth2');
 // const loginAuth = require('oauth-electron');
-const ejse = require('ejs-electron');
+//const ejse = require('ejs-electron');
 const app = electron.app;
 var BrowserWindow = require('electron').BrowserWindow; // jshint ignore:line
 //const { ipcRenderer } = electron;
@@ -521,7 +521,7 @@ let windowAuth;
 
 function loadbot() {
     authWindow.close();
-    mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
+    mainWindow.loadURL('file://' + __dirname + '/views/pages/botNew.ejs');
 }
 
 // function login3() {

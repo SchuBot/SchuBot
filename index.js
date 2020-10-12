@@ -625,11 +625,12 @@ function createWindow() {
     // and load the index.html of the app.
     mainWindow.maximize();
     //mainWindow.loadURL('file://' + __dirname + '/views/pages/index.html')
+    //mainWindow.loadURL('file:///Users\\schus\\Documents\\Schubot\\SchuBot\\views\\pages\\bot.ejs');
     mainWindow.loadURL('file://' + __dirname + '/views/pages/bot.ejs');
     mainWindow.show();
 
     // Open the DevTools.
-    //mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     mainWindow.on('closed', () => {

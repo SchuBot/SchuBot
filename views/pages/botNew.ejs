@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="../css/bootstrap.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/chat.css">
+<link rel="stylesheet" href="../css/toggle.css">
+
+
+
+</head>
+<body>
+
+<div class="sidebar">
+
+    <div id="chkBoxList" class="moduleToggleSwitches">
+
+
+
+
+
+        <div>
+            <i id="notesNotification" class="fas fa-bell" style="font-size:24px"></i>
+        </div>
+
+        <div>
+            <button id="AutoUpdate" class="btn btn-block btn-info"><span class="fa fa-beam"></span>Check For Bot Updates</button>
+
+        </div>
+
+        <div>
+            <label id="mixrConnectionLabel" for="mixrConnection">Connecting to Mixer:</label>
+             <progress id="mixrConnection" max="100"></progress>
+
+            <div class="btn-group">
+               </div>
+
+        </div>
+
+        <div style="margin-bottom:20px;">
+
+            <div style="margin:0;
+            float: left; padding-right:15px;"><i class="fas fa-signal" style="color:green;font-size:24px;margin-top:5px;"></i><span style="float:left;font-size: 10px;margin-top:10px;">Signal</span></div>
+
+            <div><i id="mixericonleft" class="fas fa-chevron-right" style="color:white;font-size:24px;margin-top:5px;"></i>
+                <i id="mixericonright" class="fas fa-chevron-left" style="color:lightskyblue;font-size:24px;margin-top:5px;margin-left:-2px;"></i>
+                <span style="float:left;font-size: 10px;margin-top:10px;">Mixer Chat</span></div>
+
+        </div>
+
+        <div style="width:95%;">
+
+            <p id="welcome"></p>
+        </div>
+        <div style="width:95%;">
+            <p id="beamConnection"></p>
+        </div>
+
+        <p id="casterAccount"></p>
+        <p id="botAccount"></p>
+
+        <div>
+            <br>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+            <i class="fas fa-grip-horizontal" style="font-size:16px;"></i>
+
+
+        </div>
+
+        <div id="authSwitches">
+            <span class="switchModuleText">Authentication</span>
+            <button id="authSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperauthswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperauthswitch">
+
+                <div>
+                    <label class="switch">
+                        <input id="authChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Authentication</p>
+                      </label>
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+        <div>
+            <span class="switchModuleText">UI Theme</span>
+            <button id="UIthemeSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperuithemeswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+
+
+            <div id="divwrapperuithemeswitch">
+                <span class="switchModuleTextSmall">(Auto Saves)</span>
+                <br></br>
+                <fieldset>
+                    <div>
+                        <input type="color" id="OutsideColorPicker" name="color" value="#000080" />
+                        <label for="outside">Outside</label>
+                    </div>
+
+                    <div>
+                        <input type="color" id="InsideColorPicker" name="color" value="#0000a0" />
+                        <label for="inside">Inside</label>
+                    </div>
+
+                    <div>
+                        <input type="color" id="TogglesColorPicker" name="color" value="#0000a0" />
+                        <label for="Text">Button Color</label>
+                    </div>
+
+                    <div>
+                        <input type="color" id="TogglesTextColorPicker" name="color" value="#400040" />
+                        <label for="Text">Button Text</label>
+                    </div>
+
+                    <div>
+                        <input type="color" id="SearchColorPicker" name="color" value="#c0c0c0" />
+                        <label for="Text">Search</label>
+                    </div>
+
+                    <div>
+                        <input type="color" id="DropdownTextColorPicker" name="color" value="#400040" />
+                        <label for="Text">Combo Text</label>
+                    </div>
+
+                    <div>
+                        <input type="color" id="DropdownBackgroundColorPicker" name="color" value="#808080" />
+                        <label for="Text">Combo</label>
+                    </div>
+
+                    <div>
+                        <input type="color" id="ModuleTextColorPicker" name="color" value="#ff8040" />
+                        <label for="Text">Text</label>
+                    </div>
+
+                    <div>
+                        <input type="color" id="ModuleBackgroundColorPicker" name="color" value="#ff8040" />
+                        <label for="Text">Background</label>
+                    </div>
+
+                 </fieldset>
+            </div>
+        </div>
+        <br>
+        <div id="chatSwitches">
+            <span class="switchModuleText">Chat</span>
+            <button id="chatSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperchatswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+
+            <div id="divwrapperchatswitch">
+
+                <div id="chatUsersSwitch">
+                    <label class="switch">
+                            <input id="chtUsrChkBox" type="checkbox" checked>
+                            <span class="slider round"></span>
+                            <p style="padding-left:42px;" class="slider-text">Viewer List</p>
+                          </label>
+                </div>
+                <br>
+                <div id="chatBoxSwitch">
+
+                    <label class="switch">
+                                <input id="chtBoxChkBox" type="checkbox" checked>
+                                <span class="slider round"></span>
+                                <p style="padding-left:42px;" class="slider-text">Chat Window</p>
+                              </label>
+
+                </div>
+                <br>
+                <div id="whisperBoxSwitch">
+
+                    <label class="switch">
+                                <input id="whisperBoxChkBox" type="checkbox" checked>
+                                <span class="slider round"></span>
+                                <p style="padding-left:42px;" class="slider-text">Whisper Window</p>
+                              </label>
+
+                </div>
+                <br>
+            </div>
+        </div>
+
+
+
+
+        <div id="FollowingSwitches">
+            <span class="switchModuleText">Following</span>
+            <button id="FollowingSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperFollowingswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperFollowingswitch">
+
+                <div>
+                    <label class="switch">
+                                        <input id="recentFollowersChkBox" type="checkbox" checked>
+                                        <span class="slider round"></span>
+                                        <p style="padding-left:42px;" class="slider-text">Recent Followers</p>
+                                      </label>
+
+                </div>
+
+                <br>
+                <div>
+
+                    <label class="switch">
+                        <input id="followersChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Follower List</p>
+                    </label>
+
+                </div>
+
+                <br>
+                <div>
+
+                    <label class="switch">
+                        <input id="followingChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Following List</p>
+                    </label>
+
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <div id="AnalyticsSwitches">
+            <span class="switchModuleText">Analytics</span>
+            <button id="AnalyticsSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperAnalyticswitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperAnalyticswitch">
+                <div>
+                    <label class="switch">
+                        <input id="analyticsViewsChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Analytics</p>
+                    </label>
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <div id="MediaSwitches">
+            <span class="switchModuleText">Media</span>
+            <button id="MediaSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperMediaSwitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperMediaSwitch">
+                <div>
+                    <label class="switch">
+                        <input id="mediafilesChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Media Files</p>
+                    </label>
+                </div>
+                <br>
+
+                <br>
+            </div>
+
+        </div>
+
+        <div id="CommandsSwitches">
+            <span class="switchModuleText">Commands</span>
+            <button id="CommandsSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperCommandsSwitch');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperCommandsSwitch">
+                <div>
+                    <label class="switch">
+                        <input id="commandsListChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Command List</p>
+                    </label>
+                </div>
+                <br>
+            </div>
+
+        </div>
+
+        <div id="AlertSwitches">
+            <span class="switchModuleText">Alerts</span>
+            <button id="AlertSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperAlertsSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperAlertsSwitches">
+                <div>
+                    <label class="switch">
+                        <input id="alertfilesChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Alert Files</p>
+                    </label>
+                </div>
+                <br>
+                <div>
+                    <label class="switch">
+                        <input id="hostalertsChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Host Alert List</p>
+                    </label>
+                </div>
+                <br>
+                <div>
+                    <label class="switch">
+                        <input id="followalertsChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Follow Alert List</p>
+                    </label>
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <div id="TriggerSwitches">
+            <span class="switchModuleText">Keywords</span>
+            <button id="TriggerSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperTriggerSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperTriggerSwitches">
+                <div>
+                    <label class="switch">
+                        <input id="keywordsListChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Trigger List</p>
+                    </label>
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <div id="NotesSwitches">
+            <span class="switchModuleText">Notes</span>
+            <button id="NotesSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperNotesSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperNotesSwitches">
+                <div>
+                    <label class="switch">
+                        <input id="notesListChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Notes List</p>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="PartySwitches">
+            <span class="switchModuleText">Party </span>
+            <span class="switchModuleTextSmall">(Coming Soon)</span>
+            <br></br>
+        </div>
+
+        <div id="ModerationSwitches">
+            <span class="switchModuleText">Monitors</span>
+            <button id="ModerationSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperModerationSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperModerationSwitches">
+                <div>
+                    <label class="switch">
+                        <input id="modMonChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Mod Monitor</p>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="TimerSwitches">
+            <span class="switchModuleText">Timers</span>
+            <button id="TimerSwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperTimerSwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperTimerSwitches">
+                <div>
+                    <label class="switch">
+                        <input id="timerListChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Timer List</p>
+                    </label>
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <div id="CurrencySwitches">
+            <span class="switchModuleText">Currency</span>
+            <button id="CurrencySwitchesActionBtn" class="toggleButton" onclick="toggleSwitchModules('divwrapperCurrencySwitches');" type="button" class="btn"><i class="fas fa-sort" style="font-size:16px;"></i></button>
+            <br></br>
+            <div id="divwrapperCurrencySwitches">
+                <div>
+                    <label class="switch">
+                        <input id="CurrencySwitchChkBox" type="checkbox" checked>
+                        <span class="slider round"></span>
+                        <p style="padding-left:42px;" class="slider-text">Currency</p>
+                    </label>
+                </div>
+                <br>
+            </div>
+        </div>
+        </br>
+        <br>
+        <div>
+            <h4>Switch ALL Timers On/Off</h4>
+            <label class="switch1">
+                <input id="switch1" type="checkbox" checked />    <div></div>
+            </label>
+        </div>
+        <br>
+    </div>
+
+
+
+  <a class="active" href="#home">Home</a>
+  <a href="#news">News</a>
+  <a href="#contact">Contact</a>
+  <a href="#about">About</a>
+</div>
+
+<div id="container2" class="content">
+  <h2>Responsive Sidebar Example</h2>
+  <p>This example use media queries to transform the sidebar to a top navigation bar when the screen size is 700px or less.</p>
+  <p>We have also added a media query for screens that are 400px or less, which will vertically stack and center the navigation links.</p>
+  <h3>Resize the browser window to see the effect.</h3>
+
+
+  <div id="draggObjectStats">
+
+      <div id ="xpos"></div>
+      <div id ="ypos"></div>
+      <div id ="posx"></div>
+      <div id ="posy"></div>
+      <div id ="divLeft"></div>
+      <div id ="divTop"></div>
+      <div id ="eWi"></div>
+      <div id ="eHe"></div>
+      <div id ="cWi"></div>
+      <div id ="cHe"></div>
+      <div id ="diffX"></div>
+      <div id ="diffY"></div>
+      <div id ="aX"></div>
+      <div id ="aY"></div>
+
+  </div>
+              
+  <div class="moduleTheme" id="divWrapperChat" onmousedown="mydragg.startMoving(this,'container2',event);" onmouseup="mydragg.stopMoving('container2');" style="width:400px;height:460px; left: 400px; top: 100px;">
+    <div>
+        <div>
+
+
+            <div style="width: 99%;float: right;">
+                <p id="chatwindowText" style="color: rgb(0, 0, 0);">Chat Window</p>
+
+
+                <label class="switch">
+                                <input id="ChatWhispersSwitchChkBox" type="checkbox" checked="">
+                                <span class="slider round"></span>
+                                <p class="slider-text" style="
+                                float: right;
+                                padding-right: 50px;
+                                margin-top: 5px;
+                            ">Whisper</p>
+                            </label>
+                <button class="toggleButton" id="cbBtn" onclick="minimiseChatBox('wrapperChat','divWrapperChat')" type="button" style="background: rgb(69, 68, 70); color: rgb(0, 128, 0);"><i class="fas fa-arrows-alt-v" style="font-size:20px;color:white;" aria-hidden="true"></i></button>
+
+            </div>
+            <div style="width: 99%;float: right;margin-top: -5px;margin-right: 28px;">
+                <!--<button type="button" id="movChatBoxModule" class="square-buttonGroupVertical" onmousedown="mydragg2.startMoving('divWrapperChat','container',event);" onmouseup="mydragg2.stopMoving('container');">
+                                        <i class="fas fa-arrows-alt" style="font-size:24px;" aria-hidden="true"></i></button> -->
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="wrapperChat">
+
+        <div class="insideBox" id="chatbox">
+            <ul style="padding-inline-start: 5px;" id="incomingChatMessages"></ul>
+
+
+        </div>
+        <div>
+            <div style='width: 350px;'>
+                <p style="line-height:44px;height:44px;padding-left:10px;text-align:center;float:left;width:150px;clear:right;">Send Message As:</p>
+                <select style="float:left;" id="selMixerSendChatMessageVars" class="dropdownTheme">
+
+                <option value="default" >Bot</option>
+                <option value="mixerSendStreamer" >Streamer</option>
+                    </select>
+            </div>
+            <div style="float: none; clear: both;"></div>
+            <p id="sendMessageTxtBox" class="moduleText">Send Message (Hitting enter/return key sends the message):</p>
+            <textarea id="outgoingChatMessage" rows="4" cols="50" placeholder="Enter command text here" required></textarea>
+        </div>
+
+    </div>
+</div>
+
+
+</div>
+
+
+
+    <!-- Insert this line above script imports  -->
+    <script type="text/javascript">
+    
+        if (typeof module === 'object') {
+            window.module = module;
+            module = undefined;
+        }
+    </script>
+
+
+<script src="http://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="http://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+<script src="https://kit.fontawesome.com/e110218193.js" crossorigin="anonymous"></script>
+ 
+
+
+
+
+<%- include("../partials/js/dragObject"); %>
+<%- include("../partials/js/listManager"); %>
+<%- include("../partials/js/connectionManager"); %>
+<%- include("../partials/js/sliderFunctions"); %> 
+
+
+<!-- normal script imports etc  -->
+<!-- Insert this line after script imports -->
+<script type="text/javascript">
+    if (window.module) module = window.module;
+</script>
+
+
+</body>
+</html>

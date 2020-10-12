@@ -252,8 +252,9 @@
     //appex.use(serveStatic(__dirname + '/resources/media'));
 
     //  app.set('views', path.join(__dirname, '/views'));
-    appex.set('views', pathdir + '/views');
     appex.set('view engine', 'ejs');
+    appex.set('views', pathdir + '/views');
+
 
     appex.use(express.static(pathdir + '/public'));
     /////////////////////////////app.use(express.static(__dirname + '/public/build'));

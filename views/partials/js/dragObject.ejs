@@ -1,13 +1,16 @@
 <script>
+    var sideNav = parseInt(document.getElementById('sidebar').getBoundingClientRect().width);
+    
     var mydragg = function() {
-
+        var windowWidth = document.getElementById('container2').clientWidth;
         return {
             move: function(divid, xpos, ypos) {
-                // console.log('Move Return' + evt.path[0].type);
+                console.log('xpos' + xpos);
                 divid.style.left = xpos + 'px';
                 divid.style.top = ypos + 'px';
             },
             startMoving: function(divid, container, evt) {
+
 
                 evt = evt || window.event;
                 var posX = evt.clientX,
@@ -16,14 +19,31 @@
                     divLeft = divid.style.left,
                     eWi = parseInt(divid.style.width),
                     eHe = parseInt(divid.style.height),
-                    cWi = parseInt(document.getElementById(container).style.width),
-                    cHe = parseInt(document.getElementById(container).style.height);
+                    //cWi = parseInt(document.getElementById(container).style.width),
+                    cWi2 = parseInt(document.getElementById(container).getBoundingClientRect().width),
+                    cHe2 = parseInt(document.getElementById(container).getBoundingClientRect().height),
+                    cWi3 =parseInt(document.getElementById(container).offsetWidth),
+                    cHe3 =parseInt(document.getElementById(container).offsetHeight);
+                  
+                    //cHe = parseInt(document.getElementById(container).style.height);
                 document.getElementById(container).style.cursor = 'move';
                 divTop = divTop.replace('px', '');
                 divLeft = divLeft.replace('px', '');
                 var diffX = posX - divLeft,
                     diffY = posY - divTop;
+
+
+       var dxpos11 = document.getElementById('diffX').innerHTML = 'diffX ' + diffX; 
+        var dxpos12 = document.getElementById('diffY').innerHTML = 'diffY ' + diffY; 
+                
                 document.onmousemove = function(evt) {
+                  
+
+
+        var clientwidth = document.getElementById('container2').clientWidth;
+        var sideNavElement2 = document.getElementById('innerWidth2').innerHTML = 'whole thing '  + clientwidth;
+        var sidenavwidth = document.getElementById('sidebar').clientWidth;
+        var sideNavElement2 = document.getElementById('sideNav2').innerHTML = 'whole thing '  + windowWidth;
 
                     //this ensures that you can't move while selecting text, its not perfect but it works
                     if (evt.path[0].type == undefined) {
@@ -33,10 +53,95 @@
                             posY = evt.clientY,
                             aX = posX - diffX,
                             aY = posY - diffY;
+
+                        var stopPoint = false;
                         if (aX < 0) aX = 0;
                         if (aY < 0) aY = 0;
-                        if (aX + eWi > cWi) aX = cWi - eWi;
-                        if (aY + eHe > cHe) aY = cHe - eHe;
+                        //if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi;
+                        console.log('ax is ' + aX);
+                        console.log('cWi2 is' + cWi2);
+
+
+            
+                        if (eWi == 400)
+                        {
+                            if ((aX + 210) > cWi2) aX = cWi2 - 202;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                        if (eWi == 200)
+                        {
+                            if ((aX + 10) > cWi2) aX = cWi2 - 2;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                        if (eWi == 1090)
+                        {
+                            if ((aX + 1100) > cWi2) aX = cWi2 - 1200;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+
+                        if (stopPoint != true)
+                        {
+                            if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi ; 
+                        } 
+
+                        // if ((aX + 210) > cWi2) ;
+                        // {
+                        //     console.log('stop point is true');
+                        //     stopPoint = true;
+
+                            
+                            
+                        // }
+
+                        // if (stopPoint != true)
+                        // {
+                        //     console.log('stop point is false');
+                        //     if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi ; 
+                        // }
+
+                        // if(stopPoint)
+                        // {
+          
+
+                        //     if(eWi >= 401)
+                        //     {
+                        //         aX = aX - 690;
+                        //     }
+                        // }
+
+                        if (aX < sideNav) aX = sideNav; 
+                        if (aY + eHe > cHe2) aY = cHe2 - eHe;
+                        
+                        
+
+       var dxpos1 = document.getElementById('xpos').innerHTML = 'xpos ' + xpos;  
+       var dxpos2 = document.getElementById('ypos').innerHTML = 'ypos ' + ypos; 
+      var dxpos3 = document.getElementById('posx').innerHTML = 'posx ' + posX; 
+       var dxpos4 = document.getElementById('posy').innerHTML = 'posy ' + posY; 
+      var dxpos5 = document.getElementById('divLeft').innerHTML = 'divLeft ' + divLeft; 
+       var dxpos6 = document.getElementById('divTop').innerHTML = 'divTop ' + divTop; 
+      var dxpos7 = document.getElementById('eWi').innerHTML = 'elementWidth ' + eWi; 
+       var dxpos8 = document.getElementById('eHe').innerHTML = 'elementHeight ' + eHe; 
+      var dxpos9 = document.getElementById('cWi').innerHTML = 'clientWidth ' + cWi2; 
+      var dxpos10 = document.getElementById('cHe').innerHTML = 'clientHeight ' + cHe2; 
+      // var dxpos11 = document.getElementById('diffX').innerHTML = 'diffX ' + diffX; 
+       // var dxpos12 = document.getElementById('diffY').innerHTML = 'diffY ' + diffY; 
+        var dxpos13 = document.getElementById('aX').innerHTML = 'aX ' + aX; 
+        var dxpos14 = document.getElementById('aY').innerHTML = 'aY ' + aY; 
+
+
                         mydragg.move(divid, aX, aY);
                     }
                 }
@@ -72,8 +177,12 @@
                     divLeft = divid2.style.left,
                     eWi = parseInt(divid2.style.width),
                     eHe = parseInt(divid2.style.height),
-                    cWi = parseInt(document.getElementById(container).style.width),
-                    cHe = parseInt(document.getElementById(container).style.height);
+
+                    cWi2 = parseInt(document.getElementById(container).getBoundingClientRect().width),
+                    cHe2 = parseInt(document.getElementById(container).getBoundingClientRect().height),
+                    cWi3 =parseInt(document.getElementById(container).offsetWidth),
+                    cHe3 =parseInt(document.getElementById(container).offsetHeight);
+                  
                 document.getElementById(container).style.cursor = 'move';
                 divTop = divTop.replace('px', '');
                 divLeft = divLeft.replace('px', '');
@@ -87,8 +196,62 @@
                         aY = posY - diffY;
                     if (aX < 0) aX = 0;
                     if (aY < 0) aY = 0;
-                    if (aX + eWi > cWi) aX = cWi - eWi;
-                    if (aY + eHe > cHe) aY = cHe - eHe;
+
+
+                    if (eWi == 400)
+                        {
+                            if ((aX + 210) > cWi2) aX = cWi2 - 202;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                        if (eWi == 200)
+                        {
+                            if ((aX + 10) > cWi2) aX = cWi2 - 2;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                        if (eWi == 1090)
+                        {
+                            if ((aX + 900) > cWi2) aX = cWi2 - 892;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+
+                        if (stopPoint != true)
+                        {
+                            if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi ; 
+                        } 
+
+
+                        if (aX < sideNav) aX = sideNav; 
+                        if (aY + eHe > cHe2) aY = cHe2 - eHe;
+                        
+
+                        var dxpos1 = document.getElementById('xpos').innerHTML = 'xpos ' + xpos;  
+       var dxpos2 = document.getElementById('ypos').innerHTML = 'ypos ' + ypos; 
+      var dxpos3 = document.getElementById('posx').innerHTML = 'posx ' + posX; 
+       var dxpos4 = document.getElementById('posy').innerHTML = 'posy ' + posY; 
+      var dxpos5 = document.getElementById('divLeft').innerHTML = 'divLeft ' + divLeft; 
+       var dxpos6 = document.getElementById('divTop').innerHTML = 'divTop ' + divTop; 
+      var dxpos7 = document.getElementById('eWi').innerHTML = 'elementWidth ' + eWi; 
+       var dxpos8 = document.getElementById('eHe').innerHTML = 'elementHeight ' + eHe; 
+      var dxpos9 = document.getElementById('cWi').innerHTML = 'clientWidth ' + cWi2; 
+      var dxpos10 = document.getElementById('cHe').innerHTML = 'clientHeight ' + cHe2; 
+      // var dxpos11 = document.getElementById('diffX').innerHTML = 'diffX ' + diffX; 
+       // var dxpos12 = document.getElementById('diffY').innerHTML = 'diffY ' + diffY; 
+        var dxpos13 = document.getElementById('aX').innerHTML = 'aX ' + aX; 
+        var dxpos14 = document.getElementById('aY').innerHTML = 'aY ' + aY; 
+
+
                     mydragg2.move(divid2, aX, aY);
                 }
             },
@@ -122,8 +285,11 @@
                     divLeft = divid2.style.left,
                     eWi = parseInt(divid2.style.width),
                     eHe = parseInt(divid2.style.height),
-                    cWi = parseInt(document.getElementById(container).style.width),
-                    cHe = parseInt(document.getElementById(container).style.height);
+                    cWi2 = parseInt(document.getElementById(container).getBoundingClientRect().width),
+                    cHe2 = parseInt(document.getElementById(container).getBoundingClientRect().height),
+                    cWi3 =parseInt(document.getElementById(container).offsetWidth),
+                    cHe3 =parseInt(document.getElementById(container).offsetHeight);
+                  
                 document.getElementById(container).style.cursor = 'move';
                 divTop = divTop.replace('px', '');
                 divLeft = divLeft.replace('px', '');
@@ -136,10 +302,22 @@
                 aX = posX - diffX,
                     aY = posY - diffY;
 
-                if (aX < 0) aX = 0;
-                if (aY < 0) aY = 0;
-                if (aX + eWi > cWi) aX = cWi - eWi;
-                if (aY + eHe > cHe) aY = cHe - eHe;
+                    if (aX < 0) aX = 0;
+                        if (aY < 0) aY = 0;
+
+                        if ((aX + 210) > cWi2) aX = cWi2 - 202;
+                        {
+                            stopPoint = true
+                        }
+
+                        if (stopPoint != true)
+                        {
+                            if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi ; 
+                        } 
+
+                        if (aX < sideNav) aX = sideNav; 
+                        if (aY + eHe > cHe2) aY = cHe2 - eHe;
+                        
 
                 mydragg3.move(divid2, aX, aY);
                 //}
@@ -157,8 +335,11 @@
                     divLeft = divid2.style.left,
                     eWi = parseInt(divid2.style.width),
                     eHe = parseInt(divid2.style.height),
-                    cWi = parseInt(document.getElementById(container).style.width),
-                    cHe = parseInt(document.getElementById(container).style.height);
+                    cWi2 = parseInt(document.getElementById(container).getBoundingClientRect().width),
+                    cHe2 = parseInt(document.getElementById(container).getBoundingClientRect().height),
+                    cWi3 =parseInt(document.getElementById(container).offsetWidth),
+                    cHe3 =parseInt(document.getElementById(container).offsetHeight);
+                  
                 document.getElementById(container).style.cursor = 'move';
                 divTop = divTop.replace('px', '');
                 divLeft = divLeft.replace('px', '');
@@ -170,14 +351,19 @@
 
                 if (aX < 0) aX = 0;
                 if (aY < 0) aY = 0;
-                if (aX + eWi > cWi) aX = cWi - eWi;
-                if (aY + eHe > cHe) aY = cHe - eHe;
+                if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi;
+                        if (aX < sideNav) aX = sideNav; 
+                        if (aY + eHe > cHe2) aY = cHe2 - eHe;
 
                 mydragg3.move(divid2, aX, aY);
                 //}
             },
         }
     }();
+    
+    
+    
+    
     /*    connectedToSocket = function() {
            document.getElementById("welcome").innerHTML = '';
            document.getElementById("welcome").innerHTML += "Socket: Connected";

@@ -340,6 +340,11 @@ input#medVidOtherValue {
 }
 
 
+.moduleToggleSwitches2 {
+    color: rgb(0, 0, 0);
+    background: rgb(114, 113, 113);
+}
+
 /* This does the toggle buttons in module */
 
 .toggleButton {
@@ -1327,7 +1332,7 @@ div.menutext {
 }
 
 #container {
-    position: absolute;
+    /*position: absolute;*/
     /* background-color: black; */
     /*border: 1px solid #000000; */
     overflow: hidden;
@@ -1678,3 +1683,15 @@ table#tableCR th {
 /* .ui-draggable .ui-dialog-titlebar {
     background-color: black !important;
 } */
+
+
+.toggleButtonHead {
+    /* background: rgb(133, 131, 131);*/
+    background: red;
+    /*color: rgb(0, 0, 0);*/
+    color: blue;
+    /* These below  aren't theme related */
+    border-radius: 3em;
+    font-weight: bold;
+}
+

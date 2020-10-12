@@ -1,5 +1,5 @@
 <script>
-    connectedToSocket = function() {
+   connectedToSocket = function() {
         document.getElementById("welcome").innerHTML = '';
         document.getElementById("welcome").innerHTML += "Socket: Connected";
     }
@@ -37,11 +37,6 @@
         document.getElementById("beamConnection").innerHTML = '';
         document.getElementById("beamConnection").innerHTML += "Mixer: Not Connected";
 
-        //this needs to be refined as we want to use the progressbar to show chat drop outs
-        /* document.getElementById("mixericonleft").style.color = "white";
-        document.getElementById("mixericonright").style.color = "lightskyblue";
-        document.getElementById("mixericonleft").style.opacity = 0.4;
-        document.getElementById("mixericonright").style.color = 0.4; */
         turnOffMixerIcons();
 
         hideMixerProgressBar();
@@ -54,15 +49,6 @@
         document.getElementById("mixericonright").style.color = 0.4;
     }
 
-
-
-
-    /*     setAccountsOnUi = function(streamer, bot) {
-            document.getElementById("casterAccount").innerHTML = '';
-            document.getElementById("casterAccount").innerHTML += streamer;
-            document.getElementById("botAccount").innerHTML = '';
-            document.getElementById("botAccount").innerHTML += bot;
-        } */
 
     setBotAccountLoggedIn = function(bot) {
         document.getElementById("BotAccountAuthInfo").innerHTML = '';
@@ -95,5 +81,5 @@
         $('#mixrConnection').attr('value', 100);
         document.getElementById("mixrConnection").style.visibility = 'hidden';
         document.getElementById("mixrConnectionLabel").style.visibility = 'hidden';
-    }
+    } 
 </script>

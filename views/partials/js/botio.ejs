@@ -87,7 +87,7 @@
         DropdownTextColorPicker.addEventListener("change", changeDropdowns, false);
         DropdownBackgroundColorPicker.addEventListener("change", changeDropdownsBackground, false);
         ModuleTextColorPicker.addEventListener("change", changeTextOnModules, false);
-        ModuleBackgroundColorPicker.addEventListener("change", changeBotBackgroundColor, false);
+        ModuleBackgroundColorPicker.addEventListener("change", changeBotBackgroundColor, false); 
 
         //////// IOSOCKET CONFIGURATION
         iosocket.on('connect', function() {
@@ -1998,6 +1998,10 @@
             chkBoxToglModuleVisible('divWrapperAuthentication');
         });
 
+        $("#authChkBoxHead").change(function() {
+            chkBoxToglModuleVisible('divWrapperAuthentication');
+        });
+
         $("#alertfilesChkBox").change(function() {
             chkBoxToglModuleVisible('divWrapperAlerts');
         });
@@ -3789,11 +3793,11 @@
     }
 
     function setDeviceWidthLayout() {
-        console.log('device width = ' + devicewidth.toString());
+/*         console.log('device width = ' + devicewidth.toString());
         document.getElementById("container").style.width = Math.round((devicewidth / 100 * 85) + 11) + 'px';
         document.getElementsByTagName("BODY")[0].style.width = Math.round((devicewidth / 100 * 85) + 11) + 'px';
         document.getElementById("chkBoxList").style.marginLeft = Math.round((devicewidth / 100 * 85)) + 12 + 'px';
-
+ */
 
     }
 
