@@ -1,6 +1,6 @@
 <a href="http://codesimple.com"><img src="https://avatars2.githubusercontent.com/u/46105748?s=400&u=364ff3b3d006e3230edd6d51814809b5ce561393&v=4" title="codesimple" alt="FVCproductions"></a>
 
-<!-- [![FVCproductions](https://avatars1.githubusercontent.com/u/4284691?v=3&s=200)](http://fvcproductions.com) -->
+
 
 ***INSERT GRAPHIC HERE (include hyperlink in image)***
 
