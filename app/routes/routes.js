@@ -9,6 +9,102 @@ const request = require("request");
 
 module.exports = function(app) {
 
+
+
+    //webhooks stuff
+
+ // Homepage route
+
+
+var id = '147299544'
+// Send Twitch webhooks subscription
+const token = 'lx71o93103qho7pc2onpz2ktprnsrp';
+
+// Twitch client id
+var clientID = 'gp762nuuoqcoxypju8c569th9wz7q5'
+// Content type of data to send
+var contentType = 'application/json'
+
+
+
+// app.get("/webhooks", (req, res) => {
+
+// console.log('test');
+
+// request({
+//     uri: "https://api.twitch.tv/helix/webhooks/hub",
+//     method: "POST",
+//     headers: {
+//         // Twitch client id
+//         'Client-ID': clientID,
+//         // Content type of data to send
+//         'Content-Type': contentType,
+//         'Authorization': `Bearer ${token}`
+//     },
+//     json: {
+//         "hub.callback": "http://localhost:8081/twitch/live",
+//         "hub.lease_seconds": "864000",
+//         "hub.mode": "subscribe",
+//         "hub.topic": `https://api.twitch.tv/helix/users/follows?first=1&to_id=${id}`
+//     }
+// }, function (err,res, body) {
+//     if (!err && res.statusCode === 202) {
+//         //res.send(`Successfully registered to  ${id} for 10 days.`)
+//         res.status(200).end()
+//     } else {
+//         console.error(err)
+//         console.error(res.statusCode)
+//         console.error(body)
+//         //res.send("Subscription error.")
+//         //res.status(400).end()
+//         //endWithCode(res,400);
+//     }
+// })
+// });
+
+function endWithCode(res, code, payload) {
+    res.statusCode = code;
+    res._events.end(payload)
+  }
+
+
+
+
+
+// Callbacks handlers
+
+// Streams Up/Down
+app.get('/webhooks', function (req, res) {
+    res.send(req.query['hub.challenge'])
+    console.log(req.query)
+    console.log(req.headers)
+    //console.log(res)
+    /*var incoming = req.headers['x-hub-signature'].split('=');
+    var hash = crypto.createHmac(incoming[0], secret)
+        .update(JSON.stringify(req.body))
+        .digest('hex')
+    if (incoming[1] != hash) {
+        console.log('Reject')
+    } else {
+        console.log('Payload OK')// do other stuff
+    }*/
+})
+
+
+app.post("/webhooks", (req, res) => {
+	const body = JSON.parse(res.body).data
+	console.log(body)
+	if (Object.keys(body).length > 0) {
+		console.log("Stream Received")
+	}
+	console.log(req.query)
+	res.send(req.query.hub_challenge)
+	res.status(200).end()
+})
+
+
+
+
     app.get('/', function(req, res) {
         console.log('index.ejs');
         res.render('pages/index.ejs');
@@ -16,6 +112,11 @@ module.exports = function(app) {
 
     app.get('/dash', function(req, res) {
         res.render('pages/dash.ejs'); // load the dash.ejs file
+    });
+
+    app.get('/consume', function(req, res) {
+        console.log('rendering bot');
+        res.render('pages/bot.ejs'); // load the dash.ejs file
     });
 
     app.get('/bot', function(req, res) {
@@ -73,6 +174,14 @@ module.exports = function(app) {
     app.get('/login', function(req, res) {
         res.render('login.ejs', { message: req.flash('loginMessage') });
     });
+
+
+    app.get('/webhooks', function(req, res) {
+
+           res.render('login.ejs', { message: req.flash('loginMessage') });
+    });
+
+
 
 
     /*     app.post('/login', passport.authenticate('local-login', {
@@ -534,6 +643,11 @@ module.exports = function(app) {
 
         res.redirect('/login');
     }
+
+
+
+
+
 
 
 }

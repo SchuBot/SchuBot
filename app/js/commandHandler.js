@@ -6,25 +6,29 @@ var request = require('request');
 
 
 //module
-let commandHandler = function(channelToken, streamID, log) {
+let commandHandler = function(channelToken, streamID, log , twitchChat , Token) {
 
     //let userInfo;
     let self = this;
     let mixerStreamId = streamID;
+   
 
 
 
     //exports
-    self.say = function(userName, commandJSONData, roles, commandTriggered, fullcommand, mixerStreamId) {
+    self.say = function(userName, commandJSONData, roles, commandTriggered, fullcommand, mixerStreamId , twitchChat , clientID ) {
 
-        //var userName = userNameStr;
-        //console.log(commandJSONData[0].text.split(' '));
+
+        //hardcoded for now use argument (TODO)
+        //auth token and client id need to be stored on json for the duration of the session
+        //twitch chat cannot currently trigger commands that require a twitch api call
+        let client_id = "gp762nuuoqcoxypju8c569th9wz7q5";
 
         var commandData = commandJSONData[0];
         var commandToChat = "";
         var target = fullcommand.split(' ')[1];
 
-        processArray(commandData, channelToken, commandTriggered, userName, target, mixerStreamId).then(function(response) {
+        processArray(commandData, channelToken, commandTriggered, userName, target, mixerStreamId , twitchChat , client_id).then(function(response) {
             commandToChat = response.join(' ');
             log.info("Command Processed! - " + response);
             //emit event and send message to mixer
@@ -43,26 +47,25 @@ commandHandler.prototype = new events.EventEmitter;
 
 module.exports = commandHandler;
 
-async function getSubstitutionVariable(userName, variableCommand, array, index, channelToken, target, targetMixerUrl, userMixerUrl, casterMixerUrl, cid) {
+async function getSubstitutionVariable(userName, variableCommand, array, index, channelToken, target, targetMixerUrl, userMixerUrl, casterMixerUrl, cid , targetTwitchUrl, userTwitchUrl, casterTwitchUrl,) {
 
     var removeAt = true;
     switch (variableCommand) {
         case "$user":
             text = userName;
-            userMixerUrl = "mixer.com/" + removeAtSymbol(text)
+            userMixerUrl = "mixer.com/" + removeAtSymbol(text);
+            userTwitchUrl = "twitch.tv/" +  + removeAtSymbol(text);
             break;
         case "$caster":
             text = channelToken;
-            casterMixerUrl = "mixer.com/" + removeAtSymbol(text)
+            casterMixerUrl = "mixer.com/" + removeAtSymbol(text);
+            casterTwitchUrl = "twitch.tv/" +  + removeAtSymbol(text);
             break;
         case "$target":
             text = target;
             targetMixerUrl = "mixer.com/" + removeAtSymbol(text)
+            targetTwitchUrl = "twitch.tv/" +  + removeAtSymbol(text);
             break;
-            /*         case "$targetMixerUrl":
-                        text = "https://mixer.com/" + removeAtSymbol(target);
-                        targetMixerUrl = "https://mixer.com/" + removeAtSymbol(target)
-                        break; */
         case "$randusr":
             text = getRandomUser();
             break;
@@ -73,9 +76,6 @@ async function getSubstitutionVariable(userName, variableCommand, array, index, 
             text = getUptime(cid);
             break;
 
-            /*           case "$readapi":
-                      text = getapi(url);
-                      break; */
         case "$targetMixerUrl":
             if (target != undefined || target != "") {
 
@@ -93,6 +93,23 @@ async function getSubstitutionVariable(userName, variableCommand, array, index, 
 
             break;
 
+            case "$targetTwitchUrl":
+                if (target != undefined || target != "") {
+    
+                    text = "https://twitch.tv/" + removeAtSymbol(target);
+                    targetTwitchUrl = "https://twitch.tv/" + removeAtSymbol(target)
+    
+                } else {
+                    if (targetTwitchUrl != "") {
+                        text = targetTwitchUrl;
+                    } else {
+                        text = "target not set"
+                    }
+    
+                }
+    
+                break;
+
         case "$userMixerUrl":
             if (userName != undefined || userName != "") {
                 if (userMixerUrl == "") {
@@ -108,6 +125,22 @@ async function getSubstitutionVariable(userName, variableCommand, array, index, 
             }
 
             break;
+
+            case "$userTwitchUrl":
+                if (userName != undefined || userName != "") {
+                    if (userTwitchUrl == "") {
+                        text = "https://twitch.tv/" + removeAtSymbol(userName)
+                    }
+                } else {
+                    if (userTwitchUrl != "") {
+                        text = userTwitchUrl;
+                    } else {
+                        text = "user not set"
+                    }
+    
+                }
+    
+                break;
 
         case "$date":
             text = getDateFromVariable();
@@ -136,10 +169,7 @@ function removeAtSymbol(text) {
 function getChannelObjectVariable(channelObject, variable) {
 
 
-
     switch (variable) {
-
-
 
         case "$joinedWeeksAgo":
             text = channelObject.joinedWeeksAgo;
@@ -252,6 +282,83 @@ function getChannelObjectVariable(channelObject, variable) {
     return text;
 }
 
+
+function getTwitchChannelObjectVariable(channelObject, variable) {
+
+        
+// broadcaster_type:''
+// description:''
+// display_name:'schusteruk'
+// email:'schuster19uk2001@hotmail.com'
+// id:'147299544'
+// login:'schusteruk'
+// offline_image_url:''
+// profile_image_url:'https://static-cdn.jtvnw.net/jtv_user_pictures/64f4dbcc-6c77-49ab-9f45-5489433536c3-profile_image-300x300.png'
+// type:''
+// view_count:64
+
+    switch (variable) {
+
+        case "$broadcasterType":
+            text = channelObject.broadcaster_type;
+            break;
+        case "$description":
+            text = channelObject.description;
+            break;
+
+        case "$displayName":
+            text = channelObject.display_name;
+            break;
+
+        case "$email":
+            text = channelObject.email;
+            break;
+
+        case "$id":
+            text = channelObject.id;
+            break;
+
+        case "$login":
+            text = channelObject.login;
+            break;
+
+        case "$offline_image_url":
+            text = channelObject.offline_image_url;
+            break;
+
+        case "$profile_image_url":
+            text = channelObject.profile_image_url;
+            break;
+
+        case "$type":
+            text = channelObject.type;
+            break;
+        case "$view_count":
+            text = channelObject.view_count;
+            break;
+
+        case "$user":
+            text = channelObject.login;
+            break;
+        case "$target":
+            text = channelObject.login;
+            break;
+        case "$caster":
+            text = channelObject.login;
+            break;
+        default:
+            text = variable + ' - Not found';
+
+
+
+
+    }
+
+
+
+    return text;
+}
+
 function getChannelVariable(userName, streamer, msg, variableCommand, target) {
     var text = "";
     switch (variableCommand) {
@@ -322,7 +429,7 @@ async function getUptime(channelID) {
     return d;
 }
 
-async function getChannel(channelToken) {
+async function getChannelMixer(channelToken) {
 
     const fetch = require("node-fetch");
     const url = "https://mixer.com/api/v1/channels/" + `${channelToken}`;
@@ -347,6 +454,39 @@ async function getChannel(channelToken) {
     return d;
 
 }
+
+async function getTwitchChannel(channelToken , twitchChat , clientID) {
+
+    const fetch = require("node-fetch");
+    const url = "https://api.twitch.tv/helix/users?login=" + `${channelToken}`;
+    var bearerToken = twitchChat.token.replace("oauth:", "");
+    
+    var d
+
+    const getChannel = async url => {
+        try {
+
+            const response = await fetch(url, {
+                method: 'get',
+                headers: {'Authorization': 'Bearer ' + `${bearerToken}`,
+                'Client-Id': `${clientID}`}
+            });
+
+            const json = await response.json();
+
+            return d = new TwitchChannelObject(json.data[0]);
+
+        } catch (error) {
+            log.error('getChannel error - ' + error);
+            return d = error;
+        }
+    };
+    d = await getChannel(url);
+
+    return d;
+
+}
+
 
 async function callApi(apiURL) {
 
@@ -417,6 +557,94 @@ class ChannelObject {
         this.joinedMonthsAgo = Date.DateDiff('m', new Date(json.createdAt), today, 1);
         this.joinedWeeksAgo = Date.DateDiff('w', new Date(json.createdAt), today, 1);
 
+
+        //
+        //console.log('Months since now: ' + Date.DateDiff('m', y2k, today, 1)); //displays 143
+        //console.log('Weeks since now: ' + Date.DateDiff('w', y2k, today, 1)); //displays 625
+
+    }
+
+    /* sayHi() {
+         alert(this.name);
+     } */
+
+
+
+
+
+}
+
+
+class TwitchChannelObject {
+
+    constructor(json) {
+
+        
+// broadcaster_type:''
+// description:''
+// display_name:'schusteruk'
+// email:'schuster19uk2001@hotmail.com'
+// id:'147299544'
+// login:'schusteruk'
+// offline_image_url:''
+// profile_image_url:'https://static-cdn.jtvnw.net/jtv_user_pictures/64f4dbcc-6c77-49ab-9f45-5489433536c3-profile_image-300x300.png'
+// type:''
+// view_count:64
+
+this.broadcaster_type = json.broadcaster_type;
+this.description = json.description;
+this.display_name = json.display_name;
+this.email = json.email;
+this.id = json.id;
+this.login = json.login;
+this.offline_image_url = json.offline_image_url
+this.profile_image_url = json.profile_image_url;
+this.type = json.type;
+this.view_count = json.view_count;
+
+
+
+
+
+
+/*         var y2k = new Date(json.createdAt) //Month is 0-11 in JavaScript!
+        var today = new Date();
+
+        this.token = json.token;
+        this.online = json.online;
+        this.audience = json.audience;
+        this.sparks = json.user.sparks;
+        this.level = json.user.level;
+        this.channel_title = json.name;
+        this.followers = json.numFollowers;
+        this.partnered = json.partnered;
+        this.featured = json.featured;
+        this.hasVod = json.hasVod;
+        this.numFollowers = json.numFollowers;
+        this.interactive = json.interactive;
+        this.isHosting = json.hosteeId;
+        this.suspended = json.suspended;
+        this.language = json.language;
+        this.vodsEnabled = json.vodsEnabled;
+        //is partnered ?
+
+        var dayStr = getDayName(new Date(json.createdAt).getDate());
+        var monthName = getDateName(new Date(json.createdAt).getMonth());
+        var yearstr = new Date(json.createdAt).getFullYear();
+
+        this.joined = dayStr + ' ' + monthName + ' ' + yearstr;
+        if (json.type != null) {
+            this.streaming = json.type.name;
+        } else {
+            this.streaming = "Not Streamed Yet!"
+        }
+
+
+        this.joinedVer2 = new Date(json.createdAt).toUTCString();
+        this.joinedDaysAgo = Date.DateDiff('d', new Date(json.createdAt), today, 1);
+        this.joinedMonthsAgo = Date.DateDiff('m', new Date(json.createdAt), today, 1);
+        this.joinedWeeksAgo = Date.DateDiff('w', new Date(json.createdAt), today, 1);
+ */
 
         //
         //console.log('Months since now: ' + Date.DateDiff('m', y2k, today, 1)); //displays 143
@@ -515,7 +743,7 @@ function getTimeFromVariable() {
 }
 
 //userName is person who triggered command
-async function processArray(commandData, channelName, commandTriggered, userName, target, mixerStreamId) {
+async function processArray(commandData, channelName, commandTriggered, userName, target, mixerStreamId ,twitchChat , clientId) {
 
     var channelInfo = null;
 
@@ -573,7 +801,7 @@ async function processArray(commandData, channelName, commandTriggered, userName
                         if (channel != undefined || channel != "") {
 
 
-                            let ChannelObject = await getChannel(channel.replace('@', ''));
+                            let ChannelObject = await getTwitchChannel(channel.replace('@', ''), twitchChat , clientId);
 
                             var commandText = bracketContentsString.replace('[', '').replace(']', '').split(' ');
 
@@ -594,7 +822,7 @@ async function processArray(commandData, channelName, commandTriggered, userName
                                         //.then(res => textresult = res).catch(e => Notices.results(e));
 
                                         // result = result + textresult;
-                                        result = result + ' ' + getChannelObjectVariable(ChannelObject, stripWhiteSpacesAndCommas);
+                                        result = result + ' ' + getTwitchChannelObjectVariable(ChannelObject, stripWhiteSpacesAndCommas);
 
                                     } else {
                                         result = result + ' ' + commandText[ii];

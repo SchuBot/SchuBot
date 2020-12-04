@@ -5,7 +5,7 @@
         var windowWidth = document.getElementById('container2').clientWidth;
         return {
             move: function(divid, xpos, ypos) {
-                console.log('xpos' + xpos);
+                //console.log('xpos' + xpos);
                 divid.style.left = xpos + 'px';
                 divid.style.top = ypos + 'px';
             },
@@ -58,9 +58,8 @@
                         if (aX < 0) aX = 0;
                         if (aY < 0) aY = 0;
                         //if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi;
-                        console.log('ax is ' + aX);
-                        console.log('cWi2 is' + cWi2);
-
+                        //console.log('ax is ' + aX);
+                        //console.log('cWi2 is' + cWi2);
 
             
                         if (eWi == 400)
@@ -198,6 +197,15 @@
                     if (aY < 0) aY = 0;
 
 
+                    if (eWi == 800)
+                        {
+                            if ((aX + 610) > cWi2) aX = cWi2 - 602;
+                            {
+                           
+                                stopPoint = true;
+                            }
+                        }
+
                     if (eWi == 400)
                         {
                             if ((aX + 210) > cWi2) aX = cWi2 - 202;
@@ -302,7 +310,7 @@
                 aX = posX - diffX,
                     aY = posY - diffY;
 
-                    if (aX < 0) aX = 0;
+/*                     if (aX < 0) aX = 0;
                         if (aY < 0) aY = 0;
 
                         if ((aX + 210) > cWi2) aX = cWi2 - 202;
@@ -316,6 +324,57 @@
                         } 
 
                         if (aX < sideNav) aX = sideNav; 
+                        if (aY + eHe > cHe2) aY = cHe2 - eHe; */
+
+
+                        if (aX < 0) aX = 0;
+                    if (aY < 0) aY = 0;
+
+
+                    if (eWi == 800)
+                        {
+                            if ((aX + 610) > cWi2) aX = cWi2 - 602;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                    if (eWi == 400)
+                        {
+                            if ((aX + 210) > cWi2) aX = cWi2 - 202;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                        if (eWi == 200)
+                        {
+                            if ((aX + 10) > cWi2) aX = cWi2 - 2;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                        if (eWi == 1090)
+                        {
+                            if ((aX + 900) > cWi2) aX = cWi2 - 892;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+
+                        if (stopPoint != true)
+                        {
+                            if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi ; 
+                        } 
+
+
+                        if (aX < sideNav) aX = sideNav; 
                         if (aY + eHe > cHe2) aY = cHe2 - eHe;
                         
 
@@ -325,6 +384,7 @@
             slideRight: function(divid, container, slideAmount, evt) {
 
                 //console.log(divid);
+                
 
                 var divid2 = document.getElementById(divid);
 
@@ -346,14 +406,57 @@
                 var diffX = posX - divLeft,
                     diffY = posY - divTop;
 
-                aX = posX - diffX,
+                 aX = posX - diffX,
                     aY = posY - diffY;
 
-                if (aX < 0) aX = 0;
+/*                 if (aX < 0) aX = 0;
                 if (aY < 0) aY = 0;
                 if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi;
                         if (aX < sideNav) aX = sideNav; 
+                        if (aY + eHe > cHe2) aY = cHe2 - eHe;  */
+
+
+                        if (aX < 0) aX = 0;
+                    if (aY < 0) aY = 0;
+
+
+                    if (eWi == 400)
+                        {
+                            if ((aX + 210) > cWi2) aX = cWi2 - 202;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                        if (eWi == 200)
+                        {
+                            if ((aX + 10) > cWi2) aX = cWi2 - 2;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+                        if (eWi == 1090)
+                        {
+                            if ((aX + 900) > cWi2) aX = cWi2 - 892;
+                            {
+                            
+                                stopPoint = true;
+                            }
+                        }
+
+
+                        if (stopPoint != true)
+                        {
+                            if (aX + eWi > cWi2 + sideNav) aX = cWi2 + sideNav - eWi ; 
+                        } 
+
+
+                        if (aX < sideNav) aX = sideNav; 
                         if (aY + eHe > cHe2) aY = cHe2 - eHe;
+
 
                 mydragg3.move(divid2, aX, aY);
                 //}

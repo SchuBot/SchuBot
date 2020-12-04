@@ -14,6 +14,8 @@
 
     const TwitchChatClient = require('../app/js/TwitchChatClient.js');
 
+    const TwitchWebhooks = require('../app/js/TwitchWebhooks.js');
+
     const MixerBotChat = require('../app/js/MixerBotChat.js');
     const mixerdata = require('../app/js/mixerdata.js');
     const constellation = require('../app/js/constellation.js');
@@ -63,7 +65,290 @@
     ////const io = require('socket.io')(server);
     var express = require('express');
     var appex = express();
+
+/* test somethign 
+
+
+*/
+
+
+appex.use(morgan('dev'));
+
+//console.log(__dirname);
+
+var pathdir = __dirname.replace("ServerSide", "");
+
+
+//appex.use(express.static(pathdir + '/resources/media'));
+//appex.use(serveStatic(__dirname + '/resources/media'));
+
+//  app.set('views', path.join(__dirname, '/views'));
+appex.set('view engine', 'ejs');
+appex.set('views', pathdir + '/views');
+
+
+appex.use(express.static(pathdir + '/public'));
+/////////////////////////////app.use(express.static(__dirname + '/public/build'));
+///////////////////////////////////////app.use(express.static(__dirname + '/vendors'));
+// app.use(express.static(__dirname + '/views'));
+appex.use(express.static(pathdir + '/public/img'));
+appex.use(express.static(pathdir + '/resources/media'));
+
+//console.log(JSON.stringify(passport));
+
+appex.use(cookieParser());
+
+
+appex.use(bodyParser.json());
+appex.use(bodyParser.urlencoded({ extended: false }));
+
+/*    app.use(session({
+       secret: 'anystringoftext',
+       saveUninitialized: true,
+       resave: true
+   })); */
+
+
+
+
+//app.use(passport.initialize());
+
+//console.log('Server attempting to run: ' + port);
+
+
+//app.use(passport.session()); // persistent login sessions
+appex.use(flash()); // use connect-flash for flash messages stored in session
+
+
+
+
+
+      
+
+    
+                //return d = new TwitchChannelObject(json.data[0]);
+    
+
+
+
+
+
+    //var server = require('http').createServer(appex);
+    require('../app/routes/routes.js')(appex);
+
     var server = require('http').createServer(appex);
+
+
+
+
+//
+
+
+var id = '147299544';
+// Send Twitch webhooks subscription
+const tokeno = 'lx71o93103qho7pc2onpz2ktprnsrp';
+
+// Twitch client id
+var clientID = 'gp762nuuoqcoxypju8c569th9wz7q5'
+// Content type of data to send
+var contentType = 'application/json'
+var hostname = 'http://localhost:8081'
+var leaseSeconds = 86000;
+
+function subUnsub(userId, subUnsubAction, res) {
+    let resolvePromise;
+    let rejectPromise;
+    const promise = new Promise((resolve, reject) => {
+      resolvePromise = resolve;
+      rejectPromise = reject;
+    });
+    if (!userId) {
+      console.warn("No channel to subscribe to.");
+      res && endWithCode(res, 404);
+      return Promise.reject("No channel to subscribe to.");
+    }
+    const options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'client-id': clientID,
+        'Authorization': `Bearer ${tokeno}`
+      }
+    };
+    const twitchReq = https.request(
+      'https://api.twitch.tv/helix/webhooks/hub',
+      options, (twitchRes) => {
+        bodify(twitchRes, body => {
+          console.info(`${subUnsubAction}d to ${userId} with HTTP status ${twitchRes.statusCode}`);
+          if (twitchRes.statusCode.toString().startsWith('2')) {
+            resolvePromise();
+          } else {
+            rejectPromise();
+          }
+          res && endWithCode(res, 200);
+        });
+      });
+    twitchReq.on('error', console.error);
+    const callbackUrl = `${hostname}/webhooks`;
+    console.log('callbackUrl', callbackUrl);
+    //const topic = `https://api.twitch.tv/helix/streams?user_id=${userId}`;
+    const topic = `https://api.twitch.tv/helix/users/follows?first=1&to_id=${userId}`
+    console.info(`${subUnsubAction} `, topic);
+    twitchReq.write(JSON.stringify({
+      "hub.callback": callbackUrl,
+      "hub.mode": subUnsubAction,
+      "hub.topic": topic,
+      "hub.secret": 'testsecret',
+      "hub.lease_seconds": leaseSeconds,
+    }));
+    twitchReq.end();
+    return promise;
+  }
+
+  function bodify(req, cb) {
+    let body = '';
+    req
+      .on('data', chunk => body += chunk)
+      .on('end', () => {
+        if (!body) return cb(null);
+        try {
+          cb(JSON.parse(body), body)
+        } catch (e) {
+          console.warn('body could not be parsed', e);
+          cb(null);
+        }
+      });
+  }
+
+
+  async function subscribeToAllChannels(res) {
+    const success = [];
+    const failure = [];
+    
+      try {
+        
+        await subUnsub(147299544, 'subscribe');
+        //console.info(`Subscribed to ${c.displayName} (147299544)`);
+        success.push(147299544);
+ 
+      } catch (e) {
+        //console.error(`Couldn't subscribe to ${c.displayName} (147299544)`)
+        failure.push(147299544);
+      }
+    
+    setTimeout(() => subscribeToAllChannels(), leaseSeconds * 1000);
+    res && endWithCode(res, 200, {success, failure});
+  } 
+
+  function endWithCode(res, code, payload) {
+    res.statusCode = code;
+    res._events.end(payload)
+  }
+
+
+
+function getFollowersFromWebHookOld()
+{
+
+        //var https = require('http');
+        var str = '';
+      
+        const options = {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'client-id': clientID,
+              'Authorization': `Bearer ${tokeno}`
+            }
+          };
+
+        callback = function(response) {
+
+            response.on('data', function (chunk) {
+              str += chunk;
+            });
+          
+            response.on('end', function () {
+              console.log(req.data);
+              console.log(str);
+              // your code here if you want to use the results !
+            });
+        }
+          
+        var req = https.request(`https://api.twitch.tv/helix/users/follows?first=1&to_id=${id}`,options, callback()).end();
+      
+}
+
+
+
+  function getFollowersFromWebHook()
+  {
+
+    const options = {
+        url: `https://api.twitch.tv/helix/users/follows?first=1&to_id=${id}`,
+        method: 'GET',
+        headers: {
+        'User-Agent': 'request',
+          'Content-Type': 'application/json',
+          'client-id': clientID,
+          'Authorization': `Bearer ${tokeno}`
+        }
+      };
+      
+      function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+          const info = JSON.parse(body);
+          console.log(info + " Stars");
+          console.log(info + " Forks");
+        }
+      }
+      
+      request(options, callback);
+
+
+/* 
+
+    const options = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'client-id': clientID,
+          'Authorization': `Bearer ${tokeno}`
+        }
+      };
+
+
+      request('https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY', { json: true }, (err, res, body) => {
+        if (err) { return console.log(err); }
+        console.log(body.url);
+        console.log(body.explanation);
+      });
+
+
+    https.get(`https://api.twitch.tv/helix/users/follows?first=1&to_id=${id}`,options, (resp) => {}
+  let data = '';
+ */
+/*   // A chunk of data has been recieved.
+  resp.on('data', (chunk) => {
+    data += chunk;
+  });
+
+  // The whole response has been received. Print out the result.
+  resp.on('end', () => {
+    console.log(JSON.parse(data).explanation);
+  });
+
+}).on("error", (err) => {
+  console.log("Error: " + err.message);
+}); */
+
+  }
+
+
+//
+
+
+
     const io = require('socket.io')(server);
 
     var fs = require('mz/fs');
@@ -81,6 +366,9 @@
     let botName = null
     let cm;
     let twitchChat;
+    let webhooks;
+
+    log.info('Server attempting to run: ' + port);
 
     ////////THIS IS THE STUFF FOR THE NEW DB
     //     /* 
@@ -241,6 +529,9 @@
 
     //require('../config/passport')(passport);
 
+
+/* commented out
+
     appex.use(morgan('dev'));
 
     //console.log(__dirname);
@@ -271,14 +562,6 @@
     appex.use(bodyParser.json());
     appex.use(bodyParser.urlencoded({ extended: false }));
 
-    /*    app.use(session({
-           secret: 'anystringoftext',
-           saveUninitialized: true,
-           resave: true
-       })); */
-
-
-
 
     //app.use(passport.initialize());
 
@@ -290,11 +573,16 @@
 
     require('../app/routes/routes.js')(appex);
 
+*/ 
 
-    server.listen(port, function() {
-        log.info('Webserver Listening on port: ' + port);
-        //  console.log(colors.magenta('Webserver Listening on port: ' + port));
-    });
+    /*    app.use(session({
+           secret: 'anystringoftext',
+           saveUninitialized: true,
+           resave: true
+       })); */
+
+
+/* webhook function */
 
     //console.log(passport.GetAuthData);
     //socket.io stuff
@@ -307,8 +595,19 @@
     // ../media/sounds/sound1.mp3 - sound path
     //../media/images/alert.gif - images path
 
+    subscribeToAllChannels();
 
 
+
+    server.listen(port, function() {
+        log.info('Webserver Listening on port: ' + port);
+        //  console.log(colors.magenta('Webserver Listening on port: ' + port));
+    });
+
+
+
+
+    getFollowersFromWebHook();
 
     io.on('connection', function(socket) {
 
@@ -1597,7 +1896,19 @@
 
         authDB.reload();
         twitchChat = new TwitchChatClient(Token, true, chatConnected, authDB, log, io);
-        ch = new commandHandler(authDB.data.streamer.username, authDB.data.streamer.channelId, log);
+        ch = new commandHandler(authDB.data.streamer.username, authDB.data.streamer.channelId, log , twitchChat , Token);
+
+
+        //my twitch user id   
+        var User = 147299544;
+        const client_id = 'gp762nuuoqcoxypju8c569th9wz7q5';
+        const OAuthToken = 'lx71o93103qho7pc2onpz2ktprnsrp';
+
+        var FollowEventsTopic = 'https://api.twitch.tv/helix/users/follows?first=1&to_id=' + `${User}`;
+
+        //webhooks = new TwitchWebhooks(OAuthToken , client_id , log);
+        //var xyz = webhooks.subscribeFollows( FollowEventsTopic);
+
 
 
         twitchChat.on('CONNECTED', function(data) {
@@ -3166,7 +3477,7 @@
     }
 
     //processes command an emits message to mixer
-    function processChatCommand(CommandList, command, user_roles, username, ch, fullcommand, bc) {
+    function processChatCommand(CommandList, command, user_roles, username, ch, fullcommand, twitchChat) {
         try {
             //need to work out a way to find the command possibly using underscore
             // var data = CommandList.getData(`/commands/id:['${[command]}']`); ///id${command}
@@ -3206,11 +3517,11 @@
                 log.info('command found: permission is: ' + commandInDB[0].permission);
 
                 //is user allowed to use command ?
-                var userAllowed = isUserPermitted(commandInDB[0].permission, commandInDB[0].user, username, user_roles, bc); // get command's permission and return true is user is allowed otherwise false
+                var userAllowed = isUserPermitted(commandInDB[0].permission, commandInDB[0].user, username, user_roles, twitchChat); // get command's permission and return true is user is allowed otherwise false
 
                 if (userAllowed) {
                     // process command and send to mixer
-                    ch.say(username, commandInDB, user_roles, command, fullcommand, authDB.data.streamer.channelId);
+                    ch.say(username, commandInDB, user_roles, command, fullcommand, authDB.data.streamer.channelId , twitchChat);
 
                     //queue alert
                     //graphicsFolder, soundFolder, videoFolder, graphicFile, soundFile, videoFile

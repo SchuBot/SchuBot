@@ -43,8 +43,8 @@
             </div>
     
             <div>
-                <label id="mixrConnectionLabel" for="mixrConnection">Connecting to Mixer:</label>
-                 <progress id="mixrConnection" max="100"></progress>
+                <label style="display: none;" id="mixrConnectionLabel" for="mixrConnection">Connecting to Mixer:</label>
+                 <progress style="display: none;" id="mixrConnection" max="100"></progress>
     
                 <div class="btn-group">
                    </div>
@@ -56,9 +56,9 @@
                 <div style="margin:0;
                 float: left; padding-right:15px;"><i class="fas fa-signal" style="color:green;font-size:24px;margin-top:5px;"></i><span style="float:left;font-size: 10px;margin-top:10px;">Signal</span></div>
     
-                <div><i id="mixericonleft" class="fas fa-chevron-right" style="color:white;font-size:24px;margin-top:5px;"></i>
-                    <i id="mixericonright" class="fas fa-chevron-left" style="color:lightskyblue;font-size:24px;margin-top:5px;margin-left:-2px;"></i>
-                    <span style="float:left;font-size: 10px;margin-top:10px;">Mixer Chat</span></div>
+                <div><i id="mixericonleft" class="fas fa-chevron-right" style="color:white; display:none; font-size:24px;margin-top:5px;"></i>
+                    <i id="mixericonright" class="fas fa-chevron-left" style="color:lightskyblue;  display:none; font-size:24px;margin-top:5px;margin-left:-2px;"></i>
+                    <span style=" display:none;float:left;font-size: 10px;margin-top:10px;">Mixer Chat</span></div>
     
             </div>
     
@@ -437,7 +437,7 @@
                 <canvas style="background-color: white; " id="canvas"></canvas>
             </div> -->
 
-            <div id="draggObjectStats">
+            <div id="draggObjectStats" style="display: none;">
 
                 <div style="color: white;" id ="xpos"></div>
                 <div style="color: white;" id ="ypos"></div>
@@ -824,7 +824,7 @@
                     </div>
 
                     <div style="width:50%;height:30px;">
-                        <div class="modulemenubartext" id="menutextav"> Mixer Authentication</div>
+                        <div class="modulemenubartext" id="menutextav">Authentication</div>
                     </div>
 
                     <div class="btn-group-vertical-right" role="group">
