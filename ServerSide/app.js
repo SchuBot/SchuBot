@@ -298,8 +298,8 @@ function getFollowersFromWebHookOld()
       function callback(error, response, body) {
         if (!error && response.statusCode == 200) {
           const info = JSON.parse(body);
-          console.log(info + " Stars");
-          console.log(info + " Forks");
+          log.info("follower details:" + JSON.stringify(info.data));
+          
         }
       }
       
@@ -1271,7 +1271,7 @@ function getFollowersFromWebHookOld()
     }
 
     function loadBotCurrencyAndTimers() {
-        addAlltimersSchedule(myTimers);
+        //addAlltimersSchedule(myTimers);
         StartCurrency();
         sendParentCurrenciesToUI(parentCurrency);
     }
@@ -5037,7 +5037,7 @@ function getFollowersFromWebHookOld()
 
 
     function stopAllTimersSchedule() {
-        Scheduler.halt()
+        Scheduler.removeAll()
     }
 
     function getLetterFullDateTimeString(dateIn) {
@@ -5606,8 +5606,10 @@ function getFollowersFromWebHookOld()
         var minimum = 10;
         var timeoutVar = null;
         var startTimers = false;
+        var hasJustStopped = false;
         var output = {
             add: function(func, context, timer, once) {
+                hasJustStopped = false;
                 var iTimer = parseInt(timer);
                 context = context && typeof context === 'object' ? context : null;
                 if (typeof func === 'function' && !isNaN(iTimer) && iTimer > 0) {
@@ -5622,6 +5624,11 @@ function getFollowersFromWebHookOld()
                         return;
                     }
                 }
+            },
+            removeAll: function(){
+                
+                hasJustStopped = true; 
+                tasks = [];
             },
             halt: function() {
                 if (timeoutVar) {
@@ -5644,13 +5651,17 @@ function getFollowersFromWebHookOld()
             }
 
             //added this so that once tasks are finished they loop again in the same sequence
-            if (tasks.length <= 0) {
-                if (myTimers.data.timers != undefined) {
-                    if (myTimers.data.timers.length > 0) {
-                        addAlltimersSchedule(myTimers);
+            if (!hasJustStopped)
+            {
+                if (tasks.length <= 0) {
+                    if (myTimers.data.timers != undefined) {
+                        if (myTimers.data.timers.length > 0) {
+                            addAlltimersSchedule(myTimers);
+                        }
                     }
                 }
             }
+
 
         };
         timeoutVar = setInterval(schedule, minimum);
